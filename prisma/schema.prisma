@@ -1,0 +1,74 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum PostStatus {
+  notification
+  apply_link
+  hall_ticket
+  results
+  expired
+}
+
+enum RelatedOrderSource {
+  ai_suggested
+  manual
+}
+
+model Category {
+  id        String   @id @default(uuid())
+  nameEn    String
+  nameTe    String
+  slug      String   @unique
+  color     String?
+  icon      String?
+  posts     Post[]
+  createdAt DateTime @default(now())
+}
+
+model Post {
+  id                 String     @id @default(uuid())
+  slug               String     @unique
+  titleEn            String
+  titleTe            String
+  summaryTe          String[]   // Telugu bullet points
+  englishAbstract    String?
+  tags               String[]   @default([])
+  docType            String?
+  statusBadge        PostStatus @default(notification)
+  pdfUrl             String?    // Google Drive link, Day 1 (Section 6.1)
+  actionUrl          String?
+  actionDeadline     DateTime?
+  category           Category?  @relation(fields: [categoryId], references: [id])
+  categoryId         String?
+  goReference        String?    // e.g. G.O.Ms.No.129
+  sourceDept         String?
+  sourceUrl          String?
+  verifiedAgainstGoir Boolean   @default(false)
+  isDraft             Boolean   @default(true)
+
+  // Related Orders — this post links TO these background/prior orders
+  relatedFrom RelatedOrder[] @relation("PostRelatedFrom")
+  // Related Orders — other posts that link back to THIS post as background
+  relatedTo   RelatedOrder[] @relation("PostRelatedTo")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model RelatedOrder {
+  post             Post                @relation("PostRelatedFrom", fields: [postId], references: [id], onDelete: Cascade)
+  postId           String
+  relatedPost      Post                @relation("PostRelatedTo", fields: [relatedPostId], references: [id], onDelete: Cascade)
+  relatedPostId    String
+  relationshipNote String?             // e.g. "Original PTR norms", "Superseded by this order"
+  source           RelatedOrderSource  @default(ai_suggested)
+  approved         Boolean             @default(false)
+
+  @@id([postId, relatedPostId])
+}
