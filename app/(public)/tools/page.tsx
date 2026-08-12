@@ -53,6 +53,16 @@ const TOOLS = [
     status: "Direct Status",
     popular: false,
   },
+  {
+    href: "/tools/da-arrears",
+    title: "DA Arrears Calculator",
+    titleTe: "డిఏ బకాయిల లెక్కింపు సాధనం",
+    desc: "Calculate Dearness Allowance arrears owed for a given Basic Pay, old/new DA percentage, and revision period, with a month-by-month breakdown.",
+    icon: "📈",
+    badge: "DA Revision",
+    status: "Month-by-Month",
+    popular: false,
+  },
 ];
 
 export default function ToolsIndexPage() {
