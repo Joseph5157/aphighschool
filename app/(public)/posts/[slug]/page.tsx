@@ -4,6 +4,10 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import LifecycleStepper from "./_components/LifecycleStepper";
 import ThumbZoneBar from "./_components/ThumbZoneBar";
+import Breadcrumb from "@/app/(public)/_components/Breadcrumb";
+import Badge from "@/app/(public)/_components/Badge";
+import Card from "@/app/(public)/_components/Card";
+import Button from "@/app/(public)/_components/Button";
 
 export const revalidate = 3600; // ISR revalidation (1 hour)
 
@@ -113,15 +117,14 @@ export default async function PostDetailPage({
 
   return (
     <div className="max-w-3xl mx-auto space-y-8 pb-24">
-      {/* Back Link */}
-      <div>
-        <Link
-          href="/"
-          className="text-xs font-mono text-inkSoft hover:text-ink transition-colors flex items-center gap-1"
-        >
-          ← Back to Home Feed
-        </Link>
-      </div>
+      {/* Breadcrumb Trail & SEO Schema */}
+      <Breadcrumb
+        items={[
+          { label: "Orders", href: "/orders" },
+          ...(post.category ? [{ label: post.category.nameEn, href: `/category/${post.category.slug}` }] : []),
+          { label: post.goReference || post.titleEn },
+        ]}
+      />
 
       {/* 1. Lifecycle Stepper */}
       <LifecycleStepper statusBadge={post.statusBadge} />
