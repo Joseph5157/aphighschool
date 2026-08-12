@@ -12,11 +12,15 @@ const QUICK_TOOLS = [
   { href: "/tools/cfms-checker", label: "CFMS Bill Status", icon: "📑", badge: "Payslip Portal" },
 ];
 
-const DEPT_LINKS = [
-  { href: "/category/school-education", label: "School Education Dept", count: "AP / TS" },
-  { href: "/category/finance", label: "Finance & Treasury Dept", count: "PRC & DA" },
-  { href: "/category/higher-education", label: "Higher & Technical Ed", count: "Colleges" },
-  { href: "/orders", label: "View All Departments →", count: "Directory" },
+const POPULAR_TAGS = [
+  { label: "#DAArrears", href: "/search?q=DA+Arrears" },
+  { label: "#MegaDSC2026", href: "/search?q=Mega+DSC" },
+  { label: "#APTET", href: "/search?q=TET" },
+  { label: "#TransferRules", href: "/search?q=Transfers" },
+  { label: "#Form16Tax", href: "/tools/tax-calculator" },
+  { label: "#PRC2024", href: "/search?q=PRC" },
+  { label: "#GPFInterest", href: "/tools/gpf-apgli" },
+  { label: "#EHSMedical", href: "/tools/cfms-checker" },
 ];
 
 export default function DesktopSidebar() {
@@ -62,24 +66,25 @@ export default function DesktopSidebar() {
         </CardContent>
       </Card>
 
-      {/* 2. Department Shortcuts */}
+      {/* 2. Popular Topics & Tags Widget */}
       <Card>
         <CardHeader className="pb-3">
           <CardTitle className="text-sm font-bold flex items-center gap-2">
-            <span>📁</span> Department Directory
+            <span>🔥</span> Popular Topics & Tags
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-2 pt-2 text-xs font-mono">
-          {DEPT_LINKS.map((dept) => (
-            <Link
-              key={dept.href}
-              href={dept.href}
-              className="group flex items-center justify-between p-2 rounded-md hover:bg-hair/20 transition-all text-inkSoft hover:text-ink font-semibold"
-            >
-              <span>{dept.label}</span>
-              <span className="text-[10px] text-inkSoft/70 font-normal">{dept.count}</span>
-            </Link>
-          ))}
+        <CardContent className="pt-2">
+          <div className="flex flex-wrap gap-1.5 font-mono text-xs">
+            {POPULAR_TAGS.map((tag) => (
+              <Link
+                key={tag.label}
+                href={tag.href}
+                className="px-2.5 py-1 rounded-md bg-hair/30 hover:bg-ink hover:text-white text-inkSoft font-semibold transition-all"
+              >
+                {tag.label}
+              </Link>
+            ))}
+          </div>
         </CardContent>
       </Card>
 
