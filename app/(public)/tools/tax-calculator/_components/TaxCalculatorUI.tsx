@@ -110,15 +110,13 @@ function InputF({
   type?: string;
 }) {
   return (
-    <div>
-      <label className="block text-[var(--label-primary)] md:text-[var(--label-secondary)] text-inkSoft font-semibold mb-0.5 tracking-wide">{label}</label>
-      <input
+    <Field label={label}>
+      <Input
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full bg-white border border-hair rounded px-2 py-1.5 text-sm text-ink leading-tight"
       />
-    </div>
+    </Field>
   );
 }
 
@@ -132,16 +130,15 @@ function NumF({
   onChange: (v: string) => void;
 }) {
   return (
-    <div>
-      <label className="block text-[var(--label-primary)] md:text-[var(--label-secondary)] text-inkSoft font-semibold mb-0.5 tracking-wide">{label} (₹)</label>
-      <input
+    <Field label={`${label} (₹)`}>
+      <Input
         type="number"
         min={0}
+        mono
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full bg-white border border-hair rounded px-2 py-1.5 text-sm text-ink tabular-nums leading-tight"
       />
-    </div>
+    </Field>
   );
 }
 
@@ -454,26 +451,24 @@ export default function TaxCalculatorUI() {
               </p>
             </div>
             <div className="flex items-center gap-3">
-              <select
+              <NativeSelect
                 value={regime}
                 onChange={(e) => setRegime(e.target.value as "old" | "new")}
                 aria-label="Tax Regime Selection"
-                className="bg-paperRaised border border-hair rounded-xl text-xs font-mono font-bold text-ink outline-none px-3 py-2"
               >
                 <option value="old">Old Tax Regime (With Deductions)</option>
                 <option value="new">New Tax Regime (Sec 115BAC)</option>
-              </select>
-              <select
+              </NativeSelect>
+              <NativeSelect
                 id={fyId}
                 value={fy}
                 onChange={(e) => setFy(e.target.value as FinancialYear)}
                 aria-label="Financial Year Selection"
-                className="bg-paperRaised border border-hair rounded-xl text-sm text-ink outline-none px-3 py-2"
               >
                 <option value="2023-24">FY 2023-24 (AY 2024-25)</option>
                 <option value="2024-25">FY 2024-25 (AY 2025-26)</option>
                 <option value="2025-26">FY 2025-26 (AY 2026-27)</option>
-              </select>
+              </NativeSelect>
             </div>
           </div>
 

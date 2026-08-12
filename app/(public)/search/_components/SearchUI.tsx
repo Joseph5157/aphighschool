@@ -3,6 +3,9 @@
 import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 
+import Input from "@/app/(public)/_components/Input";
+import Badge from "@/app/(public)/_components/Badge";
+
 type SearchPostItem = {
   id: string;
   slug: string;
@@ -74,13 +77,13 @@ export default function SearchUI({ posts }: SearchUIProps) {
     <div className="max-w-2xl mx-auto space-y-6">
       {/* Search Input Bar */}
       <div className="relative">
-        <input
+        <Input
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Search GO number, topic, or circular..."
-          className="w-full bg-paperRaised border border-hair rounded-xl px-4 py-3.5 text-sm text-ink outline-none focus:border-ink/50 transition-all font-sans placeholder:text-inkSoft/60 shadow-xs"
+          className="py-3"
           autoFocus
         />
         {query && (
