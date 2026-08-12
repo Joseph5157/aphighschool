@@ -14,6 +14,11 @@ module.exports = {
         paperRaised: "#F7F4EC",
         hair: "#D8D2C1",
       },
+      fontFamily: {
+        sans: ["'Noto Sans'", "Arial", "sans-serif"],
+        telugu: ["'Noto Sans Telugu'", "sans-serif"],
+        mono: ["'IBM Plex Mono'", "monospace"],
+      },
     },
   },
   plugins: [],

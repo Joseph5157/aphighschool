@@ -92,17 +92,17 @@ export default function HeroCard({ post }: HeroPostProps) {
 
         {/* Main Titles */}
         <Link href={`/posts/${post.slug}`} className="group block">
-          <h2 className="text-xl md:text-2xl font-bold tracking-tight text-white group-hover:text-turmeric transition-colors">
+          <h2 className="text-display text-white group-hover:text-turmeric transition-colors">
             {post.titleEn}
           </h2>
-          <div className="font-telugu text-lg md:text-xl text-paperRaised/90 mt-1 font-medium leading-relaxed">
+          <div className="text-telugu-title text-paperRaised/90 mt-1">
             {post.titleTe}
           </div>
         </Link>
 
         {/* Telugu Summary Bullets */}
         {post.summaryTe && post.summaryTe.length > 0 && (
-          <div className="mt-4 pt-4 border-t border-white/10 space-y-1.5 font-telugu text-sm text-paperRaised/80 leading-relaxed">
+          <div className="mt-4 pt-4 border-t border-white/10 space-y-2 text-telugu-body text-paperRaised/80">
             {post.summaryTe.slice(0, 3).map((bullet, idx) => (
               <div key={idx} className="flex items-start gap-2">
                 <span className="text-turmeric font-bold mt-0.5">•</span>

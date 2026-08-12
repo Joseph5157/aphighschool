@@ -88,10 +88,10 @@ export default function PostCard({ post }: PostCardProps) {
         </div>
 
         <Link href={`/posts/${post.slug}`} className="group block">
-          <h3 className="font-bold text-base text-ink group-hover:text-turmericDeep transition-colors line-clamp-2">
+          <h3 className="text-card-title text-ink group-hover:text-turmericDeep transition-colors line-clamp-2">
             {post.titleEn}
           </h3>
-          <div className="font-telugu text-sm text-inkSoft truncate mt-0.5">
+          <div className="text-telugu-body text-inkSoft truncate mt-0.5">
             {post.titleTe}
           </div>
         </Link>
