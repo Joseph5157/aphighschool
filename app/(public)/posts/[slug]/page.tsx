@@ -2,14 +2,12 @@ import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { Metadata } from "next";
+import Breadcrumb from "@/app/(public)/_components/Breadcrumb";
 import LifecycleStepper from "./_components/LifecycleStepper";
 import ThumbZoneBar from "./_components/ThumbZoneBar";
-import Breadcrumb from "@/app/(public)/_components/Breadcrumb";
 import Badge from "@/app/(public)/_components/Badge";
-import Card from "@/app/(public)/_components/Card";
 import Button from "@/app/(public)/_components/Button";
-import DesktopLeftNav from "@/app/(public)/_components/DesktopLeftNav";
-import DesktopSidebar from "@/app/(public)/_components/DesktopSidebar";
+import { Card } from "@/app/(public)/_components/Card";
 
 export const revalidate = 3600; // ISR revalidation (1 hour)
 
@@ -21,13 +19,7 @@ export async function generateMetadata({
   try {
     const post = await prisma.post.findUnique({
       where: { slug: params.slug },
-      select: {
-        titleEn: true,
-        englishAbstract: true,
-        summaryTe: true,
-        createdAt: true,
-        slug: true,
-      },
+      select: { titleEn: true, titleTe: true, summaryTe: true },
     });
 
     if (!post) {
@@ -36,20 +28,14 @@ export async function generateMetadata({
       };
     }
 
-    const title = `${post.titleEn} — AP Teacher Desk`;
     const description =
-      post.englishAbstract || (post.summaryTe && post.summaryTe[0]) || "";
+      post.summaryTe && post.summaryTe.length > 0
+        ? post.summaryTe[0]
+        : post.titleTe;
 
     return {
-      title,
-      description,
-      openGraph: {
-        title,
-        description,
-        type: "article",
-        publishedTime: post.createdAt ? new Date(post.createdAt).toISOString() : undefined,
-        url: `/posts/${post.slug}`,
-      },
+      title: `${post.titleEn} — AP Teacher Desk`,
+      description: `${description} Official AP School Education government order summary.`,
     };
   } catch (e) {
     return {
@@ -79,8 +65,8 @@ export default async function PostDetailPage({
 }) {
   let post: any = null;
   try {
-    post = await prisma.post.findFirst({
-      where: { slug: params.slug, isDraft: false },
+    post = await prisma.post.findUnique({
+      where: { slug: params.slug },
       include: {
         category: true,
         relatedFrom: {
@@ -91,7 +77,9 @@ export default async function PostDetailPage({
                 id: true,
                 slug: true,
                 titleEn: true,
+                titleTe: true,
                 goReference: true,
+                createdAt: true,
               },
             },
           },
@@ -102,12 +90,15 @@ export default async function PostDetailPage({
     post = null;
   }
 
-  if (!post) {
+  if (!post || post.isDraft) {
     notFound();
   }
 
-  const now = new Date();
-  const isPastDeadline = post.actionDeadline ? new Date(post.actionDeadline) < now : false;
+  const formattedDate = new Date(post.createdAt).toLocaleDateString("en-IN", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
 
   const formattedDeadline = post.actionDeadline
     ? new Date(post.actionDeadline).toLocaleDateString("en-IN", {
@@ -116,6 +107,9 @@ export default async function PostDetailPage({
         year: "numeric",
       })
     : null;
+
+  const isPastDeadline =
+    post.actionDeadline && new Date(post.actionDeadline) < new Date();
 
   return (
     <div className="max-w-4xl mx-auto space-y-8 pb-24 font-sans">
@@ -131,56 +125,70 @@ export default async function PostDetailPage({
       {/* 1. Lifecycle Stepper */}
       <LifecycleStepper statusBadge={post.statusBadge} />
 
-      {/* 2. Status Badge & GO Reference Bar */}
-      <div className="flex items-center justify-between gap-4 flex-wrap bg-paperRaised border border-hair rounded-xl px-4 py-3">
-        <div className="flex items-center gap-2">
-          {post.actionDeadline && (
-            <span
-              className={`font-mono text-xs px-3 py-1 rounded-full font-semibold tracking-wider ${
-                isPastDeadline
-                  ? "bg-hair/60 text-inkSoft border border-hair"
-                  : "bg-turmeric/20 text-turmericDeep border border-turmeric/30"
-              }`}
-            >
-              {isPastDeadline ? "Registration closed" : `Closes ${formattedDeadline}`}
-            </span>
-          )}
-          {post.category && (
-            <span className="font-mono text-xs text-inkSoft bg-hair/40 px-2.5 py-1 rounded">
-              {post.category.nameEn}
+      {/* 2. OPTION A: Imperial Gazette Hero Header Block */}
+      <div className="bg-[#1B2A4A] text-white border border-[#2B3C63] rounded-2xl p-6 md:p-8 space-y-5 shadow-md relative overflow-hidden">
+        {/* Badges & References Bar */}
+        <div className="flex items-center justify-between gap-3 flex-wrap border-b border-white/10 pb-4">
+          <div className="flex items-center gap-2 flex-wrap">
+            {post.verifiedAgainstGoir && (
+              <Badge variant="success" size="sm" shape="pill" dot>
+                GOIR Verified Gazette
+              </Badge>
+            )}
+            {post.category && (
+              <span className="font-mono text-xs font-semibold text-amber-300 bg-amber-400/10 px-2.5 py-1 rounded border border-amber-400/20">
+                {post.category.nameEn}
+              </span>
+            )}
+            {post.actionDeadline && (
+              <span
+                className={`font-mono text-xs px-3 py-1 rounded-full font-semibold tracking-wider ${
+                  isPastDeadline
+                    ? "bg-slate-700 text-slate-300"
+                    : "bg-amber-500/20 text-amber-200 border border-amber-500/30"
+                }`}
+              >
+                {isPastDeadline ? "Closed" : `Deadline: ${formattedDeadline}`}
+              </span>
+            )}
+          </div>
+
+          {post.goReference && (
+            <span className="font-mono text-xs font-bold text-amber-300 bg-white/10 px-3 py-1 rounded border border-white/15">
+              {post.goReference}
             </span>
           )}
         </div>
 
-        {post.goReference && (
-          <span className="font-mono text-xs font-bold text-ink bg-paper px-3 py-1 rounded border border-hair">
-            {post.goReference}
-          </span>
-        )}
-      </div>
+        {/* Bilingual Headlines */}
+        <div className="space-y-2">
+          <h1 className="text-display text-white tracking-tight leading-snug">
+            {post.titleEn}
+          </h1>
+          <div className="text-telugu-title text-amber-300 font-medium leading-relaxed">
+            {post.titleTe}
+          </div>
+        </div>
 
-      {/* 3. Bilingual Title */}
-      <div>
-        <h1 className="font-bold text-xl md:text-2xl text-ink tracking-tight leading-snug">
-          {post.titleEn}
-        </h1>
-        <div className="font-telugu text-lg text-inkSoft mt-1.5 font-medium leading-relaxed">
-          {post.titleTe}
+        {/* Gazette Metadata */}
+        <div className="text-meta text-slate-300 pt-2 flex items-center justify-between flex-wrap gap-2 border-t border-white/10">
+          <span>{post.sourceDept || "AP School Education Department"}</span>
+          <span>Published: {formattedDate}</span>
         </div>
       </div>
 
-      {/* 4. Summary Box */}
+      {/* 3. OPTION A: Telugu Gazette Summary Brief */}
       <section
         aria-label="Summary"
-        className="bg-[#FCF7EA] border border-hair/60 border-l-4 border-l-turmeric rounded-xl p-5 md:p-6 shadow-xs"
+        className="bg-[#FCF7EA] border border-hair/80 border-l-4 border-l-[#8B0000] rounded-xl p-5 md:p-6 shadow-2xs"
       >
-        <div className="font-mono font-bold text-xs tracking-wider text-turmericDeep mb-3 flex items-center justify-between">
-          <span>సారాంశం — Summary</span>
+        <div className="font-mono font-bold text-xs tracking-wider text-[#8B0000] mb-3 flex items-center justify-between">
+          <span>సారాంశం — Gazette Brief Summary</span>
           <span className="text-[10px] text-inkSoft/70 font-normal">Living Document Brief</span>
         </div>
 
         {post.summaryTe && post.summaryTe.length > 0 && (
-          <ul className="font-telugu text-sm text-ink font-medium leading-relaxed list-disc list-inside space-y-2">
+          <ul className="font-telugu text-sm text-ink font-medium leading-relaxed list-disc list-inside space-y-2.5">
             {post.summaryTe.map((bullet: string, idx: number) => (
               <li key={idx} className="pl-1">
                 {bullet}
@@ -199,108 +207,84 @@ export default async function PostDetailPage({
         )}
       </section>
 
-      {/* 5. Related Orders Block (only if approved related orders exist) */}
+      {/* 4. Related Background Orders Block */}
       {post.relatedFrom && post.relatedFrom.length > 0 && (
         <section
           aria-label="Related Background Orders"
-          className="bg-white border border-hair rounded-xl p-5 md:p-6 shadow-xs"
+          className="space-y-4"
         >
-          <div className="font-mono font-bold text-xs tracking-wider text-inkSoft mb-4 flex items-center gap-2">
-            <span>🔗 Related Orders — Background</span>
-            <span className="text-[10px] bg-paper px-2 py-0.5 rounded text-inkSoft font-normal">
+          <div className="font-mono font-bold text-xs tracking-wider text-inkSoft flex items-center gap-2">
+            <span>🔗 Related Background Orders</span>
+            <Badge variant="neutral" size="sm" shape="pill">
               {post.relatedFrom.length}
-            </span>
+            </Badge>
           </div>
 
           <div className="space-y-3">
             {post.relatedFrom.map((rel: any) => (
-              <Link
-                key={rel.relatedPost.id}
-                href={`/posts/${rel.relatedPost.slug}`}
-                className="block group bg-paperRaised hover:bg-paper border border-hair/70 rounded-lg p-3.5 transition-all"
-              >
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <div className="text-sm font-semibold text-ink group-hover:text-turmericDeep transition-colors">
-                      {rel.relatedPost.titleEn}
-                    </div>
-                    {rel.relationshipNote && (
-                      <div className="text-xs text-inkSoft font-mono mt-1">
-                        Note: {rel.relationshipNote}
-                      </div>
-                    )}
-                  </div>
-
-                  {rel.relatedPost.goReference && (
-                    <span className="font-mono text-xs text-inkSoft bg-hair/40 px-2 py-0.5 rounded flex-shrink-0">
-                      {rel.relatedPost.goReference}
+              <Card key={rel.relatedPost.id} hoverable className="p-4 bg-[#FAF7F2]">
+                <Link
+                  href={`/posts/${rel.relatedPost.slug}`}
+                  className="block group space-y-1"
+                >
+                  <div className="flex items-center justify-between text-meta text-inkSoft">
+                    <span className="font-bold text-tamarind">
+                      {rel.relatedPost.goReference || "Background G.O."}
                     </span>
+                    <span>
+                      {new Date(rel.relatedPost.createdAt).toLocaleDateString("en-IN", {
+                        day: "numeric",
+                        month: "short",
+                        year: "numeric",
+                      })}
+                    </span>
+                  </div>
+                  <div className="text-card-title text-ink group-hover:text-tamarind transition-colors">
+                    {rel.relatedPost.titleEn}
+                  </div>
+                  {rel.relationshipNote && (
+                    <div className="text-xs font-mono text-inkSoft/80 pt-1">
+                      Note: {rel.relationshipNote}
+                    </div>
                   )}
-                </div>
-              </Link>
+                </Link>
+              </Card>
             ))}
           </div>
         </section>
       )}
 
-      {/* 6. PDF Viewer */}
-      <section id="pdf-viewer-section" aria-label="Original Order PDF">
-        {post.pdfUrl ? (
-          <div className="rounded-xl overflow-hidden border border-hair shadow-sm">
-            <div className="bg-ink text-white font-mono text-xs p-3.5 flex items-center justify-between gap-3">
-              <span className="font-bold tracking-wider uppercase flex items-center gap-2">
-                📄 ORIGINAL ORDER DOCUMENT
-              </span>
-              <span className="text-[11px] text-paper/70">
-                Scroll / zoom in viewer below
-              </span>
+      {/* 5. PDF & External Actions */}
+      {post.pdfUrl && (
+        <Card className="p-6 bg-paperRaised border-hair space-y-4">
+          <div className="flex items-center justify-between flex-wrap gap-3">
+            <div>
+              <h3 className="text-card-title text-ink">Official Gazette PDF Attachment</h3>
+              <p className="text-xs font-mono text-inkSoft mt-0.5">
+                Verified PDF source from AP Government Orders Information Repository
+              </p>
             </div>
-            <iframe
-              src={post.pdfUrl}
-              title={`PDF document for ${post.titleEn}`}
-              className="w-full h-[400px] border-0 bg-white"
-            />
-          </div>
-        ) : (
-          <div className="bg-paperRaised border border-hair rounded-xl p-6 text-center text-inkSoft text-xs font-mono">
-            📄 PDF document not yet linked for this order.
-          </div>
-        )}
-      </section>
-
-      {/* 7. Source Line */}
-      <div className="flex items-center justify-between gap-4 text-[10px] font-mono text-inkSoft pt-4 border-t border-hair flex-wrap">
-        <div>
-          Source:{" "}
-          {post.sourceUrl ? (
             <a
-              href={post.sourceUrl}
+              href={post.pdfUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="underline hover:text-ink"
             >
-              {post.sourceDept || "School Education Department, AP"}
+              <Button variant="tamarind" size="md" rightIcon={<span>↗</span>}>
+                Open Original GO PDF
+              </Button>
             </a>
-          ) : (
-            <span>{post.sourceDept || "School Education Department, AP"}</span>
-          )}
-        </div>
+          </div>
+        </Card>
+      )}
 
-        {post.verifiedAgainstGoir && (
-          <span className="text-tamarind font-semibold flex items-center gap-1">
-            ✓ Verified against GOIR (goir.ap.gov.in)
-          </span>
-        )}
-      </div>
-
-      {/* 8. Disclaimer */}
-      <footer className="pt-2">
-        <p className="text-[9px] text-[#A39B85] italic font-sans leading-normal">
-          Independent, unofficial educational portal. Not affiliated with the Government of AP/TS. For legally binding documents, refer to the official source above.
+      {/* Footer Disclaimer */}
+      <footer className="border-t border-hair pt-4 text-center font-mono text-[10px] text-inkSoft/70">
+        <p>
+          AP Teacher Desk is an independent information service for teachers. Official G.O. documents are verified against goir.ap.gov.in.
         </p>
       </footer>
 
-      {/* 9. Thumb-Zone Action Bar (only if pdfUrl exists) */}
+      {/* Thumb-Zone Action Bar */}
       {post.pdfUrl && (
         <ThumbZoneBar pdfUrl={post.pdfUrl} sourceUrl={post.sourceUrl} />
       )}
