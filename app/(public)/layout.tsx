@@ -24,7 +24,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
     <div className="min-h-screen bg-paper text-ink flex flex-col antialiased">
       {/* Top Header with Desktop Navigation */}
       <header className="bg-paperRaised/95 backdrop-blur-md border-b border-hair sticky top-0 z-40 print:hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-6">
+        <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 py-3 flex items-center justify-between gap-6">
           <Link href="/" className="group flex items-center gap-3 shrink-0">
             <div className="w-9 h-9 rounded-lg bg-ink text-turmeric font-mono font-bold flex items-center justify-center border border-inkSoft shadow-sm">
               AP
@@ -65,8 +65,8 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
         </div>
       </header>
 
-      {/* Main Content Area (1280px Widescreen Container) */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-[64px] print:p-0 print:m-0 print:max-w-none print:w-full">
+      {/* Main Content Area (100% Widescreen Dashboard Container) */}
+      <main className="flex-1 w-full max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 py-8 pb-[64px] print:p-0 print:m-0 print:max-w-none print:w-full">
         {children}
       </main>
 

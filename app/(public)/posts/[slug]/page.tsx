@@ -8,6 +8,7 @@ import Breadcrumb from "@/app/(public)/_components/Breadcrumb";
 import Badge from "@/app/(public)/_components/Badge";
 import Card from "@/app/(public)/_components/Card";
 import Button from "@/app/(public)/_components/Button";
+import DesktopLeftNav from "@/app/(public)/_components/DesktopLeftNav";
 import DesktopSidebar from "@/app/(public)/_components/DesktopSidebar";
 
 export const revalidate = 3600; // ISR revalidation (1 hour)
@@ -117,8 +118,14 @@ export default async function PostDetailPage({
     : null;
 
   return (
-    <div className="lg:grid lg:grid-cols-12 lg:gap-8 space-y-8 lg:space-y-0 pb-24">
-      <div className="lg:col-span-8 space-y-8">
+    <div className="lg:grid lg:grid-cols-12 lg:gap-6 xl:gap-8 space-y-8 lg:space-y-0 pb-24">
+      {/* 1. Left Rail (3 Cols / ~25% Width) */}
+      <div className="lg:col-span-3">
+        <DesktopLeftNav />
+      </div>
+
+      {/* 2. Center G.O. Document Reader (6 Cols / ~50% Width) */}
+      <div className="lg:col-span-6 space-y-8">
         {/* Breadcrumb Trail & SEO Schema */}
       <Breadcrumb
         items={[
@@ -302,8 +309,8 @@ export default async function PostDetailPage({
 
       </div>
 
-      {/* Right Desktop Sidebar Rail */}
-      <div className="lg:col-span-4">
+      {/* 3. Right Desktop Sidebar Rail (3 Cols / ~25% Width) */}
+      <div className="lg:col-span-3">
         <DesktopSidebar />
       </div>
 

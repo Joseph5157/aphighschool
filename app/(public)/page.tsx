@@ -3,6 +3,7 @@ import Link from "next/link";
 import HeroCard from "./_components/HeroCard";
 import PostCard from "./_components/PostCard";
 import AdSlot from "./_components/AdSlot";
+import DesktopLeftNav from "./_components/DesktopLeftNav";
 import DesktopSidebar from "./_components/DesktopSidebar";
 
 import type { Metadata } from "next";
@@ -38,13 +39,18 @@ export default async function HomePage() {
   const listingPosts = posts.slice(1);
 
   return (
-    <div className="lg:grid lg:grid-cols-12 lg:gap-8 space-y-8 lg:space-y-0">
-      {/* Main Feed Column (8 Cols / ~66% Width on Widescreen) */}
-      <div className="lg:col-span-8 space-y-8">
+    <div className="lg:grid lg:grid-cols-12 lg:gap-6 xl:gap-8 space-y-8 lg:space-y-0">
+      {/* 1. Left Navigation Rail (3 Cols / ~25% Width on Desktop) */}
+      <div className="lg:col-span-3">
+        <DesktopLeftNav />
+      </div>
+
+      {/* 2. Center Feed Column (6 Cols / ~50% Width on Desktop) */}
+      <div className="lg:col-span-6 space-y-8">
         {/* Section Header */}
         <div className="flex items-center justify-between border-b border-hair pb-4">
           <div>
-            <h1 className="text-2xl font-bold text-ink tracking-tight">
+            <h1 className="text-display tracking-tight text-ink">
               Latest Orders & Living Documents
             </h1>
             <p className="text-xs text-inkSoft font-mono mt-1">
@@ -87,8 +93,8 @@ export default async function HomePage() {
         )}
       </div>
 
-      {/* Right Desktop Sidebar Rail (4 Cols / ~33% Width) */}
-      <div className="lg:col-span-4">
+      {/* 3. Right Sidebar Rail (3 Cols / ~25% Width on Desktop) */}
+      <div className="lg:col-span-3">
         <DesktopSidebar />
       </div>
     </div>

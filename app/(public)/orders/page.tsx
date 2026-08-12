@@ -3,6 +3,8 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { Card } from "@/app/(public)/_components/Card";
 import Badge from "@/app/(public)/_components/Badge";
+import DesktopLeftNav from "@/app/(public)/_components/DesktopLeftNav";
+import DesktopSidebar from "@/app/(public)/_components/DesktopSidebar";
 
 const IconBase = ({ d, size = 16 }: { d: string; size?: number }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -54,58 +56,66 @@ export default async function OrdersPage() {
   }
 
   return (
-    <div className="space-y-6 max-w-4xl mx-auto">
-      {/* Header */}
-      <div className="border-b border-hair pb-4">
-        <h1 className="text-2xl font-bold text-ink tracking-tight">Orders & Circulars</h1>
-        <p className="font-telugu text-sm text-inkSoft mt-1 font-medium">
-          ఉత్తర్వులు & సర్క్యులర్లు — శాఖల వారీగా విభజించిన సమాచారం
-        </p>
+    <div className="lg:grid lg:grid-cols-12 lg:gap-6 xl:gap-8 space-y-8 lg:space-y-0">
+      {/* 1. Left Rail Navigation */}
+      <div className="lg:col-span-3">
+        <DesktopLeftNav />
       </div>
 
-      {/* Category List Card */}
-      <Card className="overflow-hidden divide-y divide-hair">
-        {categories.map((category) => (
-          <Link
-            key={category.id}
-            href={`/category/${category.slug}`}
-            className="group flex items-center justify-between gap-3 px-5 py-4 hover:bg-hair/20 transition-all relative"
-            style={{ borderLeftWidth: "4px", borderLeftColor: category.color || "transparent" }}
-          >
-            <div className="flex items-center gap-3.5 min-w-0 flex-1">
-              {/* Icon */}
-              <div
-                className="shrink-0 p-2 rounded-lg bg-hair/30 text-ink opacity-80 group-hover:opacity-100 transition-opacity"
-                style={{ color: category.color || "var(--color-inkSoft)" }}
-              >
-                <IconBase d={getIconPath(category.icon)} size={18} />
-              </div>
+      {/* 2. Center Department Directory */}
+      <div className="lg:col-span-6 space-y-6">
+        <div className="border-b border-hair pb-4">
+          <h1 className="text-display tracking-tight text-ink">Orders & Circulars</h1>
+          <p className="font-telugu text-sm text-inkSoft mt-1 font-medium">
+            ఉత్తర్వులు & సర్క్యులర్లు — శాఖల వారీగా విభజించిన సమాచారం
+          </p>
+        </div>
 
-              {/* Category Titles */}
-              <div className="flex-1 min-w-0">
-                <div className="font-bold text-sm text-ink group-hover:text-tamarind transition-colors truncate">
-                  {category.nameEn}
+        <Card className="overflow-hidden divide-y divide-hair">
+          {categories.map((category) => (
+            <Link
+              key={category.id}
+              href={`/category/${category.slug}`}
+              className="group flex items-center justify-between gap-3 px-5 py-4 hover:bg-hair/20 transition-all relative"
+              style={{ borderLeftWidth: "4px", borderLeftColor: category.color || "transparent" }}
+            >
+              <div className="flex items-center gap-3.5 min-w-0 flex-1">
+                <div
+                  className="shrink-0 p-2 rounded-lg bg-hair/30 text-ink opacity-80 group-hover:opacity-100 transition-opacity"
+                  style={{ color: category.color || "var(--color-inkSoft)" }}
+                >
+                  <IconBase d={getIconPath(category.icon)} size={18} />
                 </div>
-                {category.nameTe && (
-                  <div className="font-telugu text-xs text-inkSoft truncate mt-0.5 font-medium">
-                    {category.nameTe}
-                  </div>
-                )}
-              </div>
-            </div>
 
-            {/* Post Count Badge & Arrow */}
-            <div className="flex items-center gap-3 shrink-0">
-              <Badge variant="neutral" size="sm">
-                {category._count.posts} {category._count.posts === 1 ? "Order" : "Orders"}
-              </Badge>
-              <span className="font-mono text-sm text-inkSoft group-hover:text-ink group-hover:translate-x-1 transition-all">
-                →
-              </span>
-            </div>
-          </Link>
-        ))}
-      </Card>
+                <div className="flex-1 min-w-0">
+                  <div className="font-bold text-sm text-ink group-hover:text-tamarind transition-colors truncate">
+                    {category.nameEn}
+                  </div>
+                  {category.nameTe && (
+                    <div className="font-telugu text-xs text-inkSoft truncate mt-0.5 font-medium">
+                      {category.nameTe}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3 shrink-0">
+                <Badge variant="neutral" size="sm">
+                  {category._count.posts} {category._count.posts === 1 ? "Order" : "Orders"}
+                </Badge>
+                <span className="font-mono text-sm text-inkSoft group-hover:text-ink group-hover:translate-x-1 transition-all">
+                  →
+                </span>
+              </div>
+            </Link>
+          ))}
+        </Card>
+      </div>
+
+      {/* 3. Right Sidebar Rail */}
+      <div className="lg:col-span-3">
+        <DesktopSidebar />
+      </div>
     </div>
   );
 }
