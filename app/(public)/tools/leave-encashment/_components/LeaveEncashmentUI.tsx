@@ -3,6 +3,11 @@
 import { useState, useId } from "react";
 import Link from "next/link";
 import Accordion, { AccordionItemData } from "@/app/(public)/_components/Accordion";
+import { Card, CardHeader, CardTitle, CardContent } from "@/app/(public)/_components/Card";
+import Field from "@/app/(public)/_components/Field";
+import Input from "@/app/(public)/_components/Input";
+import Badge from "@/app/(public)/_components/Badge";
+import Separator from "@/app/(public)/_components/Separator";
 
 function formatCurrency(val: number): string {
   return new Intl.NumberFormat("en-IN", {
@@ -18,6 +23,7 @@ const LEAVE_FAQ_ITEMS: AccordionItemData[] = [
     titleEn: "What are the rules for Earned Leave (EL) Surrender in AP & TS?",
     titleTe: "ఆర్న్డ్ లీవ్ (EL) సరెండర్ బిల్లు నిబంధనలు",
     badge: "EL Rules",
+    badgeVariant: "tamarind",
     defaultOpen: true,
     content: (
       <div className="space-y-2">
@@ -37,6 +43,7 @@ const LEAVE_FAQ_ITEMS: AccordionItemData[] = [
     titleEn: "What is the maximum EL encashment limit at retirement?",
     titleTe: "రిటైర్మెంట్ సమయంలో గరిష్ట లీవ్ ఎన్‌క్యాష్‌మెంట్ పరిమితి ఎంత?",
     badge: "Retirement Cap",
+    badgeVariant: "turmeric",
     content: (
       <div className="space-y-2">
         <p>
@@ -91,9 +98,9 @@ export default function LeaveEncashmentUI() {
         >
           ← Back to Utility Tools / ఇతర సాధనాలు
         </Link>
-        <span className="font-mono text-[9px] uppercase tracking-wider bg-tamarind/10 text-tamarind border border-tamarind/20 px-2.5 py-0.5 rounded-full font-semibold">
-          Client-Side Tool • Runs 100% On Device
-        </span>
+        <Badge variant="tamarind" size="sm" shape="pill" dot>
+          Runs 100% On Device
+        </Badge>
       </div>
 
       {/* Header */}
@@ -108,77 +115,66 @@ export default function LeaveEncashmentUI() {
 
       {/* Calculator Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Form Inputs */}
-        <div className="bg-paperRaised border border-hair rounded-xl p-5 shadow-xs space-y-4">
-          <h2 className="font-bold text-base text-ink border-b border-hair pb-2">
-            Input Details / సమాచారం
-          </h2>
+        {/* Form Inputs Card */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Input Details</CardTitle>
+          </CardHeader>
 
-          <div className="space-y-3">
-            <div>
-              <label htmlFor={basicPayId} className="block font-mono text-[10px] uppercase font-bold text-inkSoft tracking-wider mb-1">
-                Basic Pay (మూల వేతనం) ₹ *
-              </label>
-              <input
+          <CardContent className="space-y-4">
+            <Field label="Basic Pay" labelTe="మూల వేతనం" required htmlFor={basicPayId}>
+              <Input
                 id={basicPayId}
                 type="number"
+                mono
                 value={basicPay}
                 onChange={(e) => setBasicPay(e.target.value)}
-                className="w-full bg-white border border-hair rounded-lg px-3 py-2 text-xs font-mono text-ink outline-none focus:border-tamarind"
               />
-            </div>
+            </Field>
 
-            <div>
-              <label htmlFor={daPercentId} className="block font-mono text-[10px] uppercase font-bold text-inkSoft tracking-wider mb-1">
-                DA Percentage (% కరువు భత్యం) *
-              </label>
-              <input
+            <Field label="DA Percentage" labelTe="కరువు భత్యం %" required htmlFor={daPercentId}>
+              <Input
                 id={daPercentId}
                 type="number"
                 step="0.01"
+                mono
                 value={daPercent}
                 onChange={(e) => setDaPercent(e.target.value)}
-                className="w-full bg-white border border-hair rounded-lg px-3 py-2 text-xs font-mono text-ink outline-none focus:border-tamarind"
               />
-            </div>
+            </Field>
 
             <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label htmlFor={elDaysId} className="block font-mono text-[10px] uppercase font-bold text-inkSoft tracking-wider mb-1">
-                  EL Days to Surrender
-                </label>
-                <input
+              <Field label="EL Days to Surrender" htmlFor={elDaysId}>
+                <Input
                   id={elDaysId}
                   type="number"
+                  mono
                   value={elDays}
                   onChange={(e) => setElDays(e.target.value)}
-                  className="w-full bg-white border border-hair rounded-lg px-3 py-2 text-xs font-mono text-ink outline-none focus:border-tamarind"
                 />
-              </div>
-              <div>
-                <label htmlFor={hplDaysId} className="block font-mono text-[10px] uppercase font-bold text-inkSoft tracking-wider mb-1">
-                  HPL Days (Half Pay)
-                </label>
-                <input
+              </Field>
+
+              <Field label="HPL Days (Half Pay)" htmlFor={hplDaysId}>
+                <Input
                   id={hplDaysId}
                   type="number"
+                  mono
                   value={hplDays}
                   onChange={(e) => setHplDays(e.target.value)}
-                  className="w-full bg-white border border-hair rounded-lg px-3 py-2 text-xs font-mono text-ink outline-none focus:border-tamarind"
                 />
-              </div>
+              </Field>
             </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
 
-        {/* Results Block */}
-        <div className="bg-paperRaised border border-hair rounded-xl p-5 shadow-xs flex flex-col justify-between space-y-4">
+        {/* Results Card */}
+        <Card className="flex flex-col justify-between">
           <div>
-            <h2 className="font-bold text-base text-ink border-b border-hair pb-2">
-              Encashment Estimation / ఫలితం
-            </h2>
+            <CardHeader>
+              <CardTitle>Encashment Estimation</CardTitle>
+            </CardHeader>
 
-            <div className="mt-4 space-y-2.5 font-mono text-xs">
+            <CardContent className="space-y-3 font-mono text-xs">
               <div className="flex justify-between text-inkSoft">
                 <span>Basic Pay:</span>
                 <span className="font-bold text-ink">{formatCurrency(basicNum)}</span>
@@ -187,7 +183,8 @@ export default function LeaveEncashmentUI() {
                 <span>DA ({daNum}%):</span>
                 <span className="font-bold text-ink">{formatCurrency(daAmount)}</span>
               </div>
-              <div className="flex justify-between text-ink border-t border-hair/50 pt-1.5 font-bold">
+              <Separator />
+              <div className="flex justify-between text-ink font-bold">
                 <span>Total Monthly Emoluments:</span>
                 <span>{formatCurrency(totalMonthlyEmoluments)}</span>
               </div>
@@ -208,10 +205,10 @@ export default function LeaveEncashmentUI() {
                   </div>
                 )}
               </div>
-            </div>
+            </CardContent>
           </div>
 
-          <div className="pt-3 border-t border-hair flex justify-between items-baseline font-mono">
+          <div className="p-5 border-t border-hair flex justify-between items-baseline font-mono bg-paper">
             <span className="text-xs text-inkSoft uppercase tracking-wider font-bold">
               Gross Encashment Bill:
             </span>
@@ -219,7 +216,7 @@ export default function LeaveEncashmentUI() {
               {formatCurrency(totalGrossEncashment)}
             </span>
           </div>
-        </div>
+        </Card>
       </div>
 
       {/* Accordion Rules */}

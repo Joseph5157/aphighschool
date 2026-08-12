@@ -3,6 +3,11 @@
 import { useState, useId } from "react";
 import Link from "next/link";
 import Accordion, { AccordionItemData } from "@/app/(public)/_components/Accordion";
+import { Card, CardHeader, CardTitle, CardContent } from "@/app/(public)/_components/Card";
+import Field from "@/app/(public)/_components/Field";
+import Input from "@/app/(public)/_components/Input";
+import Badge from "@/app/(public)/_components/Badge";
+import Separator from "@/app/(public)/_components/Separator";
 
 function formatCurrency(val: number): string {
   return new Intl.NumberFormat("en-IN", {
@@ -18,6 +23,7 @@ const GPF_FAQ_ITEMS: AccordionItemData[] = [
     titleEn: "What are the rules for GPF Part-Final Loan vs Temporary Advance?",
     titleTe: "జీపీఎఫ్ పార్ట్-ఫైనల్ విత్‌డ్రావల్ మరియు తాత్కాలిక అడ్వాన్స్ నిబంధనలు",
     badge: "GPF Rules",
+    badgeVariant: "tamarind",
     defaultOpen: true,
     content: (
       <div className="space-y-2">
@@ -39,6 +45,7 @@ const GPF_FAQ_ITEMS: AccordionItemData[] = [
     titleEn: "How is APGLI mandatory premium slab matched with Basic Pay?",
     titleTe: "బేసిక్ పే ఆధారంగా APGLI ప్రీమియం స్లాబ్ ఎలా నిర్ణయిస్తారు?",
     badge: "APGLI Slabs",
+    badgeVariant: "turmeric",
     content: (
       <div className="space-y-2">
         <p>
@@ -59,6 +66,7 @@ const GPF_FAQ_ITEMS: AccordionItemData[] = [
     titleEn: "Is GPF interest taxable for government employees?",
     titleTe: "జీపీఎఫ్ వడ్డీకి పన్ను వర్తిస్తుందా?",
     badge: "Taxation",
+    badgeVariant: "neutral",
     content: (
       <div className="space-y-2">
         <p>
@@ -93,7 +101,6 @@ export default function GpfApgliUI() {
   const balNum = parseFloat(gpfBalance) || 0;
   const subNum = parseFloat(monthlySubscription) || 0;
   const rateNum = parseFloat(interestRate) || 7.1;
-  const serviceNum = parseFloat(serviceYears) || 0;
   const basicNum = parseFloat(basicPay) || 0;
 
   // GPF Annual Accumulation & Interest
@@ -122,9 +129,9 @@ export default function GpfApgliUI() {
         >
           ← Back to Utility Tools / ఇతర సాధనాలు
         </Link>
-        <span className="font-mono text-[9px] uppercase tracking-wider bg-tamarind/10 text-tamarind border border-tamarind/20 px-2.5 py-0.5 rounded-full font-semibold">
-          Client-Side Tool • Runs 100% On Device
-        </span>
+        <Badge variant="tamarind" size="sm" shape="pill" dot>
+          Runs 100% On Device
+        </Badge>
       </div>
 
       {/* Header */}
@@ -140,149 +147,97 @@ export default function GpfApgliUI() {
       {/* Grid: GPF & APGLI */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Card 1: GPF Interest & Loan Eligibility */}
-        <div className="bg-paperRaised border border-hair rounded-xl p-5 shadow-xs space-y-4">
-          <div className="border-b border-hair pb-3">
-            <h2 className="font-bold text-base text-ink">1. GPF Interest & Part-Final Loan</h2>
+        <Card>
+          <CardHeader>
+            <CardTitle>1. GPF Interest & Part-Final Loan</CardTitle>
             <div className="font-telugu text-xs text-inkSoft">జీపీఎఫ్ నిల్వ & పార్ట్-ఫైనల్ విత్‌డ్రావల్ అర్హత</div>
-          </div>
+          </CardHeader>
 
-          <div className="space-y-3">
-            <div>
-              <label htmlFor={gpfBalId} className="block font-mono text-[10px] uppercase font-bold text-inkSoft tracking-wider mb-1">
-                Current Opening GPF Balance (జీపీఎఫ్ నిల్వ) ₹ *
-              </label>
-              <input
-                id={gpfBalId}
-                type="number"
-                value={gpfBalance}
-                onChange={(e) => setGpfBalance(e.target.value)}
-                className="w-full bg-white border border-hair rounded-lg px-3 py-2 text-xs font-mono text-ink outline-none focus:border-tamarind"
-              />
-            </div>
+          <CardContent className="space-y-4">
+            <Field label="Current Opening GPF Balance" labelTe="జీపీఎఫ్ నిల్వ" required htmlFor={gpfBalId}>
+              <Input id={gpfBalId} type="number" mono value={gpfBalance} onChange={(e) => setGpfBalance(e.target.value)} />
+            </Field>
 
-            <div>
-              <label htmlFor={monthlySubId} className="block font-mono text-[10px] uppercase font-bold text-inkSoft tracking-wider mb-1">
-                Monthly Subscription (నెలవారీ చెల్లింపు) ₹ *
-              </label>
-              <input
-                id={monthlySubId}
-                type="number"
-                value={monthlySubscription}
-                onChange={(e) => setMonthlySubscription(e.target.value)}
-                className="w-full bg-white border border-hair rounded-lg px-3 py-2 text-xs font-mono text-ink outline-none focus:border-tamarind"
-              />
-            </div>
+            <Field label="Monthly Subscription" labelTe="నెలవారీ చెల్లింపు" required htmlFor={monthlySubId}>
+              <Input id={monthlySubId} type="number" mono value={monthlySubscription} onChange={(e) => setMonthlySubscription(e.target.value)} />
+            </Field>
 
             <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label htmlFor={interestRateId} className="block font-mono text-[10px] uppercase font-bold text-inkSoft tracking-wider mb-1">
-                  Interest Rate (% p.a.)
-                </label>
-                <input
-                  id={interestRateId}
-                  type="number"
-                  step="0.1"
-                  value={interestRate}
-                  onChange={(e) => setInterestRate(e.target.value)}
-                  className="w-full bg-white border border-hair rounded-lg px-3 py-2 text-xs font-mono text-ink outline-none focus:border-tamarind"
-                />
-              </div>
-              <div>
-                <label htmlFor={serviceYearsId} className="block font-mono text-[10px] uppercase font-bold text-inkSoft tracking-wider mb-1">
-                  Service Completed (Yrs)
-                </label>
-                <input
-                  id={serviceYearsId}
-                  type="number"
-                  value={serviceYears}
-                  onChange={(e) => setServiceYears(e.target.value)}
-                  className="w-full bg-white border border-hair rounded-lg px-3 py-2 text-xs font-mono text-ink outline-none focus:border-tamarind"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Results Block */}
-          <div className="pt-3 border-t border-hair space-y-2 font-mono text-xs">
-            <div className="flex justify-between text-inkSoft">
-              <span>Annual Subscription:</span>
-              <span className="font-bold text-ink">{formatCurrency(annualSub)}</span>
-            </div>
-            <div className="flex justify-between text-inkSoft">
-              <span>Estimated Interest (1 Yr @ {rateNum}%):</span>
-              <span className="font-bold text-tamarind">{formatCurrency(estimatedInterest)}</span>
-            </div>
-            <div className="flex justify-between text-ink border-t border-hair/50 pt-1.5 font-bold">
-              <span>Estimated Closing Balance:</span>
-              <span className="text-sm text-ink">{formatCurrency(closingBalance1Yr)}</span>
+              <Field label="Interest Rate (% p.a.)" htmlFor={interestRateId}>
+                <Input id={interestRateId} type="number" step="0.1" mono value={interestRate} onChange={(e) => setInterestRate(e.target.value)} />
+              </Field>
+              <Field label="Service Completed (Yrs)" htmlFor={serviceYearsId}>
+                <Input id={serviceYearsId} type="number" mono value={serviceYears} onChange={(e) => setServiceYears(e.target.value)} />
+              </Field>
             </div>
 
-            <div className="mt-4 p-3 bg-hair/30 rounded-lg space-y-1 text-[11px]">
-              <div className="font-bold text-ink font-sans">Part-Final Loan Limits / విత్‌డ్రావల్ పరిమితులు:</div>
+            <Separator />
+
+            <div className="space-y-2 font-mono text-xs">
               <div className="flex justify-between text-inkSoft">
-                <span>75% Max Part-Final Limit:</span>
-                <span className="font-bold text-ink">{formatCurrency(maxPartFinal75)}</span>
+                <span>Annual Subscription:</span>
+                <span className="font-bold text-ink">{formatCurrency(annualSub)}</span>
               </div>
               <div className="flex justify-between text-inkSoft">
-                <span>90% Retirement Limit:</span>
-                <span className="font-bold text-ink">{formatCurrency(maxPartFinal90)}</span>
+                <span>Estimated Interest (1 Yr @ {rateNum}%):</span>
+                <span className="font-bold text-tamarind">{formatCurrency(estimatedInterest)}</span>
+              </div>
+              <Separator />
+              <div className="flex justify-between text-ink font-bold">
+                <span>Estimated Closing Balance:</span>
+                <span className="text-sm text-ink">{formatCurrency(closingBalance1Yr)}</span>
+              </div>
+
+              <div className="mt-4 p-3 bg-hair/30 rounded-lg space-y-1 text-[11px]">
+                <div className="font-bold text-ink font-sans">Part-Final Loan Limits / విత్‌డ్రావల్ పరిమితులు:</div>
+                <div className="flex justify-between text-inkSoft">
+                  <span>75% Max Part-Final Limit:</span>
+                  <span className="font-bold text-ink">{formatCurrency(maxPartFinal75)}</span>
+                </div>
+                <div className="flex justify-between text-inkSoft">
+                  <span>90% Retirement Limit:</span>
+                  <span className="font-bold text-ink">{formatCurrency(maxPartFinal90)}</span>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
 
         {/* Card 2: APGLI Slab Matcher */}
-        <div className="bg-paperRaised border border-hair rounded-xl p-5 shadow-xs space-y-4">
-          <div className="border-b border-hair pb-3">
-            <h2 className="font-bold text-base text-ink">2. APGLI Premium Slab Matcher</h2>
+        <Card>
+          <CardHeader>
+            <CardTitle>2. APGLI Premium Slab Matcher</CardTitle>
             <div className="font-telugu text-xs text-inkSoft">బేసిక్ పే ఆధారంగా APGLI ప్రీమియం స్లాబ్</div>
-          </div>
+          </CardHeader>
 
-          <div className="space-y-3">
-            <div>
-              <label htmlFor={basicPayId} className="block font-mono text-[10px] uppercase font-bold text-inkSoft tracking-wider mb-1">
-                Current Basic Pay (మూల వేతనం) ₹ *
-              </label>
-              <input
-                id={basicPayId}
-                type="number"
-                value={basicPay}
-                onChange={(e) => setBasicPay(e.target.value)}
-                className="w-full bg-white border border-hair rounded-lg px-3 py-2 text-xs font-mono text-ink outline-none focus:border-tamarind"
-              />
-            </div>
+          <CardContent className="space-y-4">
+            <Field label="Current Basic Pay" labelTe="మూల వేతనం" required htmlFor={basicPayId}>
+              <Input id={basicPayId} type="number" mono value={basicPay} onChange={(e) => setBasicPay(e.target.value)} />
+            </Field>
 
-            <div>
-              <label htmlFor={currPremiumId} className="block font-mono text-[10px] uppercase font-bold text-inkSoft tracking-wider mb-1">
-                Current Deducted Premium ₹
-              </label>
-              <input
-                id={currPremiumId}
-                type="number"
-                value={currentPremium}
-                onChange={(e) => setCurrentPremium(e.target.value)}
-                className="w-full bg-white border border-hair rounded-lg px-3 py-2 text-xs font-mono text-ink outline-none focus:border-tamarind"
-              />
-            </div>
-          </div>
+            <Field label="Current Deducted Premium" htmlFor={currPremiumId}>
+              <Input id={currPremiumId} type="number" mono value={currentPremium} onChange={(e) => setCurrentPremium(e.target.value)} />
+            </Field>
 
-          {/* APGLI Recommendation Block */}
-          <div className="pt-3 border-t border-hair space-y-3">
-            <div className="p-3 bg-hair/30 rounded-lg space-y-1 text-xs">
-              <div className="text-inkSoft font-mono text-[11px]">Recommended Min Premium:</div>
-              <div className="text-xl font-bold text-ink font-mono">{formatCurrency(recommendedApgliPremium)} / month</div>
-              <div className="text-[11px] text-inkSoft/80 font-sans mt-1 leading-snug">
-                As per AP Government revised pay scale slabs, employees with Basic Pay ₹{basicNum.toLocaleString("en-IN")} must deduct at least {formatCurrency(recommendedApgliPremium)}.
+            <Separator />
+
+            <div className="space-y-3">
+              <div className="p-3 bg-hair/30 rounded-lg space-y-1 text-xs">
+                <div className="text-inkSoft font-mono text-[11px]">Recommended Min Premium:</div>
+                <div className="text-xl font-bold text-ink font-mono">{formatCurrency(recommendedApgliPremium)} / month</div>
+                <div className="text-[11px] text-inkSoft/80 font-sans mt-1 leading-snug">
+                  As per AP Government revised pay scale slabs, employees with Basic Pay ₹{basicNum.toLocaleString("en-IN")} must deduct at least {formatCurrency(recommendedApgliPremium)}.
+                </div>
               </div>
-            </div>
 
-            {parseFloat(currentPremium) < recommendedApgliPremium && (
-              <div className="p-3 bg-tamarind/10 border border-tamarind/30 rounded-lg text-xs text-tamarind font-medium leading-relaxed">
-                ⚠️ Your current premium ({formatCurrency(parseFloat(currentPremium) || 0)}) is below the recommended slab minimum ({formatCurrency(recommendedApgliPremium)}). Consider submitting a proposal for policy enhancement.
-              </div>
-            )}
-          </div>
-        </div>
+              {parseFloat(currentPremium) < recommendedApgliPremium && (
+                <div className="p-3 bg-tamarind/10 border border-tamarind/30 rounded-lg text-xs text-tamarind font-medium leading-relaxed">
+                  ⚠️ Your current premium ({formatCurrency(parseFloat(currentPremium) || 0)}) is below the recommended slab minimum ({formatCurrency(recommendedApgliPremium)}). Consider submitting a proposal for policy enhancement.
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Accordion Rules & FAQs */}
