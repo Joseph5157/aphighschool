@@ -2,11 +2,14 @@
 
 import { useState } from "react";
 
+import Badge from "./Badge";
+
 export type AccordionItemData = {
   id: string;
   titleEn: string;
   titleTe?: string;
   badge?: string;
+  badgeVariant?: "tamarind" | "turmeric" | "neutral" | "success" | "warning" | "dark";
   content: React.ReactNode;
   defaultOpen?: boolean;
 };
@@ -61,9 +64,9 @@ export default function Accordion({ items, allowMultiple = true, className = "" 
                     {item.titleEn}
                   </h3>
                   {item.badge && (
-                    <span className="font-mono text-[9px] uppercase tracking-wider px-2 py-0.5 rounded font-semibold bg-tamarind/10 text-tamarind border border-tamarind/20">
+                    <Badge variant={item.badgeVariant || "tamarind"} size="sm">
                       {item.badge}
-                    </span>
+                    </Badge>
                   )}
                 </div>
                 {item.titleTe && (
