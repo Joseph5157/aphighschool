@@ -6,6 +6,7 @@ import Badge from "../_components/Badge";
 import Button from "../_components/Button";
 import Breadcrumb from "../_components/Breadcrumb";
 import Accordion from "../_components/Accordion";
+import ToolsSidebar from "./_components/ToolsSidebar";
 
 export const metadata: Metadata = {
   title: "Teacher Utility Calculators — AP Teacher Desk",
@@ -68,159 +69,169 @@ const TOOLS = [
 
 export default function ToolsIndexPage() {
   return (
-    <div className="max-w-5xl mx-auto space-y-6 font-sans">
+    <div className="space-y-6 font-sans">
       <Breadcrumb items={[{ label: "Utility Tools" }]} />
 
-      {/* Option C Royal Indigo Hero Header */}
-      <div className="bg-[#1B2A4A] text-white border border-[#2B3C63] rounded-2xl p-6 md:p-8 space-y-3 shadow-md relative overflow-hidden">
-        <div className="flex items-center justify-between">
-          <Badge variant="turmeric" size="sm" shape="pill" dot>
-            Heritage Craft Utility Suite
-          </Badge>
-          <span className="font-mono text-[10px] text-amber-300">100% Client-Side Privacy</span>
-        </div>
+      <div className="lg:grid lg:grid-cols-12 lg:gap-6 xl:gap-8 space-y-8 lg:space-y-0">
+        {/* Main Feed Column (8 cols on Desktop) */}
+        <div className="lg:col-span-8 space-y-6">
+          {/* Option C Royal Indigo Hero Header */}
+          <div className="bg-[#1B2A4A] text-white border border-[#2B3C63] rounded-2xl p-6 md:p-8 space-y-3 shadow-md relative overflow-hidden">
+            <div className="flex items-center justify-between">
+              <Badge variant="turmeric" size="sm" shape="pill" dot>
+                Heritage Craft Utility Suite
+              </Badge>
+              <span className="font-mono text-[10px] text-amber-300">100% Client-Side Privacy</span>
+            </div>
 
-        <div>
-          <h1 className="text-display text-white tracking-tight">
-            Teacher Utility Calculators
-          </h1>
-          <p className="text-telugu-title text-amber-200 font-medium mt-1">
-            ఉపాధ్యాయుల వేతన, పన్ను మరియు బిల్లుల లెక్కింపు సాధనాలు
-          </p>
-        </div>
+            <div>
+              <h1 className="text-display text-white tracking-tight">
+                Teacher Utility Calculators
+              </h1>
+              <p className="text-telugu-title text-amber-200 font-medium mt-1">
+                ఉపాధ్యాయుల వేతన, పన్ను మరియు బిల్లుల లెక్కింపు సాధనాలు
+              </p>
+            </div>
 
-        <p className="text-xs text-slate-200 font-mono leading-relaxed">
-          All calculations execute strictly inside your browser. No financial data or personal pay details leave your device.
-        </p>
-      </div>
+            <p className="text-xs text-slate-200 font-mono leading-relaxed">
+              All calculations execute strictly inside your browser. No financial data or personal pay details leave your device.
+            </p>
+          </div>
 
-      {/* Privacy shield info strip */}
-      <div className="bg-[#FAF7F2] border border-amber-200/60 rounded-xl px-4 py-3 flex items-center justify-between gap-3 flex-wrap">
-        <div className="flex items-center gap-2 font-mono text-xs text-inkSoft">
-          <span className="text-amber-600 text-base">🔒</span>
-          <span>100% Client-Side · No Server Calls · No Financial Data Stored</span>
-        </div>
-        <span className="font-mono text-[10px] font-semibold text-turmericDeep bg-turmeric/10 border border-turmeric/30 px-2.5 py-1 rounded-full">
-          Privacy First
-        </span>
-      </div>
+          {/* Privacy shield info strip */}
+          <div className="bg-[#FAF7F2] border border-amber-200/60 rounded-xl px-4 py-3 flex items-center justify-between gap-3 flex-wrap">
+            <div className="flex items-center gap-2 font-mono text-xs text-inkSoft">
+              <span className="text-amber-600 text-base">🔒</span>
+              <span>100% Client-Side · No Server Calls · No Financial Data Stored</span>
+            </div>
+            <span className="font-mono text-[10px] font-semibold text-turmericDeep bg-turmeric/10 border border-turmeric/30 px-2.5 py-1 rounded-full">
+              Privacy First
+            </span>
+          </div>
 
-      {/* Option C Card Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {TOOLS.map((tool) => (
-          <Card key={tool.href} hoverable className="p-5 space-y-3 bg-[#FAF7F2] border-hair flex flex-col justify-between">
-            <div className="space-y-3">
-              <div className="flex items-center justify-between flex-wrap gap-2 text-xs font-mono">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-lg bg-[#1B2A4A] text-amber-300 flex items-center justify-center text-lg shrink-0">
-                    {tool.icon}
+          {/* Option C Card Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {TOOLS.map((tool) => (
+              <Card key={tool.href} hoverable className="p-5 space-y-3 bg-[#FAF7F2] border-hair flex flex-col justify-between">
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between flex-wrap gap-2 text-xs font-mono">
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-lg bg-[#1B2A4A] text-amber-300 flex items-center justify-center text-lg shrink-0">
+                        {tool.icon}
+                      </div>
+                      <Badge variant={tool.popular ? "tamarind" : "neutral"} size="sm" shape="pill">
+                        {tool.badge}
+                      </Badge>
+                      {tool.popular && (
+                        <span className="font-mono text-[9px] font-bold bg-amber-400/20 text-amber-700 border border-amber-300/50 px-2 py-0.5 rounded-full">
+                          ⭐ Most Used
+                        </span>
+                      )}
+                    </div>
+                    <span className="text-inkSoft font-semibold">{tool.status}</span>
                   </div>
-                  <Badge variant={tool.popular ? "tamarind" : "neutral"} size="sm" shape="pill">
-                    {tool.badge}
-                  </Badge>
-                  {tool.popular && (
-                    <span className="font-mono text-[9px] font-bold bg-amber-400/20 text-amber-700 border border-amber-300/50 px-2 py-0.5 rounded-full">
-                      ⭐ Most Used
-                    </span>
-                  )}
+
+                  <div>
+                    <h3 className="text-card-title text-ink">
+                      {tool.title}
+                    </h3>
+                    <div className="text-telugu-body text-inkSoft mt-1">
+                      {tool.titleTe}
+                    </div>
+                  </div>
+
+                  <p className="text-xs text-inkSoft font-mono leading-relaxed pt-2 border-t border-hair/50">
+                    {tool.desc}
+                  </p>
+
+                  {/* Step flow chips */}
+                  <div className="flex items-center gap-1.5 flex-wrap pt-1">
+                    {["Fill Details", "Auto-Calculate", "Export PDF"].map((step, i) => (
+                      <span key={i} className="inline-flex items-center gap-1 font-mono text-[9px] bg-[#1B2A4A]/5 text-[#1B2A4A] border border-[#1B2A4A]/15 px-2 py-0.5 rounded">
+                        <span className="font-bold">{i + 1}</span>
+                        <span className="text-inkSoft/60">·</span>
+                        {step}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-                <span className="text-inkSoft font-semibold">{tool.status}</span>
-              </div>
 
-              <div>
-                <h3 className="text-card-title text-ink">
-                  {tool.title}
-                </h3>
-                <div className="text-telugu-body text-inkSoft mt-1">
-                  {tool.titleTe}
+                <div className="pt-2 flex justify-end">
+                  <Link href={tool.href}>
+                    <Button variant="tamarind" size="sm" rightIcon={<span>→</span>}>
+                      Open Calculator
+                    </Button>
+                  </Link>
                 </div>
-              </div>
+              </Card>
+            ))}
+          </div>
 
-              <p className="text-xs text-inkSoft font-mono leading-relaxed pt-2 border-t border-hair/50">
-                {tool.desc}
-              </p>
+          {/* FAQ Section */}
+          <div className="space-y-3 pt-4 border-t border-hair">
+            <h2 className="text-section text-ink flex items-center gap-2">
+              <span>❓</span> Frequently Asked Questions
+            </h2>
+            <Accordion allowMultiple items={[
+              {
+                id: "faq-tax",
+                titleEn: "Which tax regime should AP teachers choose in FY 2025-26?",
+                titleTe: "ఆయవ్యయ సంవత్సరం 2025-26లో ఏ పన్ను నియమావళి ఎంచుకోవాలి?",
+                badge: "Tax",
+                badgeVariant: "turmeric",
+                defaultOpen: true,
+                content: (
+                  <p>
+                    For AP teachers with standard HRA and 80C deductions, the Old Regime is usually better
+                    if total deductions exceed ₹2.5 lakh. Use our calculator to compare both regimes instantly.
+                  </p>
+                ),
+              },
+              {
+                id: "faq-el",
+                titleEn: "How many days of Earned Leave can I surrender per year?",
+                titleTe: "సంవత్సరానికి ఎన్ని రోజుల ఆర్జిత సెలవులు వదులుకోవచ్చు?",
+                badge: "Leave",
+                badgeVariant: "neutral",
+                content: (
+                  <p>
+                    AP teachers can surrender up to 15 days of EL per year while in service
+                    and up to 30 days at retirement. HPL encashment is applicable only at superannuation.
+                  </p>
+                ),
+              },
+              {
+                id: "faq-gpf",
+                titleEn: "What is the current GPF interest rate for AP teachers?",
+                badge: "GPF",
+                badgeVariant: "neutral",
+                content: (
+                  <p>
+                    The current GPF interest rate is <strong>7.1% per annum</strong>, compounded annually.
+                    The balance grows on a monthly credit basis with final interest calculated at year end.
+                  </p>
+                ),
+              },
+              {
+                id: "faq-cfms",
+                titleEn: "How do I check my CFMS bill status or download my payslip?",
+                badge: "CFMS",
+                badgeVariant: "tamarind",
+                content: (
+                  <p>
+                    Use our CFMS Bill Status guide to navigate directly to the DDO submission portal
+                    and the payslip download section. No login needed for bill status — only Employee ID required.
+                  </p>
+                ),
+              },
+            ]} />
+          </div>
+        </div>
 
-              {/* Step flow chips */}
-              <div className="flex items-center gap-1.5 flex-wrap pt-1">
-                {["Fill Details", "Auto-Calculate", "Export PDF"].map((step, i) => (
-                  <span key={i} className="inline-flex items-center gap-1 font-mono text-[9px] bg-[#1B2A4A]/5 text-[#1B2A4A] border border-[#1B2A4A]/15 px-2 py-0.5 rounded">
-                    <span className="font-bold">{i + 1}</span>
-                    <span className="text-inkSoft/60">·</span>
-                    {step}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            <div className="pt-2 flex justify-end">
-              <Link href={tool.href}>
-                <Button variant="tamarind" size="sm" rightIcon={<span>→</span>}>
-                  Open Calculator
-                </Button>
-              </Link>
-            </div>
-          </Card>
-        ))}
-      </div>
-
-      {/* FAQ Section */}
-      <div className="space-y-3 pt-4 border-t border-hair">
-        <h2 className="text-section text-ink flex items-center gap-2">
-          <span>❓</span> Frequently Asked Questions
-        </h2>
-        <Accordion allowMultiple items={[
-          {
-            id: "faq-tax",
-            titleEn: "Which tax regime should AP teachers choose in FY 2025-26?",
-            titleTe: "ఆయవ్యయ సంవత్సరం 2025-26లో ఏ పన్ను నియమావళి ఎంచుకోవాలి?",
-            badge: "Tax",
-            badgeVariant: "turmeric",
-            defaultOpen: true,
-            content: (
-              <p>
-                For AP teachers with standard HRA and 80C deductions, the Old Regime is usually better
-                if total deductions exceed ₹2.5 lakh. Use our calculator to compare both regimes instantly.
-              </p>
-            ),
-          },
-          {
-            id: "faq-el",
-            titleEn: "How many days of Earned Leave can I surrender per year?",
-            titleTe: "సంవత్సరానికి ఎన్ని రోజుల ఆర్జిత సెలవులు వదులుకోవచ్చు?",
-            badge: "Leave",
-            badgeVariant: "neutral",
-            content: (
-              <p>
-                AP teachers can surrender up to 15 days of EL per year while in service
-                and up to 30 days at retirement. HPL encashment is applicable only at superannuation.
-              </p>
-            ),
-          },
-          {
-            id: "faq-gpf",
-            titleEn: "What is the current GPF interest rate for AP teachers?",
-            badge: "GPF",
-            badgeVariant: "neutral",
-            content: (
-              <p>
-                The current GPF interest rate is <strong>7.1% per annum</strong>, compounded annually.
-                The balance grows on a monthly credit basis with final interest calculated at year end.
-              </p>
-            ),
-          },
-          {
-            id: "faq-cfms",
-            titleEn: "How do I check my CFMS bill status or download my payslip?",
-            badge: "CFMS",
-            badgeVariant: "tamarind",
-            content: (
-              <p>
-                Use our CFMS Bill Status guide to navigate directly to the DDO submission portal
-                and the payslip download section. No login needed for bill status — only Employee ID required.
-              </p>
-            ),
-          },
-        ]} />
+        {/* Sidebar Column (4 cols on Desktop) */}
+        <div className="lg:col-span-4">
+          <ToolsSidebar />
+        </div>
       </div>
     </div>
   );
