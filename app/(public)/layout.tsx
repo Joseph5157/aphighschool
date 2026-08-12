@@ -3,6 +3,8 @@ import type { Metadata, Viewport } from "next";
 import BottomNav from "@/app/(public)/_components/BottomNav";
 import Button from "@/app/(public)/_components/Button";
 
+import ThemeToggle from "@/app/(public)/_components/ThemeToggle";
+
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
 export const metadata: Metadata = {
@@ -56,6 +58,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
           </nav>
 
           <div className="flex items-center gap-3">
+            <ThemeToggle />
             <Link href="/admin" className="hidden sm:block">
               <Button variant="primary" size="sm">
                 CMS →
