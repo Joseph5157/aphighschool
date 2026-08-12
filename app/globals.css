@@ -2,12 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Noto+Sans+Telugu:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Noto+Sans+Telugu:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap");
+
+/* Typography hierarchy variables */
+:root {
+  --label-primary: 0.875rem;   /* 14px */
+  --label-secondary: 0.75rem;  /* 12px */
+  --label-helper: 0.6875rem;   /* 11px */
+}
+
+@media (min-width: 768px) {
+  :root {
+    --label-primary: 0.75rem;   /* 12px */
+    --label-secondary: 0.6875rem; /* 11px */
+    --label-helper: 0.625rem;   /* 10px */
+  }
+}
 
 body {
   background: #dad5c6;
   color: #1b2a4a;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: "Noto Sans", "Noto Sans Telugu", Arial, sans-serif;
 }
 
 .font-telugu {
@@ -16,4 +31,21 @@ body {
 
 .font-mono {
   font-family: "IBM Plex Mono", monospace;
+}
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 8mm 6mm;
+  }
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .print-page-break {
+    page-break-after: always;
+    break-after: page;
+  }
 }

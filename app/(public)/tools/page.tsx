@@ -5,7 +5,7 @@ const TOOLS = [
     id: "tax-calculator",
     nameEn: "Income Tax Calculator",
     nameTe: "ఆదాయపు పన్ను గణన సాధనం",
-    description: "Calculate FY 2025-26 tax liability under New & Old regimes.",
+    description: "Calculate FY 2025-26 & FY 2024-25 tax liability under New & Old regimes with AP Teacher pay heads (Basic, DA, HRA, 80C, 80D, 24B).",
     badge: "RUNS ON YOUR DEVICE",
     badgeType: "ready",
     href: "/tools/tax-calculator",
@@ -14,37 +14,28 @@ const TOOLS = [
     id: "leave-encashment",
     nameEn: "Leave Encashment Calculator",
     nameTe: "లీవ్ ఎన్‌క్యాష్‌మెంట్ కాలిక్యులేటర్",
-    description: "Earned leave & half-pay leave encashment estimations for retiring teachers.",
-    badge: "COMING SOON",
-    badgeType: "soon",
-    href: "#",
+    description: "Earned leave & half-pay leave surrender bill encashment estimations for AP & TS teachers.",
+    badge: "RUNS ON YOUR DEVICE",
+    badgeType: "ready",
+    href: "/tools/leave-encashment",
   },
   {
     id: "gpf-apgli",
     nameEn: "GPF / APGLI Calculator",
     nameTe: "జీపీఎఫ్ / ఏపీజీఎల్ఐ గణన",
-    description: "General Provident Fund and APGLI maturity & loan eligibility estimator.",
-    badge: "COMING SOON",
-    badgeType: "soon",
-    href: "#",
-  },
-  {
-    id: "esr-manual",
-    nameEn: "e-SR Manual & Checker",
-    nameTe: "ఈ-ఎస్ఆర్ మార్గదర్శకాలు",
-    description: "Electronic Service Register entries checklist & verification rules.",
-    badge: "COMING SOON",
-    badgeType: "soon",
-    href: "#",
+    description: "General Provident Fund 7.1% interest growth, Part-Final loan eligibility & APGLI premium slab matcher.",
+    badge: "RUNS ON YOUR DEVICE",
+    badgeType: "ready",
+    href: "/tools/gpf-apgli",
   },
   {
     id: "cfms-checker",
-    nameEn: "CFMS Bill Status Checker",
-    nameTe: "సీఎఫ్ఎమ్‌ఎస్ బిల్‌ స్టేటస్",
-    description: "Comprehensive Financial Management System bill tracking guidance.",
-    badge: "COMING SOON",
-    badgeType: "soon",
-    href: "#",
+    nameEn: "CFMS Bill Status & Portal Checker",
+    nameTe: "సీఎఫ్ఎమ్‌ఎస్ బిల్‌ స్టేటస్ & పోర్టల్ మార్గదర్శి",
+    description: "Direct links and step-by-step guides for CFMS Teacher Payslips, Medical Reimbursement, EHS cards, & e-SR.",
+    badge: "DIRECTORY & GUIDES",
+    badgeType: "ready",
+    href: "/tools/cfms-checker",
   },
 ];
 
@@ -55,7 +46,7 @@ export default function ToolsIndexPage() {
       <div className="border-b border-hair pb-4">
         <h1 className="text-2xl font-bold text-ink tracking-tight">Utility Tools</h1>
         <p className="text-xs text-inkSoft font-mono mt-1">
-          Client-Side Calculators & Utilities for AP School Education Teachers
+          Client-Side Calculators & Utilities for AP & TS School Education Teachers
         </p>
       </div>
 

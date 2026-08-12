@@ -21,7 +21,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
   return (
     <div className="min-h-screen bg-paper text-ink flex flex-col antialiased">
       {/* Minimal Top Header */}
-      <header className="bg-paperRaised border-b border-hair sticky top-0 z-40">
+      <header className="bg-paperRaised border-b border-hair sticky top-0 z-40 print:hidden">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
           <Link href="/" className="group flex items-center gap-3">
             <div className="w-9 h-9 rounded-lg bg-ink text-turmeric font-mono font-bold flex items-center justify-center border border-inkSoft shadow-sm">
@@ -47,12 +47,12 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
       </header>
 
       {/* Main Content Area */}
-      <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 py-8 pb-[64px]">
+      <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 py-8 pb-[64px] print:p-0 print:m-0 print:max-w-none print:w-full">
         {children}
       </main>
 
       {/* Sticky Bottom Tab Bar */}
-      <nav className="sticky bottom-0 left-0 w-full bg-paperRaised border-t border-hair z-50">
+      <nav className="sticky bottom-0 left-0 w-full bg-paperRaised border-t border-hair z-50 print:hidden">
         <div className="max-w-md mx-auto flex items-center justify-around py-2">
           <Link href="/" className="flex flex-col items-center p-2 text-inkSoft hover:text-ink active:scale-[0.92] transition-transform">
             <svg className="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
