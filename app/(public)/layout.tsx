@@ -49,6 +49,9 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
             <Link href="/orders" className="hover:text-ink transition-colors">
               Orders & Circulars
             </Link>
+            <Link href="/education" className="hover:text-ink transition-colors">
+              Student & Exams
+            </Link>
             <Link href="/tools" className="hover:text-ink transition-colors">
               Utility Tools
             </Link>
