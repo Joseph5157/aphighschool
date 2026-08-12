@@ -1,4 +1,6 @@
 import Link from "next/link";
+import Card from "./Card";
+import Badge from "./Badge";
 
 const STATUS_LABEL: Record<string, string> = {
   notification: "Notified",
@@ -8,12 +10,12 @@ const STATUS_LABEL: Record<string, string> = {
   expired: "Expired",
 };
 
-const STATUS_COLOR: Record<string, string> = {
-  notification: "bg-tamarind/10 text-tamarind border border-tamarind/20",
-  apply_link: "bg-turmeric/20 text-turmericDeep border border-turmeric/30",
-  hall_ticket: "bg-turmeric/20 text-turmericDeep border border-turmeric/30",
-  results: "bg-tamarind/10 text-tamarind border border-tamarind/20",
-  expired: "bg-hair/60 text-inkSoft border border-hair",
+const STATUS_VARIANT: Record<string, "tamarind" | "turmeric" | "neutral" | "success"> = {
+  notification: "tamarind",
+  apply_link: "turmeric",
+  hall_ticket: "turmeric",
+  results: "success",
+  expired: "neutral",
 };
 
 function getCategoryAbbr(categoryName?: string | null, categorySlug?: string | null): string {
@@ -44,24 +46,23 @@ type PostCardProps = {
 };
 
 export default function PostCard({ post }: PostCardProps) {
-  const formattedDate = new Date(post.createdAt).toLocaleDateString("en-IN", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  });
-
   const abbr = getCategoryAbbr(post.category?.nameEn, post.category?.slug);
+  const badgeVariant = STATUS_VARIANT[post.statusBadge] || "tamarind";
 
   return (
-    <article className="bg-paperRaised border border-hair rounded-xl p-4 sm:p-5 flex items-start gap-4 transition-all active:scale-[0.99] hover:shadow-xs hover:border-ink/20">
+    <Card hoverable className="p-4 sm:p-5 flex items-start gap-4 transition-all">
       {/* Category Abbreviation Icon Block */}
-      <div 
+      <div
         className="w-12 h-12 rounded-lg bg-paper border border-hair font-mono font-bold text-xs text-ink flex items-center justify-center flex-shrink-0 shadow-inner"
-        style={post.category?.color ? { 
-          backgroundColor: `${post.category.color}15`, 
-          color: post.category.color,
-          borderColor: `${post.category.color}30`
-        } : undefined}
+        style={
+          post.category?.color
+            ? {
+                backgroundColor: `${post.category.color}15`,
+                color: post.category.color,
+                borderColor: `${post.category.color}30`,
+              }
+            : undefined
+        }
       >
         {abbr}
       </div>
@@ -69,13 +70,9 @@ export default function PostCard({ post }: PostCardProps) {
       {/* Main Details */}
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-1.5 flex-wrap">
-          <span
-            className={`font-mono text-[10px] px-2 py-0.5 rounded-full font-semibold ${
-              STATUS_COLOR[post.statusBadge] || STATUS_COLOR.notification
-            }`}
-          >
+          <Badge variant={badgeVariant} size="sm" shape="pill">
             {STATUS_LABEL[post.statusBadge] || post.statusBadge}
-          </span>
+          </Badge>
 
           {(post.category || post.goReference) && (
             <span className="font-mono text-[8.5px] text-inkSoft tracking-wide">
@@ -84,9 +81,9 @@ export default function PostCard({ post }: PostCardProps) {
           )}
 
           {post.verifiedAgainstGoir && (
-            <span className="font-mono text-[9px] text-tamarind font-medium">
-              ✓ GOIR Verified
-            </span>
+            <Badge variant="success" size="sm" shape="pill" dot>
+              GOIR Verified
+            </Badge>
           )}
         </div>
 
@@ -99,6 +96,6 @@ export default function PostCard({ post }: PostCardProps) {
           </div>
         </Link>
       </div>
-    </article>
+    </Card>
   );
 }
