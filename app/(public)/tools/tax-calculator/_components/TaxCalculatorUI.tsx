@@ -368,7 +368,7 @@ export default function TaxCalculatorUI() {
   ];
 
   return (
-    <div className="max-w-6xl mx-auto space-y-6 pb-16 font-sans print:p-0 print:m-0 print:max-w-none print:w-full">
+    <div className="max-w-7xl mx-auto space-y-6 pb-16 font-sans print:p-0 print:m-0 print:max-w-none print:w-full">
       {/* Tab Navigation */}
       <div className="flex flex-wrap items-center justify-between gap-3 print:hidden">
         <Link href="/tools" className="text-xs font-mono text-inkSoft hover:text-ink font-semibold">

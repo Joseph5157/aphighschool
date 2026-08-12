@@ -8,6 +8,7 @@ import Breadcrumb from "@/app/(public)/_components/Breadcrumb";
 import Badge from "@/app/(public)/_components/Badge";
 import Card from "@/app/(public)/_components/Card";
 import Button from "@/app/(public)/_components/Button";
+import DesktopSidebar from "@/app/(public)/_components/DesktopSidebar";
 
 export const revalidate = 3600; // ISR revalidation (1 hour)
 
@@ -116,8 +117,9 @@ export default async function PostDetailPage({
     : null;
 
   return (
-    <div className="max-w-3xl mx-auto space-y-8 pb-24">
-      {/* Breadcrumb Trail & SEO Schema */}
+    <div className="lg:grid lg:grid-cols-12 lg:gap-8 space-y-8 lg:space-y-0 pb-24">
+      <div className="lg:col-span-8 space-y-8">
+        {/* Breadcrumb Trail & SEO Schema */}
       <Breadcrumb
         items={[
           { label: "Orders", href: "/orders" },
@@ -297,6 +299,13 @@ export default async function PostDetailPage({
           Independent, unofficial educational portal. Not affiliated with the Government of AP/TS. For legally binding documents, refer to the official source above.
         </p>
       </footer>
+
+      </div>
+
+      {/* Right Desktop Sidebar Rail */}
+      <div className="lg:col-span-4">
+        <DesktopSidebar />
+      </div>
 
       {/* 9. Thumb-Zone Action Bar (only if pdfUrl exists) */}
       {post.pdfUrl && (
