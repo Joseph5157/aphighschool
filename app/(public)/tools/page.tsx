@@ -1,12 +1,10 @@
 import React from "react";
 import Link from "next/link";
 import type { Metadata } from "next";
-import { Card, CardHeader, CardTitle, CardContent } from "../_components/Card";
+import { Card } from "../_components/Card";
 import Badge from "../_components/Badge";
 import Button from "../_components/Button";
 import Breadcrumb from "../_components/Breadcrumb";
-import DesktopLeftNav from "../_components/DesktopLeftNav";
-import DesktopSidebar from "../_components/DesktopSidebar";
 
 export const metadata: Metadata = {
   title: "Teacher Utility Calculators — AP Teacher Desk",
@@ -59,43 +57,37 @@ const TOOLS = [
 
 export default function ToolsIndexPage() {
   return (
-    <div className="lg:grid lg:grid-cols-12 lg:gap-6 xl:gap-8 space-y-8 lg:space-y-0 font-sans">
-      {/* 1. Left Rail Navigation */}
-      <div className="lg:col-span-3">
-        <DesktopLeftNav />
-      </div>
+    <div className="max-w-5xl mx-auto space-y-6 font-sans">
+      <Breadcrumb items={[{ label: "Utility Tools" }]} />
 
-      {/* 2. Center Tools Content (Option C Heritage Craft Pattern) */}
-      <div className="lg:col-span-6 space-y-6">
-        <Breadcrumb items={[{ label: "Utility Tools" }]} />
+      {/* Option C Royal Indigo Hero Header */}
+      <div className="bg-[#1B2A4A] text-white border border-[#2B3C63] rounded-2xl p-6 md:p-8 space-y-3 shadow-md relative overflow-hidden">
+        <div className="flex items-center justify-between">
+          <Badge variant="turmeric" size="sm" shape="pill" dot>
+            Heritage Craft Utility Suite
+          </Badge>
+          <span className="font-mono text-[10px] text-amber-300">100% Client-Side Privacy</span>
+        </div>
 
-        {/* Option C Royal Indigo Hero Header */}
-        <div className="bg-[#1B2A4A] text-white border border-[#2B3C63] rounded-2xl p-6 space-y-3 shadow-md relative overflow-hidden">
-          <div className="flex items-center justify-between">
-            <Badge variant="turmeric" size="sm" shape="pill" dot>
-              Heritage Craft Utility Suite
-            </Badge>
-            <span className="font-mono text-[10px] text-amber-300">100% Client-Side Privacy</span>
-          </div>
-
-          <div>
-            <h1 className="text-display text-white tracking-tight">
-              Teacher Utility Calculators
-            </h1>
-            <p className="text-telugu-title text-amber-200 font-medium mt-1">
-              ఉపాధ్యాయుల వేతన, పన్ను మరియు బిల్లుల లెక్కింపు సాధనాలు
-            </p>
-          </div>
-
-          <p className="text-xs text-slate-200 font-mono leading-relaxed">
-            All calculations execute strictly inside your browser. No financial data or personal pay details leave your device.
+        <div>
+          <h1 className="text-display text-white tracking-tight">
+            Teacher Utility Calculators
+          </h1>
+          <p className="text-telugu-title text-amber-200 font-medium mt-1">
+            ఉపాధ్యాయుల వేతన, పన్ను మరియు బిల్లుల లెక్కింపు సాధనాలు
           </p>
         </div>
 
-        {/* Option C Card Grid */}
-        <div className="space-y-4">
-          {TOOLS.map((tool) => (
-            <Card key={tool.href} hoverable className="p-5 space-y-3 bg-[#FAF7F2] border-hair">
+        <p className="text-xs text-slate-200 font-mono leading-relaxed">
+          All calculations execute strictly inside your browser. No financial data or personal pay details leave your device.
+        </p>
+      </div>
+
+      {/* Option C Card Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {TOOLS.map((tool) => (
+          <Card key={tool.href} hoverable className="p-5 space-y-3 bg-[#FAF7F2] border-hair flex flex-col justify-between">
+            <div className="space-y-3">
               <div className="flex items-center justify-between flex-wrap gap-2 text-xs font-mono">
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-8 rounded-lg bg-[#1B2A4A] text-amber-300 flex items-center justify-center text-lg shrink-0">
@@ -120,22 +112,17 @@ export default function ToolsIndexPage() {
               <p className="text-xs text-inkSoft font-mono leading-relaxed pt-2 border-t border-hair/50">
                 {tool.desc}
               </p>
+            </div>
 
-              <div className="pt-1 flex justify-end">
-                <Link href={tool.href}>
-                  <Button variant="tamarind" size="sm" rightIcon={<span>→</span>}>
-                    Open Calculator
-                  </Button>
-                </Link>
-              </div>
-            </Card>
-          ))}
-        </div>
-      </div>
-
-      {/* 3. Right Sidebar Rail */}
-      <div className="lg:col-span-3">
-        <DesktopSidebar />
+            <div className="pt-2 flex justify-end">
+              <Link href={tool.href}>
+                <Button variant="tamarind" size="sm" rightIcon={<span>→</span>}>
+                  Open Calculator
+                </Button>
+              </Link>
+            </div>
+          </Card>
+        ))}
       </div>
     </div>
   );

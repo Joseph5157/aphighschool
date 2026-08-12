@@ -118,15 +118,8 @@ export default async function PostDetailPage({
     : null;
 
   return (
-    <div className="lg:grid lg:grid-cols-12 lg:gap-6 xl:gap-8 space-y-8 lg:space-y-0 pb-24">
-      {/* 1. Left Rail (3 Cols / ~25% Width) */}
-      <div className="lg:col-span-3">
-        <DesktopLeftNav />
-      </div>
-
-      {/* 2. Center G.O. Document Reader (6 Cols / ~50% Width) */}
-      <div className="lg:col-span-6 space-y-8">
-        {/* Breadcrumb Trail & SEO Schema */}
+    <div className="max-w-4xl mx-auto space-y-8 pb-24 font-sans">
+      {/* Breadcrumb Trail & SEO Schema */}
       <Breadcrumb
         items={[
           { label: "Orders", href: "/orders" },
@@ -306,13 +299,6 @@ export default async function PostDetailPage({
           Independent, unofficial educational portal. Not affiliated with the Government of AP/TS. For legally binding documents, refer to the official source above.
         </p>
       </footer>
-
-      </div>
-
-      {/* 3. Right Desktop Sidebar Rail (3 Cols / ~25% Width) */}
-      <div className="lg:col-span-3">
-        <DesktopSidebar />
-      </div>
 
       {/* 9. Thumb-Zone Action Bar (only if pdfUrl exists) */}
       {post.pdfUrl && (

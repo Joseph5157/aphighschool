@@ -3,8 +3,6 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { Card } from "@/app/(public)/_components/Card";
 import Badge from "@/app/(public)/_components/Badge";
-import DesktopLeftNav from "@/app/(public)/_components/DesktopLeftNav";
-import DesktopSidebar from "@/app/(public)/_components/DesktopSidebar";
 
 const IconBase = ({ d, size = 16 }: { d: string; size?: number }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -30,7 +28,8 @@ const getIconPath = (icon?: string) => {
 };
 
 export const metadata: Metadata = {
-  title: "Browse Orders — AP Teacher Desk",
+  title: "Orders & Circulars Directory — AP Teacher Desk",
+  description: "Browse official AP School Education government orders, memos, proceedings, and notifications by category.",
 };
 
 export const revalidate = 3600;
@@ -56,65 +55,61 @@ export default async function OrdersPage() {
   }
 
   return (
-    <div className="lg:grid lg:grid-cols-12 lg:gap-6 xl:gap-8 space-y-8 lg:space-y-0">
-      {/* 1. Left Rail Navigation */}
-      <div className="lg:col-span-3">
-        <DesktopLeftNav />
+    <div className="max-w-5xl mx-auto space-y-6 font-sans">
+      {/* Option A Gazette Header Banner */}
+      <div className="border-b border-hair pb-5">
+        <div className="flex items-center gap-2 mb-1">
+          <Badge variant="tamarind" size="sm" shape="pill" dot>
+            Official Document Directory
+          </Badge>
+          <span className="text-meta text-inkSoft">GOIR Verified Archives</span>
+        </div>
+        <h1 className="text-display text-ink tracking-tight">
+          Orders & Circulars Hub
+        </h1>
+        <p className="text-telugu-title text-inkSoft font-medium mt-1">
+          ఉత్తర్వులు & సర్క్యులర్లు వర్గాల వారీగా
+        </p>
+        <p className="text-xs text-inkSoft font-mono mt-1">
+          Browse verified government orders, department memos, proceedings, and official notifications.
+        </p>
       </div>
 
-      {/* 2. Center Department Directory */}
-      <div className="lg:col-span-6 space-y-6">
-        <div className="border-b border-hair pb-4">
-          <h1 className="text-display tracking-tight text-ink">Orders & Circulars</h1>
-          <p className="font-telugu text-sm text-inkSoft mt-1 font-medium">
-            ఉత్తర్వులు & సర్క్యులర్లు — శాఖల వారీగా విభజించిన సమాచారం
-          </p>
-        </div>
-
-        <Card className="overflow-hidden divide-y divide-hair">
-          {categories.map((category) => (
-            <Link
-              key={category.id}
-              href={`/category/${category.slug}`}
-              className="group flex items-center justify-between gap-3 px-5 py-4 hover:bg-hair/20 transition-all relative"
-              style={{ borderLeftWidth: "4px", borderLeftColor: category.color || "transparent" }}
-            >
-              <div className="flex items-center gap-3.5 min-w-0 flex-1">
-                <div
-                  className="shrink-0 p-2 rounded-lg bg-hair/30 text-ink opacity-80 group-hover:opacity-100 transition-opacity"
-                  style={{ color: category.color || "var(--color-inkSoft)" }}
-                >
-                  <IconBase d={getIconPath(category.icon)} size={18} />
-                </div>
-
-                <div className="flex-1 min-w-0">
-                  <div className="font-bold text-sm text-ink group-hover:text-tamarind transition-colors truncate">
-                    {category.nameEn}
+      {/* Categories Grid (Option A Design) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {categories.map((cat) => (
+          <Card key={cat.id} hoverable className="p-5">
+            <Link href={`/category/${cat.slug}`} className="group block space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div
+                    className="w-9 h-9 rounded-xl flex items-center justify-center text-ink shrink-0 border border-hair/80 shadow-2xs"
+                    style={{ backgroundColor: cat.color || "#F7F4EC" }}
+                  >
+                    <IconBase d={getIconPath(cat.icon)} size={18} />
                   </div>
-                  {category.nameTe && (
-                    <div className="font-telugu text-xs text-inkSoft truncate mt-0.5 font-medium">
-                      {category.nameTe}
+                  <div>
+                    <h3 className="text-card-title text-ink group-hover:text-tamarind transition-colors">
+                      {cat.nameEn}
+                    </h3>
+                    <div className="text-telugu-body text-xs text-inkSoft">
+                      {cat.nameTe}
                     </div>
-                  )}
+                  </div>
                 </div>
+
+                <Badge variant="neutral" size="sm" shape="pill">
+                  {cat._count?.posts || 0} Docs
+                </Badge>
               </div>
 
-              <div className="flex items-center gap-3 shrink-0">
-                <Badge variant="neutral" size="sm">
-                  {category._count.posts} {category._count.posts === 1 ? "Order" : "Orders"}
-                </Badge>
-                <span className="font-mono text-sm text-inkSoft group-hover:text-ink group-hover:translate-x-1 transition-all">
-                  →
-                </span>
+              <div className="pt-2 border-t border-hair/50 flex justify-between items-center text-xs font-mono text-tamarind font-semibold group-hover:text-ink transition-colors">
+                <span>View All Documents</span>
+                <span>→</span>
               </div>
             </Link>
-          ))}
-        </Card>
-      </div>
-
-      {/* 3. Right Sidebar Rail */}
-      <div className="lg:col-span-3">
-        <DesktopSidebar />
+          </Card>
+        ))}
       </div>
     </div>
   );
