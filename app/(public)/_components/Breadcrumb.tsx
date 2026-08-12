@@ -15,6 +15,7 @@ export function Breadcrumb({ items, className = "" }: BreadcrumbProps) {
   const fullItems: BreadcrumbItem[] = [{ label: "Home", href: "/" }, ...items];
 
   // Generate Google Search BreadcrumbList JSON-LD Schema
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -22,7 +23,7 @@ export function Breadcrumb({ items, className = "" }: BreadcrumbProps) {
       "@type": "ListItem",
       position: index + 1,
       name: item.label,
-      item: item.href ? `http://localhost:3000${item.href}` : undefined,
+      item: item.href ? `${siteUrl}${item.href}` : undefined,
     })),
   };
 

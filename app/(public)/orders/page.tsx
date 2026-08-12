@@ -2,15 +2,9 @@ import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import type { Metadata } from "next";
 import Badge from "@/app/(public)/_components/Badge";
-
-const DOCTYPE_ICON: Record<string, string> = {
-  go: "📜",
-  memo: "📋",
-  circular: "🔄",
-  proceedings: "⚖️",
-  notification: "🔔",
-  default: "📄",
-};
+import Breadcrumb from "@/app/(public)/_components/Breadcrumb";
+import Button from "@/app/(public)/_components/Button";
+import OrdersFilterTabs from "./_components/OrdersFilterTabs";
 
 export const metadata: Metadata = {
   title: "Orders & Circulars — AP Teacher Desk",
@@ -47,6 +41,18 @@ export default async function OrdersPage() {
     categories = [];
   }
 
+  let recentPosts: any[] = [];
+  try {
+    recentPosts = await prisma.post.findMany({
+      where: { isDraft: false },
+      orderBy: { createdAt: "desc" },
+      take: 5,
+      select: { id: true, slug: true, titleEn: true, goReference: true, createdAt: true },
+    });
+  } catch (e) {
+    recentPosts = [];
+  }
+
   const totalOrders = categories.reduce(
     (sum, cat) => sum + (cat._count?.posts || 0),
     0
@@ -54,6 +60,7 @@ export default async function OrdersPage() {
 
   return (
     <div className="max-w-5xl mx-auto space-y-8 pb-24 font-sans">
+      <Breadcrumb items={[{ label: "Orders & Circulars" }]} />
 
       {/* ── Option A: Imperial Gazette Masthead ─────────────────────────── */}
       <div className="bg-[#1B2A4A] text-white rounded-2xl overflow-hidden shadow-md">
@@ -87,78 +94,48 @@ export default async function OrdersPage() {
           <p className="text-sm text-white/60 font-mono max-w-xl leading-relaxed">
             Official government orders, department memos, proceedings, and notifications — all categories listed below.
           </p>
+
+          {/* Search shortcut inside hero */}
+          <div className="flex items-center gap-3 pt-1">
+            <Link href="/search?type=go">
+              <Button variant="outline" size="sm" leftIcon={<span>🔍</span>} rightIcon={<span>→</span>} className="border-white/40 text-white hover:bg-white/10">
+                Search All Orders
+              </Button>
+            </Link>
+          </div>
         </div>
       </div>
 
-      {/* ── Category Cards Grid ─────────────────────────────────────────── */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-        {categories.map((cat) => {
-          const icon = DOCTYPE_ICON[cat.icon] || DOCTYPE_ICON.default;
-          const count = cat._count?.posts || 0;
-
-          return (
-            <div
-              key={cat.id}
-              className="group bg-[#FAF7F2] border border-hair/70 rounded-2xl overflow-hidden hover:shadow-md hover:border-[#1B2A4A]/30 transition-all"
-            >
-              {/* Card Header */}
-              <div
-                className="px-5 py-4 border-b border-hair/60 flex items-center justify-between"
-                style={{ borderLeftColor: cat.color || "#C9973A", borderLeftWidth: 4 }}
-              >
-                <div className="flex items-center gap-3">
-                  <span className="text-xl" aria-hidden="true">{icon}</span>
-                  <div>
-                    <h2 className="font-bold text-[#1B2A4A] text-sm tracking-tight group-hover:text-tamarind transition-colors">
-                      {cat.nameEn}
-                    </h2>
-                    <div className="text-xs text-inkSoft" style={{ fontFamily: "'Noto Sans Telugu', sans-serif", lineHeight: "1.6" }}>
-                      {cat.nameTe}
-                    </div>
-                  </div>
-                </div>
-                <span className="font-mono text-xs font-bold text-[#1B2A4A] bg-[#1B2A4A]/10 px-2.5 py-1 rounded-full">
-                  {count} docs
-                </span>
-              </div>
-
-              {/* Recent orders preview list */}
-              <div className="px-5 py-3 space-y-2.5 min-h-[96px]">
-                {cat.posts && cat.posts.length > 0 ? (
-                  cat.posts.map((post: any) => (
-                    <Link
-                      key={post.id}
-                      href={`/posts/${post.slug}`}
-                      className="flex items-start justify-between gap-2 group/item"
-                    >
-                      <span className="text-xs text-ink font-medium leading-snug line-clamp-1 group-hover/item:text-tamarind transition-colors flex-1">
-                        {post.titleEn}
-                      </span>
-                      {post.goReference && (
-                        <span className="font-mono text-[10px] text-inkSoft shrink-0 bg-hair/50 px-1.5 py-0.5 rounded">
-                          {post.goReference}
-                        </span>
-                      )}
-                    </Link>
-                  ))
-                ) : (
-                  <p className="text-xs font-mono text-inkSoft/60 pt-1">No documents yet.</p>
-                )}
-              </div>
-
-              {/* Footer CTA */}
-              <Link href={`/category/${cat.slug}`} className="block">
-                <div className="px-5 py-3 border-t border-hair/60 bg-[#F3EFE6] group-hover:bg-[#1B2A4A] transition-colors flex items-center justify-between">
-                  <span className="font-mono text-xs font-semibold text-[#1B2A4A] group-hover:text-white transition-colors">
-                    View All {count} Documents
+      {/* ── Recently Added strip ─────────────────────────────────────────── */}
+      {recentPosts.length > 0 && (
+        <div className="space-y-2">
+          <h2 className="font-mono text-[10px] uppercase tracking-widest text-inkSoft font-semibold">
+            🕐 Recently Added
+          </h2>
+          <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
+            {recentPosts.map((post) => (
+              <Link key={post.id} href={`/posts/${post.slug}`} className="shrink-0">
+                <div className="bg-[#FAF7F2] border border-hair hover:border-[#1B2A4A]/40 rounded-lg px-3 py-2 flex items-center gap-2 transition-all group min-w-fit">
+                  {post.goReference && (
+                    <span className="font-mono text-[10px] font-bold text-[#1B2A4A] bg-[#1B2A4A]/10 px-1.5 py-0.5 rounded shrink-0">
+                      {post.goReference}
+                    </span>
+                  )}
+                  <span className="font-mono text-[10px] text-inkSoft max-w-[160px] truncate group-hover:text-tamarind transition-colors">
+                    {post.titleEn}
                   </span>
-                  <span className="text-[#1B2A4A] group-hover:text-amber-300 transition-colors font-mono text-sm">→</span>
+                  <span className="font-mono text-[9px] text-inkSoft/50 shrink-0">
+                    {new Date(post.createdAt).toLocaleDateString("en-IN", { day: "numeric", month: "short" })}
+                  </span>
                 </div>
               </Link>
-            </div>
-          );
-        })}
-      </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* ── Document Type Filter Tabs + Category Cards Grid ──────────────── */}
+      <OrdersFilterTabs categories={categories} />
 
       {/* ── Gazette Footer Note ─────────────────────────────────────────── */}
       <div className="border-t border-hair pt-4 font-mono text-[10px] text-inkSoft/60 text-center tracking-wide">

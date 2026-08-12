@@ -111,6 +111,24 @@ export default async function PostDetailPage({
   const isPastDeadline =
     post.actionDeadline && new Date(post.actionDeadline) < new Date();
 
+  let siblingPosts: any[] = [];
+  if (post.category) {
+    try {
+      siblingPosts = await prisma.post.findMany({
+        where: {
+          isDraft: false,
+          categoryId: post.category.id,
+          id: { not: post.id },
+        },
+        orderBy: { createdAt: "desc" },
+        take: 3,
+        select: { id: true, slug: true, titleEn: true, goReference: true, createdAt: true },
+      });
+    } catch (e) {
+      siblingPosts = [];
+    }
+  }
+
   return (
     <div className="max-w-4xl mx-auto space-y-8 pb-24 font-sans">
       {/* Breadcrumb Trail & SEO Schema */}
@@ -247,6 +265,30 @@ export default async function PostDetailPage({
                       Note: {rel.relationshipNote}
                     </div>
                   )}
+                </Link>
+              </Card>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* 4b. Sibling Posts — More from this category */}
+      {siblingPosts.length > 0 && (
+        <section aria-label="More from this category" className="space-y-3">
+          <div className="font-mono font-bold text-xs tracking-wider text-inkSoft flex items-center gap-2">
+            <span>📂 More from {post.category.nameEn}</span>
+          </div>
+          <div className="space-y-2">
+            {siblingPosts.map((sibling) => (
+              <Card key={sibling.id} hoverable className="p-4 bg-[#FAF7F2]">
+                <Link href={`/posts/${sibling.slug}`} className="block group space-y-0.5">
+                  <div className="flex items-center justify-between text-meta text-inkSoft">
+                    <span className="font-bold text-tamarind">{sibling.goReference || "G.O."}</span>
+                    <span>{new Date(sibling.createdAt).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}</span>
+                  </div>
+                  <div className="text-card-title text-ink group-hover:text-tamarind transition-colors line-clamp-2">
+                    {sibling.titleEn}
+                  </div>
                 </Link>
               </Card>
             ))}

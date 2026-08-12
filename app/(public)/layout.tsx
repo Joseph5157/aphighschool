@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata, Viewport } from "next";
 import BottomNav from "@/app/(public)/_components/BottomNav";
 import Button from "@/app/(public)/_components/Button";
+import DesktopNav from "@/app/(public)/_components/DesktopNav";
 
 import ThemeToggle from "@/app/(public)/_components/ThemeToggle";
 
@@ -42,23 +43,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
           </Link>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-6 font-mono text-xs font-semibold text-inkSoft">
-            <Link href="/" className="hover:text-ink transition-colors">
-              Home
-            </Link>
-            <Link href="/orders" className="hover:text-ink transition-colors">
-              Orders & Circulars
-            </Link>
-            <Link href="/education" className="hover:text-ink transition-colors">
-              Student & Exams
-            </Link>
-            <Link href="/tools" className="hover:text-ink transition-colors">
-              Utility Tools
-            </Link>
-            <Link href="/search" className="hover:text-ink transition-colors">
-              Search
-            </Link>
-          </nav>
+          <DesktopNav />
 
           <div className="flex items-center gap-3">
             <ThemeToggle />

@@ -5,6 +5,7 @@ import { Card } from "../_components/Card";
 import Badge from "../_components/Badge";
 import Button from "../_components/Button";
 import Breadcrumb from "../_components/Breadcrumb";
+import Accordion from "../_components/Accordion";
 
 export const metadata: Metadata = {
   title: "Teacher Utility Calculators — AP Teacher Desk",
@@ -93,6 +94,17 @@ export default function ToolsIndexPage() {
         </p>
       </div>
 
+      {/* Privacy shield info strip */}
+      <div className="bg-[#FAF7F2] border border-amber-200/60 rounded-xl px-4 py-3 flex items-center justify-between gap-3 flex-wrap">
+        <div className="flex items-center gap-2 font-mono text-xs text-inkSoft">
+          <span className="text-amber-600 text-base">🔒</span>
+          <span>100% Client-Side · No Server Calls · No Financial Data Stored</span>
+        </div>
+        <span className="font-mono text-[10px] font-semibold text-turmericDeep bg-turmeric/10 border border-turmeric/30 px-2.5 py-1 rounded-full">
+          Privacy First
+        </span>
+      </div>
+
       {/* Option C Card Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {TOOLS.map((tool) => (
@@ -106,6 +118,11 @@ export default function ToolsIndexPage() {
                   <Badge variant={tool.popular ? "tamarind" : "neutral"} size="sm" shape="pill">
                     {tool.badge}
                   </Badge>
+                  {tool.popular && (
+                    <span className="font-mono text-[9px] font-bold bg-amber-400/20 text-amber-700 border border-amber-300/50 px-2 py-0.5 rounded-full">
+                      ⭐ Most Used
+                    </span>
+                  )}
                 </div>
                 <span className="text-inkSoft font-semibold">{tool.status}</span>
               </div>
@@ -122,6 +139,17 @@ export default function ToolsIndexPage() {
               <p className="text-xs text-inkSoft font-mono leading-relaxed pt-2 border-t border-hair/50">
                 {tool.desc}
               </p>
+
+              {/* Step flow chips */}
+              <div className="flex items-center gap-1.5 flex-wrap pt-1">
+                {["Fill Details", "Auto-Calculate", "Export PDF"].map((step, i) => (
+                  <span key={i} className="inline-flex items-center gap-1 font-mono text-[9px] bg-[#1B2A4A]/5 text-[#1B2A4A] border border-[#1B2A4A]/15 px-2 py-0.5 rounded">
+                    <span className="font-bold">{i + 1}</span>
+                    <span className="text-inkSoft/60">·</span>
+                    {step}
+                  </span>
+                ))}
+              </div>
             </div>
 
             <div className="pt-2 flex justify-end">
@@ -133,6 +161,66 @@ export default function ToolsIndexPage() {
             </div>
           </Card>
         ))}
+      </div>
+
+      {/* FAQ Section */}
+      <div className="space-y-3 pt-4 border-t border-hair">
+        <h2 className="text-section text-ink flex items-center gap-2">
+          <span>❓</span> Frequently Asked Questions
+        </h2>
+        <Accordion allowMultiple items={[
+          {
+            id: "faq-tax",
+            titleEn: "Which tax regime should AP teachers choose in FY 2025-26?",
+            titleTe: "ఆయవ్యయ సంవత్సరం 2025-26లో ఏ పన్ను నియమావళి ఎంచుకోవాలి?",
+            badge: "Tax",
+            badgeVariant: "turmeric",
+            defaultOpen: true,
+            content: (
+              <p>
+                For AP teachers with standard HRA and 80C deductions, the Old Regime is usually better
+                if total deductions exceed ₹2.5 lakh. Use our calculator to compare both regimes instantly.
+              </p>
+            ),
+          },
+          {
+            id: "faq-el",
+            titleEn: "How many days of Earned Leave can I surrender per year?",
+            titleTe: "సంవత్సరానికి ఎన్ని రోజుల ఆర్జిత సెలవులు వదులుకోవచ్చు?",
+            badge: "Leave",
+            badgeVariant: "neutral",
+            content: (
+              <p>
+                AP teachers can surrender up to 15 days of EL per year while in service
+                and up to 30 days at retirement. HPL encashment is applicable only at superannuation.
+              </p>
+            ),
+          },
+          {
+            id: "faq-gpf",
+            titleEn: "What is the current GPF interest rate for AP teachers?",
+            badge: "GPF",
+            badgeVariant: "neutral",
+            content: (
+              <p>
+                The current GPF interest rate is <strong>7.1% per annum</strong>, compounded annually.
+                The balance grows on a monthly credit basis with final interest calculated at year end.
+              </p>
+            ),
+          },
+          {
+            id: "faq-cfms",
+            titleEn: "How do I check my CFMS bill status or download my payslip?",
+            badge: "CFMS",
+            badgeVariant: "tamarind",
+            content: (
+              <p>
+                Use our CFMS Bill Status guide to navigate directly to the DDO submission portal
+                and the payslip download section. No login needed for bill status — only Employee ID required.
+              </p>
+            ),
+          },
+        ]} />
       </div>
     </div>
   );
