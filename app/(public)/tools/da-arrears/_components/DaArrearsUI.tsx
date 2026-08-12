@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useState } from "react";
 import Link from "next/link";
 import Accordion, { AccordionItemData } from "@/app/(public)/_components/Accordion";
 import { Card, CardHeader, CardTitle, CardContent } from "@/app/(public)/_components/Card";
@@ -141,9 +141,18 @@ export default function DaArrearsUI() {
   const toYearId = useId();
   const pensionSchemeId = useId();
 
-  const now = new Date();
-  const currentYear = now.getFullYear();
-  const currentMonth = now.getMonth() + 1;
+  // Static prerendering runs this component once at build time on the build
+  // machine. `new Date()` must therefore NOT be evaluated during the initial
+  // render (it would bake a stale build-time date into the served HTML and
+  // cause a hydration mismatch once a real user's browser hydrates later).
+  // Instead we render a fixed, deterministic placeholder on the first pass
+  // (matching on both server and client) and swap in the real current date
+  // from a post-mount effect, which only ever runs in the browser.
+  const REFERENCE_YEAR = 2026;
+  const REFERENCE_MONTH = 1;
+
+  const [currentYear, setCurrentYear] = useState<number>(REFERENCE_YEAR);
+  const [currentMonth, setCurrentMonth] = useState<number>(REFERENCE_MONTH);
 
   const yearOptions = useMemo(() => {
     const years: number[] = [];
@@ -155,10 +164,23 @@ export default function DaArrearsUI() {
   const [oldDaPercent, setOldDaPercent] = useState<string>("");
   const [newDaPercent, setNewDaPercent] = useState<string>("");
   const [fromMonth, setFromMonth] = useState<number>(1);
-  const [fromYear, setFromYear] = useState<number>(currentYear - 1);
-  const [toMonth, setToMonth] = useState<number>(currentMonth);
-  const [toYear, setToYear] = useState<number>(currentYear);
+  const [fromYear, setFromYear] = useState<number>(REFERENCE_YEAR - 1);
+  const [toMonth, setToMonth] = useState<number>(REFERENCE_MONTH);
+  const [toYear, setToYear] = useState<number>(REFERENCE_YEAR);
   const [pensionScheme, setPensionScheme] = useState<"OPS" | "CPS">("OPS");
+
+  // Runs once after mount (browser only) — swaps the placeholder date values
+  // for the real current date without ever affecting server-rendered output.
+  useEffect(() => {
+    const now = new Date();
+    const y = now.getFullYear();
+    const m = now.getMonth() + 1;
+    setCurrentYear(y);
+    setCurrentMonth(m);
+    setFromYear(y - 1);
+    setToMonth(m);
+    setToYear(y);
+  }, []);
 
   const result = useMemo(
     () =>
@@ -175,6 +197,7 @@ export default function DaArrearsUI() {
   );
 
   const daDeltaPercent = (parseFloat(newDaPercent) || 0) - (parseFloat(oldDaPercent) || 0);
+  const hasInput = oldDaPercent.trim() !== "" && newDaPercent.trim() !== "";
   const hasNoArrears = !result.error && daDeltaPercent <= 0;
 
   return (
@@ -339,23 +362,29 @@ export default function DaArrearsUI() {
               </div>
             ) : (
               <>
-                <div className="p-3 bg-hair/30 rounded-lg space-y-1">
-                  <div className="text-inkSoft font-mono text-[11px]">
-                    {hasNoArrears ? "Result:" : "Total Estimated Arrears:"}
+                {!hasInput ? (
+                  <div className="p-3 bg-hair/30 rounded-lg text-sm text-inkSoft font-sans leading-relaxed">
+                    Enter your old and new DA % above to see your arrears estimate.
                   </div>
-                  {hasNoArrears ? (
-                    <div className="text-sm font-bold text-ink font-sans leading-snug">
-                      No arrears payable — new DA is not higher than the old rate.
+                ) : (
+                  <div className="p-3 bg-hair/30 rounded-lg space-y-1">
+                    <div className="text-inkSoft font-mono text-[11px]">
+                      {hasNoArrears ? "Result:" : "Total Estimated Arrears:"}
                     </div>
-                  ) : (
-                    <div className="text-xl font-bold text-tamarind font-mono">
-                      {formatCurrency(result.totalArrears)}
+                    {hasNoArrears ? (
+                      <div className="text-sm font-bold text-ink font-sans leading-snug">
+                        No arrears payable — new DA is not higher than the old rate.
+                      </div>
+                    ) : (
+                      <div className="text-xl font-bold text-tamarind font-mono">
+                        {formatCurrency(result.totalArrears)}
+                      </div>
+                    )}
+                    <div className="text-[11px] text-inkSoft/80 font-sans mt-1">
+                      Across {result.monthCount} month{result.monthCount === 1 ? "" : "s"}
                     </div>
-                  )}
-                  <div className="text-[11px] text-inkSoft/80 font-sans mt-1">
-                    Across {result.monthCount} month{result.monthCount === 1 ? "" : "s"}
                   </div>
-                </div>
+                )}
 
                 <div className="p-3 bg-tamarind/5 border border-tamarind/20 rounded-lg text-[11px] text-inkSoft leading-relaxed">
                   {pensionScheme === "OPS" ? (
@@ -373,7 +402,7 @@ export default function DaArrearsUI() {
                   )}
                 </div>
 
-                {result.months.length > 0 && (
+                {hasInput && result.months.length > 0 && (
                   <Table>
                     <TableHeader>
                       <TableRow>
