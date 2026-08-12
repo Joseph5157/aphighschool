@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { prisma } from "@/lib/prisma";
 import SearchUI from "./_components/SearchUI";
 import DesktopLeftNav from "../_components/DesktopLeftNav";
@@ -51,7 +52,9 @@ export default async function SearchPage() {
           </p>
         </div>
 
-        <SearchUI posts={posts} />
+        <Suspense fallback={<div className="text-xs font-mono text-inkSoft py-4">Loading search...</div>}>
+          <SearchUI posts={posts} />
+        </Suspense>
       </div>
 
       {/* 3. Right Sidebar Rail */}

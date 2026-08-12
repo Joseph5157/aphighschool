@@ -2,9 +2,11 @@
 
 import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 import Input from "@/app/(public)/_components/Input";
 import Badge from "@/app/(public)/_components/Badge";
+import { Card } from "@/app/(public)/_components/Card";
 
 type SearchPostItem = {
   id: string;
@@ -22,10 +24,11 @@ type SearchUIProps = {
 
 const TRENDING_CHIPS = [
   "TET 2026",
-  "CFMS status",
-  "e-SR login",
+  "DA Arrears",
+  "Mega DSC",
   "PRC arrears",
-  "SSC results",
+  "Transfers",
+  "Form 16",
 ];
 
 function highlightMatch(text: string, query: string) {
@@ -50,7 +53,18 @@ function highlightMatch(text: string, query: string) {
 }
 
 export default function SearchUI({ posts }: SearchUIProps) {
-  const [query, setQuery] = useState("");
+  const searchParams = useSearchParams();
+  const initialQuery = searchParams ? searchParams.get("q") || "" : "";
+  const [query, setQuery] = useState(initialQuery);
+
+  useEffect(() => {
+    if (searchParams) {
+      const qParam = searchParams.get("q");
+      if (qParam !== null) {
+        setQuery(qParam);
+      }
+    }
+  }, [searchParams]);
 
   const trimmedQuery = query.trim();
   const isQueryValid = trimmedQuery.length >= 2;
@@ -59,11 +73,12 @@ export default function SearchUI({ posts }: SearchUIProps) {
     if (!isQueryValid) return [];
     const q = trimmedQuery.toLowerCase();
     return posts.filter((post) => {
-      const inEn = post.titleEn.toLowerCase().includes(q);
-      const inTe = post.titleTe.toLowerCase().includes(q);
+      const inEn = post.titleEn ? post.titleEn.toLowerCase().includes(q) : false;
+      const inTe = post.titleTe ? post.titleTe.toLowerCase().includes(q) : false;
       const inGo = post.goReference ? post.goReference.toLowerCase().includes(q) : false;
       const inCat = post.category ? post.category.nameEn.toLowerCase().includes(q) : false;
-      return inEn || inTe || inGo || inCat;
+      const inDoc = post.docType ? post.docType.toLowerCase().includes(q) : false;
+      return inEn || inTe || inGo || inCat || inDoc;
     });
   }, [posts, trimmedQuery, isQueryValid]);
 
@@ -74,7 +89,7 @@ export default function SearchUI({ posts }: SearchUIProps) {
   };
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
+    <div className="w-full space-y-6">
       {/* Search Input Bar */}
       <div className="relative">
         <Input
@@ -83,7 +98,7 @@ export default function SearchUI({ posts }: SearchUIProps) {
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Search GO number, topic, or circular..."
-          className="py-3"
+          className="py-3 pr-10"
           autoFocus
         />
         {query && (
@@ -99,18 +114,20 @@ export default function SearchUI({ posts }: SearchUIProps) {
 
       {/* Trending / Assist Chips (Shown when input has < 2 chars) */}
       {!isQueryValid && (
-        <div className="space-y-2 pt-2">
+        <div className="space-y-2.5 pt-2">
           <div className="font-mono text-[9.5px] uppercase tracking-wider text-inkSoft font-semibold">
-            Trending & Quick Filters
+            Trending Search Topics
           </div>
           <div className="flex items-center gap-2 flex-wrap">
             {TRENDING_CHIPS.map((chip) => (
               <button
                 key={chip}
                 onClick={() => setQuery(chip)}
-                className="bg-paperRaised border border-hair hover:border-ink/30 active:scale-[0.97] px-3.5 py-1.5 rounded-full text-xs text-ink font-medium transition-all hover:bg-paper shadow-2xs"
+                className="focus:outline-none"
               >
-                🔍 {chip}
+                <Badge variant="neutral" size="sm" shape="pill" className="cursor-pointer hover:border-ink/40">
+                  🔍 {chip}
+                </Badge>
               </button>
             ))}
           </div>
@@ -126,37 +143,35 @@ export default function SearchUI({ posts }: SearchUIProps) {
           </div>
 
           {results.length === 0 ? (
-            <div className="bg-paperRaised border border-hair rounded-xl p-10 text-center text-sm font-mono text-inkSoft">
+            <Card className="p-8 text-center text-xs font-mono text-inkSoft">
               No results found matching "{query}"
-            </div>
+            </Card>
           ) : (
-            <div className="space-y-2.5">
+            <div className="space-y-3">
               {results.map((post) => (
-                <Link
-                  key={post.id}
-                  href={`/posts/${post.slug}`}
-                  className="block bg-paperRaised border border-hair hover:border-ink/30 active:scale-[0.99] rounded-xl p-4 transition-all group"
-                >
-                  <div className="font-bold text-sm text-ink group-hover:text-turmericDeep transition-colors">
-                    {highlightMatch(post.titleEn, trimmedQuery)}
-                  </div>
-                  <div className="font-telugu text-xs text-inkSoft mt-0.5">
-                    {post.titleTe}
-                  </div>
-                  <div className="font-mono text-[8.5px] text-[#9C9788] uppercase tracking-wider mt-2.5 flex items-center gap-2">
-                    <span>AP SCHOOL EDUCATION</span>
-                    <span>/</span>
-                    <span>{post.docType || post.category?.nameEn || "GO CIRCULAR"}</span>
-                    {post.goReference && (
-                      <>
-                        <span>/</span>
-                        <span className="text-ink font-bold">
-                          {highlightMatch(post.goReference, trimmedQuery)}
-                        </span>
-                      </>
-                    )}
-                  </div>
-                </Link>
+                <Card key={post.id} hoverable className="p-4">
+                  <Link href={`/posts/${post.slug}`} className="block space-y-1.5 group">
+                    <h3 className="text-card-title text-ink group-hover:text-tamarind transition-colors">
+                      {highlightMatch(post.titleEn, trimmedQuery)}
+                    </h3>
+                    <div className="text-telugu-body text-inkSoft">
+                      {post.titleTe}
+                    </div>
+                    <div className="text-meta text-inkSoft/70 uppercase tracking-wider pt-1 border-t border-hair/30 flex items-center gap-2">
+                      <span>AP SCHOOL EDUCATION</span>
+                      <span>/</span>
+                      <span>{post.docType || post.category?.nameEn || "GO CIRCULAR"}</span>
+                      {post.goReference && (
+                        <>
+                          <span>/</span>
+                          <span className="text-ink font-bold">
+                            {highlightMatch(post.goReference, trimmedQuery)}
+                          </span>
+                        </>
+                      )}
+                    </div>
+                  </Link>
+                </Card>
               ))}
             </div>
           )}
