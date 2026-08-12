@@ -1,5 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import SearchUI from "./_components/SearchUI";
+import DesktopLeftNav from "../_components/DesktopLeftNav";
+import DesktopSidebar from "../_components/DesktopSidebar";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -34,15 +36,28 @@ export default async function SearchPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="border-b border-hair pb-4">
-        <h1 className="text-2xl font-bold text-ink tracking-tight">Search Portal</h1>
-        <p className="text-xs text-inkSoft font-mono mt-1">
-          Search AP Government Orders, Circulars, and Guidance by GO number or topic
-        </p>
+    <div className="lg:grid lg:grid-cols-12 lg:gap-6 xl:gap-8 space-y-8 lg:space-y-0">
+      {/* 1. Left Rail Navigation */}
+      <div className="lg:col-span-3">
+        <DesktopLeftNav />
       </div>
 
-      <SearchUI posts={posts} />
+      {/* 2. Center Search Engine (6 Cols / ~50% Width) */}
+      <div className="lg:col-span-6 space-y-6">
+        <div className="border-b border-hair pb-4">
+          <h1 className="text-display tracking-tight text-ink">Search Portal</h1>
+          <p className="text-xs text-inkSoft font-mono mt-1">
+            Search AP Government Orders, Circulars, and Guidance by GO number or topic
+          </p>
+        </div>
+
+        <SearchUI posts={posts} />
+      </div>
+
+      {/* 3. Right Sidebar Rail */}
+      <div className="lg:col-span-3">
+        <DesktopSidebar />
+      </div>
     </div>
   );
 }
