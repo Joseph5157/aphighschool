@@ -1,6 +1,5 @@
 import React from "react";
 import type { Metadata } from "next";
-import { Card } from "../_components/Card";
 import Badge from "../_components/Badge";
 import Breadcrumb from "../_components/Breadcrumb";
 import Accordion from "../_components/Accordion";
@@ -151,7 +150,7 @@ export default async function EducationPage() {
       {/* Quick Resource Badges Grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {QUICK_RESOURCES.map((res, i) => (
-          <Card key={i} className="bg-[#1E293B] border-slate-700 text-slate-100 p-3.5 hover:border-emerald-500/50 transition-all">
+          <div key={i} className="bg-[#1E293B] border border-slate-700 text-slate-100 p-3.5 rounded-xl hover:border-emerald-500/50 transition-all">
             <div className="flex items-center gap-2.5">
               <span className="text-xl">{res.icon}</span>
               <div className="min-w-0 flex-1">
@@ -159,7 +158,7 @@ export default async function EducationPage() {
                 <div className="text-[10px] font-mono text-slate-400 truncate">{res.count}</div>
               </div>
             </div>
-          </Card>
+          </div>
         ))}
       </div>
 

@@ -2,9 +2,7 @@
 
 import Link from "next/link";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "../../_components/Tabs";
-import { Card } from "../../_components/Card";
 import Badge, { BadgeVariant } from "../../_components/Badge";
-import Button from "../../_components/Button";
 
 export type ExamUpdateItem = {
   id: string;
@@ -29,7 +27,7 @@ const TABS = [
 
 function UpdateCard({ item }: { item: ExamUpdateItem }) {
   return (
-    <Card className="bg-[#1E293B] border-slate-700 hover:border-emerald-500/50 text-slate-100 p-5 space-y-3 transition-all group shadow-sm">
+    <div className="bg-[#1E293B] border border-slate-700 hover:border-emerald-500/50 text-slate-100 rounded-xl p-5 space-y-3 transition-all group shadow-sm">
       <div className="flex items-center justify-between flex-wrap gap-2 text-xs font-mono">
         <div className="flex items-center gap-2">
           <Badge variant={item.badgeVariant} size="sm" shape="pill" dot>
@@ -41,7 +39,7 @@ function UpdateCard({ item }: { item: ExamUpdateItem }) {
       </div>
 
       <div>
-        <h3 className="text-card-title text-white group-hover:text-emerald-400 transition-colors">
+        <h3 className="font-bold text-sm sm:text-base text-white tracking-tight group-hover:text-emerald-400 transition-colors">
           {item.title}
         </h3>
         {item.titleTe && (
@@ -49,18 +47,18 @@ function UpdateCard({ item }: { item: ExamUpdateItem }) {
         )}
       </div>
 
-      <p className="text-xs text-slate-300 font-mono leading-relaxed pt-2 border-t border-slate-700/60">
+      <p className="text-xs text-slate-400 font-mono leading-relaxed pt-2 border-t border-slate-700/60">
         {item.desc}
       </p>
 
       <div className="pt-1 flex justify-end">
         <Link href={item.link}>
-          <Button variant="secondary" size="sm" rightIcon={<span>→</span>}>
-            Open Official Link
-          </Button>
+          <button className="inline-flex items-center gap-1.5 font-mono font-bold text-xs px-2.5 py-1.5 rounded-md border border-slate-500 text-slate-200 hover:border-emerald-400 hover:text-emerald-400 transition-all">
+            Open Official Link <span>→</span>
+          </button>
         </Link>
       </div>
-    </Card>
+    </div>
   );
 }
 

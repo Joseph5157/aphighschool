@@ -3,13 +3,23 @@
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "../../_components/Tabs";
 import Link from "next/link";
 
-const DOCTYPE_ICON: Record<string, string> = {
-  go: "📜",
-  memo: "📋",
-  circular: "🔄",
-  proceedings: "⚖️",
-  notification: "🔔",
-  default: "📄",
+// Maps category slug → display emoji icon
+const SLUG_ICON: Record<string, string> = {
+  "govt-orders": "📜",
+  "circulars": "🔄",
+  "memos": "📋",
+  "proceedings": "⚖️",
+  "notifications": "🔔",
+  "default": "📄",
+};
+
+// Maps tab value → category slugs it matches
+const TAB_SLUGS: Record<string, string[]> = {
+  "go": ["govt-orders"],
+  "memo": ["memos"],
+  "proceedings": ["proceedings"],
+  "circular": ["circulars"],
+  "notification": ["notifications"],
 };
 
 type CategoryData = {
@@ -44,14 +54,17 @@ export default function OrdersFilterTabs({ categories }: { categories: CategoryD
       </TabsList>
 
       {DOC_TYPE_TABS.map((tab) => {
-        const filtered = tab.value === "all" ? categories : categories.filter((c) => c.icon === tab.value);
+        const filtered =
+          tab.value === "all"
+            ? categories
+            : categories.filter((c) => (TAB_SLUGS[tab.value] || []).includes(c.slug));
 
         return (
           <TabsContent key={tab.value} value={tab.value}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               {filtered.length > 0 ? (
                 filtered.map((cat) => {
-                  const icon = DOCTYPE_ICON[cat.icon || ""] || DOCTYPE_ICON.default;
+                  const icon = SLUG_ICON[cat.slug] || SLUG_ICON.default;
                   const count = cat._count?.posts || 0;
                   return (
                     <div
