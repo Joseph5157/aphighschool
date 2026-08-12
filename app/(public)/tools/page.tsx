@@ -1,4 +1,7 @@
 import Link from "next/link";
+import Button from "@/app/(public)/_components/Button";
+import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/app/(public)/_components/Card";
+import Badge from "@/app/(public)/_components/Badge";
 
 const TOOLS = [
   {
@@ -7,7 +10,7 @@ const TOOLS = [
     nameTe: "ఆదాయపు పన్ను గణన సాధనం",
     description: "Calculate FY 2025-26 & FY 2024-25 tax liability under New & Old regimes with AP Teacher pay heads (Basic, DA, HRA, 80C, 80D, 24B).",
     badge: "RUNS ON YOUR DEVICE",
-    badgeType: "ready",
+    badgeVariant: "success" as const,
     href: "/tools/tax-calculator",
   },
   {
@@ -16,7 +19,7 @@ const TOOLS = [
     nameTe: "లీవ్ ఎన్‌క్యాష్‌మెంట్ కాలిక్యులేటర్",
     description: "Earned leave & half-pay leave surrender bill encashment estimations for AP & TS teachers.",
     badge: "RUNS ON YOUR DEVICE",
-    badgeType: "ready",
+    badgeVariant: "success" as const,
     href: "/tools/leave-encashment",
   },
   {
@@ -25,7 +28,7 @@ const TOOLS = [
     nameTe: "జీపీఎఫ్ / ఏపీజీఎల్ఐ గణన",
     description: "General Provident Fund 7.1% interest growth, Part-Final loan eligibility & APGLI premium slab matcher.",
     badge: "RUNS ON YOUR DEVICE",
-    badgeType: "ready",
+    badgeVariant: "success" as const,
     href: "/tools/gpf-apgli",
   },
   {
@@ -34,7 +37,7 @@ const TOOLS = [
     nameTe: "సీఎఫ్ఎమ్‌ఎస్ బిల్‌ స్టేటస్ & పోర్టల్ మార్గదర్శి",
     description: "Direct links and step-by-step guides for CFMS Teacher Payslips, Medical Reimbursement, EHS cards, & e-SR.",
     badge: "DIRECTORY & GUIDES",
-    badgeType: "ready",
+    badgeVariant: "tamarind" as const,
     href: "/tools/cfms-checker",
   },
 ];
@@ -50,58 +53,39 @@ export default function ToolsIndexPage() {
         </p>
       </div>
 
-      {/* Tools Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {TOOLS.map((tool) => {
-          const isReady = tool.badgeType === "ready";
-
-          return (
-            <div
-              key={tool.id}
-              className={`bg-paperRaised border border-hair rounded-xl p-5 flex flex-col justify-between transition-all ${
-                isReady ? "hover:border-ink/30 hover:shadow-xs" : "opacity-75"
-              }`}
-            >
-              <div>
+      {/* Tools Grid using Card, Badge, and Button Tier 1 Components */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        {TOOLS.map((tool) => (
+          <Card key={tool.id} hoverable className="flex flex-col justify-between">
+            <div>
+              <CardHeader className="border-b-0 pb-2">
                 <div className="flex items-center justify-between gap-2 mb-2">
-                  <span
-                    className={`font-mono text-[9px] uppercase tracking-wider px-2 py-0.5 rounded font-semibold ${
-                      isReady
-                        ? "bg-tamarind/10 text-tamarind border border-tamarind/20"
-                        : "bg-hair/50 text-inkSoft"
-                    }`}
-                  >
+                  <Badge variant={tool.badgeVariant} size="sm" shape="pill" dot>
                     {tool.badge}
-                  </span>
+                  </Badge>
                 </div>
-
-                <h2 className="font-bold text-base text-ink">{tool.nameEn}</h2>
-                <div className="font-telugu text-xs text-inkSoft mt-0.5 font-medium">
+                <CardTitle>{tool.nameEn}</CardTitle>
+                <div className="font-telugu text-xs text-inkSoft font-medium">
                   {tool.nameTe}
                 </div>
+              </CardHeader>
 
-                <p className="text-xs text-inkSoft/80 font-sans mt-3 leading-relaxed">
+              <CardContent className="pt-0">
+                <p className="text-xs text-inkSoft/80 font-sans leading-relaxed">
                   {tool.description}
                 </p>
-              </div>
-
-              <div className="mt-5 pt-3 border-t border-hair/50">
-                {isReady ? (
-                  <Link
-                    href={tool.href}
-                    className="inline-flex items-center gap-1 text-xs font-mono font-semibold text-ink hover:text-turmericDeep transition-colors"
-                  >
-                    Open Tool →
-                  </Link>
-                ) : (
-                  <span className="text-xs font-mono text-inkSoft/60 cursor-not-allowed">
-                    Under Development
-                  </span>
-                )}
-              </div>
+              </CardContent>
             </div>
-          );
-        })}
+
+            <CardFooter className="bg-paper/50">
+              <Link href={tool.href} className="w-full">
+                <Button variant="primary" size="sm" fullWidth rightIcon={<span>→</span>}>
+                  Open Tool
+                </Button>
+              </Link>
+            </CardFooter>
+          </Card>
+        ))}
       </div>
     </div>
   );

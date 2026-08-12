@@ -1,6 +1,8 @@
 import Link from "next/link";
 import type { Metadata, Viewport } from "next";
 
+import Button from "@/app/(public)/_components/Button";
+
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
 export const metadata: Metadata = {
@@ -37,11 +39,10 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
             </div>
           </Link>
           
-          <Link
-            href="/admin"
-            className="hidden md:block text-xs font-mono bg-ink text-paperRaised px-3 py-1.5 rounded-md hover:bg-inkSoft transition-colors"
-          >
-            CMS →
+          <Link href="/admin" className="hidden md:block">
+            <Button variant="primary" size="sm">
+              CMS →
+            </Button>
           </Link>
         </div>
       </header>
