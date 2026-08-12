@@ -2,6 +2,7 @@
 
 import { useState, useId } from "react";
 import Link from "next/link";
+import Accordion, { AccordionItemData } from "@/app/(public)/_components/Accordion";
 
 function formatCurrency(val: number): string {
   return new Intl.NumberFormat("en-IN", {
@@ -10,6 +11,66 @@ function formatCurrency(val: number): string {
     maximumFractionDigits: 0,
   }).format(val);
 }
+
+const GPF_FAQ_ITEMS: AccordionItemData[] = [
+  {
+    id: "gpf-loan-rules",
+    titleEn: "What are the rules for GPF Part-Final Loan vs Temporary Advance?",
+    titleTe: "జీపీఎఫ్ పార్ట్-ఫైనల్ విత్‌డ్రావల్ మరియు తాత్కాలిక అడ్వాన్స్ నిబంధనలు",
+    badge: "GPF Rules",
+    defaultOpen: true,
+    content: (
+      <div className="space-y-2">
+        <p>
+          <b>Temporary Advance (TA):</b> Can be taken after completing 1 year of service. Repayable in 12 to 36 equal monthly installments.
+        </p>
+        <p>
+          <b>Part-Final Withdrawal (PF):</b> Non-refundable withdrawal available after completing 15 years of service (or within 10 years of retirement).
+        </p>
+        <ul className="list-disc pl-4 space-y-1">
+          <li><b>Up to 75% of credit balance:</b> Allowed for higher education, marriage, or medical illness of self/dependents.</li>
+          <li><b>Up to 90% of credit balance:</b> Allowed within 12 months prior to retirement date.</li>
+        </ul>
+      </div>
+    ),
+  },
+  {
+    id: "apgli-slab-rules",
+    titleEn: "How is APGLI mandatory premium slab matched with Basic Pay?",
+    titleTe: "బేసిక్ పే ఆధారంగా APGLI ప్రీమియం స్లాబ్ ఎలా నిర్ణయిస్తారు?",
+    badge: "APGLI Slabs",
+    content: (
+      <div className="space-y-2">
+        <p>
+          APGLI (Andhra Pradesh Government Life Insurance) is mandatory for all AP state employees up to 55 years of age. Minimum monthly premium is fixed as per Basic Pay slabs:
+        </p>
+        <div className="bg-paper border border-hair rounded-lg p-3 font-mono text-xs space-y-1">
+          <div>• Basic Pay up to ₹25,220 ➔ Min Premium: ₹500</div>
+          <div>• Basic Pay ₹25,221 to ₹35,570 ➔ Min Premium: ₹750</div>
+          <div>• Basic Pay ₹35,571 to ₹48,440 ➔ Min Premium: ₹1,000</div>
+          <div>• Basic Pay ₹48,441 to ₹67,980 ➔ Min Premium: ₹1,400</div>
+          <div>• Basic Pay ₹67,981 & above ➔ Min Premium: ₹2,000</div>
+        </div>
+      </div>
+    ),
+  },
+  {
+    id: "gpf-interest-tax",
+    titleEn: "Is GPF interest taxable for government employees?",
+    titleTe: "జీపీఎఫ్ వడ్డీకి పన్ను వర్తిస్తుందా?",
+    badge: "Taxation",
+    content: (
+      <div className="space-y-2">
+        <p>
+          Under Section 10(11) of the Income Tax Act, interest on GPF contributions up to <b>₹5,00,000 per annum</b> for government employees is completely tax-free.
+        </p>
+        <p>
+          If annual employee GPF contribution exceeds ₹5 Lakhs, interest earned on the excess contribution amount above ₹5 Lakhs is taxable under 'Income from Other Sources'.
+        </p>
+      </div>
+    ),
+  },
+];
 
 export default function GpfApgliUI() {
   const gpfBalId = useId();
@@ -99,23 +160,23 @@ export default function GpfApgliUI() {
               />
             </div>
 
+            <div>
+              <label htmlFor={monthlySubId} className="block font-mono text-[10px] uppercase font-bold text-inkSoft tracking-wider mb-1">
+                Monthly Subscription (నెలవారీ చెల్లింపు) ₹ *
+              </label>
+              <input
+                id={monthlySubId}
+                type="number"
+                value={monthlySubscription}
+                onChange={(e) => setMonthlySubscription(e.target.value)}
+                className="w-full bg-white border border-hair rounded-lg px-3 py-2 text-xs font-mono text-ink outline-none focus:border-tamarind"
+              />
+            </div>
+
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label htmlFor={monthlySubId} className="block font-mono text-[10px] uppercase font-bold text-inkSoft tracking-wider mb-1">
-                  Monthly Subscription ₹
-                </label>
-                <input
-                  id={monthlySubId}
-                  type="number"
-                  value={monthlySubscription}
-                  onChange={(e) => setMonthlySubscription(e.target.value)}
-                  className="w-full bg-white border border-hair rounded-lg px-3 py-1.5 text-xs font-mono text-ink outline-none"
-                />
-              </div>
-
-              <div>
                 <label htmlFor={interestRateId} className="block font-mono text-[10px] uppercase font-bold text-inkSoft tracking-wider mb-1">
-                  Interest Rate %
+                  Interest Rate (% p.a.)
                 </label>
                 <input
                   id={interestRateId}
@@ -123,55 +184,48 @@ export default function GpfApgliUI() {
                   step="0.1"
                   value={interestRate}
                   onChange={(e) => setInterestRate(e.target.value)}
-                  className="w-full bg-white border border-hair rounded-lg px-3 py-1.5 text-xs font-mono text-ink outline-none"
+                  className="w-full bg-white border border-hair rounded-lg px-3 py-2 text-xs font-mono text-ink outline-none focus:border-tamarind"
+                />
+              </div>
+              <div>
+                <label htmlFor={serviceYearsId} className="block font-mono text-[10px] uppercase font-bold text-inkSoft tracking-wider mb-1">
+                  Service Completed (Yrs)
+                </label>
+                <input
+                  id={serviceYearsId}
+                  type="number"
+                  value={serviceYears}
+                  onChange={(e) => setServiceYears(e.target.value)}
+                  className="w-full bg-white border border-hair rounded-lg px-3 py-2 text-xs font-mono text-ink outline-none focus:border-tamarind"
                 />
               </div>
             </div>
-
-            <div>
-              <label htmlFor={serviceYearsId} className="block font-mono text-[10px] uppercase font-bold text-inkSoft tracking-wider mb-1">
-                Total Service Completed (Years)
-              </label>
-              <input
-                id={serviceYearsId}
-                type="number"
-                value={serviceYears}
-                onChange={(e) => setServiceYears(e.target.value)}
-                className="w-full bg-white border border-hair rounded-lg px-3 py-1.5 text-xs font-mono text-ink outline-none"
-              />
-            </div>
           </div>
 
-          {/* GPF Output Summary */}
-          <div className="bg-ink text-white rounded-xl p-4 font-mono text-xs space-y-2 mt-4">
-            <div className="text-[10px] text-white/60 uppercase font-bold tracking-wider border-b border-white/10 pb-1">
-              Estimated Annual GPF Growth
-            </div>
-
-            <div className="flex justify-between text-white/80">
+          {/* Results Block */}
+          <div className="pt-3 border-t border-hair space-y-2 font-mono text-xs">
+            <div className="flex justify-between text-inkSoft">
               <span>Annual Subscription:</span>
-              <span>{formatCurrency(annualSub)}</span>
+              <span className="font-bold text-ink">{formatCurrency(annualSub)}</span>
+            </div>
+            <div className="flex justify-between text-inkSoft">
+              <span>Estimated Interest (1 Yr @ {rateNum}%):</span>
+              <span className="font-bold text-tamarind">{formatCurrency(estimatedInterest)}</span>
+            </div>
+            <div className="flex justify-between text-ink border-t border-hair/50 pt-1.5 font-bold">
+              <span>Estimated Closing Balance:</span>
+              <span className="text-sm text-ink">{formatCurrency(closingBalance1Yr)}</span>
             </div>
 
-            <div className="flex justify-between text-white/80">
-              <span>Est. Interest @ {rateNum}%:</span>
-              <span className="text-emerald-300">+{formatCurrency(estimatedInterest)}</span>
-            </div>
-
-            <div className="flex justify-between text-sm font-bold text-turmeric pt-1 border-t border-white/10">
-              <span>Closing Balance (1 Yr):</span>
-              <span>{formatCurrency(closingBalance1Yr)}</span>
-            </div>
-
-            <div className="pt-2 border-t border-white/10 text-[10px] space-y-1">
-              <div className="text-white/70 font-bold uppercase">Part-Final Withdrawal Limits:</div>
-              <div className="flex justify-between text-white">
-                <span>Standard (75% of Balance):</span>
-                <span className="font-bold text-emerald-300">{formatCurrency(maxPartFinal75)}</span>
+            <div className="mt-4 p-3 bg-hair/30 rounded-lg space-y-1 text-[11px]">
+              <div className="font-bold text-ink font-sans">Part-Final Loan Limits / విత్‌డ్రావల్ పరిమితులు:</div>
+              <div className="flex justify-between text-inkSoft">
+                <span>75% Max Part-Final Limit:</span>
+                <span className="font-bold text-ink">{formatCurrency(maxPartFinal75)}</span>
               </div>
-              <div className="flex justify-between text-white">
-                <span>Superannuation 1 Yr prior (90%):</span>
-                <span className="font-bold text-emerald-300">{formatCurrency(maxPartFinal90)}</span>
+              <div className="flex justify-between text-inkSoft">
+                <span>90% Retirement Limit:</span>
+                <span className="font-bold text-ink">{formatCurrency(maxPartFinal90)}</span>
               </div>
             </div>
           </div>
@@ -180,14 +234,14 @@ export default function GpfApgliUI() {
         {/* Card 2: APGLI Slab Matcher */}
         <div className="bg-paperRaised border border-hair rounded-xl p-5 shadow-xs space-y-4">
           <div className="border-b border-hair pb-3">
-            <h2 className="font-bold text-base text-ink">2. APGLI Compulsory Premium Slab</h2>
-            <div className="font-telugu text-xs text-inkSoft">ఏపీజీఎల్ఐ కనీస ప్రీమియం స్లాబ్ పరిశీలన</div>
+            <h2 className="font-bold text-base text-ink">2. APGLI Premium Slab Matcher</h2>
+            <div className="font-telugu text-xs text-inkSoft">బేసిక్ పే ఆధారంగా APGLI ప్రీమియం స్లాబ్</div>
           </div>
 
           <div className="space-y-3">
             <div>
               <label htmlFor={basicPayId} className="block font-mono text-[10px] uppercase font-bold text-inkSoft tracking-wider mb-1">
-                Monthly Basic Pay ₹ *
+                Current Basic Pay (మూల వేతనం) ₹ *
               </label>
               <input
                 id={basicPayId}
@@ -200,45 +254,43 @@ export default function GpfApgliUI() {
 
             <div>
               <label htmlFor={currPremiumId} className="block font-mono text-[10px] uppercase font-bold text-inkSoft tracking-wider mb-1">
-                Current Monthly APGLI Premium Cut (₹)
+                Current Deducted Premium ₹
               </label>
               <input
                 id={currPremiumId}
                 type="number"
                 value={currentPremium}
                 onChange={(e) => setCurrentPremium(e.target.value)}
-                className="w-full bg-white border border-hair rounded-lg px-3 py-1.5 text-xs font-mono text-ink outline-none"
+                className="w-full bg-white border border-hair rounded-lg px-3 py-2 text-xs font-mono text-ink outline-none focus:border-tamarind"
               />
             </div>
           </div>
 
-          {/* APGLI Result Card */}
-          <div className="bg-paper border border-hair rounded-xl p-4 font-mono text-xs space-y-3">
-            <div className="flex justify-between items-center border-b border-hair/50 pb-2">
-              <span className="text-inkSoft font-semibold text-[10px] uppercase">Compulsory Minimum Slab:</span>
-              <span className="font-bold text-tamarind text-sm">{formatCurrency(recommendedApgliPremium)}/mo</span>
+          {/* APGLI Recommendation Block */}
+          <div className="pt-3 border-t border-hair space-y-3">
+            <div className="p-3 bg-hair/30 rounded-lg space-y-1 text-xs">
+              <div className="text-inkSoft font-mono text-[11px]">Recommended Min Premium:</div>
+              <div className="text-xl font-bold text-ink font-mono">{formatCurrency(recommendedApgliPremium)} / month</div>
+              <div className="text-[11px] text-inkSoft/80 font-sans mt-1 leading-snug">
+                As per AP Government revised pay scale slabs, employees with Basic Pay ₹{basicNum.toLocaleString("en-IN")} must deduct at least {formatCurrency(recommendedApgliPremium)}.
+              </div>
             </div>
 
-            {parseFloat(currentPremium) < recommendedApgliPremium ? (
-              <div className="bg-amber-100 border border-amber-300 text-amber-900 rounded-lg p-2 text-[11px] font-sans">
-                ⚠️ <strong>Enhancement Required:</strong> Your current deduction ({formatCurrency(parseFloat(currentPremium))}) is less than the mandatory slab for basic pay {formatCurrency(basicNum)}. Please apply for APGLI premium enhancement.
-              </div>
-            ) : (
-              <div className="bg-emerald-100 border border-emerald-300 text-emerald-900 rounded-lg p-2 text-[11px] font-sans">
-                ✓ <strong>Compliant:</strong> Your current deduction meets or exceeds the mandatory APGLI slab limit.
+            {parseFloat(currentPremium) < recommendedApgliPremium && (
+              <div className="p-3 bg-tamarind/10 border border-tamarind/30 rounded-lg text-xs text-tamarind font-medium leading-relaxed">
+                ⚠️ Your current premium ({formatCurrency(parseFloat(currentPremium) || 0)}) is below the recommended slab minimum ({formatCurrency(recommendedApgliPremium)}). Consider submitting a proposal for policy enhancement.
               </div>
             )}
-
-            <div className="text-[10px] text-inkSoft font-sans space-y-0.5 pt-1">
-              <div className="font-bold text-ink">APGLI Mandatory Slabs Reference:</div>
-              <div>• Basic Pay up to ₹25,220: ₹500/mo</div>
-              <div>• Basic Pay ₹25,221 – ₹35,570: ₹750/mo</div>
-              <div>• Basic Pay ₹35,571 – ₹48,440: ₹1,000/mo</div>
-              <div>• Basic Pay ₹48,441 – ₹67,990: ₹1,400/mo</div>
-              <div>• Basic Pay Above ₹67,990: ₹2,000/mo</div>
-            </div>
           </div>
         </div>
+      </div>
+
+      {/* Accordion Rules & FAQs */}
+      <div className="space-y-4 pt-6 border-t border-hair">
+        <h2 className="text-lg font-bold text-ink tracking-tight flex items-center gap-2">
+          <span>📘</span> GPF & APGLI Guidelines & FAQs (నిబంధనలు & వివరణలు)
+        </h2>
+        <Accordion items={GPF_FAQ_ITEMS} allowMultiple={true} />
       </div>
     </div>
   );

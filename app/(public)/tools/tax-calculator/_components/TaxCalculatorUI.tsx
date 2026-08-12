@@ -2,6 +2,7 @@
 
 import { useState, useId } from "react";
 import Link from "next/link";
+import Accordion, { AccordionItemData } from "@/app/(public)/_components/Accordion";
 
 type FinancialYear = "2023-24" | "2024-25" | "2025-26";
 type DocumentView =
@@ -798,6 +799,67 @@ export default function TaxCalculatorUI() {
                 </button>
               </div>
             </div>
+          </div>
+
+          {/* Accordion FAQs Section */}
+          <div className="pt-8 border-t border-hair space-y-4 print:hidden">
+            <h2 className="text-lg font-bold text-ink tracking-tight flex items-center gap-2">
+              <span>📘</span> Income Tax Guidelines & FAQs (ఆదాయపు పన్ను మార్గదర్శకాలు)
+            </h2>
+            <Accordion
+              items={[
+                {
+                  id: "tax-regimes-comparison",
+                  titleEn: "Which Regime is better for AP Teachers for FY 2025-26?",
+                  titleTe: "FY 2025-26 కి ఉపాధ్యాయులకు ఏ పన్ను విధానం (Old vs New Regime) మంచిది?",
+                  badge: "Regime Guide",
+                  defaultOpen: true,
+                  content: (
+                    <div className="space-y-2">
+                      <p>
+                        <b>New Tax Regime (FY 2025-26 / AY 2026-27):</b> Offers lower tax slab rates and a higher <b>Standard Deduction of ₹75,000</b>. Tax rebate u/s 87A is available for taxable income up to <b>₹7,00,000</b> (resulting in zero tax payable for income up to ₹7.75 Lakhs).
+                      </p>
+                      <p>
+                        <b>Old Tax Regime:</b> Allows deductions like <b>HRA exemption u/s 10(13A), 80C (up to ₹1.5L), 80D (Health Insurance), and Housing Loan Interest u/s 24(b) (up to ₹2L)</b>. If your total exemptions and deductions exceed ₹3,75,000, Old Regime usually saves more tax.
+                      </p>
+                    </div>
+                  ),
+                },
+                {
+                  id: "hra-exemption-rules",
+                  titleEn: "How is HRA Exemption u/s 10(13A) calculated for teachers?",
+                  titleTe: "ఉపాధ్యాయులకు హెచ్‌ఆర్‌ఏ (HRA) పన్ను మినహాయింపు లెక్కించడం ఎలా?",
+                  badge: "HRA Rules",
+                  content: (
+                    <div className="space-y-2">
+                      <p>HRA exemption under Section 10(13A) is the <b>minimum</b> of the following three amounts:</p>
+                      <ol className="list-decimal pl-4 space-y-1">
+                        <li>Actual HRA received from government payroll.</li>
+                        <li>Actual rent paid minus 10% of (Basic Pay + DA).</li>
+                        <li>40% of (Basic Pay + DA) for non-metro towns/districts in AP & TS.</li>
+                      </ol>
+                    </div>
+                  ),
+                },
+                {
+                  id: "landlord-pan-rule",
+                  titleEn: "Is Landlord PAN mandatory for claiming HRA in Form 12BB?",
+                  titleTe: "ఫారం 12బిబి లో యజమాని పాన్ కార్డ్ తప్పనిసరియా?",
+                  badge: "Form 12BB",
+                  content: (
+                    <div className="space-y-2">
+                      <p>
+                        As per Central Board of Direct Taxes (CBDT) circulars, providing the <b>Landlord's PAN card number is mandatory</b> if total rent paid during the financial year exceeds <b>₹1,00,000/-</b> (approx ₹8,334 per month).
+                      </p>
+                      <p>
+                        If the landlord does not have a PAN card, a declaration in Form 60/61 along with landlord contact details must be attached to Form 12BB.
+                      </p>
+                    </div>
+                  ),
+                },
+              ]}
+              allowMultiple={true}
+            />
           </div>
         </div>
       )}
