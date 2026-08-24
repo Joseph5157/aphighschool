@@ -59,7 +59,7 @@ with the `ADMIN_EMAIL` / `ADMIN_PASSWORD` you set in `.env`.
 
 Tests run against a dedicated `portal_test` Postgres database inside the same Docker
 container as dev (`docker compose up -d db`, published on host port 5433). Config lives
-in `.env.test` (loaded automatically by `vitest.config.ts`); it holds no real secrets.
+in `.env.test` (loaded automatically by `vitest.config.mts`); it holds no real secrets.
 
 After every schema change, push the schema to the test database:
 
