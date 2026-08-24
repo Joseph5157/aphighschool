@@ -55,6 +55,27 @@ with the `ADMIN_EMAIL` / `ADMIN_PASSWORD` you set in `.env`.
   in the UI as a reminder banner, and includes the **Related Orders** picker for the
   completeness requirement (Section 9.2).
 
+## Running tests
+
+Tests run against a dedicated `portal_test` Postgres database inside the same Docker
+container as dev (`docker compose up -d db`, published on host port 5433). Config lives
+in `.env.test` (loaded automatically by `vitest.config.ts`); it holds no real secrets.
+
+After every schema change, push the schema to the test database:
+
+```bash
+$env:DATABASE_URL="postgresql://portal:portal_dev_password@localhost:5433/portal_test?schema=public"; npx prisma db push
+```
+
+(Bash equivalent: `DATABASE_URL="postgresql://portal:portal_dev_password@localhost:5433/portal_test?schema=public" npx prisma db push`)
+
+Then run the tests:
+
+```bash
+npm test          # single run
+npm run test:watch  # watch mode
+```
+
 ## What's NOT here yet
 
 - The public-facing site (Home Feed, Category Page, Living Document article view,
