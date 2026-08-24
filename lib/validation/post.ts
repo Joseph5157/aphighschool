@@ -24,8 +24,10 @@ const STATUS_BADGES = ["notification", "apply_link", "hall_ticket", "results", "
 const TELUGU = /[ఀ-౿]/;
 
 // G.O.Ms.No.129 / G.O.Rt.No.55 / Memo.No.1234 / Circular.No.7 — with or without spaces.
+// Anchored at both ends (trailing whitespace only) so a valid prefix cannot be used to
+// smuggle arbitrary trailing text — including markup — past the check.
 const GO_REFERENCE =
-  /^(G\.?O\.?\s?(Ms|Rt|P)\.?\s?No\.?\s?\d+|Memo\.?\s?No\.?\s?[\w/-]+|Circular\.?\s?No\.?\s?[\w/-]+|Proc\.?\s?No\.?\s?[\w/-]+)/i;
+  /^(G\.?O\.?\s?(Ms|Rt|P)\.?\s?No\.?\s?\d+|Memo\.?\s?No\.?\s?[\w/-]+|Circular\.?\s?No\.?\s?[\w/-]+|Proc\.?\s?No\.?\s?[\w/-]+)\s*$/i;
 
 function isHttpsUrl(value: string): boolean {
   try {
@@ -70,7 +72,7 @@ export function validatePost(input: PostInput): string[] {
 
   if (input.goReference && !GO_REFERENCE.test(input.goReference.trim())) {
     errors.push(
-      "GO reference must look like G.O.Ms.No.55, G.O.Rt.No.55, Memo.No.55, or Circular.No.55."
+      "GO reference must look like G.O.Ms.No.55, G.O.Rt.No.55, Memo.No.55, or Circular.No.55, or Proc.No.55."
     );
   }
 

@@ -55,6 +55,11 @@ describe("validatePost", () => {
     expect(errors).toContain("PDF URL must be an https:// link.");
   });
 
+  it("rejects a non-https action url", () => {
+    const errors = validatePost({ ...base, actionUrl: "http://example.com/apply" });
+    expect(errors).toContain("Action URL must be an https:// link.");
+  });
+
   it("rejects a malformed source url", () => {
     expect(validatePost({ ...base, sourceUrl: "not a url" })).toContain(
       "Source URL must be an https:// link."
@@ -73,7 +78,20 @@ describe("validatePost", () => {
 
   it("rejects a GO reference that is not in G.O./Memo/Circular form", () => {
     expect(validatePost({ ...base, goReference: "55" })).toContain(
-      "GO reference must look like G.O.Ms.No.55, G.O.Rt.No.55, Memo.No.55, or Circular.No.55."
+      "GO reference must look like G.O.Ms.No.55, G.O.Rt.No.55, Memo.No.55, or Circular.No.55, or Proc.No.55."
+    );
+  });
+
+  it("rejects a GO reference with a valid prefix but trailing garbage", () => {
+    // Discrimination case for the missing end-anchor: an unanchored regex matches on
+    // the valid prefix alone and ignores everything after it, silently accepting
+    // arbitrary trailing text (including markup) tacked onto a real-looking reference.
+    const errors = validatePost({
+      ...base,
+      goReference: "G.O.Ms.No.55 this is not actually valid nonsense !!! @@@",
+    });
+    expect(errors).toContain(
+      "GO reference must look like G.O.Ms.No.55, G.O.Rt.No.55, Memo.No.55, or Circular.No.55, or Proc.No.55."
     );
   });
 
