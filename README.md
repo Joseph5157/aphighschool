@@ -26,8 +26,9 @@ npm install
 
 # 3. Configure environment
 cp .env.example .env
-# Edit .env — at minimum set ADMIN_EMAIL, ADMIN_PASSWORD, and NEXTAUTH_SECRET
+# Edit .env — at minimum set ADMIN_EMAIL, ADMIN_PASSWORD_HASH, and NEXTAUTH_SECRET
 # Generate a secret with: openssl rand -base64 32
+# Generate the password hash with: npx tsx scripts/hash-password.ts <password>
 
 # 4. Push the schema to Postgres (no migration history yet — fine for local dev)
 npm run db:push
@@ -40,7 +41,8 @@ npm run dev
 ```
 
 Visit `http://localhost:3000/admin` — you'll be redirected to `/admin/login`. Sign in
-with the `ADMIN_EMAIL` / `ADMIN_PASSWORD` you set in `.env`.
+with `ADMIN_EMAIL` and the plain-text password you hashed into `ADMIN_PASSWORD_HASH`
+in `.env`.
 
 ## What's here
 
