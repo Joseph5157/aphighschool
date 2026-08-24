@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { requireAdmin } from "@/lib/auth-guard";
 
 function slugify(text: string) {
   return text
@@ -13,6 +14,7 @@ function slugify(text: string) {
 }
 
 export async function createPost(formData: FormData) {
+  await requireAdmin();
   const titleEn = String(formData.get("titleEn") || "");
   const titleTe = String(formData.get("titleTe") || "");
   const summaryTeRaw = String(formData.get("summaryTe") || "");
@@ -74,6 +76,7 @@ export async function createPost(formData: FormData) {
 }
 
 export async function publishPost(postId: string) {
+  await requireAdmin();
   await prisma.post.update({
     where: { id: postId },
     data: { isDraft: false },
@@ -83,6 +86,7 @@ export async function publishPost(postId: string) {
 }
 
 export async function updatePost(postId: string, formData: FormData) {
+  await requireAdmin();
   const titleEn = String(formData.get("titleEn") || "");
   const titleTe = String(formData.get("titleTe") || "");
   const summaryTeRaw = String(formData.get("summaryTe") || "");
@@ -135,6 +139,7 @@ export async function updatePost(postId: string, formData: FormData) {
 }
 
 export async function deletePost(postId: string) {
+  await requireAdmin();
   await prisma.post.delete({ where: { id: postId } });
   revalidatePath("/admin/posts");
 }
