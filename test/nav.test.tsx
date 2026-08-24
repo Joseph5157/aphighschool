@@ -32,8 +32,8 @@ describe("public navigation scope", () => {
 
   it("desktop nav links only to in-scope destinations", () => {
     render(<DesktopNav />);
-    for (const href of hrefs()) {
-      expect(ALLOWED).toContain(href);
-    }
+    const found = hrefs();
+    expect(found).toHaveLength(4);
+    expect(new Set(found)).toEqual(new Set(ALLOWED));
   });
 });
