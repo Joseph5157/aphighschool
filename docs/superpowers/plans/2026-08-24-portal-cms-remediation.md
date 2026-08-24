@@ -579,11 +579,15 @@ describe("public navigation scope", () => {
     expect(hrefs()).not.toContain("/education");
   });
 
-  it("desktop nav links only to in-scope destinations", () => {
+  // Assert count AND set equality, not membership alone. A per-href
+  // `expect(ALLOWED).toContain(href)` loop passes when a link goes MISSING
+  // or is duplicated — it only catches additions. Both navs get the same
+  // rigor so a silently dropped destination fails the suite.
+  it("desktop nav exposes exactly the four allowed destinations", () => {
     render(<DesktopNav />);
-    for (const href of hrefs()) {
-      expect(ALLOWED).toContain(href);
-    }
+    const found = hrefs();
+    expect(found).toHaveLength(4);
+    expect(new Set(found)).toEqual(new Set(ALLOWED));
   });
 });
 ```
