@@ -40,7 +40,7 @@ Two milestones depend on decisions made earlier and will need re-derivation if t
 
 | File | Responsibility |
 |---|---|
-| `vitest.config.ts` | Test runner config; jsdom default, `.env.test` loading |
+| `vitest.config.mts` | Test runner config; jsdom default, `.env.test` loading |
 | `test/setup.ts` | Testing Library matchers, global test setup |
 | `test/db.ts` | Test-database helpers: `resetDb()`, `seedCategory()`, `makePost()` |
 | `lib/auth-guard.ts` | `requireAdmin()` — server-action authorisation |
@@ -75,7 +75,7 @@ Nothing here touches the database schema. Every task is revertible with `git rev
 There is no test runner in this project today. This task creates one; every task after it is written test-first.
 
 **Files:**
-- Create: `vitest.config.ts`
+- Create: `vitest.config.mts`
 - Create: `test/setup.ts`
 - Create: `test/db.ts`
 - Create: `.env.test`
@@ -113,7 +113,7 @@ ADMIN_EMAIL="admin@test.local"
 NEXT_PUBLIC_SITE_URL="http://localhost:3000"
 ```
 
-- [ ] **Step 4: Write `vitest.config.ts`**
+- [ ] **Step 4: Write `vitest.config.mts`**
 
 `loadEnv` ships with Vite, which Vitest already depends on — no extra package.
 
@@ -132,9 +132,12 @@ export default defineConfig(() => ({
     environment: "jsdom",
     setupFiles: ["./test/setup.ts"],
     env: loadEnv("test", process.cwd(), ""),
-    // DB-backed tests share one Postgres database. Run serially so resetDb()
-    // in one file cannot truncate a table another file is mid-way through.
-    poolOptions: { threads: { singleThread: true } },
+    // DB-backed tests share one Postgres database, so test FILES must not run
+    // concurrently: resetDb() in one would truncate a table another is using.
+    // NOTE: poolOptions.threads.singleThread does NOT achieve this — Vitest 2.x
+    // defaults `pool` to "forks", making that setting a no-op. fileParallelism
+    // is pool-agnostic and survives a future change of default pool.
+    fileParallelism: false,
   },
 }));
 ```
@@ -248,7 +251,7 @@ Expected: PASS, 2 tests.
 - [ ] **Step 11: Commit**
 
 ```bash
-git add vitest.config.ts test/ package.json package-lock.json .env.test .env.example README.md
+git add vitest.config.mts test/ package.json package-lock.json .env.test .env.example README.md
 git commit -m "test: add Vitest harness with test database helpers"
 ```
 
