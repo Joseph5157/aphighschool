@@ -68,13 +68,17 @@ async function main() {
     create: { nameEn: "Tools", nameTe: "ఉపకరణాలు", slug: "tools", color: "#1B2A4A", icon: "tool" },
   });
 
+  // Seed records are demo fixtures, not real orders. They are created as UNPUBLISHED
+  // drafts with verifiedAgainstGoir=false and no PDF or source URL. A real post is
+  // verified by a human against GOIR and published deliberately from the admin UI.
+
   // 2. Background Post (GO 21)
   const background = await prisma.post.upsert({
     where: { slug: "go-21-original-ptr-norms" },
-    update: { isDraft: false, categoryId: govtOrders.id, docType: "go", tags: ["Transfers", "PTR"] },
+    update: { isDraft: true, categoryId: govtOrders.id, docType: "go", tags: ["Transfers", "PTR"] },
     create: {
       slug: "go-21-original-ptr-norms",
-      titleEn: "Original PTR Norms & Staff Restructuring Guidelines",
+      titleEn: "[DEMO] Original PTR Norms & Staff Restructuring Guidelines",
       titleTe: "అసలు పీటీఆర్ నిబంధనలు మరియు సిబ్బంది పునర్వ్యవస్థీకరణ మార్గదర్శకాలు",
       summaryTe: [
         "పాఠశాలల్లో ఉపాధ్యాయ-విద్యార్థి నిష్పత్తి (PTR) ప్రాథమిక నిబంధనలు నిర్దేశించబడ్డాయి.",
@@ -84,22 +88,22 @@ async function main() {
       statusBadge: "expired",
       goReference: "G.O.Ms.No.21",
       sourceDept: "School Education, AP",
-      sourceUrl: "https://goir.ap.gov.in",
+      sourceUrl: null,
       categoryId: govtOrders.id,
       docType: "go",
       tags: ["Transfers", "PTR"],
-      verifiedAgainstGoir: true,
-      isDraft: false,
+      verifiedAgainstGoir: false,
+      isDraft: true,
     },
   });
 
   // 3. District Allocation Post (GO 129)
   const main2026 = await prisma.post.upsert({
     where: { slug: "go-129-district-allocation-2026" },
-    update: { isDraft: false, categoryId: govtOrders.id, docType: "go", tags: ["Transfers"] },
+    update: { isDraft: true, categoryId: govtOrders.id, docType: "go", tags: ["Transfers"] },
     create: {
       slug: "go-129-district-allocation-2026",
-      titleEn: "New District Allocation Guidelines for Teachers & Educational Staff",
+      titleEn: "[DEMO] New District Allocation Guidelines for Teachers & Educational Staff",
       titleTe: "నూతన జిల్లాల్లో ఉపాధ్యాయులు మరియు విద్యాశాఖ సిబ్బంది కేటాయింపు మార్గదర్శకాలు",
       summaryTe: [
         "అర్హులైన ఉపాధ్యాయులు మరియు ఉద్యోగులు ఆగస్టు 30లోగా ఆన్‌లైన్ దరఖాస్తు చేసుకోవాలి.",
@@ -108,27 +112,27 @@ async function main() {
       ],
       englishAbstract: "Applies to: All AP Teachers & School Education Staff · Key rule: Seniority & Spouse points allotment · Deadline: 2026-08-30",
       statusBadge: "apply_link",
-      pdfUrl: "https://drive.google.com/file/d/1A2B3C4D5E6F7G8H9I0J/view",
+      pdfUrl: null,
       actionUrl: "https://cse.ap.gov.in",
       actionDeadline: new Date("2026-08-30"),
       goReference: "G.O.Ms.No.129",
       sourceDept: "School Education, AP",
-      sourceUrl: "https://goir.ap.gov.in",
+      sourceUrl: null,
       categoryId: govtOrders.id,
       docType: "go",
       tags: ["Transfers"],
-      verifiedAgainstGoir: true,
-      isDraft: false,
+      verifiedAgainstGoir: false,
+      isDraft: true,
     },
   });
 
   // 4. TET 2026 Post
   const tetPost = await prisma.post.upsert({
     where: { slug: "ap-tet-2026-notification-guidelines" },
-    update: { isDraft: false, categoryId: notifications.id, docType: "notification", tags: ["TET"] },
+    update: { isDraft: true, categoryId: notifications.id, docType: "notification", tags: ["TET"] },
     create: {
       slug: "ap-tet-2026-notification-guidelines",
-      titleEn: "AP TET 2026 Official Notification & Online Application Guidelines",
+      titleEn: "[DEMO] AP TET 2026 Official Notification & Online Application Guidelines",
       titleTe: "ఆంధ్రప్రదేశ్ ఉపాధ్యాయ అర్హత పరీక్ష (AP TET 2026) అధికారిక ప్రకటన & ఆన్‌లైన్ దరఖాస్తు మార్గదర్శకాలు",
       summaryTe: [
         "ఆంధ్రప్రదేశ్ ఉపాధ్యాయ అర్హత పరీక్ష (TET 2026) దరఖాస్తు స్వీకరణ ప్రారంభమైనది.",
@@ -137,7 +141,7 @@ async function main() {
       ],
       englishAbstract: "Applies to: D.El.Ed / B.Ed candidates & In-service teachers · Key rule: Computer Based Test (CBT) · Deadline: 2026-08-25",
       statusBadge: "notification",
-      pdfUrl: "https://drive.google.com/file/d/TET2026GUIDELINES/view",
+      pdfUrl: null,
       actionUrl: "https://aptet.apcfss.in",
       actionDeadline: new Date("2026-08-25"),
       goReference: "Memo.No.1742/TET/2026",
@@ -146,18 +150,18 @@ async function main() {
       categoryId: notifications.id,
       docType: "notification",
       tags: ["TET"],
-      verifiedAgainstGoir: true,
-      isDraft: false,
+      verifiedAgainstGoir: false,
+      isDraft: true,
     },
   });
 
   // 5. DSC 2026 Hall Tickets Post
   const dscPost = await prisma.post.upsert({
     where: { slug: "ap-dsc-2026-hall-tickets-release" },
-    update: { isDraft: false, categoryId: notifications.id, docType: "proceeding", tags: ["DSC"] },
+    update: { isDraft: true, categoryId: notifications.id, docType: "proceeding", tags: ["DSC"] },
     create: {
       slug: "ap-dsc-2026-hall-tickets-release",
-      titleEn: "AP Mega DSC 2026 Examination Hall Tickets Released Download Link",
+      titleEn: "[DEMO] AP Mega DSC 2026 Examination Hall Tickets Released Download Link",
       titleTe: "ఆంధ్రప్రదేశ్ మెగా డీఎస్సీ 2026 పరీక్ష హాల్ టిక్కెట్లు విడుదల - డౌన్‌లోడ్ లింక్",
       summaryTe: [
         "మెగా డీఎస్సీ 2026 హాల్ టిక్కెట్లు అధికారిక పోర్టల్‌లో అందుబాటులో ఉంచబడ్డాయి.",
@@ -166,7 +170,7 @@ async function main() {
       ],
       englishAbstract: "Applies to: All registered Mega DSC 2026 applicants · Key rule: Print hall ticket with valid Govt Photo ID",
       statusBadge: "hall_ticket",
-      pdfUrl: "https://drive.google.com/file/d/DSC2026HALLTICKETS/view",
+      pdfUrl: null,
       actionUrl: "https://apdsc.apcfss.in",
       goReference: "G.O.Rt.No.408",
       sourceDept: "School Education, AP",
@@ -174,18 +178,18 @@ async function main() {
       categoryId: notifications.id,
       docType: "proceeding",
       tags: ["DSC"],
-      verifiedAgainstGoir: true,
-      isDraft: false,
+      verifiedAgainstGoir: false,
+      isDraft: true,
     },
   });
 
   // 6. DA Arrears Post
   const daPost = await prisma.post.upsert({
     where: { slug: "da-arrears-payment-schedule-2026" },
-    update: { isDraft: false, categoryId: circulars.id, docType: "circular", tags: ["PRC", "DA"] },
+    update: { isDraft: true, categoryId: circulars.id, docType: "circular", tags: ["PRC", "DA"] },
     create: {
       slug: "da-arrears-payment-schedule-2026",
-      titleEn: "Dearness Allowance (DA) Arrears Installments Release Orders",
+      titleEn: "[DEMO] Dearness Allowance (DA) Arrears Installments Release Orders",
       titleTe: "కరువు భత్యం (DA) బకాయిల వాయిదాల విడుదల ఉత్తర్వులు",
       summaryTe: [
         "ఉపాధ్యాయులు మరియు ప్రభుత్వ ఉద్యోగుల కరువు భత్యం (DA) బకాయిలు జీపిఎఫ్ అకౌంట్‌లో జమ చేసేందుకు ఉత్తర్వులు.",
@@ -193,15 +197,15 @@ async function main() {
       ],
       englishAbstract: "Applies to: All AP Govt Teachers & Pensioners · Key rule: GPF adjustment in 3 installments",
       statusBadge: "results",
-      pdfUrl: "https://drive.google.com/file/d/DAARREARS2026/view",
+      pdfUrl: null,
       goReference: "G.O.Ms.No.84",
       sourceDept: "Finance Department, AP",
-      sourceUrl: "https://goir.ap.gov.in",
+      sourceUrl: null,
       categoryId: circulars.id,
       docType: "circular",
       tags: ["PRC", "DA"],
-      verifiedAgainstGoir: true,
-      isDraft: false,
+      verifiedAgainstGoir: false,
+      isDraft: true,
     },
   });
 
