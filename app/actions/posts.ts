@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireAdmin } from "@/lib/auth-guard";
+import { parsePostForm, validatePost } from "@/lib/validation/post";
 
 function slugify(text: string) {
   return text
@@ -15,60 +16,44 @@ function slugify(text: string) {
 
 export async function createPost(formData: FormData) {
   await requireAdmin();
-  const titleEn = String(formData.get("titleEn") || "");
-  const titleTe = String(formData.get("titleTe") || "");
-  const summaryTeRaw = String(formData.get("summaryTe") || "");
-  const englishAbstract = String(formData.get("englishAbstract") || "");
-  const statusBadge = String(formData.get("statusBadge") || "notification") as any;
-  const pdfUrl = String(formData.get("pdfUrl") || "");
-  const actionDeadlineRaw = String(formData.get("actionDeadline") || "");
-  const goReference = String(formData.get("goReference") || "");
-  const sourceDept = String(formData.get("sourceDept") || "");
-  const sourceUrl = String(formData.get("sourceUrl") || "");
-  const categoryId = String(formData.get("categoryId") || "") || null;
-  const docType = String(formData.get("docType") || "") || null;
-  const tagsRaw = String(formData.get("tagsRaw") || "");
-  const tags = tagsRaw.split(",").map((t) => t.trim()).filter(Boolean);
-  const verifiedAgainstGoir = formData.get("verifiedAgainstGoir") === "on";
-  const relatedPostIds = formData.getAll("relatedPostIds").map(String).filter(Boolean);
 
-  // Quality-First checklist (Section 4.1) is enforced by the admin, not the schema —
-  // but we do require the fields that make the checklist possible: title, at least one
-  // Telugu summary line, and a GO reference so the post can be verified against GOIR.
-  if (!titleEn || !titleTe || !summaryTeRaw.trim()) {
-    throw new Error("Title (EN/TE) and at least one Telugu summary line are required.");
+  const input = parsePostForm(formData);
+  const errors = validatePost(input);
+  if (errors.length > 0) {
+    throw new Error(errors.join(" "));
+  }
+
+  if (input.categoryId) {
+    const exists = await prisma.category.findUnique({ where: { id: input.categoryId } });
+    if (!exists) throw new Error("Selected category does not exist.");
   }
 
   const post = await prisma.post.create({
     data: {
-      slug: `${slugify(titleEn)}-${Date.now().toString(36)}`,
-      titleEn,
-      titleTe,
-      summaryTe: summaryTeRaw.split("\n").map((s) => s.trim()).filter(Boolean),
-      englishAbstract: englishAbstract || null,
-      statusBadge,
-      pdfUrl: pdfUrl || null,
-      actionDeadline: actionDeadlineRaw ? new Date(actionDeadlineRaw) : null,
-      goReference: goReference || null,
-      sourceDept: sourceDept || null,
-      sourceUrl: sourceUrl || null,
-      categoryId,
-      docType,
-      tags,
-      verifiedAgainstGoir,
+      slug: `${slugify(input.titleEn)}-${Date.now().toString(36)}`,
+      titleEn: input.titleEn,
+      titleTe: input.titleTe,
+      summaryTe: input.summaryTe,
+      englishAbstract: input.englishAbstract,
+      statusBadge: input.statusBadge as never,
+      pdfUrl: input.pdfUrl,
+      actionUrl: input.actionUrl,
+      actionDeadline: input.actionDeadline,
+      goReference: input.goReference,
+      sourceDept: input.sourceDept,
+      sourceUrl: input.sourceUrl,
+      categoryId: input.categoryId,
+      docType: input.docType,
+      tags: input.tags,
+      verifiedAgainstGoir: input.verifiedAgainstGoir,
       // isDraft intentionally omitted — the schema defaults to true.
       // Publishing is a separate, deliberate action (publishPost).
     },
   });
 
-  for (const relatedId of relatedPostIds) {
+  for (const relatedId of input.relatedPostIds) {
     await prisma.relatedOrder.create({
-      data: {
-        postId: post.id,
-        relatedPostId: relatedId,
-        source: "manual",
-        approved: true,
-      },
+      data: { postId: post.id, relatedPostId: relatedId, source: "manual", approved: true },
     });
   }
 
@@ -88,47 +73,43 @@ export async function publishPost(postId: string) {
 
 export async function updatePost(postId: string, formData: FormData) {
   await requireAdmin();
-  const titleEn = String(formData.get("titleEn") || "");
-  const titleTe = String(formData.get("titleTe") || "");
-  const summaryTeRaw = String(formData.get("summaryTe") || "");
-  const englishAbstract = String(formData.get("englishAbstract") || "");
-  const statusBadge = String(formData.get("statusBadge") || "notification") as any;
-  const pdfUrl = String(formData.get("pdfUrl") || "");
-  const actionDeadlineRaw = String(formData.get("actionDeadline") || "");
-  const goReference = String(formData.get("goReference") || "");
-  const sourceDept = String(formData.get("sourceDept") || "");
-  const sourceUrl = String(formData.get("sourceUrl") || "");
-  const categoryId = String(formData.get("categoryId") || "") || null;
-  const docType = String(formData.get("docType") || "") || null;
-  const tagsRaw = String(formData.get("tagsRaw") || "");
-  const tags = tagsRaw.split(",").map((t) => t.trim()).filter(Boolean);
-  const verifiedAgainstGoir = formData.get("verifiedAgainstGoir") === "on";
-  const relatedPostIds = formData.getAll("relatedPostIds").map(String).filter(Boolean);
+
+  const input = parsePostForm(formData, postId);
+  const errors = validatePost(input);
+  if (errors.length > 0) {
+    throw new Error(errors.join(" "));
+  }
+
+  if (input.categoryId) {
+    const exists = await prisma.category.findUnique({ where: { id: input.categoryId } });
+    if (!exists) throw new Error("Selected category does not exist.");
+  }
 
   await prisma.post.update({
     where: { id: postId },
     data: {
-      titleEn,
-      titleTe,
-      summaryTe: summaryTeRaw.split("\n").map((s) => s.trim()).filter(Boolean),
-      englishAbstract: englishAbstract || null,
-      statusBadge,
-      pdfUrl: pdfUrl || null,
-      actionDeadline: actionDeadlineRaw ? new Date(actionDeadlineRaw) : null,
-      goReference: goReference || null,
-      sourceDept: sourceDept || null,
-      sourceUrl: sourceUrl || null,
-      categoryId,
-      docType,
-      tags,
-      verifiedAgainstGoir,
+      titleEn: input.titleEn,
+      titleTe: input.titleTe,
+      summaryTe: input.summaryTe,
+      englishAbstract: input.englishAbstract,
+      statusBadge: input.statusBadge as never,
+      pdfUrl: input.pdfUrl,
+      actionUrl: input.actionUrl,
+      actionDeadline: input.actionDeadline,
+      goReference: input.goReference,
+      sourceDept: input.sourceDept,
+      sourceUrl: input.sourceUrl,
+      categoryId: input.categoryId,
+      docType: input.docType,
+      tags: input.tags,
+      verifiedAgainstGoir: input.verifiedAgainstGoir,
     },
   });
 
   // Simplest correct approach for a solo-admin CMS: replace the related-orders set
   // each save, rather than diffing. Fine at this scale; revisit if it ever matters.
   await prisma.relatedOrder.deleteMany({ where: { postId } });
-  for (const relatedId of relatedPostIds) {
+  for (const relatedId of input.relatedPostIds) {
     if (relatedId === postId) continue;
     await prisma.relatedOrder.create({
       data: { postId, relatedPostId: relatedId, source: "manual", approved: true },
