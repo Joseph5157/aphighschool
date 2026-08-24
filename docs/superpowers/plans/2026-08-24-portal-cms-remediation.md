@@ -786,6 +786,51 @@ describe("department rail", () => {
     expect(source).toMatch(/_count/);
   });
 });
+
+// The three cases above assert on SOURCE TEXT only. They would still pass if the
+// component queried Prisma and discarded the result, or wired the badge to a count
+// that includes drafts. Both must be caught by rendering.
+//
+// DesktopLeftNav is an async Server Component, so Testing Library's render() cannot
+// mount it — but calling it directly and rendering the returned element tree works,
+// and react-dom/server is already transitive via Next, so this needs no new dependency.
+describe("department rail rendered output", () => {
+  beforeEach(resetDb);
+
+  it("links to every non-tools category and omits tools", async () => {
+    await seedCategory("govt-orders");
+    await seedCategory("circulars");
+    await seedCategory("tools");
+
+    const html = renderToStaticMarkup(await DesktopLeftNav());
+
+    expect(html).toContain("/category/govt-orders");
+    expect(html).toContain("/category/circulars");
+    expect(html).not.toContain("/category/tools");
+  });
+
+  it("counts published posts only, never drafts", async () => {
+    const cat = await seedCategory("govt-orders");
+    await makePost({ categoryId: cat.id, isDraft: false });
+    await makePost({ categoryId: cat.id, isDraft: false });
+    await makePost({ categoryId: cat.id, isDraft: true });
+
+    const html = renderToStaticMarkup(await DesktopLeftNav());
+
+    // 2 published + 1 draft must render as 2. The draft must be non-zero in this
+    // fixture or the assertion cannot discriminate.
+    expect(html).toMatch(/>2</);
+    expect(html).not.toMatch(/>3</);
+  });
+});
+```
+
+Imports this second block needs, added to the top of the file:
+
+```ts
+import { renderToStaticMarkup } from "react-dom/server";
+import { resetDb, seedCategory, makePost } from "./db";
+import DesktopLeftNav from "@/app/(public)/_components/DesktopLeftNav";
 ```
 
 - [ ] **Step 2: Run it to make sure it fails**
