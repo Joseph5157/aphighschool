@@ -56,7 +56,8 @@ export async function createPost(formData: FormData) {
       docType,
       tags,
       verifiedAgainstGoir,
-      isDraft: false,
+      // isDraft intentionally omitted — the schema defaults to true.
+      // Publishing is a separate, deliberate action (publishPost).
     },
   });
 
