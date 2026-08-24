@@ -405,11 +405,19 @@ import { authOptions } from "@/lib/auth";
 
 const PASSWORD = "correct-horse-battery-staple";
 
+// IMPORTANT: reach the callback through `.options.authorize`, NOT
+// `providers[0].authorize`. next-auth 4.x's Credentials() returns a permanent
+// `authorize: () => null` STUB on the provider object and stashes the real
+// config under `.options`; the stub is only overwritten inside parseProviders()
+// during real request handling, which a unit test never triggers. Testing
+// `providers[0].authorize` therefore asserts against a stub and always passes,
+// proving nothing. Verified against node_modules/next-auth/providers/credentials.js
+// and node_modules/next-auth/core/lib/providers.js.
 function authorizeFn() {
   const provider = authOptions.providers[0] as unknown as {
-    authorize: (c: Record<string, string> | undefined) => Promise<unknown>;
+    options: { authorize: (c: Record<string, string> | undefined) => Promise<unknown> };
   };
-  return provider.authorize;
+  return provider.options.authorize;
 }
 
 describe("admin credentials provider", () => {
