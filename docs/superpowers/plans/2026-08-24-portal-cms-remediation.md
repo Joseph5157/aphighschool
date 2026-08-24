@@ -1352,7 +1352,24 @@ describe("validatePost", () => {
 
   it("rejects a GO reference that is not in G.O./Memo/Circular form", () => {
     expect(validatePost({ ...base, goReference: "55" })).toContain(
-      "GO reference must look like G.O.Ms.No.55, G.O.Rt.No.55, Memo.No.55, or Circular.No.55."
+      "GO reference must look like G.O.Ms.No.55, G.O.Rt.No.55, Memo.No.55, Circular.No.55, or Proc.No.55."
+    );
+  });
+
+  // The bare-"55" case above does NOT prove the regex is end-anchored: "55"
+  // fails the prefix outright, so it is rejected either way. This case is the
+  // one that catches an unanchored pattern.
+  it("rejects a valid GO reference followed by trailing garbage", () => {
+    expect(
+      validatePost({ ...base, goReference: "G.O.Ms.No.55 <script>alert(1)</script>" })
+    ).toContain(
+      "GO reference must look like G.O.Ms.No.55, G.O.Rt.No.55, Memo.No.55, Circular.No.55, or Proc.No.55."
+    );
+  });
+
+  it("rejects a non-https action url", () => {
+    expect(validatePost({ ...base, actionUrl: "http://cse.ap.gov.in/apply" })).toContain(
+      "Action URL must be an https:// link."
     );
   });
 
@@ -1419,8 +1436,15 @@ const STATUS_BADGES = ["notification", "apply_link", "hall_ticket", "results", "
 const TELUGU = /[ఀ-౿]/;
 
 // G.O.Ms.No.129 / G.O.Rt.No.55 / Memo.No.1234 / Circular.No.7 — with or without spaces.
+// MUST be anchored at BOTH ends. With only `^`, a valid prefix followed by
+// anything at all passes — "G.O.Ms.No.55 <script>alert(1)</script>" validated
+// as a well-formed reference. A test rejecting a bare "55" does NOT catch this,
+// because "55" fails the prefix outright, so the rule looks covered while its
+// real failure mode is open. Trailing whitespace is tolerated; nothing else is.
+// Anchoring deliberately rejects "G.O.Ms.No.129 dated 30-08-2026" — goReference
+// is a reference, not a citation line; the date belongs in documentDate.
 const GO_REFERENCE =
-  /^(G\.?O\.?\s?(Ms|Rt|P)\.?\s?No\.?\s?\d+|Memo\.?\s?No\.?\s?[\w/-]+|Circular\.?\s?No\.?\s?[\w/-]+|Proc\.?\s?No\.?\s?[\w/-]+)/i;
+  /^(G\.?O\.?\s?(Ms|Rt|P)\.?\s?No\.?\s?\d+|Memo\.?\s?No\.?\s?[\w/-]+|Circular\.?\s?No\.?\s?[\w/-]+|Proc\.?\s?No\.?\s?[\w/-]+)\s*$/i;
 
 function isHttpsUrl(value: string): boolean {
   try {
@@ -1465,7 +1489,7 @@ export function validatePost(input: PostInput): string[] {
 
   if (input.goReference && !GO_REFERENCE.test(input.goReference.trim())) {
     errors.push(
-      "GO reference must look like G.O.Ms.No.55, G.O.Rt.No.55, Memo.No.55, or Circular.No.55."
+      "GO reference must look like G.O.Ms.No.55, G.O.Rt.No.55, Memo.No.55, Circular.No.55, or Proc.No.55."
     );
   }
 
