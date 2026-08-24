@@ -75,7 +75,16 @@ async function main() {
   // 2. Background Post (GO 21)
   const background = await prisma.post.upsert({
     where: { slug: "go-21-original-ptr-norms" },
-    update: { isDraft: true, categoryId: govtOrders.id, docType: "go", tags: ["Transfers", "PTR"] },
+    update: {
+      isDraft: true,
+      categoryId: govtOrders.id,
+      docType: "go",
+      tags: ["Transfers", "PTR"],
+      titleEn: "[DEMO] Original PTR Norms & Staff Restructuring Guidelines",
+      verifiedAgainstGoir: false,
+      pdfUrl: null,
+      sourceUrl: null,
+    },
     create: {
       slug: "go-21-original-ptr-norms",
       titleEn: "[DEMO] Original PTR Norms & Staff Restructuring Guidelines",
@@ -100,7 +109,16 @@ async function main() {
   // 3. District Allocation Post (GO 129)
   const main2026 = await prisma.post.upsert({
     where: { slug: "go-129-district-allocation-2026" },
-    update: { isDraft: true, categoryId: govtOrders.id, docType: "go", tags: ["Transfers"] },
+    update: {
+      isDraft: true,
+      categoryId: govtOrders.id,
+      docType: "go",
+      tags: ["Transfers"],
+      titleEn: "[DEMO] New District Allocation Guidelines for Teachers & Educational Staff",
+      verifiedAgainstGoir: false,
+      pdfUrl: null,
+      sourceUrl: null,
+    },
     create: {
       slug: "go-129-district-allocation-2026",
       titleEn: "[DEMO] New District Allocation Guidelines for Teachers & Educational Staff",
@@ -129,7 +147,16 @@ async function main() {
   // 4. TET 2026 Post
   const tetPost = await prisma.post.upsert({
     where: { slug: "ap-tet-2026-notification-guidelines" },
-    update: { isDraft: true, categoryId: notifications.id, docType: "notification", tags: ["TET"] },
+    update: {
+      isDraft: true,
+      categoryId: notifications.id,
+      docType: "notification",
+      tags: ["TET"],
+      titleEn: "[DEMO] AP TET 2026 Official Notification & Online Application Guidelines",
+      verifiedAgainstGoir: false,
+      pdfUrl: null,
+      sourceUrl: null,
+    },
     create: {
       slug: "ap-tet-2026-notification-guidelines",
       titleEn: "[DEMO] AP TET 2026 Official Notification & Online Application Guidelines",
@@ -158,7 +185,16 @@ async function main() {
   // 5. DSC 2026 Hall Tickets Post
   const dscPost = await prisma.post.upsert({
     where: { slug: "ap-dsc-2026-hall-tickets-release" },
-    update: { isDraft: true, categoryId: notifications.id, docType: "proceeding", tags: ["DSC"] },
+    update: {
+      isDraft: true,
+      categoryId: notifications.id,
+      docType: "proceeding",
+      tags: ["DSC"],
+      titleEn: "[DEMO] AP Mega DSC 2026 Examination Hall Tickets Released Download Link",
+      verifiedAgainstGoir: false,
+      pdfUrl: null,
+      sourceUrl: null,
+    },
     create: {
       slug: "ap-dsc-2026-hall-tickets-release",
       titleEn: "[DEMO] AP Mega DSC 2026 Examination Hall Tickets Released Download Link",
@@ -186,7 +222,16 @@ async function main() {
   // 6. DA Arrears Post
   const daPost = await prisma.post.upsert({
     where: { slug: "da-arrears-payment-schedule-2026" },
-    update: { isDraft: true, categoryId: circulars.id, docType: "circular", tags: ["PRC", "DA"] },
+    update: {
+      isDraft: true,
+      categoryId: circulars.id,
+      docType: "circular",
+      tags: ["PRC", "DA"],
+      titleEn: "[DEMO] Dearness Allowance (DA) Arrears Installments Release Orders",
+      verifiedAgainstGoir: false,
+      pdfUrl: null,
+      sourceUrl: null,
+    },
     create: {
       slug: "da-arrears-payment-schedule-2026",
       titleEn: "[DEMO] Dearness Allowance (DA) Arrears Installments Release Orders",
