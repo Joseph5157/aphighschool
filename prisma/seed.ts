@@ -155,7 +155,7 @@ async function main() {
       titleEn: "[DEMO] AP TET 2026 Official Notification & Online Application Guidelines",
       verifiedAgainstGoir: false,
       pdfUrl: null,
-      sourceUrl: null,
+      sourceUrl: "https://aptet.apcfss.in",
     },
     create: {
       slug: "ap-tet-2026-notification-guidelines",
@@ -193,7 +193,7 @@ async function main() {
       titleEn: "[DEMO] AP Mega DSC 2026 Examination Hall Tickets Released Download Link",
       verifiedAgainstGoir: false,
       pdfUrl: null,
-      sourceUrl: null,
+      sourceUrl: "https://apdsc.apcfss.in",
     },
     create: {
       slug: "ap-dsc-2026-hall-tickets-release",

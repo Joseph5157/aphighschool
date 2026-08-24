@@ -81,4 +81,55 @@ describe("seed idempotency (database)", () => {
     expect(healed.pdfUrl).toBeNull();
     expect(healed.sourceUrl).toBeNull();
   }, 30000);
+
+  // The three posts above carried the bare goir.ap.gov.in domain and needed
+  // sourceUrl nulled. TET and DSC are different: their sourceUrl is a real AP
+  // application portal (aptet.apcfss.in / apdsc.apcfss.in), not a fabricated
+  // stand-in, and reseeding must preserve it rather than null it out. A
+  // blanket "null every sourceUrl on update" fix would silently destroy a
+  // legitimate source link on every reseed — this test catches exactly that.
+  it("running the real seed script over a dirty TET row keeps its real source url", async () => {
+    const DIRTY_SLUG = "ap-tet-2026-notification-guidelines";
+    const REAL_SOURCE_URL = "https://aptet.apcfss.in";
+
+    const databaseUrl = process.env.DATABASE_URL ?? "";
+    if (!databaseUrl.includes("portal_test")) {
+      throw new Error(
+        `Refusing to run prisma/seed.ts: DATABASE_URL does not target portal_test (${databaseUrl})`
+      );
+    }
+
+    // Simulate a row left behind by the OLD (pre-fix) seed script: published
+    // and GOIR-verified, with a fake Drive pdfUrl, but a real (not bare-domain,
+    // not fabricated) sourceUrl — exactly what TET's own create branch has
+    // always used.
+    await testDb.post.create({
+      data: {
+        slug: DIRTY_SLUG,
+        titleEn: "AP TET 2026 Official Notification & Online Application Guidelines",
+        titleTe: "ఆంధ్రప్రదేశ్ ఉపాధ్యాయ అర్హత పరీక్ష (AP TET 2026) అధికారిక ప్రకటన & ఆన్‌లైన్ దరఖాస్తు మార్గదర్శకాలు",
+        summaryTe: ["పాత సీడ్ డేటా."],
+        isDraft: false,
+        verifiedAgainstGoir: true,
+        pdfUrl: "https://drive.google.com/file/d/TET2026GUIDELINES/view",
+        sourceUrl: REAL_SOURCE_URL,
+      },
+    });
+
+    execFileSync("npx", ["tsx", "prisma/seed.ts"], {
+      cwd: process.cwd(),
+      env: { ...process.env, DATABASE_URL: databaseUrl },
+      stdio: "pipe",
+      shell: true,
+    });
+
+    const healed = await testDb.post.findUniqueOrThrow({ where: { slug: DIRTY_SLUG } });
+
+    expect(healed.isDraft).toBe(true);
+    expect(healed.verifiedAgainstGoir).toBe(false);
+    expect(healed.pdfUrl).toBeNull();
+    // The positive case: a real portal url must survive a reseed, not be
+    // nulled alongside the fabricated fields.
+    expect(healed.sourceUrl).toBe(REAL_SOURCE_URL);
+  }, 30000);
 });
