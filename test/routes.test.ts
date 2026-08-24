@@ -33,4 +33,20 @@ describe("public route scope", () => {
       );
     expect(offenders).toEqual([]);
   });
+
+  it("renders no advertisement placeholder", () => {
+    const offenders = walk(PUBLIC_DIR)
+      .filter((f) => f.endsWith(".tsx"))
+      .filter((f) => /AdSlot|Sponsored/.test(fs.readFileSync(f, "utf8")));
+    expect(offenders).toEqual([]);
+  });
+
+  // Guard against a vacuously-true PUBLIC_DIR: walk() returns [] for a
+  // missing directory, which would make every "no file contains X"
+  // assertion above pass without actually checking anything. This
+  // confirms PUBLIC_DIR resolves to a real directory with real content.
+  it("walks a non-empty set of .tsx route files (non-vacuity guard)", () => {
+    const tsxFiles = walk(PUBLIC_DIR).filter((f) => f.endsWith(".tsx"));
+    expect(tsxFiles.length).toBeGreaterThan(0);
+  });
 });

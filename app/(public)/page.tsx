@@ -2,7 +2,6 @@ import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import HeroCard from "./_components/HeroCard";
 import PostCard from "./_components/PostCard";
-import AdSlot from "./_components/AdSlot";
 import DesktopLeftNav from "./_components/DesktopLeftNav";
 import DesktopSidebar from "./_components/DesktopSidebar";
 
@@ -78,16 +77,9 @@ export default async function HomePage() {
             </h2>
 
             <div className="space-y-4">
-              {listingPosts.map((post, index) => {
-                const showAdSlot = index === 1;
-
-                return (
-                  <div key={post.id} className="space-y-4">
-                    <PostCard post={post} />
-                    {showAdSlot && <AdSlot />}
-                  </div>
-                );
-              })}
+              {listingPosts.map((post) => (
+                <PostCard key={post.id} post={post} />
+              ))}
             </div>
           </section>
         )}
