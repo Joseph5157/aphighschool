@@ -23,7 +23,8 @@ type PostFormClientProps = {
     sourceDept: string | null;
     sourceUrl: string | null;
     categoryId: string | null;
-    docType: string | null;
+    documentType: string | null;
+    orderState: string;
     tags: string[];
     verifiedAgainstGoir: boolean;
     relatedPostIds: string[];
@@ -31,6 +32,22 @@ type PostFormClientProps = {
   categories: Category[];
   candidatePosts: CandidatePost[];
 };
+
+const DOCUMENT_TYPE_OPTIONS = [
+  ["go", "Government Order (GO)"],
+  ["circular", "Circular"],
+  ["memo", "Memo"],
+  ["proceeding", "Proceeding"],
+  ["notification", "Notification"],
+  ["other", "Other"],
+];
+
+const ORDER_STATE_OPTIONS = [
+  ["current", "Current"],
+  ["amended", "Amended"],
+  ["superseded", "Superseded"],
+  ["archived", "Archived"],
+];
 
 const STATUS_OPTIONS = [
   ["notification", "Notification"],
@@ -70,7 +87,8 @@ export default function PostFormClient({
   const [actionUrl, setActionUrl] = useState(initial?.actionUrl || "");
   const [sourceUrl, setSourceUrl] = useState(initial?.sourceUrl || "");
   const [categoryId, setCategoryId] = useState(initial?.categoryId || "");
-  const [docType, setDocType] = useState(initial?.docType || "");
+  const [documentType, setDocumentType] = useState(initial?.documentType || "");
+  const [orderState, setOrderState] = useState(initial?.orderState || "current");
   const [tagsRaw, setTagsRaw] = useState(initial?.tags?.join(", ") || "");
   const [verifiedAgainstGoir, setVerifiedAgainstGoir] = useState(
     initial?.verifiedAgainstGoir || false
@@ -273,31 +291,53 @@ export default function PostFormClient({
               Document Type
             </label>
             <select
-              name="docType"
-              value={docType}
-              onChange={(e) => setDocType(e.target.value)}
+              name="documentType"
+              value={documentType}
+              onChange={(e) => setDocumentType(e.target.value)}
               className="w-full border border-hair rounded-lg px-3 py-2 text-sm bg-white"
             >
               <option value="">— None —</option>
-              <option value="go">Government Order (GO)</option>
-              <option value="circular">Circular</option>
-              <option value="memo">Memo</option>
-              <option value="proceeding">Proceeding</option>
-              <option value="notification">Notification</option>
+              {DOCUMENT_TYPE_OPTIONS.map(([value, label]) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
             </select>
           </div>
           <div>
             <label className="block text-xs font-mono uppercase text-inkSoft mb-1">
-              Topic Tags (comma separated)
+              Order State
             </label>
-            <input
-              name="tagsRaw"
-              value={tagsRaw}
-              onChange={(e) => setTagsRaw(e.target.value)}
-              placeholder="Transfers, PRC, TET"
-              className="w-full border border-hair rounded-lg px-3 py-2 text-sm"
-            />
+            <select
+              name="orderState"
+              value={orderState}
+              onChange={(e) => setOrderState(e.target.value)}
+              className="w-full border border-hair rounded-lg px-3 py-2 text-sm bg-white"
+            >
+              {ORDER_STATE_OPTIONS.map(([value, label]) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
+            </select>
+            <p className="mt-1 text-[11px] text-inkSoft">
+              Only shown for orders, circulars, memos and proceedings. Recruitment
+              notifications show application stages instead.
+            </p>
           </div>
+        </div>
+
+        <div>
+          <label className="block text-xs font-mono uppercase text-inkSoft mb-1">
+            Topic Tags (comma separated)
+          </label>
+          <input
+            name="tagsRaw"
+            value={tagsRaw}
+            onChange={(e) => setTagsRaw(e.target.value)}
+            placeholder="Transfers, PRC, TET"
+            className="w-full border border-hair rounded-lg px-3 py-2 text-sm"
+          />
         </div>
 
         <div className="grid grid-cols-2 gap-4">

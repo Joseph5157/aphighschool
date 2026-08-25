@@ -18,7 +18,8 @@ type PostFormProps = {
     sourceDept: string | null;
     sourceUrl: string | null;
     categoryId: string | null;
-    docType: string | null;
+    documentType: string | null;
+    orderState: string;
     tags: string[];
     verifiedAgainstGoir: boolean;
     relatedPostIds: string[];

@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, type DocType, type OrderState, type PostStatus } from "@prisma/client";
 
 export const testDb = new PrismaClient();
 
@@ -24,6 +24,9 @@ export type PostOverrides = Partial<{
   goReference: string;
   categoryId: string | null;
   tags: string[];
+  documentType: DocType | null;
+  orderState: OrderState;
+  statusBadge: PostStatus;
 }>;
 
 let counter = 0;
@@ -40,6 +43,12 @@ export async function makePost(overrides: PostOverrides = {}) {
       goReference: overrides.goReference ?? `G.O.Ms.No.${counter}`,
       categoryId: overrides.categoryId ?? null,
       tags: overrides.tags ?? [],
+      // Spread these in only when the caller asked for them, so an omitted
+      // override still exercises the column's own schema default rather than a
+      // value this helper invented. test/schema-shape.test.ts depends on that.
+      ...(overrides.documentType !== undefined && { documentType: overrides.documentType }),
+      ...(overrides.orderState !== undefined && { orderState: overrides.orderState }),
+      ...(overrides.statusBadge !== undefined && { statusBadge: overrides.statusBadge }),
     },
   });
 }

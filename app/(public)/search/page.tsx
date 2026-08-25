@@ -22,7 +22,7 @@ export default async function SearchPage() {
         titleTe: true,
         goReference: true,
         categoryId: true,
-        docType: true,
+        documentType: true,
         category: {
           select: {
             nameEn: true,

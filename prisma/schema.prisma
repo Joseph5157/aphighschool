@@ -57,9 +57,8 @@ model Post {
   summaryTe          String[]   // Telugu bullet points
   englishAbstract    String?
   tags               String[]   @default([])
-  /// Free-text legacy column. Superseded by documentType; dropped in Task 14.
-  docType             String?
-  /// The document type as a closed set. Backfilled from docType.
+  /// The document type as a closed set. Backfilled from the legacy free-text
+  /// docType column, which was dropped in Task 14.
   documentType        DocType?
   /// Lifecycle state for non-recruitment documents.
   orderState          OrderState @default(current)

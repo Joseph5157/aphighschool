@@ -15,13 +15,20 @@ export type PostInput = {
   sourceDept: string | null;
   sourceUrl: string | null;
   categoryId: string | null;
-  docType: string | null;
+  documentType: string | null;
+  orderState: string;
   tags: string[];
   verifiedAgainstGoir: boolean;
   relatedPostIds: string[];
 };
 
 const STATUS_BADGES = ["notification", "apply_link", "hall_ticket", "results", "expired"];
+
+// Must stay in step with the DocType and OrderState enums in prisma/schema.prisma.
+// Prisma rejects an out-of-enum value at the database boundary with an opaque
+// error, so these are checked here to produce an admin-readable message first.
+const DOCUMENT_TYPES = ["go", "circular", "memo", "proceeding", "notification", "other"];
+const ORDER_STATES = ["current", "amended", "superseded", "archived"];
 
 // Telugu block: U+0C00–U+0C7F.
 const TELUGU = /[ఀ-౿]/;
@@ -61,6 +68,18 @@ export function validatePost(input: PostInput): string[] {
 
   if (!STATUS_BADGES.includes(input.statusBadge)) {
     errors.push("Status badge is not a recognised value.");
+  }
+
+  // documentType is optional — a post whose type has not been established yet
+  // is legitimate, and lifecycle.ts treats null as a plain state document.
+  if (input.documentType !== null && !DOCUMENT_TYPES.includes(input.documentType)) {
+    errors.push("Document type is not a recognised value.");
+  }
+
+  // orderState is not optional: every document is in exactly one state, and the
+  // column defaults to "current".
+  if (!ORDER_STATES.includes(input.orderState)) {
+    errors.push("Order state is not a recognised value.");
   }
 
   if (input.pdfUrl && !isHttpsUrl(input.pdfUrl)) {
@@ -135,7 +154,8 @@ export function parsePostForm(formData: FormData, id?: string): PostInput {
     sourceDept: orNull("sourceDept"),
     sourceUrl: orNull("sourceUrl"),
     categoryId: orNull("categoryId"),
-    docType: orNull("docType"),
+    documentType: orNull("documentType"),
+    orderState: str("orderState") || "current",
     tags: String(formData.get("tagsRaw") || "")
       .split(",")
       .map((t) => t.trim())

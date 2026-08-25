@@ -6,6 +6,8 @@ import Breadcrumb from "@/app/(public)/_components/Breadcrumb";
 import LifecycleStepper from "./_components/LifecycleStepper";
 import ThumbZoneBar from "./_components/ThumbZoneBar";
 import Badge from "@/app/(public)/_components/Badge";
+import OrderStateBadge from "@/app/(public)/_components/OrderStateBadge";
+import { resolveLifecycle } from "@/lib/posts/lifecycle";
 import Button from "@/app/(public)/_components/Button";
 import { Card } from "@/app/(public)/_components/Card";
 import { officialDate, dateLabel, formatDate, ORDER_BY_OFFICIAL_DATE } from "@/lib/dates";
@@ -136,8 +138,19 @@ export default async function PostDetailPage({
         ]}
       />
 
-      {/* 1. Lifecycle Stepper */}
-      <LifecycleStepper statusBadge={post.statusBadge} />
+      {/* 1. Lifecycle — recruitment stages for notifications, order state otherwise */}
+      {(() => {
+        const view = resolveLifecycle(post);
+        return view.kind === "recruitment" ? (
+          <LifecycleStepper
+            stages={view.stages}
+            currentStage={view.currentStage}
+            isExpired={view.isExpired}
+          />
+        ) : (
+          <OrderStateBadge state={view.state} label={view.label} />
+        );
+      })()}
 
       {/* 2. OPTION A: Imperial Gazette Hero Header Block */}
       <div className="bg-[#1B2A4A] text-white border border-[#2B3C63] rounded-2xl p-6 md:p-8 space-y-5 shadow-md relative overflow-hidden">

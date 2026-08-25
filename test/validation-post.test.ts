@@ -16,7 +16,8 @@ const base: PostInput = {
   sourceDept: "School Education, AP",
   sourceUrl: null,
   categoryId: null,
-  docType: "go",
+  documentType: "go",
+  orderState: "current",
   tags: [],
   verifiedAgainstGoir: false,
   relatedPostIds: [],
@@ -132,6 +133,40 @@ describe("validatePost", () => {
   it("rejects duplicate related post ids", () => {
     const errors = validatePost({ ...base, relatedPostIds: ["x", "x"] });
     expect(errors).toContain("Related orders must be unique.");
+  });
+
+  it("rejects a document type outside the enum", () => {
+    expect(validatePost({ ...base, documentType: "banana" })).toContain(
+      "Document type is not a recognised value."
+    );
+  });
+
+  it("accepts every document type in the enum", () => {
+    for (const documentType of ["go", "circular", "memo", "proceeding", "notification", "other"]) {
+      expect(validatePost({ ...base, documentType })).toEqual([]);
+    }
+  });
+
+  it("accepts a post with no document type", () => {
+    expect(validatePost({ ...base, documentType: null })).toEqual([]);
+  });
+
+  it("rejects an order state outside the enum", () => {
+    expect(validatePost({ ...base, orderState: "pending" })).toContain(
+      "Order state is not a recognised value."
+    );
+  });
+
+  it("rejects an empty order state — every post is in exactly one state", () => {
+    expect(validatePost({ ...base, orderState: "" })).toContain(
+      "Order state is not a recognised value."
+    );
+  });
+
+  it("accepts every order state in the enum", () => {
+    for (const orderState of ["current", "amended", "superseded", "archived"]) {
+      expect(validatePost({ ...base, orderState })).toEqual([]);
+    }
   });
 
   it("requires a source URL when the post claims GOIR verification", () => {

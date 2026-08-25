@@ -14,7 +14,7 @@ type SearchPostItem = {
   titleEn: string;
   titleTe: string;
   goReference?: string | null;
-  docType?: string | null;
+  documentType?: string | null;
   category?: { nameEn: string } | null;
 };
 
@@ -77,7 +77,7 @@ export default function SearchUI({ posts }: SearchUIProps) {
       const inTe = post.titleTe ? post.titleTe.toLowerCase().includes(q) : false;
       const inGo = post.goReference ? post.goReference.toLowerCase().includes(q) : false;
       const inCat = post.category ? post.category.nameEn.toLowerCase().includes(q) : false;
-      const inDoc = post.docType ? post.docType.toLowerCase().includes(q) : false;
+      const inDoc = post.documentType ? post.documentType.toLowerCase().includes(q) : false;
       return inEn || inTe || inGo || inCat || inDoc;
     });
   }, [posts, trimmedQuery, isQueryValid]);
@@ -160,7 +160,7 @@ export default function SearchUI({ posts }: SearchUIProps) {
                     <div className="text-meta text-inkSoft/70 uppercase tracking-wider pt-1 border-t border-hair/30 flex items-center gap-2">
                       <span>AP SCHOOL EDUCATION</span>
                       <span>/</span>
-                      <span>{post.docType || post.category?.nameEn || "GO CIRCULAR"}</span>
+                      <span>{post.documentType || post.category?.nameEn || "GO CIRCULAR"}</span>
                       {post.goReference && (
                         <>
                           <span>/</span>

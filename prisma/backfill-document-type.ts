@@ -13,11 +13,17 @@ const MAP: Record<string, DocType> = {
   notification: "notification",
 };
 
+// Read through raw SQL, not the Prisma client. "docType" is a legacy column
+// that no longer exists in schema.prisma (dropped in Task 14), so the generated
+// client has no field for it and a typed select would not compile. This script
+// is a one-shot migration that must run against a database where the column is
+// still present — see docs/PRODUCTION-MIGRATION.md for the required ordering.
+type LegacyRow = { id: string; docType: string | null; slug: string };
+
 async function main() {
-  const posts = await prisma.post.findMany({
-    where: { documentType: null },
-    select: { id: true, docType: true, slug: true },
-  });
+  const posts = await prisma.$queryRaw<LegacyRow[]>`
+    SELECT "id", "docType", "slug" FROM "Post" WHERE "documentType" IS NULL
+  `;
 
   let mapped = 0;
   let fellBack = 0;
