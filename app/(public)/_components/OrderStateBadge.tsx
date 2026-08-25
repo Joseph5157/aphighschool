@@ -1,16 +1,6 @@
 import type { OrderState } from "@prisma/client";
 import Badge from "./Badge";
-
-// Badge has no `kumkum` variant today, so `superseded` uses `tamarind` — the
-// nearest existing red-family variant. It cannot fall back to `neutral`: that
-// is already `archived`, and the two states would render identically. Adding a
-// real `kumkum` Badge token is a Milestone F item.
-const VARIANT: Record<OrderState, "success" | "turmeric" | "tamarind" | "neutral"> = {
-  current: "success",
-  amended: "turmeric",
-  superseded: "tamarind",
-  archived: "neutral",
-};
+import { ORDER_STATE_VARIANT } from "./lifecyclePill";
 
 const EXPLANATION: Record<OrderState, string> = {
   current: "This order is in force.",
@@ -32,7 +22,7 @@ export default function OrderStateBadge({
         Document Status
       </div>
       <div className="flex items-center gap-3 flex-wrap">
-        <Badge variant={VARIANT[state]} size="sm" shape="pill" dot>
+        <Badge variant={ORDER_STATE_VARIANT[state]} size="sm" shape="pill" dot>
           {label}
         </Badge>
         <span className="text-xs text-inkSoft">{EXPLANATION[state]}</span>

@@ -2,25 +2,35 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
+import type { DocType, OrderState } from "@prisma/client";
 import Badge from "@/app/(public)/_components/Badge";
 import { Card } from "@/app/(public)/_components/Card";
 import Button from "@/app/(public)/_components/Button";
+import {
+  resolveLifecyclePill,
+  type RecruitmentPill,
+} from "@/app/(public)/_components/lifecyclePill";
 import { officialDate, dateLabel, formatDate, officialYear } from "@/lib/dates";
 
-const STATUS_BADGE_VARIANT: Record<string, "success" | "turmeric" | "neutral"> = {
-  notification: "turmeric",
-  apply_link: "success",
-  hall_ticket: "turmeric",
-  results: "success",
-  expired: "neutral",
-};
-
-const STATUS_BADGE_LABEL: Record<string, string> = {
-  notification: "Notified",
-  apply_link: "Apply Open",
-  hall_ticket: "Hall Ticket",
-  results: "Results",
-  expired: "Expired",
+// Only reached for documents that actually have an application lifecycle —
+// see resolveLifecyclePill. Everything else shows its order state instead.
+// This log uses Title Case where the homepage cards use sentence case.
+const RECRUITMENT: RecruitmentPill = {
+  labels: {
+    notification: "Notified",
+    apply_link: "Apply Open",
+    hall_ticket: "Hall Ticket",
+    results: "Results",
+    expired: "Expired",
+  },
+  variants: {
+    notification: "turmeric",
+    apply_link: "success",
+    hall_ticket: "turmeric",
+    results: "success",
+    expired: "neutral",
+  },
+  fallbackVariant: "neutral",
 };
 
 type PostItem = {
@@ -31,6 +41,8 @@ type PostItem = {
   summaryTe: string[];
   englishAbstract?: string | null;
   statusBadge: string;
+  documentType: DocType | null;
+  orderState: OrderState;
   goReference?: string | null;
   actionDeadline?: Date | string | null;
   createdAt: Date | string;
@@ -148,8 +160,7 @@ export default function CategoryLogList({ posts }: CategoryLogListProps) {
               post.statusBadge === "expired" ||
               (post.actionDeadline && new Date(post.actionDeadline) < new Date());
 
-            const badgeVariant = STATUS_BADGE_VARIANT[post.statusBadge] || "neutral";
-            const badgeLabel = STATUS_BADGE_LABEL[post.statusBadge] || post.statusBadge;
+            const pill = resolveLifecyclePill(post, RECRUITMENT);
 
             return (
               <Link key={post.id} href={`/posts/${post.slug}`} className="block group">
@@ -157,8 +168,8 @@ export default function CategoryLogList({ posts }: CategoryLogListProps) {
                   {/* Row 1: Meta badges + date */}
                   <div className="flex items-center justify-between gap-2 flex-wrap">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <Badge variant={badgeVariant} size="sm" dot>
-                        {badgeLabel}
+                      <Badge variant={pill.variant} size="sm" dot>
+                        {pill.label}
                       </Badge>
                       {post.goReference && (
                         <span className="font-mono text-[10px] font-bold text-[#1B2A4A] bg-[#1B2A4A]/10 px-2 py-0.5 rounded border border-[#1B2A4A]/15">

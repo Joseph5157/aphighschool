@@ -1,21 +1,27 @@
 import Link from "next/link";
+import type { DocType, OrderState } from "@prisma/client";
 import Card from "./Card";
 import Badge from "./Badge";
+import { resolveLifecyclePill, type RecruitmentPill } from "./lifecyclePill";
 
-const STATUS_LABEL: Record<string, string> = {
-  notification: "Notified",
-  apply_link: "Apply open",
-  hall_ticket: "Hall ticket",
-  results: "Results",
-  expired: "Expired",
-};
-
-const STATUS_VARIANT: Record<string, "tamarind" | "turmeric" | "neutral" | "success"> = {
-  notification: "tamarind",
-  apply_link: "turmeric",
-  hall_ticket: "turmeric",
-  results: "success",
-  expired: "neutral",
+// Only reached for documents that actually have an application lifecycle —
+// see resolveLifecyclePill. Everything else shows its order state instead.
+const RECRUITMENT: RecruitmentPill = {
+  labels: {
+    notification: "Notified",
+    apply_link: "Apply open",
+    hall_ticket: "Hall ticket",
+    results: "Results",
+    expired: "Expired",
+  },
+  variants: {
+    notification: "tamarind",
+    apply_link: "turmeric",
+    hall_ticket: "turmeric",
+    results: "success",
+    expired: "neutral",
+  },
+  fallbackVariant: "tamarind",
 };
 
 function getCategoryAbbr(categoryName?: string | null, categorySlug?: string | null): string {
@@ -37,6 +43,8 @@ type PostCardProps = {
     titleEn: string;
     titleTe: string;
     statusBadge: string;
+    documentType: DocType | null;
+    orderState: OrderState;
     goReference?: string | null;
     sourceDept?: string | null;
     verifiedAgainstGoir: boolean;
@@ -47,7 +55,7 @@ type PostCardProps = {
 
 export default function PostCard({ post }: PostCardProps) {
   const abbr = getCategoryAbbr(post.category?.nameEn, post.category?.slug);
-  const badgeVariant = STATUS_VARIANT[post.statusBadge] || "tamarind";
+  const pill = resolveLifecyclePill(post, RECRUITMENT);
 
   return (
     <Card hoverable className="p-4 sm:p-5 flex items-start gap-4 transition-all">
@@ -70,8 +78,8 @@ export default function PostCard({ post }: PostCardProps) {
       {/* Main Details */}
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-1.5 flex-wrap">
-          <Badge variant={badgeVariant} size="sm" shape="pill">
-            {STATUS_LABEL[post.statusBadge] || post.statusBadge}
+          <Badge variant={pill.variant} size="sm" shape="pill">
+            {pill.label}
           </Badge>
 
           {(post.category || post.goReference) && (

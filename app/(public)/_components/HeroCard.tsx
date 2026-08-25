@@ -1,21 +1,27 @@
 import Link from "next/link";
+import type { DocType, OrderState } from "@prisma/client";
 import Badge from "./Badge";
 import { officialDate, dateLabel, formatDate } from "@/lib/dates";
+import { resolveLifecyclePill, type RecruitmentPill } from "./lifecyclePill";
 
-const STATUS_LABEL: Record<string, string> = {
-  notification: "Notified",
-  apply_link: "Apply open",
-  hall_ticket: "Hall ticket",
-  results: "Results",
-  expired: "Expired",
-};
-
-const STATUS_VARIANT: Record<string, "tamarind" | "turmeric" | "neutral" | "success"> = {
-  notification: "turmeric",
-  apply_link: "success",
-  hall_ticket: "turmeric",
-  results: "success",
-  expired: "neutral",
+// Only reached for documents that actually have an application lifecycle —
+// see resolveLifecyclePill. Everything else shows its order state instead.
+const RECRUITMENT: RecruitmentPill = {
+  labels: {
+    notification: "Notified",
+    apply_link: "Apply open",
+    hall_ticket: "Hall ticket",
+    results: "Results",
+    expired: "Expired",
+  },
+  variants: {
+    notification: "turmeric",
+    apply_link: "success",
+    hall_ticket: "turmeric",
+    results: "success",
+    expired: "neutral",
+  },
+  fallbackVariant: "turmeric",
 };
 
 type HeroPostProps = {
@@ -27,6 +33,8 @@ type HeroPostProps = {
     summaryTe: string[];
     englishAbstract?: string | null;
     statusBadge: string;
+    documentType: DocType | null;
+    orderState: OrderState;
     goReference?: string | null;
     sourceDept?: string | null;
     verifiedAgainstGoir: boolean;
@@ -40,7 +48,7 @@ type HeroPostProps = {
 export default function HeroCard({ post }: HeroPostProps) {
   const gradientFrom = post.category?.color || "#C9973A";
   const gradientTo = "#C9973A"; // turmeric gold
-  const badgeVariant = STATUS_VARIANT[post.statusBadge] || "turmeric";
+  const pill = resolveLifecyclePill(post, RECRUITMENT);
 
   return (
     <div
@@ -52,8 +60,8 @@ export default function HeroCard({ post }: HeroPostProps) {
       <article className="bg-ink text-white rounded-2xl p-6 md:p-8 relative overflow-hidden">
         {/* Background Accent Pill & Badges */}
         <div className="flex items-center gap-3 mb-4 flex-wrap">
-          <Badge variant={badgeVariant} size="sm" shape="pill" dot>
-            {STATUS_LABEL[post.statusBadge] || post.statusBadge}
+          <Badge variant={pill.variant} size="sm" shape="pill" dot>
+            {pill.label}
           </Badge>
 
           {post.category && (
