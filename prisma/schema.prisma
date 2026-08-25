@@ -20,6 +20,24 @@ enum RelatedOrderSource {
   manual
 }
 
+enum DocType {
+  go
+  circular
+  memo
+  proceeding
+  notification
+  other
+}
+
+/// Lifecycle for an ordinary order/circular/memo. Recruitment notifications
+/// use PostStatus instead — see lib/posts/lifecycle.ts.
+enum OrderState {
+  current
+  amended
+  superseded
+  archived
+}
+
 model Category {
   id        String   @id @default(uuid())
   nameEn    String
@@ -39,7 +57,16 @@ model Post {
   summaryTe          String[]   // Telugu bullet points
   englishAbstract    String?
   tags               String[]   @default([])
-  docType            String?
+  /// Free-text legacy column. Superseded by documentType; dropped in Task 14.
+  docType             String?
+  /// The document type as a closed set. Backfilled from docType.
+  documentType        DocType?
+  /// Lifecycle state for non-recruitment documents.
+  orderState          OrderState @default(current)
+  /// The date the order was actually issued by the department. NULL when no
+  /// verifiable date exists — never inferred. Distinct from createdAt, which is
+  /// the CMS ingestion timestamp.
+  documentDate        DateTime?
   statusBadge        PostStatus @default(notification)
   pdfUrl             String?    // Google Drive link, Day 1 (Section 6.1)
   actionUrl          String?
