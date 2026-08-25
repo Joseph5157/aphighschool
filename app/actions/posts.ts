@@ -40,6 +40,12 @@ export async function createPost(formData: FormData) {
       actionUrl: input.actionUrl,
       actionDeadline: input.actionDeadline,
       documentDate: input.documentDate,
+      // effectiveDate is the sort/index helper (see lib/dates.ts). When
+      // documentDate is set, pin it explicitly. When it's null, leave the
+      // field out entirely: Postgres evaluates now() once per transaction, so
+      // effectiveDate's @default(now()) resolves to the exact same value as
+      // createdAt's — no read-back needed on create.
+      effectiveDate: input.documentDate ?? undefined,
       goReference: input.goReference,
       sourceDept: input.sourceDept,
       sourceUrl: input.sourceUrl,
@@ -86,6 +92,16 @@ export async function updatePost(postId: string, formData: FormData) {
     if (!exists) throw new Error("Selected category does not exist.");
   }
 
+  // Unlike create, update never re-evaluates column defaults, so effectiveDate
+  // (the COALESCE(documentDate, createdAt) sort helper — see lib/dates.ts) has
+  // to be computed here explicitly on every save, in both directions: setting
+  // documentDate pins it, and clearing documentDate back to null must fall
+  // back to this post's own original createdAt, not "now".
+  const existing = await prisma.post.findUniqueOrThrow({
+    where: { id: postId },
+    select: { createdAt: true },
+  });
+
   await prisma.post.update({
     where: { id: postId },
     data: {
@@ -98,6 +114,7 @@ export async function updatePost(postId: string, formData: FormData) {
       actionUrl: input.actionUrl,
       actionDeadline: input.actionDeadline,
       documentDate: input.documentDate,
+      effectiveDate: input.documentDate ?? existing.createdAt,
       goReference: input.goReference,
       sourceDept: input.sourceDept,
       sourceUrl: input.sourceUrl,

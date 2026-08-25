@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Badge from "./Badge";
+import { officialDate, dateLabel, formatDate } from "@/lib/dates";
 
 const STATUS_LABEL: Record<string, string> = {
   notification: "Notified",
@@ -30,18 +31,13 @@ type HeroPostProps = {
     sourceDept?: string | null;
     verifiedAgainstGoir: boolean;
     createdAt: Date;
+    documentDate: Date | null;
     category?: { nameEn: string; slug: string; color?: string | null; icon?: string | null } | null;
     relatedFrom?: Array<{ relatedPost: { titleEn: string; goReference?: string | null } }>;
   };
 };
 
 export default function HeroCard({ post }: HeroPostProps) {
-  const formattedDate = new Date(post.createdAt).toLocaleDateString("en-IN", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  });
-
   const gradientFrom = post.category?.color || "#C9973A";
   const gradientTo = "#C9973A"; // turmeric gold
   const badgeVariant = STATUS_VARIANT[post.statusBadge] || "turmeric";
@@ -114,7 +110,9 @@ export default function HeroCard({ post }: HeroPostProps) {
 
         {/* Date & Meta Footer */}
         <div className="mt-6 pt-4 border-t border-white/10 flex items-center justify-between text-xs font-mono text-paper/60">
-          <span>{formattedDate}</span>
+          <span>
+            {dateLabel(post)} · {formatDate(officialDate(post))}
+          </span>
           <Link
             href={`/posts/${post.slug}`}
             className="text-turmeric hover:underline font-bold flex items-center gap-1"

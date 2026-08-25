@@ -29,11 +29,17 @@ export function formatDate(date: Date): string {
 }
 
 /**
- * Prisma cannot express COALESCE in orderBy, but ordering by documentDate with
- * nulls last and then by createdAt produces the same result: dated documents
- * sort by their official date, undated ones fall in behind by ingestion date.
+ * Prisma's `orderBy` cannot express COALESCE(documentDate, createdAt) — ordering
+ * by documentDate with nulls last is NOT equivalent: it puts every dated row
+ * ahead of every undated row, when the spec requires them interleaved by their
+ * effective date. (E.g. a post added today with no documentDate must outrank a
+ * 2019 GO, not sink beneath it.)
+ *
+ * So the Post table carries a real `effectiveDate` column, kept in sync with
+ * COALESCE(documentDate, createdAt) by every write path that touches
+ * documentDate (see app/actions/posts.ts). This is purely a sort/index helper —
+ * display code must keep computing officialDate()/dateLabel() fresh from
+ * documentDate/createdAt, never read effectiveDate directly, so a sync bug here
+ * can never surface a false date, only a wrong sort position.
  */
-export const ORDER_BY_OFFICIAL_DATE = [
-  { documentDate: { sort: "desc", nulls: "last" } },
-  { createdAt: "desc" },
-] as const;
+export const ORDER_BY_OFFICIAL_DATE = { effectiveDate: "desc" } as const;

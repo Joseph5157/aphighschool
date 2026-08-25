@@ -41,18 +41,36 @@ import { ORDER_BY_OFFICIAL_DATE } from "@/lib/dates";
 describe("official date ordering", () => {
   beforeEach(resetDb);
 
-  it("sorts dated documents by official date, undated ones after", async () => {
+  // Proves COALESCE(documentDate, createdAt), not "dated rows always beat
+  // undated rows". An undated row's effective date is its OWN createdAt, so it
+  // must interleave with dated rows by that value, not sink beneath all of
+  // them. Here undated-order's createdAt (2022) sits between old-order's
+  // documentDate (2020) and recent-order's documentDate (2024) — so the
+  // correct order lands it in the MIDDLE. A nulls-last mechanism (ordering by
+  // documentDate with nulls sorted after every non-null value) would instead
+  // put every dated row ahead of it regardless of date, giving
+  // [recent, old, undated] — wrong, and indistinguishable from correct by a
+  // test that only ever puts the undated row at an end.
+  it("interleaves an undated row by its own createdAt, per COALESCE(documentDate, createdAt)", async () => {
     const old = await makePost({ slug: "old-order" });
+    const undated = await makePost({ slug: "undated-order" });
     const recent = await makePost({ slug: "recent-order" });
-    await makePost({ slug: "undated-order" });
 
+    // effectiveDate is a sort-helper column the app keeps in sync on every
+    // write that touches documentDate (see app/actions/posts.ts). These test
+    // writes go straight to the DB, bypassing that app layer, so the test
+    // must set it itself here — exactly what createPost/updatePost do.
     await testDb.post.update({
       where: { id: old.id },
-      data: { documentDate: new Date("2023-01-01") },
+      data: { documentDate: new Date("2020-06-01"), effectiveDate: new Date("2020-06-01") },
+    });
+    await testDb.post.update({
+      where: { id: undated.id },
+      data: { createdAt: new Date("2022-06-01"), effectiveDate: new Date("2022-06-01") },
     });
     await testDb.post.update({
       where: { id: recent.id },
-      data: { documentDate: new Date("2026-01-01") },
+      data: { documentDate: new Date("2024-06-01"), effectiveDate: new Date("2024-06-01") },
     });
 
     const posts = await testDb.post.findMany({
@@ -62,8 +80,8 @@ describe("official date ordering", () => {
 
     expect(posts.map((p) => p.slug)).toEqual([
       "recent-order",
-      "old-order",
       "undated-order",
+      "old-order",
     ]);
   });
 });

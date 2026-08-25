@@ -67,6 +67,17 @@ model Post {
   /// verifiable date exists — never inferred. Distinct from createdAt, which is
   /// the CMS ingestion timestamp.
   documentDate        DateTime?
+  /// Sort/index helper ONLY — never read for display. Always equals
+  /// COALESCE(documentDate, createdAt). Prisma's `orderBy` cannot express
+  /// COALESCE directly, so app/actions/posts.ts (createPost/updatePost) keeps
+  /// this column in sync on every write that touches documentDate. Rows
+  /// created without a documentDate never need explicit syncing: Postgres
+  /// evaluates `now()` once per transaction, so this column's @default(now())
+  /// and createdAt's @default(now()) resolve to the identical timestamp on
+  /// insert. Display code must keep using officialDate()/dateLabel() from
+  /// lib/dates.ts, which compute fresh from documentDate/createdAt — never
+  /// from this column — so a sync bug here can never surface a false date.
+  effectiveDate      DateTime   @default(now())
   statusBadge        PostStatus @default(notification)
   pdfUrl             String?    // Google Drive link, Day 1 (Section 6.1)
   actionUrl          String?
@@ -86,6 +97,8 @@ model Post {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([effectiveDate])
 }
 
 model RelatedOrder {

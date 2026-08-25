@@ -5,6 +5,7 @@ import Link from "next/link";
 import Badge from "@/app/(public)/_components/Badge";
 import { Card } from "@/app/(public)/_components/Card";
 import Button from "@/app/(public)/_components/Button";
+import { officialDate, dateLabel, formatDate } from "@/lib/dates";
 
 const STATUS_BADGE_VARIANT: Record<string, "success" | "turmeric" | "neutral"> = {
   notification: "turmeric",
@@ -33,12 +34,30 @@ type PostItem = {
   goReference?: string | null;
   actionDeadline?: Date | string | null;
   createdAt: Date | string;
+  documentDate: Date | string | null;
   tags: string[];
 };
 
 type CategoryLogListProps = {
   posts: PostItem[];
 };
+
+// PostItem's date fields can arrive as Date or string depending on the RSC
+// serialization boundary — normalize before handing them to lib/dates.ts.
+function normalizedDates(post: PostItem) {
+  return {
+    documentDate: post.documentDate ? new Date(post.documentDate) : null,
+    createdAt: new Date(post.createdAt),
+  };
+}
+
+function effectiveDateOf(post: PostItem): Date {
+  return officialDate(normalizedDates(post));
+}
+
+function dateLabelOf(post: PostItem) {
+  return dateLabel(normalizedDates(post));
+}
 
 export default function CategoryLogList({ posts }: CategoryLogListProps) {
   const [activeFilter, setActiveFilter] = useState<string>("All");
@@ -53,7 +72,7 @@ export default function CategoryLogList({ posts }: CategoryLogListProps) {
   const filteredPosts = useMemo(() => {
     const now = new Date();
     return posts.filter((post) => {
-      const postYear = new Date(post.createdAt).getFullYear().toString();
+      const postYear = effectiveDateOf(post).getFullYear().toString();
       const isPast =
         post.statusBadge === "expired" ||
         (post.actionDeadline && new Date(post.actionDeadline) < now);
@@ -117,11 +136,6 @@ export default function CategoryLogList({ posts }: CategoryLogListProps) {
       ) : (
         <div className="space-y-3">
           {visiblePosts.map((post) => {
-            const formattedDate = new Date(post.createdAt).toLocaleDateString("en-IN", {
-              day: "numeric",
-              month: "short",
-              year: "numeric",
-            });
             const isPast =
               post.statusBadge === "expired" ||
               (post.actionDeadline && new Date(post.actionDeadline) < new Date());
@@ -144,7 +158,9 @@ export default function CategoryLogList({ posts }: CategoryLogListProps) {
                         </span>
                       )}
                     </div>
-                    <span className="font-mono text-[10px] text-inkSoft/70 shrink-0">{formattedDate}</span>
+                    <span className="font-mono text-[10px] text-inkSoft/70 shrink-0">
+                      {dateLabelOf(post)} · {formatDate(effectiveDateOf(post))}
+                    </span>
                   </div>
 
                   {/* Row 2: English title */}
