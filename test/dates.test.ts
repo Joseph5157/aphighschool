@@ -1,6 +1,6 @@
 // @vitest-environment node
-import { describe, it, expect } from "vitest";
-import { officialDate, dateLabel, formatDate } from "@/lib/dates";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { officialDate, dateLabel, formatDate, officialYear, todayInIST, isAfterTodayIST } from "@/lib/dates";
 
 const createdAt = new Date("2026-08-24T10:00:00.000Z");
 const issued = new Date("2024-02-08T00:00:00.000Z");
@@ -33,8 +33,63 @@ describe("formatDate", () => {
   });
 });
 
+describe("officialYear", () => {
+  const yearBoundary = new Date("2023-12-31T19:00:00.000Z"); // 2024-01-01 00:30 IST
+
+  // getFullYear() reads the machine's own local timezone, not Asia/Kolkata.
+  // This dev/test machine happens to already run as Asia/Calcutta, which
+  // would silently mask a regression to getFullYear() right here — so pin
+  // process.env.TZ to something else for these two tests specifically, to
+  // prove officialYear() is reading the Intl-pinned IST value and not
+  // whatever zone the process happens to be running under.
+  beforeEach(() => {
+    vi.stubEnv("TZ", "UTC");
+  });
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
+  it("buckets by the Asia/Kolkata calendar year, not the process's own timezone", () => {
+    // Sanity check on the premise: under the stubbed UTC zone, plain
+    // getFullYear() on this instant reads 2023 — the wrong year, and exactly
+    // what a regression to officialDate(post).getFullYear() would return.
+    expect(yearBoundary.getFullYear()).toBe(2023);
+    expect(officialYear({ documentDate: yearBoundary, createdAt })).toBe(2024);
+  });
+
+  it("falls back to createdAt's IST year when documentDate is null", () => {
+    expect(officialYear({ documentDate: null, createdAt: yearBoundary })).toBe(2024);
+  });
+});
+
+describe("todayInIST / isAfterTodayIST", () => {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("does not flag today's date as future during the UTC/IST day-boundary gap", () => {
+    // Real-world instant: 2026-08-25T01:30:00+05:30 — i.e. 25 Aug in IST, but
+    // still 24 Aug in UTC. This is exactly the 00:00–05:30 IST window where
+    // Date.now()-based comparison used to reject "today" as future-dated.
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-08-24T20:00:00.000Z"));
+
+    expect(todayInIST()).toBe("2026-08-25");
+
+    const pickedToday = new Date("2026-08-25T00:00:00.000Z"); // what a <input type="date"> gives for "today"
+    expect(isAfterTodayIST(pickedToday)).toBe(false);
+  });
+
+  it("still flags a genuinely future date as future", () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-08-24T20:00:00.000Z")); // 2026-08-25 IST
+
+    const tomorrow = new Date("2026-08-26T00:00:00.000Z");
+    expect(isAfterTodayIST(tomorrow)).toBe(true);
+  });
+});
+
 // --- ordering, against the database ---
-import { beforeEach } from "vitest";
 import { resetDb, makePost, testDb } from "./db";
 import { ORDER_BY_OFFICIAL_DATE } from "@/lib/dates";
 
@@ -74,7 +129,7 @@ describe("official date ordering", () => {
     });
 
     const posts = await testDb.post.findMany({
-      orderBy: ORDER_BY_OFFICIAL_DATE as never,
+      orderBy: ORDER_BY_OFFICIAL_DATE,
       select: { slug: true },
     });
 

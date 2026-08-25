@@ -81,6 +81,7 @@ export default async function PostDetailPage({
                 titleTe: true,
                 goReference: true,
                 createdAt: true,
+                documentDate: true,
               },
             },
           },
@@ -115,9 +116,9 @@ export default async function PostDetailPage({
           categoryId: post.category.id,
           id: { not: post.id },
         },
-        orderBy: ORDER_BY_OFFICIAL_DATE as never,
+        orderBy: ORDER_BY_OFFICIAL_DATE,
         take: 3,
-        select: { id: true, slug: true, titleEn: true, goReference: true, createdAt: true },
+        select: { id: true, slug: true, titleEn: true, goReference: true, createdAt: true, documentDate: true },
       });
     } catch (e) {
       siblingPosts = [];
@@ -247,11 +248,7 @@ export default async function PostDetailPage({
                       {rel.relatedPost.goReference || "Background G.O."}
                     </span>
                     <span>
-                      {new Date(rel.relatedPost.createdAt).toLocaleDateString("en-IN", {
-                        day: "numeric",
-                        month: "short",
-                        year: "numeric",
-                      })}
+                      {dateLabel(rel.relatedPost)} · {formatDate(officialDate(rel.relatedPost))}
                     </span>
                   </div>
                   <div className="text-card-title text-ink group-hover:text-tamarind transition-colors">
@@ -281,7 +278,7 @@ export default async function PostDetailPage({
                 <Link href={`/posts/${sibling.slug}`} className="block group space-y-0.5">
                   <div className="flex items-center justify-between text-meta text-inkSoft">
                     <span className="font-bold text-tamarind">{sibling.goReference || "G.O."}</span>
-                    <span>{new Date(sibling.createdAt).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}</span>
+                    <span>{dateLabel(sibling)} · {formatDate(officialDate(sibling))}</span>
                   </div>
                   <div className="text-card-title text-ink group-hover:text-tamarind transition-colors line-clamp-2">
                     {sibling.titleEn}

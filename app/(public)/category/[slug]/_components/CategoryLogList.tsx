@@ -5,7 +5,7 @@ import Link from "next/link";
 import Badge from "@/app/(public)/_components/Badge";
 import { Card } from "@/app/(public)/_components/Card";
 import Button from "@/app/(public)/_components/Button";
-import { officialDate, dateLabel, formatDate } from "@/lib/dates";
+import { officialDate, dateLabel, formatDate, officialYear } from "@/lib/dates";
 
 const STATUS_BADGE_VARIANT: Record<string, "success" | "turmeric" | "neutral"> = {
   notification: "turmeric",
@@ -51,12 +51,20 @@ function normalizedDates(post: PostItem) {
   };
 }
 
-function effectiveDateOf(post: PostItem): Date {
+// Named after officialDate()/officialYear(), which is what this computes —
+// never rename to reference the DB's `effectiveDate` column: this reads
+// documentDate/createdAt directly and must never be confused with, or swapped
+// for, that column (a sort-helper only — see lib/dates.ts).
+function officialDateOf(post: PostItem): Date {
   return officialDate(normalizedDates(post));
 }
 
 function dateLabelOf(post: PostItem) {
   return dateLabel(normalizedDates(post));
+}
+
+function officialYearOf(post: PostItem): number {
+  return officialYear(normalizedDates(post));
 }
 
 export default function CategoryLogList({ posts }: CategoryLogListProps) {
@@ -72,7 +80,7 @@ export default function CategoryLogList({ posts }: CategoryLogListProps) {
   const filteredPosts = useMemo(() => {
     const now = new Date();
     return posts.filter((post) => {
-      const postYear = effectiveDateOf(post).getFullYear().toString();
+      const postYear = officialYearOf(post).toString();
       const isPast =
         post.statusBadge === "expired" ||
         (post.actionDeadline && new Date(post.actionDeadline) < now);
@@ -159,7 +167,7 @@ export default function CategoryLogList({ posts }: CategoryLogListProps) {
                       )}
                     </div>
                     <span className="font-mono text-[10px] text-inkSoft/70 shrink-0">
-                      {dateLabelOf(post)} · {formatDate(effectiveDateOf(post))}
+                      {dateLabelOf(post)} · {formatDate(officialDateOf(post))}
                     </span>
                   </div>
 

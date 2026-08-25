@@ -17,6 +17,7 @@ vi.mock("next/navigation", () => ({
 
 import { createPost, updatePost } from "@/app/actions/posts";
 import { resetDb, testDb } from "./db";
+import { ORDER_BY_OFFICIAL_DATE } from "@/lib/dates";
 
 function form(fields: Record<string, string>) {
   const fd = new FormData();
@@ -31,11 +32,20 @@ const VALID = {
   goReference: "G.O.Ms.No.55",
 };
 
-async function expectRedirect(fn: () => Promise<void>) {
+// createPost/updatePost always end in redirect() (mocked above to throw), so
+// a call that returns normally means something upstream — validation,
+// requireAdmin, the write itself — silently failed to run. Assert that, don't
+// just swallow every outcome under a name that promises otherwise.
+async function swallowRedirect(fn: () => Promise<void>) {
+  let redirected = false;
   try {
     await fn();
   } catch (e) {
+    redirected = true;
     if ((e as Error).message !== "NEXT_REDIRECT") throw e;
+  }
+  if (!redirected) {
+    throw new Error("expected the action to redirect (throw NEXT_REDIRECT), but it returned normally");
   }
 }
 
@@ -43,7 +53,7 @@ describe("effectiveDate sync on createPost", () => {
   beforeEach(resetDb);
 
   it("matches createdAt when no documentDate is given", async () => {
-    await expectRedirect(() => createPost(form(VALID)));
+    await swallowRedirect(() => createPost(form(VALID)));
     const post = await testDb.post.findFirstOrThrow();
 
     expect(post.documentDate).toBeNull();
@@ -51,7 +61,7 @@ describe("effectiveDate sync on createPost", () => {
   });
 
   it("pins effectiveDate to documentDate when one is given", async () => {
-    await expectRedirect(() =>
+    await swallowRedirect(() =>
       createPost(form({ ...VALID, documentDate: "2024-02-08" }))
     );
     const post = await testDb.post.findFirstOrThrow();
@@ -67,11 +77,11 @@ describe("effectiveDate sync on updatePost", () => {
   beforeEach(resetDb);
 
   it("moves effectiveDate to a newly-added documentDate", async () => {
-    await expectRedirect(() => createPost(form(VALID)));
+    await swallowRedirect(() => createPost(form(VALID)));
     const post = await testDb.post.findFirstOrThrow();
     expect(post.effectiveDate.getTime()).toBe(post.createdAt.getTime());
 
-    await expectRedirect(() =>
+    await swallowRedirect(() =>
       updatePost(post.id, form({ ...VALID, documentDate: "2020-06-01" }))
     );
     const updated = await testDb.post.findUniqueOrThrow({ where: { id: post.id } });
@@ -81,7 +91,7 @@ describe("effectiveDate sync on updatePost", () => {
   });
 
   it("falls back to the post's own original createdAt when documentDate is cleared, not the update time", async () => {
-    await expectRedirect(() =>
+    await swallowRedirect(() =>
       createPost(form({ ...VALID, documentDate: "2020-06-01" }))
     );
     const post = await testDb.post.findFirstOrThrow();
@@ -89,7 +99,7 @@ describe("effectiveDate sync on updatePost", () => {
 
     // Clearing documentDate: omit it from the form entirely, same as the
     // admin form submitting a blank date input.
-    await expectRedirect(() => updatePost(post.id, form(VALID)));
+    await swallowRedirect(() => updatePost(post.id, form(VALID)));
     const updated = await testDb.post.findUniqueOrThrow({ where: { id: post.id } });
 
     expect(updated.documentDate).toBeNull();
@@ -97,5 +107,50 @@ describe("effectiveDate sync on updatePost", () => {
     // the update's own timestamp instead of falling back to the row's real,
     // original ingestion date.
     expect(updated.effectiveDate.getTime()).toBe(originalCreatedAt.getTime());
+  });
+});
+
+describe("end-to-end: createPost/updatePost feed ORDER_BY_OFFICIAL_DATE correctly", () => {
+  beforeEach(resetDb);
+
+  // Certifies the whole chain, not just the pieces: real actions write
+  // effectiveDate, and a real findMany(ORDER_BY_OFFICIAL_DATE) reads it back
+  // in the right order. The two tests above independently prove createPost
+  // and updatePost sync effectiveDate; test/dates.test.ts independently
+  // proves ORDER_BY_OFFICIAL_DATE sorts effectiveDate correctly against
+  // hand-set rows. Neither proves the two are wired together — this does.
+  //
+  // The middle post is deliberately created with an OLDER documentDate than
+  // "oldest-order", then moved past it via updatePost. If updatePost stopped
+  // syncing effectiveDate, this post's effectiveDate would stay pinned at its
+  // stale creation-time value (2010) and it would sort LAST, not middle — a
+  // deterministic flip, not a coin-flip between two near-identical timestamps.
+  it("sorts posts created and edited through the real actions in true official-date order", async () => {
+    await swallowRedirect(() =>
+      createPost(form({ ...VALID, titleEn: "Oldest Order E2E", documentDate: "2015-01-01" }))
+    );
+
+    await swallowRedirect(() =>
+      createPost(form({ ...VALID, titleEn: "Moved Order E2E", documentDate: "2010-01-01" }))
+    );
+    const moved = await testDb.post.findFirstOrThrow({ where: { titleEn: "Moved Order E2E" } });
+    await swallowRedirect(() =>
+      updatePost(moved.id, form({ ...VALID, titleEn: "Moved Order E2E", documentDate: "2020-01-01" }))
+    );
+
+    await swallowRedirect(() =>
+      createPost(form({ ...VALID, titleEn: "Fresh Undated Order E2E" }))
+    );
+
+    const all = await testDb.post.findMany({
+      orderBy: ORDER_BY_OFFICIAL_DATE,
+      select: { titleEn: true },
+    });
+
+    expect(all.map((p) => p.titleEn)).toEqual([
+      "Fresh Undated Order E2E",
+      "Moved Order E2E",
+      "Oldest Order E2E",
+    ]);
   });
 });

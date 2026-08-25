@@ -1,3 +1,5 @@
+import { isAfterTodayIST } from "@/lib/dates";
+
 export type PostInput = {
   id?: string;
   titleEn: string;
@@ -83,8 +85,11 @@ export function validatePost(input: PostInput): string[] {
 
   if (input.documentDate && Number.isNaN(input.documentDate.getTime())) {
     errors.push("Official document date is not a valid date.");
-  }
-  if (input.documentDate && input.documentDate.getTime() > Date.now()) {
+  } else if (input.documentDate && isAfterTodayIST(input.documentDate)) {
+    // Compared against Asia/Kolkata's calendar date, not Date.now(): the only
+    // admin using this form is in IST, and a raw UTC-instant comparison would
+    // reject "today" as future-dated between 00:00 and 05:30 IST, when the
+    // UTC calendar date is still "yesterday".
     errors.push("Official document date cannot be in the future.");
   }
 

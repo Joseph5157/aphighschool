@@ -6,7 +6,7 @@ import Breadcrumb from "@/app/(public)/_components/Breadcrumb";
 import Button from "@/app/(public)/_components/Button";
 import OrdersFilterTabs from "./_components/OrdersFilterTabs";
 import OrdersSidebar from "./_components/OrdersSidebar";
-import { ORDER_BY_OFFICIAL_DATE } from "@/lib/dates";
+import { ORDER_BY_OFFICIAL_DATE, officialDate, dateLabel, formatDate } from "@/lib/dates";
 
 export const metadata: Metadata = {
   title: "Orders & Circulars — AP Teacher Desk",
@@ -25,7 +25,7 @@ export default async function OrdersPage() {
         _count: { select: { posts: { where: { isDraft: false } } } },
         posts: {
           where: { isDraft: false },
-          orderBy: ORDER_BY_OFFICIAL_DATE as never,
+          orderBy: ORDER_BY_OFFICIAL_DATE,
           take: 3,
           select: {
             id: true,
@@ -34,7 +34,6 @@ export default async function OrdersPage() {
             goReference: true,
             statusBadge: true,
             createdAt: true,
-            documentDate: true,
           },
         },
       },
@@ -48,7 +47,7 @@ export default async function OrdersPage() {
   try {
     recentPosts = await prisma.post.findMany({
       where: { isDraft: false },
-      orderBy: ORDER_BY_OFFICIAL_DATE as never,
+      orderBy: ORDER_BY_OFFICIAL_DATE,
       take: 5,
       select: {
         id: true,
@@ -138,7 +137,7 @@ export default async function OrdersPage() {
                         {post.titleEn}
                       </span>
                       <span className="font-mono text-[9px] text-inkSoft/50 shrink-0">
-                        {new Date(post.createdAt).toLocaleDateString("en-IN", { day: "numeric", month: "short" })}
+                        {dateLabel(post)} · {formatDate(officialDate(post))}
                       </span>
                     </div>
                   </Link>

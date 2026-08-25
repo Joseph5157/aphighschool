@@ -20,7 +20,7 @@ export default async function HomePage() {
   try {
     posts = await prisma.post.findMany({
       where: { isDraft: false },
-      orderBy: ORDER_BY_OFFICIAL_DATE as never,
+      orderBy: ORDER_BY_OFFICIAL_DATE,
       take: 6,
       include: {
         category: true,

@@ -51,7 +51,7 @@ export default async function CategoryDetailPage({
       include: {
         posts: {
           where: { isDraft: false },
-          orderBy: ORDER_BY_OFFICIAL_DATE as never,
+          orderBy: ORDER_BY_OFFICIAL_DATE,
         },
         _count: { select: { posts: { where: { isDraft: false } } } },
       },

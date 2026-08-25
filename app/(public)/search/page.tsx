@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { prisma } from "@/lib/prisma";
 import SearchUI from "./_components/SearchUI";
 import type { Metadata } from "next";
+import { ORDER_BY_OFFICIAL_DATE } from "@/lib/dates";
 
 export const metadata: Metadata = {
   title: "Search AP Teacher Orders — AP Teacher Desk",
@@ -28,7 +29,7 @@ export default async function SearchPage() {
           },
         },
       },
-      orderBy: { createdAt: "desc" },
+      orderBy: ORDER_BY_OFFICIAL_DATE,
     });
   } catch (e) {
     posts = [];

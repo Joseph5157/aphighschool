@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { todayInIST } from "@/lib/dates";
 
 type Category = { id: string; nameEn: string };
 type CandidatePost = { id: string; titleEn: string; goReference: string | null };
@@ -336,7 +337,7 @@ export default function PostFormClient({
               name="documentDate"
               value={documentDate}
               onChange={(e) => setDocumentDate(e.target.value)}
-              max={new Date().toISOString().slice(0, 10)}
+              max={todayInIST()}
               className="w-full border border-hair rounded-lg px-3 py-2 text-sm"
             />
             <p className="mt-1 text-[11px] text-inkSoft">
