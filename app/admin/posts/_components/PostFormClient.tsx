@@ -15,7 +15,9 @@ type PostFormClientProps = {
     englishAbstract: string | null;
     statusBadge: string;
     pdfUrl: string | null;
+    actionUrl: string | null;
     actionDeadline: Date | null;
+    documentDate: Date | null;
     goReference: string | null;
     sourceDept: string | null;
     sourceUrl: string | null;
@@ -56,9 +58,15 @@ export default function PostFormClient({
       ? new Date(initial.actionDeadline).toISOString().slice(0, 10)
       : ""
   );
+  const [documentDate, setDocumentDate] = useState(
+    initial?.documentDate
+      ? new Date(initial.documentDate).toISOString().slice(0, 10)
+      : ""
+  );
   const [sourceDept, setSourceDept] = useState(initial?.sourceDept || "");
 
   const [pdfUrl, setPdfUrl] = useState(initial?.pdfUrl || "");
+  const [actionUrl, setActionUrl] = useState(initial?.actionUrl || "");
   const [sourceUrl, setSourceUrl] = useState(initial?.sourceUrl || "");
   const [categoryId, setCategoryId] = useState(initial?.categoryId || "");
   const [docType, setDocType] = useState(initial?.docType || "");
@@ -313,6 +321,38 @@ export default function PostFormClient({
               name="actionDeadline"
               value={actionDeadline}
               onChange={(e) => setActionDeadline(e.target.value)}
+              className="w-full border border-hair rounded-lg px-3 py-2 text-sm"
+            />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block text-xs font-mono uppercase text-inkSoft mb-1">
+              Official Document Date
+            </label>
+            <input
+              type="date"
+              name="documentDate"
+              value={documentDate}
+              onChange={(e) => setDocumentDate(e.target.value)}
+              max={new Date().toISOString().slice(0, 10)}
+              className="w-full border border-hair rounded-lg px-3 py-2 text-sm"
+            />
+            <p className="mt-1 text-[11px] text-inkSoft">
+              The date the department issued this order. Leave blank if you cannot verify it —
+              do not guess.
+            </p>
+          </div>
+          <div>
+            <label className="block text-xs font-mono uppercase text-inkSoft mb-1">
+              Action URL
+            </label>
+            <input
+              name="actionUrl"
+              value={actionUrl}
+              onChange={(e) => setActionUrl(e.target.value)}
+              placeholder="https://apply.example.gov.in/..."
               className="w-full border border-hair rounded-lg px-3 py-2 text-sm"
             />
           </div>

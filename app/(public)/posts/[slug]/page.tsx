@@ -8,6 +8,7 @@ import ThumbZoneBar from "./_components/ThumbZoneBar";
 import Badge from "@/app/(public)/_components/Badge";
 import Button from "@/app/(public)/_components/Button";
 import { Card } from "@/app/(public)/_components/Card";
+import { officialDate, dateLabel, formatDate, ORDER_BY_OFFICIAL_DATE } from "@/lib/dates";
 
 export const revalidate = 3600; // ISR revalidation (1 hour)
 
@@ -94,12 +95,6 @@ export default async function PostDetailPage({
     notFound();
   }
 
-  const formattedDate = new Date(post.createdAt).toLocaleDateString("en-IN", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-
   const formattedDeadline = post.actionDeadline
     ? new Date(post.actionDeadline).toLocaleDateString("en-IN", {
         day: "numeric",
@@ -120,7 +115,7 @@ export default async function PostDetailPage({
           categoryId: post.category.id,
           id: { not: post.id },
         },
-        orderBy: { createdAt: "desc" },
+        orderBy: ORDER_BY_OFFICIAL_DATE as never,
         take: 3,
         select: { id: true, slug: true, titleEn: true, goReference: true, createdAt: true },
       });
@@ -191,7 +186,9 @@ export default async function PostDetailPage({
         {/* Gazette Metadata */}
         <div className="text-meta text-slate-300 pt-2 flex items-center justify-between flex-wrap gap-2 border-t border-white/10">
           <span>{post.sourceDept || "AP School Education Department"}</span>
-          <span>Published: {formattedDate}</span>
+          <span>
+            {dateLabel(post)}: {formatDate(officialDate(post))}
+          </span>
         </div>
       </div>
 

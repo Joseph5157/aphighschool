@@ -11,7 +11,9 @@ type PostFormProps = {
     englishAbstract: string | null;
     statusBadge: string;
     pdfUrl: string | null;
+    actionUrl: string | null;
     actionDeadline: Date | null;
+    documentDate: Date | null;
     goReference: string | null;
     sourceDept: string | null;
     sourceUrl: string | null;

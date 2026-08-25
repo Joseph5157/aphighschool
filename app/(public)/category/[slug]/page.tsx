@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import CategoryLogList from "./_components/CategoryLogList";
 import Breadcrumb from "@/app/(public)/_components/Breadcrumb";
 import Badge from "@/app/(public)/_components/Badge";
+import { ORDER_BY_OFFICIAL_DATE } from "@/lib/dates";
 
 export const revalidate = 3600;
 
@@ -50,7 +51,7 @@ export default async function CategoryDetailPage({
       include: {
         posts: {
           where: { isDraft: false },
-          orderBy: { createdAt: "desc" },
+          orderBy: ORDER_BY_OFFICIAL_DATE as never,
         },
         _count: { select: { posts: { where: { isDraft: false } } } },
       },

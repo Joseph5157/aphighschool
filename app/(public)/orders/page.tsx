@@ -6,6 +6,7 @@ import Breadcrumb from "@/app/(public)/_components/Breadcrumb";
 import Button from "@/app/(public)/_components/Button";
 import OrdersFilterTabs from "./_components/OrdersFilterTabs";
 import OrdersSidebar from "./_components/OrdersSidebar";
+import { ORDER_BY_OFFICIAL_DATE } from "@/lib/dates";
 
 export const metadata: Metadata = {
   title: "Orders & Circulars — AP Teacher Desk",
@@ -24,7 +25,7 @@ export default async function OrdersPage() {
         _count: { select: { posts: { where: { isDraft: false } } } },
         posts: {
           where: { isDraft: false },
-          orderBy: { createdAt: "desc" },
+          orderBy: ORDER_BY_OFFICIAL_DATE as never,
           take: 3,
           select: {
             id: true,
@@ -33,6 +34,7 @@ export default async function OrdersPage() {
             goReference: true,
             statusBadge: true,
             createdAt: true,
+            documentDate: true,
           },
         },
       },
@@ -46,9 +48,16 @@ export default async function OrdersPage() {
   try {
     recentPosts = await prisma.post.findMany({
       where: { isDraft: false },
-      orderBy: { createdAt: "desc" },
+      orderBy: ORDER_BY_OFFICIAL_DATE as never,
       take: 5,
-      select: { id: true, slug: true, titleEn: true, goReference: true, createdAt: true },
+      select: {
+        id: true,
+        slug: true,
+        titleEn: true,
+        goReference: true,
+        createdAt: true,
+        documentDate: true,
+      },
     });
   } catch (e) {
     recentPosts = [];

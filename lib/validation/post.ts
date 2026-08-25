@@ -8,6 +8,7 @@ export type PostInput = {
   pdfUrl: string | null;
   actionUrl: string | null;
   actionDeadline: Date | null;
+  documentDate: Date | null;
   goReference: string | null;
   sourceDept: string | null;
   sourceUrl: string | null;
@@ -80,6 +81,13 @@ export function validatePost(input: PostInput): string[] {
     errors.push("Action deadline is not a valid date.");
   }
 
+  if (input.documentDate && Number.isNaN(input.documentDate.getTime())) {
+    errors.push("Official document date is not a valid date.");
+  }
+  if (input.documentDate && input.documentDate.getTime() > Date.now()) {
+    errors.push("Official document date cannot be in the future.");
+  }
+
   if (input.id && input.relatedPostIds.includes(input.id)) {
     errors.push("A post cannot be related to itself.");
   }
@@ -102,6 +110,7 @@ export function parsePostForm(formData: FormData, id?: string): PostInput {
   const orNull = (key: string) => str(key) || null;
 
   const deadlineRaw = str("actionDeadline");
+  const documentDateRaw = str("documentDate");
 
   return {
     id,
@@ -116,6 +125,7 @@ export function parsePostForm(formData: FormData, id?: string): PostInput {
     pdfUrl: orNull("pdfUrl"),
     actionUrl: orNull("actionUrl"),
     actionDeadline: deadlineRaw ? new Date(deadlineRaw) : null,
+    documentDate: documentDateRaw ? new Date(documentDateRaw) : null,
     goReference: orNull("goReference"),
     sourceDept: orNull("sourceDept"),
     sourceUrl: orNull("sourceUrl"),

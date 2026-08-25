@@ -4,6 +4,7 @@ import HeroCard from "./_components/HeroCard";
 import PostCard from "./_components/PostCard";
 import DesktopLeftNav from "./_components/DesktopLeftNav";
 import DesktopSidebar from "./_components/DesktopSidebar";
+import { ORDER_BY_OFFICIAL_DATE } from "@/lib/dates";
 
 import type { Metadata } from "next";
 
@@ -19,7 +20,7 @@ export default async function HomePage() {
   try {
     posts = await prisma.post.findMany({
       where: { isDraft: false },
-      orderBy: { createdAt: "desc" },
+      orderBy: ORDER_BY_OFFICIAL_DATE as never,
       take: 6,
       include: {
         category: true,

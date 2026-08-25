@@ -11,6 +11,7 @@ const base: PostInput = {
   pdfUrl: null,
   actionUrl: null,
   actionDeadline: null,
+  documentDate: null,
   goReference: "G.O.Ms.No.55",
   sourceDept: "School Education, AP",
   sourceUrl: null,
@@ -103,6 +104,24 @@ describe("validatePost", () => {
     expect(validatePost({ ...base, actionDeadline: new Date("nonsense") })).toContain(
       "Action deadline is not a valid date."
     );
+  });
+
+  it("rejects an unparseable document date", () => {
+    expect(validatePost({ ...base, documentDate: new Date("nonsense") })).toContain(
+      "Official document date is not a valid date."
+    );
+  });
+
+  it("rejects a document date in the future", () => {
+    const nextYear = new Date();
+    nextYear.setFullYear(nextYear.getFullYear() + 1);
+    expect(validatePost({ ...base, documentDate: nextYear })).toContain(
+      "Official document date cannot be in the future."
+    );
+  });
+
+  it("accepts a valid past document date", () => {
+    expect(validatePost({ ...base, documentDate: new Date("2024-02-08") })).toEqual([]);
   });
 
   it("rejects a post that relates to itself", () => {
