@@ -24,9 +24,8 @@ export default async function HomePage() {
       include: {
         category: true,
         relatedFrom: {
-          include: {
-            relatedPost: true,
-          },
+          where: { approved: true, relatedPost: { isDraft: false } },
+          include: { relatedPost: true },
         },
       },
     });

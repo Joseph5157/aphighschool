@@ -17,8 +17,8 @@ export async function generateMetadata({
   params: { slug: string };
 }): Promise<Metadata> {
   try {
-    const post = await prisma.post.findUnique({
-      where: { slug: params.slug },
+    const post = await prisma.post.findFirst({
+      where: { slug: params.slug, isDraft: false },
       select: { titleEn: true, titleTe: true, summaryTe: true },
     });
 
@@ -70,7 +70,7 @@ export default async function PostDetailPage({
       include: {
         category: true,
         relatedFrom: {
-          where: { approved: true },
+          where: { approved: true, relatedPost: { isDraft: false } },
           include: {
             relatedPost: {
               select: {
