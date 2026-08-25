@@ -4,6 +4,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
 import { resetDb, testDb } from "./db";
+import { resolveLifecycle } from "@/lib/posts/lifecycle";
 
 const SEED = fs.readFileSync(path.join(process.cwd(), "prisma", "seed.ts"), "utf8");
 
@@ -131,5 +132,36 @@ describe("seed idempotency (database)", () => {
     // The positive case: a real portal url must survive a reseed, not be
     // nulled alongside the fabricated fields.
     expect(healed.sourceUrl).toBe(REAL_SOURCE_URL);
+  }, 30000);
+
+  // The DSC hall-tickets post was seeded as documentType "proceeding", which
+  // sends it down the order-state branch: it rendered "Document Status:
+  // Current" instead of the recruitment stepper it obviously wants. Asserted
+  // through resolveLifecycle against the really-seeded row rather than against
+  // the seed script's source text, so it checks the user-visible consequence.
+  it("classifies the DSC hall-tickets post as a recruitment document", async () => {
+    const databaseUrl = process.env.DATABASE_URL ?? "";
+    if (!databaseUrl.includes("portal_test")) {
+      throw new Error(
+        `Refusing to run prisma/seed.ts: DATABASE_URL does not target portal_test (${databaseUrl})`
+      );
+    }
+
+    execFileSync("npx", ["tsx", "prisma/seed.ts"], {
+      cwd: process.cwd(),
+      env: { ...process.env, DATABASE_URL: databaseUrl },
+      stdio: "pipe",
+      shell: true,
+    });
+
+    const dsc = await testDb.post.findUniqueOrThrow({
+      where: { slug: "ap-dsc-2026-hall-tickets-release" },
+    });
+
+    expect(dsc.statusBadge).toBe("hall_ticket");
+    const view = resolveLifecycle(dsc);
+    expect(view.kind).toBe("recruitment");
+    if (view.kind !== "recruitment") throw new Error("wrong kind");
+    expect(view.currentStage).toBe(3);
   }, 30000);
 });

@@ -74,7 +74,9 @@ whether Related Orders context should surface there (e.g. search results, catego
 
 - The public site uses a sticky bottom tab bar for primary navigation (`Home`, `Orders`, `Search`, `Tools`).
 - The `Category` model organizes posts into structured types: `Government Orders`, `Circulars`, `Memos`, `Proceedings`, `Notifications`, `Tools`.
-- We use the `docType` field on `Post` (e.g. `go`, `circular`, `memo`, `proceeding`, `notification`) and `tags` string array for flexible topic filtering on the front-end (e.g. `Transfers`, `PTR`).
+- Two enum columns describe a document on `Post`: `documentType` (`DocType`: `go`, `circular`, `memo`, `proceeding`, `notification`, `other` — nullable, because a post whose type has not been established yet is legitimate) and `orderState` (`OrderState`: `current`, `amended`, `superseded`, `archived`, defaulting to `current`). The older `docType` column has been dropped — do not write code against it.
+- `documentType` is what decides whether a document has an application lifecycle at all: only `notification` gets the recruitment stepper (Notified -> Apply open -> Hall ticket -> Results, positioned by `statusBadge`). Everything else — a GO, circular, memo or proceeding — shows its `orderState` instead, because a DA arrears circular is not awaiting exam results. That rule lives in `lib/posts/lifecycle.ts`; read it from there rather than re-deriving it per surface.
+- The `tags` string array carries flexible topic filtering on the front-end (e.g. `Transfers`, `PTR`).
 - Do not hardcode specific topics as categories; keep categories strictly limited to the official document types above, and use `tags` for topics.
 
 ## Content/publishing workflow (for context, not code you need to build yet)

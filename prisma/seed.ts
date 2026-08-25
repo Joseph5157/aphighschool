@@ -188,7 +188,7 @@ async function main() {
     update: {
       isDraft: true,
       categoryId: notifications.id,
-      documentType: "proceeding",
+      documentType: "notification",
       tags: ["DSC"],
       titleEn: "[DEMO] AP Mega DSC 2026 Examination Hall Tickets Released Download Link",
       verifiedAgainstGoir: false,
@@ -212,7 +212,7 @@ async function main() {
       sourceDept: "School Education, AP",
       sourceUrl: "https://apdsc.apcfss.in",
       categoryId: notifications.id,
-      documentType: "proceeding",
+      documentType: "notification",
       tags: ["DSC"],
       verifiedAgainstGoir: false,
       isDraft: true,

@@ -215,8 +215,13 @@ FROM "Post"
 WHERE "effectiveDate" IS DISTINCT FROM COALESCE("documentDate", "createdAt");
 ```
 
-`IS DISTINCT FROM`, not `<>`: with NULLs involved, `<>` returns NULL rather than
-true and the query would report `0` no matter how badly the column had drifted.
+`IS DISTINCT FROM` rather than `<>` is defensive habit here, not a requirement:
+both operands are NOT NULL today — `Post.effectiveDate` is
+`DateTime @default(now())`, and `COALESCE("documentDate", "createdAt")` cannot
+be NULL because `createdAt` is NOT NULL — so the two operators return exactly
+the same rows on this query. Keep `IS DISTINCT FROM` anyway: it stays correct
+if either side is ever made nullable, where `<>` would yield NULL instead of
+true and silently under-report drift.
 
 ---
 

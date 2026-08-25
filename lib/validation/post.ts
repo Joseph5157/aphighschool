@@ -1,3 +1,5 @@
+import { DocType, OrderState, PostStatus } from "@prisma/client";
+
 import { isAfterTodayIST } from "@/lib/dates";
 
 export type PostInput = {
@@ -22,13 +24,15 @@ export type PostInput = {
   relatedPostIds: string[];
 };
 
-const STATUS_BADGES = ["notification", "apply_link", "hall_ticket", "results", "expired"];
-
-// Must stay in step with the DocType and OrderState enums in prisma/schema.prisma.
 // Prisma rejects an out-of-enum value at the database boundary with an opaque
-// error, so these are checked here to produce an admin-readable message first.
-const DOCUMENT_TYPES = ["go", "circular", "memo", "proceeding", "notification", "other"];
-const ORDER_STATES = ["current", "amended", "superseded", "archived"];
+// error, so membership is checked here first to produce an admin-readable
+// message. These are derived from the generated Prisma enum objects rather
+// than retyped: a hand-maintained copy of each enum could drift from
+// prisma/schema.prisma without tsc or any test noticing, because the values
+// only ever flow through as `string`. There is now no second list to drift.
+const STATUS_BADGES: string[] = Object.values(PostStatus);
+const DOCUMENT_TYPES: string[] = Object.values(DocType);
+const ORDER_STATES: string[] = Object.values(OrderState);
 
 // Telugu block: U+0C00–U+0C7F.
 const TELUGU = /[ఀ-౿]/;

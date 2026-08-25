@@ -1,5 +1,6 @@
 "use server";
 
+import type { DocType, OrderState, PostStatus } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -28,6 +29,14 @@ export async function createPost(formData: FormData) {
     if (!exists) throw new Error("Selected category does not exist.");
   }
 
+  // statusBadge / documentType / orderState arrive from parsePostForm as raw
+  // FormData strings, and validatePost only *reports* errors rather than
+  // narrowing, so TypeScript cannot see that this write is reached only for
+  // values that passed the enum check above. The assertions are therefore
+  // load-bearing. They name the real Prisma enums rather than `never`: `never`
+  // is assignable to everything, so it also silenced any genuine type change
+  // on the field. lib/validation/post.ts derives its accepted values from
+  // these same enum objects, which is what makes the assertions true.
   const post = await prisma.post.create({
     data: {
       slug: `${slugify(input.titleEn)}-${Date.now().toString(36)}`,
@@ -35,7 +44,7 @@ export async function createPost(formData: FormData) {
       titleTe: input.titleTe,
       summaryTe: input.summaryTe,
       englishAbstract: input.englishAbstract,
-      statusBadge: input.statusBadge as never,
+      statusBadge: input.statusBadge as PostStatus,
       pdfUrl: input.pdfUrl,
       actionUrl: input.actionUrl,
       actionDeadline: input.actionDeadline,
@@ -50,8 +59,8 @@ export async function createPost(formData: FormData) {
       sourceDept: input.sourceDept,
       sourceUrl: input.sourceUrl,
       categoryId: input.categoryId,
-      documentType: input.documentType as never,
-      orderState: input.orderState as never,
+      documentType: input.documentType as DocType | null,
+      orderState: input.orderState as OrderState,
       tags: input.tags,
       verifiedAgainstGoir: input.verifiedAgainstGoir,
       // isDraft intentionally omitted — the schema defaults to true.
@@ -110,7 +119,7 @@ export async function updatePost(postId: string, formData: FormData) {
       titleTe: input.titleTe,
       summaryTe: input.summaryTe,
       englishAbstract: input.englishAbstract,
-      statusBadge: input.statusBadge as never,
+      statusBadge: input.statusBadge as PostStatus,
       pdfUrl: input.pdfUrl,
       actionUrl: input.actionUrl,
       actionDeadline: input.actionDeadline,
@@ -120,8 +129,8 @@ export async function updatePost(postId: string, formData: FormData) {
       sourceDept: input.sourceDept,
       sourceUrl: input.sourceUrl,
       categoryId: input.categoryId,
-      documentType: input.documentType as never,
-      orderState: input.orderState as never,
+      documentType: input.documentType as DocType | null,
+      orderState: input.orderState as OrderState,
       tags: input.tags,
       verifiedAgainstGoir: input.verifiedAgainstGoir,
     },

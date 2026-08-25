@@ -24,7 +24,10 @@ export default function LifecycleStepper({ stages, currentStage, isExpired }: St
           const isCurrent = !isExpired && id === currentStage;
 
           return (
-            <div key={label} className="relative z-10 flex flex-col items-center flex-1 text-center">
+            // Keyed on position, not label: two stages sharing a label would
+            // otherwise collide. Stages are a fixed, ordered list, so the
+            // index is a stable identity here.
+            <div key={id} className="relative z-10 flex flex-col items-center flex-1 text-center">
               <div
                 className={`w-8 h-8 rounded-full font-mono text-xs font-bold flex items-center justify-center transition-all ${
                   isDone

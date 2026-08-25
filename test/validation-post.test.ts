@@ -1,5 +1,6 @@
 // @vitest-environment node
 import { describe, it, expect } from "vitest";
+import { DocType, OrderState, PostStatus } from "@prisma/client";
 import { validatePost, type PostInput } from "@/lib/validation/post";
 
 const base: PostInput = {
@@ -173,6 +174,53 @@ describe("validatePost", () => {
     const errors = validatePost({ ...base, verifiedAgainstGoir: true, sourceUrl: null });
     expect(errors).toContain(
       "A GOIR-verified post must carry the source URL it was verified against."
+    );
+  });
+});
+
+// The cases above (and test/schema-shape.test.ts) iterate their own hardcoded
+// literals, so they stay green whether or not the validator has drifted from
+// schema.prisma — adding a value to an enum and forgetting the validator was
+// invisible to both tsc and the suite. These iterate the Prisma enum objects
+// themselves, so there is no second list to agree with.
+describe("validation enums track the Prisma schema", () => {
+  it("accepts every DocType the schema defines", () => {
+    for (const documentType of Object.values(DocType)) {
+      expect(validatePost({ ...base, documentType })).toEqual([]);
+    }
+  });
+
+  it("accepts every OrderState the schema defines", () => {
+    for (const orderState of Object.values(OrderState)) {
+      expect(validatePost({ ...base, orderState })).toEqual([]);
+    }
+  });
+
+  it("accepts every PostStatus the schema defines", () => {
+    for (const statusBadge of Object.values(PostStatus)) {
+      expect(validatePost({ ...base, statusBadge })).toEqual([]);
+    }
+  });
+
+  // The other direction is only spot-checked: there is no way to enumerate
+  // every string the validator might wrongly accept. It is the validator
+  // deriving its lists from these same enum objects, rather than this test,
+  // that rules out an over-permissive list.
+  //
+  // The probe deliberately is not a plausible future enum value ("gazette",
+  // "repealed"): adding such a value to schema.prisma would then make this
+  // test fail for a reason that has nothing to do with the defect it guards.
+  const NOT_AN_ENUM_VALUE = "__not_a_real_enum_value__";
+
+  it("rejects values the schema enums do not define", () => {
+    expect(validatePost({ ...base, documentType: NOT_AN_ENUM_VALUE })).toContain(
+      "Document type is not a recognised value."
+    );
+    expect(validatePost({ ...base, orderState: NOT_AN_ENUM_VALUE })).toContain(
+      "Order state is not a recognised value."
+    );
+    expect(validatePost({ ...base, statusBadge: NOT_AN_ENUM_VALUE })).toContain(
+      "Status badge is not a recognised value."
     );
   });
 });
