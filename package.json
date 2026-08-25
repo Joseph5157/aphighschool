@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "db:push": "prisma db push",
-    "db:seed": "tsx prisma/seed.ts",
+    "db:seed": "tsx --env-file=.env prisma/seed.ts",
     "db:studio": "prisma studio",
     "db:backup": "tsx --env-file=.env prisma/backup.ts",
     "db:backfill": "tsx --env-file=.env prisma/backfill-document-type.ts",

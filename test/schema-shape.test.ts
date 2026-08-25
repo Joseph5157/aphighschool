@@ -38,4 +38,16 @@ describe("post schema shape", () => {
       expect(updated.documentType).toBe(value);
     }
   });
+
+  it("accepts each orderState enum value", async () => {
+    const values = ["current", "amended", "superseded", "archived"] as const;
+    for (const value of values) {
+      const post = await makePost({ slug: `state-${value}` });
+      const updated = await testDb.post.update({
+        where: { id: post.id },
+        data: { orderState: value },
+      });
+      expect(updated.orderState).toBe(value);
+    }
+  });
 });
