@@ -3,6 +3,7 @@ import { describe, it, expect, beforeEach } from "vitest";
 import fs from "node:fs";
 import path from "node:path";
 import { resetDb, makePost, testDb } from "./db";
+import { generateMetadata } from "../app/(public)/posts/[slug]/page";
 
 const detail = fs.readFileSync(
   path.join(process.cwd(), "app", "(public)", "posts", "[slug]", "page.tsx"),
@@ -79,5 +80,41 @@ describe("related order filtering behaviour", () => {
     });
 
     expect(result?.relatedFrom[0].relatedPost.slug).toBe("child-2");
+  });
+});
+
+describe("generateMetadata behaviour", () => {
+  beforeEach(resetDb);
+
+  it("falls through to the not-found title for a draft slug, leaking neither title nor Telugu summary", async () => {
+    await makePost({
+      slug: "secret-draft-order",
+      titleEn: "Secret Draft Order Title",
+      titleTe: "రహస్య ముసాయిదా ఉత్తర్వు శీర్షిక",
+      summaryTe: ["ఇది రహస్య సారాంశం."],
+      isDraft: true,
+    });
+
+    const metadata = await generateMetadata({
+      params: { slug: "secret-draft-order" },
+    });
+
+    expect(metadata.title).toBe("Order Not Found — AP Teacher Desk");
+    expect(metadata.title).not.toContain("Secret Draft Order Title");
+    expect(JSON.stringify(metadata)).not.toContain("రహస్య");
+  });
+
+  it("carries the real title for a published post", async () => {
+    await makePost({
+      slug: "public-order",
+      titleEn: "Public Order Title",
+      isDraft: false,
+    });
+
+    const metadata = await generateMetadata({
+      params: { slug: "public-order" },
+    });
+
+    expect(metadata.title).toContain("Public Order Title");
   });
 });
