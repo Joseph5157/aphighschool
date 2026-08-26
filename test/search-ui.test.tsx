@@ -55,6 +55,6 @@ describe("SearchUI", () => {
 
   it("shows the prompt state when there is no query", () => {
     render(<SearchUI results={[]} query="" activeType={null} />);
-    expect(screen.getByText(/Trending/i)).toBeInTheDocument();
+    expect(screen.getByText(/Quick Searches/i)).toBeInTheDocument();
   });
 });

@@ -16,7 +16,7 @@ type SearchUIProps = {
   activeType: string | null;
 };
 
-const TRENDING_CHIPS = [
+const QUICK_SEARCH_CHIPS = [
   "TET 2026",
   "DA Arrears",
   "Mega DSC",
@@ -167,10 +167,10 @@ export default function SearchUI({ results, query, activeType }: SearchUIProps) 
       {isEmptyPrompt && (
         <div className="space-y-2.5 pt-2">
           <div className="font-mono text-[9.5px] uppercase tracking-wider text-inkSoft font-semibold">
-            Trending Search Topics
+            Quick Searches
           </div>
           <div className="flex items-center gap-2 flex-wrap">
-            {TRENDING_CHIPS.map((chip) => (
+            {QUICK_SEARCH_CHIPS.map((chip) => (
               <button
                 key={chip}
                 onClick={() => setValue(chip)}
