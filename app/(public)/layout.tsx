@@ -32,7 +32,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
       <header className="bg-paperRaised/95 backdrop-blur-md border-b border-hair sticky top-0 z-40 print:hidden">
         <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 py-3 flex items-center justify-between gap-6">
           <Link href="/" className="group flex items-center gap-3 shrink-0">
-            <div className="w-9 h-9 rounded-lg bg-ink text-turmeric font-mono font-bold flex items-center justify-center border border-inkSoft shadow-sm">
+            <div className="w-9 h-9 rounded-lg bg-masthead text-turmeric font-mono font-bold flex items-center justify-center border border-mastheadText/30 shadow-sm">
               AP
             </div>
             <div>

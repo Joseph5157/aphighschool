@@ -67,13 +67,13 @@ export function TabsTrigger({ value, children, badge, className = "" }: TabsTrig
       onClick={() => context.setActiveTab(value)}
       className={`whitespace-nowrap px-3 py-1.5 rounded-lg transition-all cursor-pointer inline-flex items-center gap-1.5 ${
         isActive
-          ? "bg-ink text-white shadow-2xs"
+          ? "bg-ink text-paper shadow-2xs"
           : "text-inkSoft hover:text-ink hover:bg-hair/30"
       } ${className}`}
     >
       <span>{children}</span>
       {badge && (
-        <span className={`text-[9px] px-1.5 py-0.2 rounded font-semibold ${isActive ? "bg-white/20 text-white" : "bg-hair text-inkSoft"}`}>
+        <span className={`text-[9px] px-1.5 py-0.2 rounded font-semibold ${isActive ? "bg-paper/20 text-paper" : "bg-hair text-inkSoft"}`}>
           {badge}
         </span>
       )}

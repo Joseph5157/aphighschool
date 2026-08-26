@@ -74,11 +74,11 @@ export default async function CategoryDetailPage({
       />
 
       {/* ── Option A: Imperial Gazette Category Masthead ─────────────────── */}
-      <div className="bg-ink text-paper rounded-2xl overflow-hidden shadow-md">
+      <div className="bg-masthead text-mastheadText rounded-2xl overflow-hidden shadow-md">
         {/* Top classification ribbon */}
         <div
-          className="border-b border-hair/20 px-6 py-2 flex items-center justify-between text-[10px] font-mono text-paper/40 tracking-widest uppercase"
-          style={{ backgroundColor: "color-mix(in srgb, var(--color-ink) 85%, black)" }}
+          className="border-b border-mastheadText/20 px-6 py-2 flex items-center justify-between text-[10px] font-mono text-mastheadText/40 tracking-widest uppercase"
+          style={{ backgroundColor: "color-mix(in srgb, var(--color-masthead) 85%, black)" }}
         >
           <span>AP School Education · Official Document Category</span>
           <span className="hidden sm:block">GOIR Verified</span>
@@ -99,7 +99,7 @@ export default async function CategoryDetailPage({
           </div>
 
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-paper tracking-tight leading-snug">
+            <h1 className="text-2xl md:text-3xl font-bold text-mastheadText tracking-tight leading-snug">
               {category.nameEn}
             </h1>
             {category.nameTe && (
@@ -112,7 +112,7 @@ export default async function CategoryDetailPage({
             )}
           </div>
 
-          <p className="text-xs font-mono text-paper/50 max-w-lg">
+          <p className="text-xs font-mono text-mastheadText/50 max-w-lg">
             All official {category.nameEn} government orders — sorted by publication date, newest first.
           </p>
         </div>

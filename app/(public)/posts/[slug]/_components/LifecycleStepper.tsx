@@ -33,7 +33,7 @@ export default function LifecycleStepper({ stages, currentStage, isExpired }: St
                   isDone
                     ? "bg-turmeric text-ink shadow-sm"
                     : isCurrent
-                    ? "bg-ink text-turmeric border-2 border-turmeric shadow-md"
+                    ? "bg-ink text-paper border-2 border-turmeric shadow-md"
                     : "bg-paperRaised border-2 border-hair text-inkSoft/60"
                 }`}
               >

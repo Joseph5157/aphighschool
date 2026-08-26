@@ -152,9 +152,9 @@ export default async function PostDetailPage({
       })()}
 
       {/* 2. OPTION A: Imperial Gazette Hero Header Block */}
-      <div className="bg-ink text-paper border border-inkSoft/40 rounded-2xl p-6 md:p-8 space-y-5 shadow-md relative overflow-hidden">
+      <div className="bg-masthead text-mastheadText border border-mastheadText/40 rounded-2xl p-6 md:p-8 space-y-5 shadow-md relative overflow-hidden">
         {/* Badges & References Bar */}
-        <div className="flex items-center justify-between gap-3 flex-wrap border-b border-hair/20 pb-4">
+        <div className="flex items-center justify-between gap-3 flex-wrap border-b border-mastheadText/20 pb-4">
           <div className="flex items-center gap-2 flex-wrap">
             {post.verifiedAgainstGoir && (
               <Badge variant="success" size="sm" shape="pill" dot>
@@ -170,7 +170,7 @@ export default async function PostDetailPage({
               <span
                 className={`font-mono text-xs px-3 py-1 rounded-full font-semibold tracking-wider ${
                   isPastDeadline
-                    ? "bg-hair/30 text-inkSoft"
+                    ? "bg-mastheadText/15 text-mastheadText/70"
                     : "bg-turmeric/20 text-turmeric border border-turmeric/30"
                 }`}
               >
@@ -180,7 +180,7 @@ export default async function PostDetailPage({
           </div>
 
           {post.goReference && (
-            <span className="font-mono text-xs font-bold text-turmeric bg-paper/10 px-3 py-1 rounded border border-hair/20">
+            <span className="font-mono text-xs font-bold text-turmeric bg-mastheadText/10 px-3 py-1 rounded border border-mastheadText/20">
               {post.goReference}
             </span>
           )}
@@ -188,7 +188,7 @@ export default async function PostDetailPage({
 
         {/* Bilingual Headlines */}
         <div className="space-y-2">
-          <h1 className="text-display text-paper tracking-tight leading-snug">
+          <h1 className="text-display text-mastheadText tracking-tight leading-snug">
             {post.titleEn}
           </h1>
           <div className="text-telugu-title text-turmeric font-medium leading-relaxed">
@@ -197,7 +197,7 @@ export default async function PostDetailPage({
         </div>
 
         {/* Gazette Metadata */}
-        <div className="text-meta text-paper/60 pt-2 flex items-center justify-between flex-wrap gap-2 border-t border-hair/20">
+        <div className="text-meta text-mastheadText/60 pt-2 flex items-center justify-between flex-wrap gap-2 border-t border-mastheadText/20">
           <span>{post.sourceDept || "AP School Education Department"}</span>
           <span>
             {dateLabel(post)}: {formatDate(officialDate(post))}

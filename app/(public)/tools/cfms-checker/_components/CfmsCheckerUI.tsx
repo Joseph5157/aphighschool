@@ -154,7 +154,7 @@ export default function CfmsCheckerUI() {
             href={item.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-xs font-mono font-bold bg-ink text-white px-3.5 py-2 rounded-lg hover:bg-ink/90 transition-all shadow-2xs"
+            className="inline-flex items-center gap-1.5 text-xs font-mono font-bold bg-ink text-paper px-3.5 py-2 rounded-lg hover:bg-ink/90 transition-all shadow-2xs"
           >
             <span>Open Official Portal (అధికారిక వెబ్‌సైట్)</span>
             <span>↗</span>

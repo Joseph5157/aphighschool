@@ -67,7 +67,7 @@ export function SheetContent({ children, side = "bottom", className = "" }: Shee
     <div className="fixed inset-0 z-50 flex flex-col justify-end">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-ink/50 backdrop-blur-xs transition-opacity animate-fadeIn"
+        className="fixed inset-0 bg-black/50 backdrop-blur-xs transition-opacity animate-fadeIn"
         onClick={() => context.setIsOpen(false)}
       />
 

@@ -70,11 +70,11 @@ export default async function OrdersPage() {
         {/* Main Feed Column (8 cols on Desktop) */}
         <div className="lg:col-span-8 space-y-8">
           {/* ── Option A: Imperial Gazette Masthead ─────────────────────────── */}
-          <div className="bg-ink text-paper rounded-2xl overflow-hidden shadow-md">
+          <div className="bg-masthead text-mastheadText rounded-2xl overflow-hidden shadow-md">
             {/* Top ribbon */}
             <div
-              className="border-b border-hair/20 px-6 py-2 flex items-center justify-between text-[11px] font-mono text-paper/50 tracking-widest uppercase"
-              style={{ backgroundColor: "color-mix(in srgb, var(--color-ink) 85%, black)" }}
+              className="border-b border-mastheadText/20 px-6 py-2 flex items-center justify-between text-[11px] font-mono text-mastheadText/50 tracking-widest uppercase"
+              style={{ backgroundColor: "color-mix(in srgb, var(--color-masthead) 85%, black)" }}
             >
               <span>AP School Education Department — Official G.O. Repository</span>
               <span className="hidden sm:block">goir.ap.gov.in verified</span>
@@ -93,7 +93,7 @@ export default async function OrdersPage() {
 
               {/* Bilingual headline */}
               <div>
-                <h1 className="text-2xl md:text-3xl font-bold text-paper tracking-tight leading-snug">
+                <h1 className="text-2xl md:text-3xl font-bold text-mastheadText tracking-tight leading-snug">
                   Orders &amp; Circulars Hub
                 </h1>
                 <p className="font-medium mt-1.5 text-turmeric" style={{ fontFamily: "var(--font-noto-telugu), sans-serif", fontSize: "1.05rem", lineHeight: "1.75" }}>
@@ -101,14 +101,14 @@ export default async function OrdersPage() {
                 </p>
               </div>
 
-              <p className="text-sm text-paper/60 font-mono max-w-xl leading-relaxed">
+              <p className="text-sm text-mastheadText/60 font-mono max-w-xl leading-relaxed">
                 Official government orders, department memos, proceedings, and notifications — all categories listed below.
               </p>
 
               {/* Search shortcut inside hero */}
               <div className="flex items-center gap-3 pt-1">
                 <Link href="/search?type=go">
-                  <Button variant="outline" size="sm" leftIcon={<span>🔍</span>} rightIcon={<span>→</span>} className="border-paper/40 text-paper hover:bg-paper/10">
+                  <Button variant="outline" size="sm" leftIcon={<span>🔍</span>} rightIcon={<span>→</span>} className="border-mastheadText/40 text-mastheadText hover:bg-mastheadText/10">
                     Search Government Orders
                   </Button>
                 </Link>

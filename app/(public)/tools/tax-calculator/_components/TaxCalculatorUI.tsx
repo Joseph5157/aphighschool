@@ -518,7 +518,7 @@ export default function TaxCalculatorUI() {
                       type="number"
                       value={basic}
                       onChange={(e) => setBasic(e.target.value)}
-                      className="w-full bg-white border border-hair rounded px-2 py-1.5 text-sm text-ink tabular-nums"
+                      className="w-full bg-paperRaised border border-hair rounded px-2 py-1.5 text-sm text-ink tabular-nums"
                     />
                   </div>
                   <div>
@@ -528,7 +528,7 @@ export default function TaxCalculatorUI() {
                     <select
                       value={daSelect}
                       onChange={(e) => setDaSelect(parseFloat(e.target.value))}
-                      className="w-full bg-white border border-hair rounded px-2 py-1.5 text-sm text-ink"
+                      className="w-full bg-paperRaised border border-hair rounded px-2 py-1.5 text-sm text-ink"
                     >
                       {DA_PRESETS.map((p) => (
                         <option key={p.label} value={p.value}>
@@ -544,7 +544,7 @@ export default function TaxCalculatorUI() {
                     <select
                       value={hraSelect}
                       onChange={(e) => setHraSelect(parseFloat(e.target.value))}
-                      className="w-full bg-white border border-hair rounded px-2 py-1.5 text-sm text-ink"
+                      className="w-full bg-paperRaised border border-hair rounded px-2 py-1.5 text-sm text-ink"
                     >
                       {HRA_PRESETS.map((p) => (
                         <option key={p.label} value={p.value}>
@@ -577,7 +577,7 @@ export default function TaxCalculatorUI() {
                     <select
                       value={houseStatus}
                       onChange={(e) => setHouseStatus(e.target.value as "Rented" | "Own")}
-                      className="w-full bg-white border border-hair rounded px-2 py-1.5 text-sm text-ink"
+                      className="w-full bg-paperRaised border border-hair rounded px-2 py-1.5 text-sm text-ink"
                     >
                       <option value="Own">Own House</option>
                       <option value="Rented">Rented House</option>
@@ -658,25 +658,25 @@ export default function TaxCalculatorUI() {
                       type="number"
                       value={paid}
                       onChange={(e) => setPaid(e.target.value)}
-                      className="bg-white border border-hair rounded px-2 py-1.5 text-sm tabular-nums"
+                      className="bg-paperRaised border border-hair rounded px-2 py-1.5 text-sm tabular-nums"
                     />
                     <input
                       type="number"
                       value={ded}
                       onChange={(e) => setDed(e.target.value)}
-                      className="bg-white border border-hair rounded px-2 py-1.5 text-sm tabular-nums"
+                      className="bg-paperRaised border border-hair rounded px-2 py-1.5 text-sm tabular-nums"
                     />
                     <input
                       type="number"
                       value={dep}
                       onChange={(e) => setDep(e.target.value)}
-                      className="bg-white border border-hair rounded px-2 py-1.5 text-sm tabular-nums"
+                      className="bg-paperRaised border border-hair rounded px-2 py-1.5 text-sm tabular-nums"
                     />
                     <input
                       type="text"
                       value={rec}
                       onChange={(e) => setRec(e.target.value)}
-                      className="bg-white border border-hair rounded px-2 py-1.5 text-sm"
+                      className="bg-paperRaised border border-hair rounded px-2 py-1.5 text-sm"
                     />
                   </div>
                 ))}
@@ -710,7 +710,7 @@ export default function TaxCalculatorUI() {
                     <select
                       value={lenderType}
                       onChange={(e) => setLenderType(e.target.value)}
-                      className="w-full bg-white border border-hair rounded px-2 py-1.5 text-sm text-ink"
+                      className="w-full bg-paperRaised border border-hair rounded px-2 py-1.5 text-sm text-ink"
                     >
                       <option>Financial Institution</option>
                       <option>Employer</option>
@@ -786,7 +786,7 @@ export default function TaxCalculatorUI() {
                     key={id}
                     type="button"
                     onClick={() => setActiveTab(id)}
-                    className="w-full text-left bg-white border border-hair p-2 rounded hover:border-ink font-bold text-ink transition-colors"
+                    className="w-full text-left bg-paperRaised border border-hair p-2 rounded hover:border-ink font-bold text-ink transition-colors"
                   >
                     {label}
                   </button>
@@ -1013,7 +1013,7 @@ export default function TaxCalculatorUI() {
           </div>
 
           {/* Section 1: Income from Gross Salary */}
-          <div className="border border-black divide-y divide-gray-300">
+          <div className="border border-black divide-y divide-black/15">
             <div className="grid grid-cols-[1fr_130px_130px] bg-black/10 font-bold p-1.5 border-b border-black text-xs">
               <div>1 Income from Gross Salary</div>
               <div className="text-right tabular-nums pr-2">{fmt(totalGross)}</div>
@@ -1034,7 +1034,7 @@ export default function TaxCalculatorUI() {
           </div>
 
           {/* Section 2: HRA Exemption */}
-          <div className="border border-black divide-y divide-gray-300">
+          <div className="border border-black divide-y divide-black/15">
             <div className="grid grid-cols-[1fr_130px] bg-black/10 font-bold p-1.5 border-b border-black text-xs">
               <div>2 HRA Exemption. Sec.10(13-A)</div>
               <div className="text-right pr-2 font-bold text-black/80">
@@ -1052,7 +1052,7 @@ export default function TaxCalculatorUI() {
           </div>
 
           {/* Section 3: Deductions from Salary */}
-          <div className="border border-black divide-y divide-gray-300">
+          <div className="border border-black divide-y divide-black/15">
             <div className="grid grid-cols-[1fr_130px_130px] bg-black/10 font-bold p-1.5 border-b border-black text-xs">
               <div>3 Deductions from Salary Income</div>
               <div></div>
@@ -1074,14 +1074,14 @@ export default function TaxCalculatorUI() {
 
           {/* Section 4 & 5: Other Sources & House Property */}
           <div className="grid grid-cols-2 border border-black divide-x divide-black text-xs">
-            <div className="divide-y divide-gray-300">
+            <div className="divide-y divide-black/15">
               <div className="bg-black/10 font-bold p-1.5 border-b border-black">4 Income from Other Sources</div>
               <div className="p-1.5 flex justify-between text-xs">
                 <span className="pl-2 text-black/80">Bank Interest & Other:</span>
                 <span className="tabular-nums font-semibold">{otherSrcNum > 0 ? fmt(otherSrcNum) : "—"}</span>
               </div>
             </div>
-            <div className="divide-y divide-gray-300">
+            <div className="divide-y divide-black/15">
               <div className="bg-black/10 font-bold p-1.5 border-b border-black">5 Income / Loss House Property Sec.24</div>
               <div className="p-1.5 flex justify-between text-xs">
                 <span className="pl-2 text-black/80">Interest on Housing Loan:</span>
@@ -1137,7 +1137,7 @@ export default function TaxCalculatorUI() {
                   <th className="p-1 text-right pr-3">Tax Amount (₹)</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-300 tabular-nums">
+              <tbody className="divide-y divide-black/15 tabular-nums">
                 <tr>
                   <td className="p-1 border-r border-black/25 font-sans">Upto ₹2,50,000</td>
                   <td className="p-1 border-r border-black/25 font-sans">Nil</td>

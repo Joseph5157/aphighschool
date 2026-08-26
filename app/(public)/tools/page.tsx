@@ -76,7 +76,7 @@ export default function ToolsIndexPage() {
         {/* Main Feed Column (8 cols on Desktop) */}
         <div className="lg:col-span-8 space-y-6">
           {/* Option C Royal Indigo Hero Header */}
-          <div className="bg-ink text-paper border border-inkSoft/40 rounded-2xl p-6 md:p-8 space-y-3 shadow-md relative overflow-hidden">
+          <div className="bg-masthead text-mastheadText border border-mastheadText/40 rounded-2xl p-6 md:p-8 space-y-3 shadow-md relative overflow-hidden">
             <div className="flex items-center justify-between">
               <Badge variant="turmeric" size="sm" shape="pill" dot>
                 Heritage Craft Utility Suite
@@ -85,7 +85,7 @@ export default function ToolsIndexPage() {
             </div>
 
             <div>
-              <h1 className="text-display text-paper tracking-tight">
+              <h1 className="text-display text-mastheadText tracking-tight">
                 Teacher Utility Calculators
               </h1>
               <p className="text-telugu-title text-turmeric font-medium mt-1">
@@ -93,7 +93,7 @@ export default function ToolsIndexPage() {
               </p>
             </div>
 
-            <p className="text-xs text-paper/70 font-mono leading-relaxed">
+            <p className="text-xs text-mastheadText/70 font-mono leading-relaxed">
               All calculations execute strictly inside your browser. No financial data or personal pay details leave your device.
             </p>
           </div>

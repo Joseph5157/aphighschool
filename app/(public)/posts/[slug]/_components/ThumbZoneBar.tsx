@@ -24,7 +24,7 @@ export default function ThumbZoneBar({ pdfUrl, sourceUrl }: ThumbZoneProps) {
         {/* Primary Action Button */}
         <button
           onClick={scrollToPdf}
-          className="flex-1 h-[48px] min-h-[48px] bg-ink hover:bg-inkSoft text-white font-mono font-bold text-sm tracking-wider uppercase rounded-xl flex items-center justify-center gap-2 shadow-md transition-all active:scale-[0.99]"
+          className="flex-1 h-[48px] min-h-[48px] bg-ink hover:bg-inkSoft text-paper font-mono font-bold text-sm tracking-wider uppercase rounded-xl flex items-center justify-center gap-2 shadow-md transition-all active:scale-[0.99]"
         >
           <span>📄 VIEW FULL ORDER</span>
         </button>
@@ -35,7 +35,7 @@ export default function ThumbZoneBar({ pdfUrl, sourceUrl }: ThumbZoneProps) {
             href={sourceUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-[48px] h-[48px] min-w-[48px] min-h-[48px] bg-white border border-hair rounded-xl flex items-center justify-center text-ink hover:text-turmericDeep hover:border-ink/30 transition-all shadow-sm"
+            className="w-[48px] h-[48px] min-w-[48px] min-h-[48px] bg-paperRaised border border-hair rounded-xl flex items-center justify-center text-ink hover:text-turmericDeep hover:border-ink/30 transition-all shadow-sm"
             title="Open Original Source URL"
             aria-label="Open Official Source"
           >

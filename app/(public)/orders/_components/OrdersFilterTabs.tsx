@@ -122,7 +122,7 @@ export default function OrdersFilterTabs({ categories }: { categories: CategoryD
                           <span className="font-mono text-xs font-semibold text-ink group-hover:text-paper transition-colors">
                             View All {count} Documents
                           </span>
-                          <span className="text-ink group-hover:text-turmeric transition-colors font-mono text-sm">→</span>
+                          <span className="text-ink group-hover:text-paper transition-colors font-mono text-sm">→</span>
                         </div>
                       </Link>
                     </div>

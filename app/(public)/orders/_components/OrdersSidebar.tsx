@@ -83,7 +83,7 @@ export default function OrdersSidebar() {
       </div>
 
       {/* 3. Official Gazette Repository Banner */}
-      <div className="bg-ink text-paper rounded-2xl p-5 space-y-3 shadow-md border border-inkSoft/40">
+      <div className="bg-masthead text-mastheadText rounded-2xl p-5 space-y-3 shadow-md border border-mastheadText/40">
         <div className="flex items-center justify-between">
           <Badge variant="turmeric" size="sm" shape="pill" dot>
             goir.ap.gov.in
@@ -91,11 +91,11 @@ export default function OrdersSidebar() {
           <span className="text-[10px] font-mono text-turmeric">AP Gazette</span>
         </div>
 
-        <div className="font-bold text-xs text-paper">
+        <div className="font-bold text-xs text-mastheadText">
           Andhra Pradesh Government Orders Repository
         </div>
 
-        <p className="text-xs text-paper/80 font-mono leading-relaxed">
+        <p className="text-xs text-mastheadText/80 font-mono leading-relaxed">
           All G.O. Ms, G.O. Rt, Memos, and Circulars published on AP Teacher Desk are verified against official gazette records.
         </p>
 

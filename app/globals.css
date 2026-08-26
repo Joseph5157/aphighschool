@@ -28,6 +28,14 @@
   --color-paper: #EDE8DC;
   --color-paperRaised: #F7F4EC;
   --color-hair: #D8D2C1;
+
+  /* Fixed "Imperial Gazette" branding tokens — intentionally NOT redefined
+     under html.dark. These back always-navy letterhead/masthead panels
+     (category/orders/post hero headers, the tools hero) that must look the
+     same in both themes, unlike the ink/paper pair which is designed to
+     flip. Never add an html.dark override for these two variables. */
+  --color-masthead: #1B2A4A;
+  --color-masthead-text: #EDE8DC;
 }
 
 html.dark {

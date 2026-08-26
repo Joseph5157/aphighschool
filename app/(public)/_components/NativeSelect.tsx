@@ -12,7 +12,7 @@ export const NativeSelect = forwardRef<HTMLSelectElement, NativeSelectProps>(
       <div className="relative w-full">
         <select
           ref={ref}
-          className={`w-full appearance-none bg-white border rounded-lg px-3 py-2 pr-8 text-xs sm:text-sm text-ink outline-none transition-all shadow-2xs font-sans cursor-pointer ${errorClass} ${className}`}
+          className={`w-full appearance-none bg-paperRaised border rounded-lg px-3 py-2 pr-8 text-xs sm:text-sm text-ink outline-none transition-all shadow-2xs font-sans cursor-pointer ${errorClass} ${className}`}
           {...props}
         >
           {children}

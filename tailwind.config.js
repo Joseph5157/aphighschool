@@ -15,6 +15,8 @@ module.exports = {
         paper: "var(--color-paper)",
         paperRaised: "var(--color-paperRaised)",
         hair: "var(--color-hair)",
+        masthead: "var(--color-masthead)",
+        mastheadText: "var(--color-masthead-text)",
       },
       fontFamily: {
         sans: ["var(--font-space-grotesk)", "system-ui", "sans-serif"],

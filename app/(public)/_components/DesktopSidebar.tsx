@@ -94,7 +94,7 @@ export default function DesktopSidebar() {
               <Link
                 key={tag.label}
                 href={tag.href}
-                className="px-3 py-1 rounded-full border border-hair bg-paper/40 hover:bg-ink hover:text-white text-inkSoft font-semibold transition-all shadow-2xs"
+                className="px-3 py-1 rounded-full border border-hair bg-paper/40 hover:bg-ink hover:text-paper text-inkSoft font-semibold transition-all shadow-2xs"
               >
                 {tag.label}
               </Link>

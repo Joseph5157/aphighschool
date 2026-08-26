@@ -89,7 +89,7 @@ export default function ToolsSidebar() {
       </div>
 
       {/* 3. Offline Privacy Guarantee Banner */}
-      <div className="bg-gradient-to-br from-[var(--color-ink)] to-[var(--color-inkSoft)] text-paper rounded-2xl p-5 space-y-3 shadow-md">
+      <div className="bg-masthead text-mastheadText rounded-2xl p-5 space-y-3 shadow-md">
         <div className="flex items-center justify-between">
           <Badge variant="turmeric" size="sm" shape="pill" dot>
             100% Privacy First
@@ -97,11 +97,11 @@ export default function ToolsSidebar() {
           <span className="text-[10px] font-mono text-turmeric">Browser Native</span>
         </div>
 
-        <div className="font-bold text-xs text-paper">
+        <div className="font-bold text-xs text-mastheadText">
           Client-Side Security Guarantee
         </div>
 
-        <p className="text-xs text-paper/70 font-mono leading-relaxed">
+        <p className="text-xs text-mastheadText/70 font-mono leading-relaxed">
           Zero network requests executed when calculating salary, tax statements, or leave bills. All data stays local to your web browser.
         </p>
       </div>
