@@ -106,7 +106,7 @@ export default async function OrdersPage() {
               <div className="flex items-center gap-3 pt-1">
                 <Link href="/search?type=go">
                   <Button variant="outline" size="sm" leftIcon={<span>🔍</span>} rightIcon={<span>→</span>} className="border-white/40 text-white hover:bg-white/10">
-                    Search All Orders
+                    Search Government Orders
                   </Button>
                 </Link>
               </div>
