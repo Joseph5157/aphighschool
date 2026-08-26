@@ -152,9 +152,9 @@ export default async function PostDetailPage({
       })()}
 
       {/* 2. OPTION A: Imperial Gazette Hero Header Block */}
-      <div className="bg-[#1B2A4A] text-white border border-[#2B3C63] rounded-2xl p-6 md:p-8 space-y-5 shadow-md relative overflow-hidden">
+      <div className="bg-ink text-paper border border-inkSoft/40 rounded-2xl p-6 md:p-8 space-y-5 shadow-md relative overflow-hidden">
         {/* Badges & References Bar */}
-        <div className="flex items-center justify-between gap-3 flex-wrap border-b border-white/10 pb-4">
+        <div className="flex items-center justify-between gap-3 flex-wrap border-b border-hair/20 pb-4">
           <div className="flex items-center gap-2 flex-wrap">
             {post.verifiedAgainstGoir && (
               <Badge variant="success" size="sm" shape="pill" dot>
@@ -162,7 +162,7 @@ export default async function PostDetailPage({
               </Badge>
             )}
             {post.category && (
-              <span className="font-mono text-xs font-semibold text-amber-300 bg-amber-400/10 px-2.5 py-1 rounded border border-amber-400/20">
+              <span className="font-mono text-xs font-semibold text-turmeric bg-turmeric/10 px-2.5 py-1 rounded border border-turmeric/20">
                 {post.category.nameEn}
               </span>
             )}
@@ -170,8 +170,8 @@ export default async function PostDetailPage({
               <span
                 className={`font-mono text-xs px-3 py-1 rounded-full font-semibold tracking-wider ${
                   isPastDeadline
-                    ? "bg-slate-700 text-slate-300"
-                    : "bg-amber-500/20 text-amber-200 border border-amber-500/30"
+                    ? "bg-hair/30 text-inkSoft"
+                    : "bg-turmeric/20 text-turmeric border border-turmeric/30"
                 }`}
               >
                 {isPastDeadline ? "Closed" : `Deadline: ${formattedDeadline}`}
@@ -180,7 +180,7 @@ export default async function PostDetailPage({
           </div>
 
           {post.goReference && (
-            <span className="font-mono text-xs font-bold text-amber-300 bg-white/10 px-3 py-1 rounded border border-white/15">
+            <span className="font-mono text-xs font-bold text-turmeric bg-paper/10 px-3 py-1 rounded border border-hair/20">
               {post.goReference}
             </span>
           )}
@@ -188,16 +188,16 @@ export default async function PostDetailPage({
 
         {/* Bilingual Headlines */}
         <div className="space-y-2">
-          <h1 className="text-display text-white tracking-tight leading-snug">
+          <h1 className="text-display text-paper tracking-tight leading-snug">
             {post.titleEn}
           </h1>
-          <div className="text-telugu-title text-amber-300 font-medium leading-relaxed">
+          <div className="text-telugu-title text-turmeric font-medium leading-relaxed">
             {post.titleTe}
           </div>
         </div>
 
         {/* Gazette Metadata */}
-        <div className="text-meta text-slate-300 pt-2 flex items-center justify-between flex-wrap gap-2 border-t border-white/10">
+        <div className="text-meta text-paper/60 pt-2 flex items-center justify-between flex-wrap gap-2 border-t border-hair/20">
           <span>{post.sourceDept || "AP School Education Department"}</span>
           <span>
             {dateLabel(post)}: {formatDate(officialDate(post))}
@@ -208,9 +208,9 @@ export default async function PostDetailPage({
       {/* 3. OPTION A: Telugu Gazette Summary Brief */}
       <section
         aria-label="Summary"
-        className="bg-[#FCF7EA] border border-hair/80 border-l-4 border-l-[#8B0000] rounded-xl p-5 md:p-6 shadow-2xs"
+        className="bg-paperRaised border border-hair/80 border-l-4 border-l-kumkum rounded-xl p-5 md:p-6 shadow-2xs"
       >
-        <div className="font-mono font-bold text-xs tracking-wider text-[#8B0000] mb-3 flex items-center justify-between">
+        <div className="font-mono font-bold text-xs tracking-wider text-kumkum mb-3 flex items-center justify-between">
           <span>సారాంశం — Gazette Brief Summary</span>
           <span className="text-[10px] text-inkSoft/70 font-normal">Living Document Brief</span>
         </div>
@@ -250,7 +250,7 @@ export default async function PostDetailPage({
 
           <div className="space-y-3">
             {post.relatedFrom.map((rel: any) => (
-              <Card key={rel.relatedPost.id} hoverable className="p-4 bg-[#FAF7F2]">
+              <Card key={rel.relatedPost.id} hoverable className="p-4 bg-paperRaised">
                 <Link
                   href={`/posts/${rel.relatedPost.slug}`}
                   className="block group space-y-1"
@@ -286,7 +286,7 @@ export default async function PostDetailPage({
           </div>
           <div className="space-y-2">
             {siblingPosts.map((sibling) => (
-              <Card key={sibling.id} hoverable className="p-4 bg-[#FAF7F2]">
+              <Card key={sibling.id} hoverable className="p-4 bg-paperRaised">
                 <Link href={`/posts/${sibling.slug}`} className="block group space-y-0.5">
                   <div className="flex items-center justify-between text-meta text-inkSoft">
                     <span className="font-bold text-tamarind">{sibling.goReference || "G.O."}</span>

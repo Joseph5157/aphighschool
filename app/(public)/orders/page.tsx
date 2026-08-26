@@ -70,9 +70,12 @@ export default async function OrdersPage() {
         {/* Main Feed Column (8 cols on Desktop) */}
         <div className="lg:col-span-8 space-y-8">
           {/* ── Option A: Imperial Gazette Masthead ─────────────────────────── */}
-          <div className="bg-[#1B2A4A] text-white rounded-2xl overflow-hidden shadow-md">
+          <div className="bg-ink text-paper rounded-2xl overflow-hidden shadow-md">
             {/* Top ribbon */}
-            <div className="bg-[#142040] border-b border-white/10 px-6 py-2 flex items-center justify-between text-[11px] font-mono text-white/50 tracking-widest uppercase">
+            <div
+              className="border-b border-hair/20 px-6 py-2 flex items-center justify-between text-[11px] font-mono text-paper/50 tracking-widest uppercase"
+              style={{ backgroundColor: "color-mix(in srgb, var(--color-ink) 85%, black)" }}
+            >
               <span>AP School Education Department — Official G.O. Repository</span>
               <span className="hidden sm:block">goir.ap.gov.in verified</span>
             </div>
@@ -83,29 +86,29 @@ export default async function OrdersPage() {
                 <Badge variant="success" size="sm" shape="pill" dot>
                   GOIR Verified Repository
                 </Badge>
-                <span className="font-mono text-xs text-amber-300/70">
+                <span className="font-mono text-xs text-turmeric/70">
                   {totalOrders} Official Documents
                 </span>
               </div>
 
               {/* Bilingual headline */}
               <div>
-                <h1 className="text-2xl md:text-3xl font-bold text-white tracking-tight leading-snug">
+                <h1 className="text-2xl md:text-3xl font-bold text-paper tracking-tight leading-snug">
                   Orders &amp; Circulars Hub
                 </h1>
-                <p className="font-medium mt-1.5 text-amber-300" style={{ fontFamily: "var(--font-noto-telugu), sans-serif", fontSize: "1.05rem", lineHeight: "1.75" }}>
+                <p className="font-medium mt-1.5 text-turmeric" style={{ fontFamily: "var(--font-noto-telugu), sans-serif", fontSize: "1.05rem", lineHeight: "1.75" }}>
                   ఉత్తర్వులు &amp; సర్క్యులర్లు — వర్గాల వారీగా
                 </p>
               </div>
 
-              <p className="text-sm text-white/60 font-mono max-w-xl leading-relaxed">
+              <p className="text-sm text-paper/60 font-mono max-w-xl leading-relaxed">
                 Official government orders, department memos, proceedings, and notifications — all categories listed below.
               </p>
 
               {/* Search shortcut inside hero */}
               <div className="flex items-center gap-3 pt-1">
                 <Link href="/search?type=go">
-                  <Button variant="outline" size="sm" leftIcon={<span>🔍</span>} rightIcon={<span>→</span>} className="border-white/40 text-white hover:bg-white/10">
+                  <Button variant="outline" size="sm" leftIcon={<span>🔍</span>} rightIcon={<span>→</span>} className="border-paper/40 text-paper hover:bg-paper/10">
                     Search Government Orders
                   </Button>
                 </Link>
@@ -122,9 +125,9 @@ export default async function OrdersPage() {
               <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
                 {recentPosts.map((post) => (
                   <Link key={post.id} href={`/posts/${post.slug}`} className="shrink-0">
-                    <div className="bg-[#FAF7F2] border border-hair hover:border-[#1B2A4A]/40 rounded-lg px-3 py-2 flex items-center gap-2 transition-all group min-w-fit">
+                    <div className="bg-paperRaised border border-hair hover:border-ink/40 rounded-lg px-3 py-2 flex items-center gap-2 transition-all group min-w-fit">
                       {post.goReference && (
-                        <span className="font-mono text-[10px] font-bold text-[#1B2A4A] bg-[#1B2A4A]/10 px-1.5 py-0.5 rounded shrink-0">
+                        <span className="font-mono text-[10px] font-bold text-ink bg-ink/10 px-1.5 py-0.5 rounded shrink-0">
                           {post.goReference}
                         </span>
                       )}

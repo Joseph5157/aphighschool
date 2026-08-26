@@ -69,17 +69,17 @@ export default function OrdersFilterTabs({ categories }: { categories: CategoryD
                   return (
                     <div
                       key={cat.id}
-                      className="group bg-[#FAF7F2] border border-hair/70 rounded-2xl overflow-hidden hover:shadow-md hover:border-[#1B2A4A]/30 transition-all"
+                      className="group bg-paperRaised border border-hair/70 rounded-2xl overflow-hidden hover:shadow-md hover:border-ink/30 transition-all"
                     >
                       {/* Card Header */}
                       <div
                         className="px-5 py-4 border-b border-hair/60 flex items-center justify-between"
-                        style={{ borderLeftColor: cat.color || "#C9973A", borderLeftWidth: 4 }}
+                        style={{ borderLeftColor: cat.color || "var(--color-turmeric)", borderLeftWidth: 4 }}
                       >
                         <div className="flex items-center gap-3">
                           <span className="text-xl" aria-hidden="true">{icon}</span>
                           <div>
-                            <h2 className="font-bold text-[#1B2A4A] text-sm tracking-tight group-hover:text-tamarind transition-colors">
+                            <h2 className="font-bold text-ink text-sm tracking-tight group-hover:text-tamarind transition-colors">
                               {cat.nameEn}
                             </h2>
                             <div className="text-xs text-inkSoft" style={{ fontFamily: "var(--font-noto-telugu), sans-serif", lineHeight: "1.6" }}>
@@ -87,7 +87,7 @@ export default function OrdersFilterTabs({ categories }: { categories: CategoryD
                             </div>
                           </div>
                         </div>
-                        <span className="font-mono text-xs font-bold text-[#1B2A4A] bg-[#1B2A4A]/10 px-2.5 py-1 rounded-full">
+                        <span className="font-mono text-xs font-bold text-ink bg-ink/10 px-2.5 py-1 rounded-full">
                           {count} docs
                         </span>
                       </div>
@@ -118,11 +118,11 @@ export default function OrdersFilterTabs({ categories }: { categories: CategoryD
 
                       {/* Footer CTA */}
                       <Link href={`/category/${cat.slug}`} className="block">
-                        <div className="px-5 py-3 border-t border-hair/60 bg-[#F3EFE6] group-hover:bg-[#1B2A4A] transition-colors flex items-center justify-between">
-                          <span className="font-mono text-xs font-semibold text-[#1B2A4A] group-hover:text-white transition-colors">
+                        <div className="px-5 py-3 border-t border-hair/60 bg-paper group-hover:bg-ink transition-colors flex items-center justify-between">
+                          <span className="font-mono text-xs font-semibold text-ink group-hover:text-paper transition-colors">
                             View All {count} Documents
                           </span>
-                          <span className="text-[#1B2A4A] group-hover:text-amber-300 transition-colors font-mono text-sm">→</span>
+                          <span className="text-ink group-hover:text-turmeric transition-colors font-mono text-sm">→</span>
                         </div>
                       </Link>
                     </div>

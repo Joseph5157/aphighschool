@@ -19,10 +19,10 @@ export default function ToolsSidebar() {
   return (
     <aside className="space-y-6 font-sans">
       {/* 1. Financial Rates & Constants Widget (Option C Heritage Craft) */}
-      <div className="bg-[#FAF7F2] border border-hair rounded-2xl p-5 space-y-4 shadow-2xs">
+      <div className="bg-paperRaised border border-hair rounded-2xl p-5 space-y-4 shadow-2xs">
         <div className="flex items-center justify-between border-b border-hair/60 pb-3">
           <div>
-            <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-[#1B2A4A] flex items-center gap-1.5">
+            <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-ink flex items-center gap-1.5">
               <span>📊</span> Financial Rates Summary
             </h3>
             <p className="text-[10px] font-mono text-inkSoft/70 mt-0.5">
@@ -45,7 +45,7 @@ export default function ToolsSidebar() {
                 <div className="text-[10px] font-mono text-inkSoft">{item.note}</div>
               </div>
               <div className="text-right">
-                <div className="font-mono font-bold text-xs text-[#1B2A4A]">{item.val}</div>
+                <div className="font-mono font-bold text-xs text-ink">{item.val}</div>
                 <span className="font-mono text-[9px] text-turmericDeep font-semibold">{item.badge}</span>
               </div>
             </div>
@@ -54,9 +54,9 @@ export default function ToolsSidebar() {
       </div>
 
       {/* 2. DDO Submission & Bill Checklist Widget */}
-      <div className="bg-[#FAF7F2] border border-hair rounded-2xl p-5 space-y-4 shadow-2xs">
+      <div className="bg-paperRaised border border-hair rounded-2xl p-5 space-y-4 shadow-2xs">
         <div className="flex items-center justify-between border-b border-hair/60 pb-3">
-          <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-[#1B2A4A] flex items-center gap-1.5">
+          <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-ink flex items-center gap-1.5">
             <span>📋</span> DDO Bill Submission Guide
           </h3>
           <span className="text-[10px] font-mono text-inkSoft">Checklist</span>
@@ -67,14 +67,14 @@ export default function ToolsSidebar() {
             <Link
               key={item.title}
               href={item.href}
-              className="group flex items-center justify-between p-3 rounded-xl border border-hair/60 hover:border-[#1B2A4A]/40 bg-paper/30 hover:bg-paperRaised transition-all shadow-2xs"
+              className="group flex items-center justify-between p-3 rounded-xl border border-hair/60 hover:border-ink/40 bg-paper/30 hover:bg-paperRaised transition-all shadow-2xs"
             >
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-[#1B2A4A]/10 text-[#1B2A4A] border border-[#1B2A4A]/20 flex items-center justify-center text-base shrink-0">
+                <div className="w-8 h-8 rounded-lg bg-ink/10 text-ink border border-ink/20 flex items-center justify-center text-base shrink-0">
                   {item.icon}
                 </div>
                 <div>
-                  <div className="font-bold text-xs text-ink group-hover:text-[#1B2A4A] transition-colors">
+                  <div className="font-bold text-xs text-ink group-hover:text-inkSoft transition-colors">
                     {item.title}
                   </div>
                   <div className="text-[10px] font-mono text-inkSoft/70">
@@ -82,26 +82,26 @@ export default function ToolsSidebar() {
                   </div>
                 </div>
               </div>
-              <span className="text-inkSoft group-hover:text-[#1B2A4A] text-xs font-mono transition-colors">→</span>
+              <span className="text-inkSoft group-hover:text-ink text-xs font-mono transition-colors">→</span>
             </Link>
           ))}
         </div>
       </div>
 
       {/* 3. Offline Privacy Guarantee Banner */}
-      <div className="bg-gradient-to-br from-[#1B2A4A] to-[#2B3C63] text-white rounded-2xl p-5 space-y-3 shadow-md">
+      <div className="bg-gradient-to-br from-[var(--color-ink)] to-[var(--color-inkSoft)] text-paper rounded-2xl p-5 space-y-3 shadow-md">
         <div className="flex items-center justify-between">
           <Badge variant="turmeric" size="sm" shape="pill" dot>
             100% Privacy First
           </Badge>
-          <span className="text-[10px] font-mono text-amber-300">Browser Native</span>
+          <span className="text-[10px] font-mono text-turmeric">Browser Native</span>
         </div>
 
-        <div className="font-bold text-xs text-white">
+        <div className="font-bold text-xs text-paper">
           Client-Side Security Guarantee
         </div>
 
-        <p className="text-xs text-slate-200 font-mono leading-relaxed">
+        <p className="text-xs text-paper/70 font-mono leading-relaxed">
           Zero network requests executed when calculating salary, tax statements, or leave bills. All data stays local to your web browser.
         </p>
       </div>

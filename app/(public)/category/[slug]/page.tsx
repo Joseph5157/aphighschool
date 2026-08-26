@@ -74,9 +74,12 @@ export default async function CategoryDetailPage({
       />
 
       {/* ── Option A: Imperial Gazette Category Masthead ─────────────────── */}
-      <div className="bg-[#1B2A4A] text-white rounded-2xl overflow-hidden shadow-md">
+      <div className="bg-ink text-paper rounded-2xl overflow-hidden shadow-md">
         {/* Top classification ribbon */}
-        <div className="bg-[#142040] border-b border-white/10 px-6 py-2 flex items-center justify-between text-[10px] font-mono text-white/40 tracking-widest uppercase">
+        <div
+          className="border-b border-hair/20 px-6 py-2 flex items-center justify-between text-[10px] font-mono text-paper/40 tracking-widest uppercase"
+          style={{ backgroundColor: "color-mix(in srgb, var(--color-ink) 85%, black)" }}
+        >
           <span>AP School Education · Official Document Category</span>
           <span className="hidden sm:block">GOIR Verified</span>
         </div>
@@ -84,24 +87,24 @@ export default async function CategoryDetailPage({
         {/* Main Header */}
         <div
           className="px-6 py-7 md:px-10 md:py-8 space-y-4 border-l-4"
-          style={{ borderLeftColor: category.color || "#C9973A" }}
+          style={{ borderLeftColor: category.color || "var(--color-turmeric)" }}
         >
           <div className="flex items-center gap-3 flex-wrap">
             <Badge variant="success" size="sm" shape="pill" dot>
               GOIR Verified Category
             </Badge>
-            <span className="font-mono text-xs text-amber-300/70">
+            <span className="font-mono text-xs text-turmeric/70">
               {postCount} {postCount === 1 ? "document" : "documents"}
             </span>
           </div>
 
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-white tracking-tight leading-snug">
+            <h1 className="text-2xl md:text-3xl font-bold text-paper tracking-tight leading-snug">
               {category.nameEn}
             </h1>
             {category.nameTe && (
               <p
-                className="mt-1.5 text-amber-300 font-medium"
+                className="mt-1.5 text-turmeric font-medium"
                 style={{ fontFamily: "var(--font-noto-telugu), sans-serif", fontSize: "1rem", lineHeight: "1.75" }}
               >
                 {category.nameTe}
@@ -109,7 +112,7 @@ export default async function CategoryDetailPage({
             )}
           </div>
 
-          <p className="text-xs font-mono text-white/50 max-w-lg">
+          <p className="text-xs font-mono text-paper/50 max-w-lg">
             All official {category.nameEn} government orders — sorted by publication date, newest first.
           </p>
         </div>

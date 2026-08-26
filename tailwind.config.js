@@ -1,18 +1,20 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./app/**/*.{js,ts,jsx,tsx}"],
+  darkMode: "class",
   theme: {
     extend: {
       colors: {
-        ink: "#1B2A4A",
-        inkSoft: "#33456B",
-        turmeric: "#E8A33D",
-        turmericDeep: "#C7811F",
-        tamarind: "#2F6B4F",
-        kumkum: "#B5432E",
-        paper: "#EDE8DC",
-        paperRaised: "#F7F4EC",
-        hair: "#D8D2C1",
+        ink: "var(--color-ink)",
+        inkSoft: "var(--color-inkSoft)",
+        turmeric: "var(--color-turmeric)",
+        turmericDeep: "var(--color-turmericDeep)",
+        tamarind: "var(--color-tamarind)",
+        tamarindDark: "var(--color-tamarindDark)",
+        kumkum: "var(--color-kumkum)",
+        paper: "var(--color-paper)",
+        paperRaised: "var(--color-paperRaised)",
+        hair: "var(--color-hair)",
       },
       fontFamily: {
         sans: ["var(--font-space-grotesk)", "system-ui", "sans-serif"],

@@ -76,32 +76,32 @@ export default function ToolsIndexPage() {
         {/* Main Feed Column (8 cols on Desktop) */}
         <div className="lg:col-span-8 space-y-6">
           {/* Option C Royal Indigo Hero Header */}
-          <div className="bg-[#1B2A4A] text-white border border-[#2B3C63] rounded-2xl p-6 md:p-8 space-y-3 shadow-md relative overflow-hidden">
+          <div className="bg-ink text-paper border border-inkSoft/40 rounded-2xl p-6 md:p-8 space-y-3 shadow-md relative overflow-hidden">
             <div className="flex items-center justify-between">
               <Badge variant="turmeric" size="sm" shape="pill" dot>
                 Heritage Craft Utility Suite
               </Badge>
-              <span className="font-mono text-[10px] text-amber-300">100% Client-Side Privacy</span>
+              <span className="font-mono text-[10px] text-turmeric">100% Client-Side Privacy</span>
             </div>
 
             <div>
-              <h1 className="text-display text-white tracking-tight">
+              <h1 className="text-display text-paper tracking-tight">
                 Teacher Utility Calculators
               </h1>
-              <p className="text-telugu-title text-amber-200 font-medium mt-1">
+              <p className="text-telugu-title text-turmeric font-medium mt-1">
                 ఉపాధ్యాయుల వేతన, పన్ను మరియు బిల్లుల లెక్కింపు సాధనాలు
               </p>
             </div>
 
-            <p className="text-xs text-slate-200 font-mono leading-relaxed">
+            <p className="text-xs text-paper/70 font-mono leading-relaxed">
               All calculations execute strictly inside your browser. No financial data or personal pay details leave your device.
             </p>
           </div>
 
           {/* Privacy shield info strip */}
-          <div className="bg-[#FAF7F2] border border-amber-200/60 rounded-xl px-4 py-3 flex items-center justify-between gap-3 flex-wrap">
+          <div className="bg-paperRaised border border-turmeric/30 rounded-xl px-4 py-3 flex items-center justify-between gap-3 flex-wrap">
             <div className="flex items-center gap-2 font-mono text-xs text-inkSoft">
-              <span className="text-amber-600 text-base">🔒</span>
+              <span className="text-turmericDeep text-base">🔒</span>
               <span>100% Client-Side · No Server Calls · No Financial Data Stored</span>
             </div>
             <span className="font-mono text-[10px] font-semibold text-turmericDeep bg-turmeric/10 border border-turmeric/30 px-2.5 py-1 rounded-full">
@@ -112,18 +112,18 @@ export default function ToolsIndexPage() {
           {/* Option C Card Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {TOOLS.map((tool) => (
-              <Card key={tool.href} hoverable className="p-5 space-y-3 bg-[#FAF7F2] border-hair flex flex-col justify-between">
+              <Card key={tool.href} hoverable className="p-5 space-y-3 bg-paperRaised border-hair flex flex-col justify-between">
                 <div className="space-y-3">
                   <div className="flex items-center justify-between flex-wrap gap-2 text-xs font-mono">
                     <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-lg bg-[#1B2A4A] text-amber-300 flex items-center justify-center text-lg shrink-0">
+                      <div className="w-8 h-8 rounded-lg bg-ink text-turmeric flex items-center justify-center text-lg shrink-0">
                         {tool.icon}
                       </div>
                       <Badge variant={tool.popular ? "tamarind" : "neutral"} size="sm" shape="pill">
                         {tool.badge}
                       </Badge>
                       {tool.popular && (
-                        <span className="font-mono text-[9px] font-bold bg-amber-400/20 text-amber-700 border border-amber-300/50 px-2 py-0.5 rounded-full">
+                        <span className="font-mono text-[9px] font-bold bg-turmeric/20 text-turmericDeep border border-turmeric/40 px-2 py-0.5 rounded-full">
                           ⭐ Most Used
                         </span>
                       )}
@@ -147,7 +147,7 @@ export default function ToolsIndexPage() {
                   {/* Step flow chips */}
                   <div className="flex items-center gap-1.5 flex-wrap pt-1">
                     {["Fill Details", "Auto-Calculate", "Export PDF"].map((step, i) => (
-                      <span key={i} className="inline-flex items-center gap-1 font-mono text-[9px] bg-[#1B2A4A]/5 text-[#1B2A4A] border border-[#1B2A4A]/15 px-2 py-0.5 rounded">
+                      <span key={i} className="inline-flex items-center gap-1 font-mono text-[9px] bg-ink/5 text-ink border border-ink/15 px-2 py-0.5 rounded">
                         <span className="font-bold">{i + 1}</span>
                         <span className="text-inkSoft/60">·</span>
                         {step}

@@ -24,10 +24,10 @@ export default function OrdersSidebar() {
   return (
     <aside className="space-y-6 font-sans">
       {/* 1. GOIR Verification & Status Breakdown (Option A Gazette Theme) */}
-      <div className="bg-[#FAF7F2] border border-hair rounded-2xl p-5 space-y-4 shadow-2xs">
+      <div className="bg-paperRaised border border-hair rounded-2xl p-5 space-y-4 shadow-2xs">
         <div className="flex items-center justify-between border-b border-hair/60 pb-3">
           <div>
-            <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-[#1B2A4A] flex items-center gap-1.5">
+            <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-ink flex items-center gap-1.5">
               <span>🏛️</span> GOIR Repository Stats
             </h3>
             <p className="text-[10px] font-mono text-inkSoft/70 mt-0.5">
@@ -52,7 +52,7 @@ export default function OrdersSidebar() {
                   <div className="text-[10px] font-mono text-inkSoft">{item.desc}</div>
                 </div>
               </div>
-              <span className="font-mono text-xs font-bold text-[#1B2A4A] bg-[#1B2A4A]/10 px-2 py-0.5 rounded">
+              <span className="font-mono text-xs font-bold text-ink bg-ink/10 px-2 py-0.5 rounded">
                 {item.count}
               </span>
             </div>
@@ -61,9 +61,9 @@ export default function OrdersSidebar() {
       </div>
 
       {/* 2. Trending G.O. Search Tags Widget */}
-      <div className="bg-[#FAF7F2] border border-hair rounded-2xl p-5 space-y-4 shadow-2xs">
+      <div className="bg-paperRaised border border-hair rounded-2xl p-5 space-y-4 shadow-2xs">
         <div className="flex items-center justify-between border-b border-hair/60 pb-3">
-          <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-[#1B2A4A] flex items-center gap-1.5">
+          <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-ink flex items-center gap-1.5">
             <span>🔥</span> Trending G.O. Topics
           </h3>
           <span className="text-[10px] font-mono text-inkSoft">Searched</span>
@@ -74,7 +74,7 @@ export default function OrdersSidebar() {
             <Link
               key={tag.label}
               href={tag.href}
-              className="px-3 py-1 rounded-full border border-hair bg-paper/50 hover:bg-[#1B2A4A] hover:text-white text-inkSoft font-semibold transition-all shadow-2xs"
+              className="px-3 py-1 rounded-full border border-hair bg-paper/50 hover:bg-ink hover:text-paper text-inkSoft font-semibold transition-all shadow-2xs"
             >
               {tag.label}
             </Link>
@@ -83,19 +83,19 @@ export default function OrdersSidebar() {
       </div>
 
       {/* 3. Official Gazette Repository Banner */}
-      <div className="bg-[#1B2A4A] text-white rounded-2xl p-5 space-y-3 shadow-md border border-[#2B3C63]">
+      <div className="bg-ink text-paper rounded-2xl p-5 space-y-3 shadow-md border border-inkSoft/40">
         <div className="flex items-center justify-between">
           <Badge variant="turmeric" size="sm" shape="pill" dot>
             goir.ap.gov.in
           </Badge>
-          <span className="text-[10px] font-mono text-amber-300">AP Gazette</span>
+          <span className="text-[10px] font-mono text-turmeric">AP Gazette</span>
         </div>
 
-        <div className="font-bold text-xs text-white">
+        <div className="font-bold text-xs text-paper">
           Andhra Pradesh Government Orders Repository
         </div>
 
-        <p className="text-xs text-slate-200 font-mono leading-relaxed">
+        <p className="text-xs text-paper/80 font-mono leading-relaxed">
           All G.O. Ms, G.O. Rt, Memos, and Circulars published on AP Teacher Desk are verified against official gazette records.
         </p>
 
@@ -104,7 +104,7 @@ export default function OrdersSidebar() {
             href="https://goir.ap.gov.in"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 font-mono text-xs text-amber-300 hover:underline font-bold"
+            className="inline-flex items-center gap-1.5 font-mono text-xs text-turmeric hover:underline font-bold"
           >
             <span>Open GOIR Official Portal</span>
             <span>↗</span>

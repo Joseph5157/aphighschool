@@ -17,36 +17,37 @@
   }
 }
 
+:root {
+  --color-ink: #1B2A4A;
+  --color-inkSoft: #33456B;
+  --color-turmeric: #E8A33D;
+  --color-turmericDeep: #C7811F;
+  --color-tamarind: #2F6B4F;
+  --color-tamarindDark: #245640;
+  --color-kumkum: #B5432E;
+  --color-paper: #EDE8DC;
+  --color-paperRaised: #F7F4EC;
+  --color-hair: #D8D2C1;
+}
+
+html.dark {
+  --color-ink: #F5F2E9;
+  --color-inkSoft: #A9B4C7;
+  --color-turmeric: #F0B45C;
+  --color-turmericDeep: #E8A33D;
+  --color-tamarind: #5FA37E;
+  --color-tamarindDark: #4A8A67;
+  --color-kumkum: #E0705A;
+  --color-paper: #131A28;
+  --color-paperRaised: #1C2536;
+  --color-hair: #33405A;
+}
+
 body {
-  background: #dad5c6;
-  color: #1b2a4a;
+  background: var(--color-paper);
+  color: var(--color-ink);
   font-family: var(--font-space-grotesk), system-ui, sans-serif;
   transition: background-color 0.2s ease, color 0.2s ease;
-}
-
-html.dark body {
-  background-color: #0F172A;
-  color: #F8FAFC;
-}
-
-html.dark .bg-paper {
-  background-color: #0F172A !important;
-}
-
-html.dark .bg-paperRaised {
-  background-color: #1E293B !important;
-}
-
-html.dark .border-hair {
-  border-color: #334155 !important;
-}
-
-html.dark .text-ink {
-  color: #F8FAFC !important;
-}
-
-html.dark .text-inkSoft {
-  color: #94A3B8 !important;
 }
 
 /* Typography Utility Hierarchy */

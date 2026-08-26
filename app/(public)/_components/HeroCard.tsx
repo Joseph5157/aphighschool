@@ -46,18 +46,17 @@ type HeroPostProps = {
 };
 
 export default function HeroCard({ post }: HeroPostProps) {
-  const gradientFrom = post.category?.color || "#C9973A";
-  const gradientTo = "#C9973A"; // turmeric gold
+  const gradientFrom = post.category?.color || "var(--color-turmeric)";
   const pill = resolveLifecyclePill(post, RECRUITMENT);
 
   return (
     <div
       className="p-[2px] rounded-2xl mb-8 shadow-md"
       style={{
-        background: `linear-gradient(135deg, ${gradientFrom}, ${gradientTo}55, transparent)`,
+        background: `linear-gradient(135deg, ${gradientFrom}, color-mix(in srgb, var(--color-turmeric) 33%, transparent), transparent)`,
       }}
     >
-      <article className="bg-ink text-white rounded-2xl p-6 md:p-8 relative overflow-hidden">
+      <article className="bg-ink text-paper rounded-2xl p-6 md:p-8 relative overflow-hidden">
         {/* Background Accent Pill & Badges */}
         <div className="flex items-center gap-3 mb-4 flex-wrap">
           <Badge variant={pill.variant} size="sm" shape="pill" dot>
@@ -74,7 +73,10 @@ export default function HeroCard({ post }: HeroPostProps) {
                       color: post.category.color,
                       borderColor: `${post.category.color}50`,
                     }
-                  : { backgroundColor: "rgba(255,255,255,0.1)", color: "#fff" }
+                  : {
+                      backgroundColor: "color-mix(in srgb, var(--color-paper) 20%, transparent)",
+                      color: "var(--color-paper)",
+                    }
               }
             >
               {post.category.nameEn}
@@ -82,7 +84,7 @@ export default function HeroCard({ post }: HeroPostProps) {
           )}
 
           {post.goReference && (
-            <span className="font-mono text-[10px] text-paper/80 bg-paper/10 px-2 py-0.5 rounded border border-white/10">
+            <span className="font-mono text-[10px] text-paper/80 bg-paper/10 px-2 py-0.5 rounded border border-hair/20">
               {post.goReference}
             </span>
           )}
@@ -96,7 +98,7 @@ export default function HeroCard({ post }: HeroPostProps) {
 
         {/* Main Titles */}
         <Link href={`/posts/${post.slug}`} className="group block">
-          <h2 className="text-display text-white group-hover:text-turmeric transition-colors">
+          <h2 className="text-display text-paper group-hover:text-turmeric transition-colors">
             {post.titleEn}
           </h2>
           <div className="text-telugu-title text-paperRaised/90 mt-1">
@@ -106,7 +108,7 @@ export default function HeroCard({ post }: HeroPostProps) {
 
         {/* Telugu Summary Bullets */}
         {post.summaryTe && post.summaryTe.length > 0 && (
-          <div className="mt-4 pt-4 border-t border-white/10 space-y-2 text-telugu-body text-paperRaised/80">
+          <div className="mt-4 pt-4 border-t border-hair/20 space-y-2 text-telugu-body text-paperRaised/80">
             {post.summaryTe.slice(0, 3).map((bullet, idx) => (
               <div key={idx} className="flex items-start gap-2">
                 <span className="text-turmeric font-bold mt-0.5">•</span>
@@ -117,7 +119,7 @@ export default function HeroCard({ post }: HeroPostProps) {
         )}
 
         {/* Date & Meta Footer */}
-        <div className="mt-6 pt-4 border-t border-white/10 flex items-center justify-between text-xs font-mono text-paper/60">
+        <div className="mt-6 pt-4 border-t border-hair/20 flex items-center justify-between text-xs font-mono text-paper/60">
           <span>
             {dateLabel(post)} · {formatDate(officialDate(post))}
           </span>

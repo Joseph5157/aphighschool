@@ -84,11 +84,11 @@ function OfficialRow({
 }) {
   return (
     <div
-      className={`grid grid-cols-[1fr_130px] border-b border-gray-300 text-xs leading-normal font-['Arial','Segoe_UI',Calibri,sans-serif] ${
-        highlight ? "bg-gray-100 font-bold text-black" : "text-black"
+      className={`grid grid-cols-[1fr_130px] border-b border-black/15 text-xs leading-normal font-['Arial','Segoe_UI',Calibri,sans-serif] ${
+        highlight ? "bg-black/10 font-bold text-black" : "text-black"
       }`}
     >
-      <div className={`${bold ? "font-bold text-black" : "text-gray-900"} ${sub ? "pl-5 text-gray-800" : "pl-2"} py-1 border-r border-black pr-2`}>
+      <div className={`${bold ? "font-bold text-black" : "text-black"} ${sub ? "pl-5 text-black/80" : "pl-2"} py-1 border-r border-black pr-2`}>
         {label}
       </div>
       <div className={`text-right py-1 pr-2 tabular-nums ${bold ? "font-bold text-black" : "text-black"}`}>
@@ -390,7 +390,7 @@ export default function TaxCalculatorUI() {
                 t.id === "printAll"
                   ? "bg-tamarind text-white hover:bg-tamarind/90"
                   : activeTab === t.id
-                  ? "bg-ink text-white"
+                  ? "bg-ink text-paper"
                   : "text-inkSoft hover:text-ink"
               }`}
             >
@@ -402,12 +402,12 @@ export default function TaxCalculatorUI() {
 
       {/* Sticky Print Action Banner */}
       {activeTab !== "calculator" && (
-        <div className="bg-ink text-white rounded-xl p-3 px-4 flex flex-wrap items-center justify-between gap-3 shadow-lg print:hidden border-l-4 border-turmeric sticky top-3 z-30">
+        <div className="bg-ink text-paper rounded-xl p-3 px-4 flex flex-wrap items-center justify-between gap-3 shadow-lg print:hidden border-l-4 border-turmeric sticky top-3 z-30">
           <div className="flex items-center gap-2">
             <span className="font-mono text-xs font-bold text-turmeric uppercase">
               📄 {activeTab === "printAll" ? "Full Print Suite (All 7 Documents)" : TABS.find((t) => t.id === activeTab)?.label}
             </span>
-            <span className="text-[11px] text-white/70 hidden sm:inline">
+            <span className="text-[11px] text-paper/70 hidden sm:inline">
               — Official Monochrome A4 Layout
             </span>
           </div>
@@ -432,7 +432,7 @@ export default function TaxCalculatorUI() {
             <button
               type="button"
               onClick={() => setActiveTab("calculator")}
-              className="bg-white/10 text-white hover:bg-white/20 font-mono font-semibold text-xs px-3 py-2 rounded-lg transition-all cursor-pointer"
+              className="bg-paper/10 text-paper hover:bg-paper/20 font-mono font-semibold text-xs px-3 py-2 rounded-lg transition-all cursor-pointer"
             >
               ← Edit Details
             </button>
@@ -723,15 +723,15 @@ export default function TaxCalculatorUI() {
 
             {/* Right Summary Panel */}
             <div className="space-y-4">
-              <div className="bg-ink text-white rounded-xl p-6 shadow-md border-l-4 border-turmeric space-y-3 sticky top-4">
-                <div className="font-mono text-[9px] text-[#9AA3B8] uppercase font-bold tracking-wider">
+              <div className="bg-ink text-paper rounded-xl p-6 shadow-md border-l-4 border-turmeric space-y-3 sticky top-4">
+                <div className="font-mono text-[9px] text-paper/60 uppercase font-bold tracking-wider">
                   Tax Payable ({regime === "old" ? "Old Regime" : "New Regime"})
                 </div>
                 <div className="text-3xl font-bold text-turmeric font-mono">₹{fmt(taxPayable)}</div>
-                <div className="text-xs text-white/70 font-mono">Gross Salary: ₹{fmt(totalGross)}</div>
-                <div className="text-xs text-white/70 font-mono">Taxable Income: ₹{fmt(taxableIncome)}</div>
-                <div className="text-xs text-white/70 font-mono">Net Tax to Pay Now: ₹{fmt(netPayable)}</div>
-                <div className="border-t border-white/20 pt-3 space-y-1 text-[var(--label-primary)] md:text-[var(--label-secondary)] font-mono">
+                <div className="text-xs text-paper/70 font-mono">Gross Salary: ₹{fmt(totalGross)}</div>
+                <div className="text-xs text-paper/70 font-mono">Taxable Income: ₹{fmt(taxableIncome)}</div>
+                <div className="text-xs text-paper/70 font-mono">Net Tax to Pay Now: ₹{fmt(netPayable)}</div>
+                <div className="border-t border-hair/20 pt-3 space-y-1 text-[var(--label-primary)] md:text-[var(--label-secondary)] font-mono">
                   <div className="flex justify-between">
                     <span>Gross Salary</span>
                     <span>₹{fmt(totalGross)}</span>
@@ -750,7 +750,7 @@ export default function TaxCalculatorUI() {
                       <span>₹{fmt(totalVIA)}</span>
                     </div>
                   )}
-                  <div className="flex justify-between font-bold border-t border-white/20 pt-1">
+                  <div className="flex justify-between font-bold border-t border-hair/20 pt-1">
                     <span>Taxable Income</span>
                     <span>₹{fmt(taxableIncome)}</span>
                   </div>
@@ -868,17 +868,17 @@ export default function TaxCalculatorUI() {
       {/* ── ANNEXURE - I ── */}
       {(activeTab === "annexure1" || activeTab === "printAll") && (
         <div className="bg-white border-2 border-black p-5 font-['Arial','Segoe_UI',Calibri,sans-serif] text-black space-y-3 print:border-none print:p-0 print-page-break text-[11px] leading-normal w-full antialiased">
-          <div className="border border-black bg-gray-200 py-2 text-center font-bold text-sm uppercase tracking-wide">
+          <div className="border border-black bg-black/15 py-2 text-center font-bold text-sm uppercase tracking-wide">
             ANNEXURE - 1 (Financial Year {fy})
           </div>
-          <div className="font-semibold text-xs text-gray-900 flex justify-between items-center px-1">
+          <div className="font-semibold text-xs text-black flex justify-between items-center px-1">
             <div>Month wise Income of: &nbsp;<span className="underline font-bold text-black text-sm">{empName}</span></div>
-            <div className="text-xs font-normal text-gray-700">DESIG: <b>{empDesig}</b> | PAN: <b>{empPan}</b></div>
+            <div className="text-xs font-normal text-black/70">DESIG: <b>{empDesig}</b> | PAN: <b>{empPan}</b></div>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-center border-collapse border border-black text-[var(--label-primary)] md:text-[var(--label-secondary)]" style={{ tableLayout: "fixed" }}>
               <thead>
-                <tr className="bg-gray-200 font-bold border-b-2 border-black text-[9.5px]">
+                <tr className="bg-black/15 font-bold border-b-2 border-black text-[9.5px]">
                   {[
                     "Month",
                     "B.Pay",
@@ -910,7 +910,7 @@ export default function TaxCalculatorUI() {
               </thead>
               <tbody className="tabular-nums font-medium">
                 {rows.map((r) => (
-                  <tr key={r.month} className="border-b border-gray-300 hover:bg-gray-50">
+                  <tr key={r.month} className="border-b border-black/15 hover:bg-black/5">
                     <td className="border-r border-black p-1 font-bold">{r.month}</td>
                     <td className="border-r border-black p-1">{r.basic}</td>
                     <td className="border-r border-black p-1"></td>
@@ -921,7 +921,7 @@ export default function TaxCalculatorUI() {
                     <td className="border-r border-black p-1"></td>
                     <td className="border-r border-black p-1"></td>
                     <td className="border-r border-black p-1"></td>
-                    <td className="border-r border-black p-1 font-bold bg-gray-50">{r.gross}</td>
+                    <td className="border-r border-black p-1 font-bold bg-black/5">{r.gross}</td>
                     <td className="border-r border-black p-1">{n(gpf) > 0 ? Math.round(n(gpf) / 12) : ""}</td>
                     <td className="border-r border-black p-1">{n(apgli) > 0 ? Math.round(n(apgli) / 12) : ""}</td>
                     <td className="border-r border-black p-1">{n(gis) > 0 ? Math.round(n(gis) / 12) : ""}</td>
@@ -931,7 +931,7 @@ export default function TaxCalculatorUI() {
                     <td className="border-r border-black p-1"></td>
                     <td className="border-r border-black p-1"></td>
                     <td className="border-r border-black p-1">{r.pt}</td>
-                    <td className="p-1 font-bold bg-gray-50">{r.net}</td>
+                    <td className="p-1 font-bold bg-black/5">{r.net}</td>
                   </tr>
                 ))}
                 {[
@@ -947,12 +947,12 @@ export default function TaxCalculatorUI() {
                   "Prepone Arrear",
                   "P.R.C Arrears",
                 ].map((a, i) => (
-                  <tr key={i} className="border-b border-gray-200">
+                  <tr key={i} className="border-b border-black/10">
                     <td className="border-r border-black p-1 font-bold text-left">{a}</td>
                     <td colSpan={20}></td>
                   </tr>
                 ))}
-                <tr className="font-bold bg-gray-200 border-t-2 border-black text-[var(--label-primary)] md:text-[var(--label-secondary)]">
+                <tr className="font-bold bg-black/15 border-t-2 border-black text-[var(--label-primary)] md:text-[var(--label-secondary)]">
                   <td className="border-r border-black p-1.5">Grand Totals</td>
                   <td className="border-r border-black p-1.5">{totBasic}</td>
                   <td className="border-r border-black p-1.5"></td>
@@ -989,7 +989,7 @@ export default function TaxCalculatorUI() {
       {(activeTab === "annexure2" || activeTab === "printAll") && (
         <div className="bg-white border-2 border-black p-5 font-['Arial','Segoe_UI',Calibri,sans-serif] text-black space-y-3 print:border-none print:p-0 print-page-break text-xs leading-normal w-full antialiased">
           {/* Header */}
-          <div className="border border-black bg-gray-200 p-2 flex justify-between items-center font-bold text-xs">
+          <div className="border border-black bg-black/15 p-2 flex justify-between items-center font-bold text-xs">
             <div className="text-center">
               Financial Year<br /><b>{fy}</b>
             </div>
@@ -1005,29 +1005,29 @@ export default function TaxCalculatorUI() {
             {empName}, {empDesig}, {empSchool}
           </div>
 
-          <div className="grid grid-cols-4 border border-black p-1.5 text-xs font-medium gap-2 bg-gray-50">
-            <div><span className="text-gray-600">PAN:</span> <b>{empPan}</b></div>
-            <div><span className="text-gray-600">Tre.ID:</span> <b>{empTid}</b></div>
-            <div><span className="text-gray-600">DDO TAN:</span> <b>{ddoTan}</b></div>
-            <div><span className="text-gray-600">DDO PAN:</span> <b>{ddoPan}</b></div>
+          <div className="grid grid-cols-4 border border-black p-1.5 text-xs font-medium gap-2 bg-black/5">
+            <div><span className="text-black/60">PAN:</span> <b>{empPan}</b></div>
+            <div><span className="text-black/60">Tre.ID:</span> <b>{empTid}</b></div>
+            <div><span className="text-black/60">DDO TAN:</span> <b>{ddoTan}</b></div>
+            <div><span className="text-black/60">DDO PAN:</span> <b>{ddoPan}</b></div>
           </div>
 
           {/* Section 1: Income from Gross Salary */}
           <div className="border border-black divide-y divide-gray-300">
-            <div className="grid grid-cols-[1fr_130px_130px] bg-gray-100 font-bold p-1.5 border-b border-black text-xs">
+            <div className="grid grid-cols-[1fr_130px_130px] bg-black/10 font-bold p-1.5 border-b border-black text-xs">
               <div>1 Income from Gross Salary</div>
               <div className="text-right tabular-nums pr-2">{fmt(totalGross)}</div>
               <div className="text-right tabular-nums pr-2">{fmt(totalGross)}</div>
             </div>
             <div className="grid grid-cols-[1fr_130px_130px] p-1 text-xs">
-              <div className="pl-4 text-gray-800">Standard deduction. Sec-16(ia)</div>
+              <div className="pl-4 text-black/80">Standard deduction. Sec-16(ia)</div>
               <div className="text-right tabular-nums pr-2">{fmt(stdDed)}</div>
               <div className="text-right tabular-nums pr-2 font-bold">
-                <span className="text-[var(--label-primary)] md:text-[var(--label-secondary)] font-normal mr-2 text-gray-600">Sec-16(ia)</span>
+                <span className="text-[var(--label-primary)] md:text-[var(--label-secondary)] font-normal mr-2 text-black/60">Sec-16(ia)</span>
                 {fmt(stdDed)}
               </div>
             </div>
-            <div className="grid grid-cols-[1fr_130px] bg-gray-50 font-bold p-1.5 border-t border-black text-xs">
+            <div className="grid grid-cols-[1fr_130px] bg-black/5 font-bold p-1.5 border-t border-black text-xs">
               <div className="text-right pr-3">Net Salary after Standard Deduction:</div>
               <div className="text-right tabular-nums pr-2">{fmt(totalGross - stdDed)}</div>
             </div>
@@ -1035,17 +1035,17 @@ export default function TaxCalculatorUI() {
 
           {/* Section 2: HRA Exemption */}
           <div className="border border-black divide-y divide-gray-300">
-            <div className="grid grid-cols-[1fr_130px] bg-gray-100 font-bold p-1.5 border-b border-black text-xs">
+            <div className="grid grid-cols-[1fr_130px] bg-black/10 font-bold p-1.5 border-b border-black text-xs">
               <div>2 HRA Exemption. Sec.10(13-A)</div>
-              <div className="text-right pr-2 font-bold text-gray-800">
+              <div className="text-right pr-2 font-bold text-black/80">
                 {n(rentPaid) > 0 ? "Rented House" : "Own House"}
               </div>
             </div>
             <div className="grid grid-cols-[1fr_130px] p-1 text-[11px]">
-              <div className="pl-4 text-gray-700">Total Basic Pay: ₹{fmt(totBasic)} | Total DA: ₹{fmt(totDa)} | Total HRA Received: ₹{fmt(totHra)}</div>
+              <div className="pl-4 text-black/70">Total Basic Pay: ₹{fmt(totBasic)} | Total DA: ₹{fmt(totDa)} | Total HRA Received: ₹{fmt(totHra)}</div>
               <div className="text-right tabular-nums pr-2">{hraEx > 0 ? fmt(hraEx) : "—"}</div>
             </div>
-            <div className="grid grid-cols-[1fr_130px] bg-gray-50 font-bold p-1.5 border-t border-black text-xs">
+            <div className="grid grid-cols-[1fr_130px] bg-black/5 font-bold p-1.5 border-t border-black text-xs">
               <div className="text-right pr-3">Balance after HRA Exemption:</div>
               <div className="text-right tabular-nums pr-2">{fmt(totalGross - stdDed - totalSec10)}</div>
             </div>
@@ -1053,20 +1053,20 @@ export default function TaxCalculatorUI() {
 
           {/* Section 3: Deductions from Salary */}
           <div className="border border-black divide-y divide-gray-300">
-            <div className="grid grid-cols-[1fr_130px_130px] bg-gray-100 font-bold p-1.5 border-b border-black text-xs">
+            <div className="grid grid-cols-[1fr_130px_130px] bg-black/10 font-bold p-1.5 border-b border-black text-xs">
               <div>3 Deductions from Salary Income</div>
               <div></div>
               <div className="text-right tabular-nums pr-2">{fmt(ptNum)}</div>
             </div>
             <div className="grid grid-cols-[1fr_130px_130px] p-1 text-xs">
-              <div className="pl-4 text-gray-800">Profession Tax Sec.16(iii)</div>
+              <div className="pl-4 text-black/80">Profession Tax Sec.16(iii)</div>
               <div className="text-right tabular-nums pr-2">{fmt(ptNum)}</div>
               <div className="text-right tabular-nums pr-2 font-bold">
-                <span className="text-[var(--label-primary)] md:text-[var(--label-secondary)] font-normal mr-2 text-gray-600">Sec.16(iii)</span>
+                <span className="text-[var(--label-primary)] md:text-[var(--label-secondary)] font-normal mr-2 text-black/60">Sec.16(iii)</span>
                 {fmt(ptNum)}
               </div>
             </div>
-            <div className="grid grid-cols-[1fr_130px] bg-gray-50 font-bold p-1.5 border-t border-black text-xs">
+            <div className="grid grid-cols-[1fr_130px] bg-black/5 font-bold p-1.5 border-t border-black text-xs">
               <div className="text-right pr-3">Income chargeable under Salaries:</div>
               <div className="text-right tabular-nums pr-2">{fmt(incChargeable)}</div>
             </div>
@@ -1075,16 +1075,16 @@ export default function TaxCalculatorUI() {
           {/* Section 4 & 5: Other Sources & House Property */}
           <div className="grid grid-cols-2 border border-black divide-x divide-black text-xs">
             <div className="divide-y divide-gray-300">
-              <div className="bg-gray-100 font-bold p-1.5 border-b border-black">4 Income from Other Sources</div>
+              <div className="bg-black/10 font-bold p-1.5 border-b border-black">4 Income from Other Sources</div>
               <div className="p-1.5 flex justify-between text-xs">
-                <span className="pl-2 text-gray-800">Bank Interest & Other:</span>
+                <span className="pl-2 text-black/80">Bank Interest & Other:</span>
                 <span className="tabular-nums font-semibold">{otherSrcNum > 0 ? fmt(otherSrcNum) : "—"}</span>
               </div>
             </div>
             <div className="divide-y divide-gray-300">
-              <div className="bg-gray-100 font-bold p-1.5 border-b border-black">5 Income / Loss House Property Sec.24</div>
+              <div className="bg-black/10 font-bold p-1.5 border-b border-black">5 Income / Loss House Property Sec.24</div>
               <div className="p-1.5 flex justify-between text-xs">
-                <span className="pl-2 text-gray-800">Interest on Housing Loan:</span>
+                <span className="pl-2 text-black/80">Interest on Housing Loan:</span>
                 <span className="tabular-nums font-semibold">{hpLossNum > 0 ? `-${fmt(hpLossNum)}` : "—"}</span>
               </div>
             </div>
@@ -1092,62 +1092,62 @@ export default function TaxCalculatorUI() {
 
           {/* Section 6: Deductions U/S Chapter VI-A */}
           <div className="border border-black">
-            <div className="bg-gray-100 font-bold p-1.5 border-b border-black flex justify-between text-xs">
+            <div className="bg-black/10 font-bold p-1.5 border-b border-black flex justify-between text-xs">
               <div>6 Deductions U/S Chapter VI-A (80C Limit ₹1,50,000, 80D, 80G, etc.)</div>
               <div className="tabular-nums font-bold">{fmt(totalVIA)}</div>
             </div>
             <div className="grid grid-cols-2 p-1.5 text-[11px] gap-x-4 gap-y-1">
               <div className="flex justify-between">
-                <span className="text-gray-800">80C (GPF/ZPPF, APGLI, GIS, LIC, PLI, HLP, Tuition):</span>
+                <span className="text-black/80">80C (GPF/ZPPF, APGLI, GIS, LIC, PLI, HLP, Tuition):</span>
                 <span className="tabular-nums font-bold">{fmt(cap80C)}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-800">80CCD(1B) (Additional NPS):</span>
+                <span className="text-black/80">80CCD(1B) (Additional NPS):</span>
                 <span className="tabular-nums font-bold">{fmt(cap80CCD1B)}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-800">80D (Health Insurance / EHS):</span>
+                <span className="text-black/80">80D (Health Insurance / EHS):</span>
                 <span className="tabular-nums font-bold">{fmt(cap80D)}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-800">80G / 80U / 80E / 80EEB / 80TTA:</span>
+                <span className="text-black/80">80G / 80U / 80E / 80EEB / 80TTA:</span>
                 <span className="tabular-nums font-bold">{fmt(n(s80g) + n(s80u) + n(s80e) + cap80EEB + cap80TTA)}</span>
               </div>
             </div>
           </div>
 
           {/* Section 7: Net Taxable Income */}
-          <div className="border-2 border-black bg-gray-100 p-2 flex justify-between items-center font-bold text-xs">
+          <div className="border-2 border-black bg-black/10 p-2 flex justify-between items-center font-bold text-xs">
             <div>7 Net Taxable Income (Total Income) (1 to 5 − 6) [Rounded to nearest ₹10]</div>
             <div className="tabular-nums text-sm">₹{fmt(taxableIncome)}</div>
           </div>
 
           {/* Section 8: Total Tax on (7) Income - Official Slabs Grid */}
           <div className="border border-black">
-            <div className="bg-gray-200 font-bold p-1.5 border-b border-black flex justify-between text-xs">
+            <div className="bg-black/15 font-bold p-1.5 border-b border-black flex justify-between text-xs">
               <div>8 TOTAL Tax on (7) Income ({regime === "old" ? "Old Tax Regime, below 60 Years" : "New Tax Regime u/s 115BAC"})</div>
               <div className="tabular-nums">Net Tax: ₹{fmt(taxPayable)}</div>
             </div>
             <table className="w-full text-center border-collapse text-[11px]">
               <thead>
-                <tr className="bg-gray-100 border-b border-gray-400 font-semibold">
-                  <th className="p-1 border-r border-gray-400">Income Slab</th>
-                  <th className="p-1 border-r border-gray-400">Rate</th>
-                  <th className="p-1 border-r border-gray-400">Taxable in Slab (₹)</th>
+                <tr className="bg-black/10 border-b border-black/25 font-semibold">
+                  <th className="p-1 border-r border-black/25">Income Slab</th>
+                  <th className="p-1 border-r border-black/25">Rate</th>
+                  <th className="p-1 border-r border-black/25">Taxable in Slab (₹)</th>
                   <th className="p-1 text-right pr-3">Tax Amount (₹)</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-300 tabular-nums">
                 <tr>
-                  <td className="p-1 border-r border-gray-400 font-sans">Upto ₹2,50,000</td>
-                  <td className="p-1 border-r border-gray-400 font-sans">Nil</td>
-                  <td className="p-1 border-r border-gray-400">{fmt(Math.min(taxableIncome, 250000))}</td>
+                  <td className="p-1 border-r border-black/25 font-sans">Upto ₹2,50,000</td>
+                  <td className="p-1 border-r border-black/25 font-sans">Nil</td>
+                  <td className="p-1 border-r border-black/25">{fmt(Math.min(taxableIncome, 250000))}</td>
                   <td className="p-1 text-right pr-3">Nil</td>
                 </tr>
                 <tr>
-                  <td className="p-1 border-r border-gray-400 font-sans">₹2,50,001 to ₹5,00,000</td>
-                  <td className="p-1 border-r border-gray-400 font-sans">5%</td>
-                  <td className="p-1 border-r border-gray-400">
+                  <td className="p-1 border-r border-black/25 font-sans">₹2,50,001 to ₹5,00,000</td>
+                  <td className="p-1 border-r border-black/25 font-sans">5%</td>
+                  <td className="p-1 border-r border-black/25">
                     {fmt(Math.max(0, Math.min(taxableIncome - 250000, 250000)))}
                   </td>
                   <td className="p-1 text-right pr-3">
@@ -1155,9 +1155,9 @@ export default function TaxCalculatorUI() {
                   </td>
                 </tr>
                 <tr>
-                  <td className="p-1 border-r border-gray-400 font-sans">₹5,00,001 to ₹10,00,000</td>
-                  <td className="p-1 border-r border-gray-400 font-sans">20%</td>
-                  <td className="p-1 border-r border-gray-400">
+                  <td className="p-1 border-r border-black/25 font-sans">₹5,00,001 to ₹10,00,000</td>
+                  <td className="p-1 border-r border-black/25 font-sans">20%</td>
+                  <td className="p-1 border-r border-black/25">
                     {fmt(Math.max(0, Math.min(taxableIncome - 500000, 500000)))}
                   </td>
                   <td className="p-1 text-right pr-3">
@@ -1165,36 +1165,36 @@ export default function TaxCalculatorUI() {
                   </td>
                 </tr>
                 <tr>
-                  <td className="p-1 border-r border-gray-400 font-sans">Above ₹10,00,000</td>
-                  <td className="p-1 border-r border-gray-400 font-sans">30%</td>
-                  <td className="p-1 border-r border-gray-400">
+                  <td className="p-1 border-r border-black/25 font-sans">Above ₹10,00,000</td>
+                  <td className="p-1 border-r border-black/25 font-sans">30%</td>
+                  <td className="p-1 border-r border-black/25">
                     {fmt(Math.max(0, taxableIncome - 1000000))}
                   </td>
                   <td className="p-1 text-right pr-3">
                     {fmt(Math.max(0, taxableIncome - 1000000) * 0.3)}
                   </td>
                 </tr>
-                <tr className="bg-gray-100 font-bold border-t border-black text-xs">
-                  <td colSpan={3} className="p-1.5 border-r border-gray-400 text-right font-sans">Tax on Total Income:</td>
+                <tr className="bg-black/10 font-bold border-t border-black text-xs">
+                  <td colSpan={3} className="p-1.5 border-r border-black/25 text-right font-sans">Tax on Total Income:</td>
                   <td className="p-1.5 text-right pr-3 tabular-nums">{fmt(slabTax)}</td>
                 </tr>
                 {rebate87A > 0 && (
                   <tr>
-                    <td colSpan={3} className="p-1 border-r border-gray-400 text-right font-sans">Less: Tax Rebate u/s 87A:</td>
+                    <td colSpan={3} className="p-1 border-r border-black/25 text-right font-sans">Less: Tax Rebate u/s 87A:</td>
                     <td className="p-1 text-right pr-3 tabular-nums">-{fmt(rebate87A)}</td>
                   </tr>
                 )}
                 <tr>
-                  <td colSpan={3} className="p-1 border-r border-gray-400 text-right font-sans">Add: Health (1%) & Education Cess (3%) @ 4%:</td>
+                  <td colSpan={3} className="p-1 border-r border-black/25 text-right font-sans">Add: Health (1%) & Education Cess (3%) @ 4%:</td>
                   <td className="p-1 text-right pr-3 tabular-nums">+{fmt(cess)}</td>
                 </tr>
                 {reliefNum > 0 && (
                   <tr>
-                    <td colSpan={3} className="p-1 border-r border-gray-400 text-right font-sans">Less: Tax Relief u/s 89 (Form 10E):</td>
+                    <td colSpan={3} className="p-1 border-r border-black/25 text-right font-sans">Less: Tax Relief u/s 89 (Form 10E):</td>
                     <td className="p-1 text-right pr-3 tabular-nums">-{fmt(reliefNum)}</td>
                   </tr>
                 )}
-                <tr className="bg-gray-200 font-bold border-t border-black text-xs">
+                <tr className="bg-black/15 font-bold border-t border-black text-xs">
                   <td colSpan={3} className="p-1.5 border-r border-black text-right font-sans">Total Tax Payable:</td>
                   <td className="p-1.5 text-right pr-3 tabular-nums">₹{fmt(taxPayable - reliefNum)}</td>
                 </tr>
@@ -1212,9 +1212,9 @@ export default function TaxCalculatorUI() {
                 <div>Q3: ₹{fmt(advQ3)}</div>
                 <div>Q4: ₹{fmt(advQ4)}</div>
               </div>
-              <div className="text-right pr-3 font-bold text-gray-800 text-[11px]">Total TDS Paid: ₹{fmt(totalTDS)}</div>
+              <div className="text-right pr-3 font-bold text-black/80 text-[11px]">Total TDS Paid: ₹{fmt(totalTDS)}</div>
             </div>
-            <div className="p-2 bg-gray-100 flex flex-col justify-center items-center text-center">
+            <div className="p-2 bg-black/10 flex flex-col justify-center items-center text-center">
               <div className="text-xs font-bold uppercase">10 Total Tax to be Paid now (8 − 9)</div>
               <div className="tabular-nums font-bold text-lg text-black pt-0.5">₹{fmt(netPayable)}</div>
             </div>
@@ -1232,10 +1232,10 @@ export default function TaxCalculatorUI() {
       {(activeTab === "form16a" || activeTab === "printAll") && (
         <div className="bg-white border-2 border-black p-6 font-['Arial','Segoe_UI',Calibri,sans-serif] text-black space-y-4 print:border-none print:p-0 print-page-break text-xs leading-normal w-full antialiased">
           <div className="text-center border-b-2 border-black pb-2 space-y-0.5">
-            <div className="text-xs font-semibold text-gray-700">FORM NO. 16</div>
-            <div className="text-xs font-bold text-gray-800">[See rule 31(1)(a)]</div>
+            <div className="text-xs font-semibold text-black/70">FORM NO. 16</div>
+            <div className="text-xs font-bold text-black/80">[See rule 31(1)(a)]</div>
             <div className="font-bold text-sm uppercase tracking-wide">CERTIFICATE UNDER SECTION 203 OF THE INCOME-TAX ACT, 1961</div>
-            <div className="text-xs text-gray-700">for Tax Deducted at Source on Salary</div>
+            <div className="text-xs text-black/70">for Tax Deducted at Source on Salary</div>
           </div>
           <div className="flex justify-between text-xs px-1">
             <div>
@@ -1245,19 +1245,19 @@ export default function TaxCalculatorUI() {
               <b>Last Updated: </b><span>{certDate || "___/___/________"}</span>
             </div>
           </div>
-          <div className="bg-gray-200 border border-black p-1.5 font-bold text-center uppercase text-xs tracking-wider">PART A</div>
+          <div className="bg-black/15 border border-black p-1.5 font-bold text-center uppercase text-xs tracking-wider">PART A</div>
           <div className="grid grid-cols-2 border border-black divide-x divide-black text-xs">
             <div className="p-3 space-y-1">
               <div className="font-bold uppercase border-b border-black pb-1 text-xs">Name and Address of Employer / Deductor</div>
               <div className="font-bold text-black">{ddoName || "[DDO Name]"}</div>
-              <div className="text-gray-800">{empSchool}, {empPlace}, {empMandal}, {empDist}</div>
+              <div className="text-black/80">{empSchool}, {empPlace}, {empMandal}, {empDist}</div>
               <div>
                 <b>TAN: </b><span className="font-bold">{ddoTan || "________________"}</span>
               </div>
               <div>
                 <b>PAN: </b><span className="font-bold">{ddoPan || "________________"}</span>
               </div>
-              <div className="text-gray-700 text-[11px]">
+              <div className="text-black/70 text-[11px]">
                 <b>CIT (TDS): </b>O/o CIT (TDS), {citCity} – {citPin}
               </div>
             </div>
@@ -1265,7 +1265,7 @@ export default function TaxCalculatorUI() {
               <div className="font-bold uppercase border-b border-black pb-1 text-xs">Name and Designation of Employee</div>
               <div className="font-bold text-black">{empName}</div>
               <div className="font-medium">{empDesig}</div>
-              <div className="text-gray-800">{empSchool}, {empPlace}, {empDist}</div>
+              <div className="text-black/80">{empSchool}, {empPlace}, {empDist}</div>
               <div>
                 <b>PAN: </b><span className="font-bold">{empPan || "________________"}</span>
               </div>
@@ -1283,12 +1283,12 @@ export default function TaxCalculatorUI() {
 
           {/* Quarterly TDS Summary Table */}
           <div className="border border-black text-xs">
-            <div className="bg-gray-200 border-b border-black p-1.5 font-bold uppercase text-center text-xs">
+            <div className="bg-black/15 border-b border-black p-1.5 font-bold uppercase text-center text-xs">
               Summary of Tax Deducted and Deposited in Central Government Account through Book Adjustment
             </div>
             <table className="w-full border-collapse text-center">
               <thead>
-                <tr className="bg-gray-100 border-b border-black font-bold text-xs">
+                <tr className="bg-black/10 border-b border-black font-bold text-xs">
                   <th className="border-r border-black p-1.5">Quarter</th>
                   <th className="border-r border-black p-1.5">Receipt No. of Quarterly Statement u/s 200(3)</th>
                   <th className="border-r border-black p-1.5 text-right pr-2">Amount Paid / Credited (₹)</th>
@@ -1303,7 +1303,7 @@ export default function TaxCalculatorUI() {
                   { q: "Q3", rec: q3Rec, paid: q3Paid, ded: q3Ded, dep: q3Dep },
                   { q: "Q4", rec: q4Rec, paid: q4Paid, ded: q4Ded, dep: q4Dep },
                 ].map(({ q, rec, paid, ded, dep }) => (
-                  <tr key={q} className="border-b border-gray-300">
+                  <tr key={q} className="border-b border-black/15">
                     <td className="border-r border-black p-1 font-bold">{q}</td>
                     <td className="border-r border-black p-1">{rec || "—"}</td>
                     <td className="border-r border-black p-1 text-right pr-2">{fmt(n(paid))}</td>
@@ -1311,7 +1311,7 @@ export default function TaxCalculatorUI() {
                     <td className="p-1 text-right pr-2">{fmt(n(dep))}</td>
                   </tr>
                 ))}
-                <tr className="font-bold bg-gray-100 border-t border-black">
+                <tr className="font-bold bg-black/10 border-t border-black">
                   <td colSpan={2} className="border-r border-black p-1.5 text-right">
                     TOTAL
                   </td>
@@ -1325,12 +1325,12 @@ export default function TaxCalculatorUI() {
 
           {/* Section I — BIN for Govt Deductors */}
           <div className="border border-black text-xs">
-            <div className="bg-gray-200 border-b border-black p-1.5 font-bold uppercase text-xs">
+            <div className="bg-black/15 border-b border-black p-1.5 font-bold uppercase text-xs">
               Section I — Book Adjustment Details (For Government Deductors — AP Teachers)
             </div>
             <table className="w-full border-collapse text-center">
               <thead>
-                <tr className="bg-gray-100 border-b border-black font-bold text-xs">
+                <tr className="bg-black/10 border-b border-black font-bold text-xs">
                   <th className="border-r border-black p-1.5">Sl</th>
                   <th className="border-r border-black p-1.5 text-right pr-2">Tax Deposited (₹)</th>
                   <th className="border-r border-black p-1.5">Receipt No. of Form 24G</th>
@@ -1379,9 +1379,9 @@ export default function TaxCalculatorUI() {
         <div className="bg-white border-2 border-black p-6 font-['Arial','Segoe_UI',Calibri,sans-serif] text-black space-y-4 print:border-none print:p-0 print-page-break text-xs leading-normal w-full antialiased">
           <div className="text-center border-b-2 border-black pb-2 space-y-0.5">
             <div className="font-bold text-sm uppercase tracking-wide">FORM NO. 16 — PART B (ANNEXURE)</div>
-            <div className="text-xs text-gray-700">Details of Salary Paid and any other income and tax deducted</div>
+            <div className="text-xs text-black/70">Details of Salary Paid and any other income and tax deducted</div>
           </div>
-          <div className="grid grid-cols-2 border border-black p-2.5 gap-2 text-xs bg-gray-50">
+          <div className="grid grid-cols-2 border border-black p-2.5 gap-2 text-xs bg-black/5">
             <div>
               <b>Name of Employee: </b><span className="font-bold">{empName}</span>
             </div>
@@ -1395,18 +1395,18 @@ export default function TaxCalculatorUI() {
               <b>Financial Year: </b><b>{fy}</b>
             </div>
           </div>
-          <div className="border border-black p-2 text-xs bg-gray-50">
+          <div className="border border-black p-2 text-xs bg-black/5">
             <b>Whether opting out of taxation u/s 115BAC(1A) (New Tax Regime)? </b>
             <u className="font-bold">{regime === "old" ? "YES — Opting out (Old Regime)" : "NO — New Regime"}</u>
           </div>
           <div className="border border-black divide-y divide-black">
-            <div className="bg-gray-100 p-1.5 font-bold text-xs">1. Gross Salary</div>
+            <div className="bg-black/10 p-1.5 font-bold text-xs">1. Gross Salary</div>
             <OfficialRow label="  (a) Salary as per sec 17(1)" value={sal17_1} sub />
             <OfficialRow label="  (b) Value of perquisites u/s 17(2) [Form 12BA]" value={p17_2} sub />
             <OfficialRow label="  (c) Profits in lieu of salary u/s 17(3) [Form 12BA]" value={p17_3} sub />
             <OfficialRow label="  (d) Total [1(a)+1(b)+1(c)]" value={totalGross} bold />
             <OfficialRow label="  (e) Salary from other employer(s)" value={otherEmpNum} sub />
-            <div className="bg-gray-100 p-1.5 font-bold text-xs border-t border-black">2. Less: Allowances exempt u/s 10</div>
+            <div className="bg-black/10 p-1.5 font-bold text-xs border-t border-black">2. Less: Allowances exempt u/s 10</div>
             <OfficialRow label="  LTC/LTA u/s 10(5)" value={n(ltcEx)} sub />
             <OfficialRow label="  Gratuity u/s 10(10)" value={n(gratuityEx)} sub />
             <OfficialRow label="  Commuted Pension u/s 10(10A)" value={n(commutedEx)} sub />
@@ -1414,19 +1414,19 @@ export default function TaxCalculatorUI() {
             <OfficialRow label="  HRA u/s 10(13A)" value={hraEx} sub />
             <OfficialRow label="  (i) Total exempt allowances [2]" value={totalSec10} bold />
             <OfficialRow label="3. Total Salary from current employer [1(d)-2(i)]" value={totalGross - totalSec10} bold highlight />
-            <div className="bg-gray-100 p-1.5 font-bold text-xs border-t border-black">4. Less: Deductions under section 16</div>
+            <div className="bg-black/10 p-1.5 font-bold text-xs border-t border-black">4. Less: Deductions under section 16</div>
             <OfficialRow label="  (a) Standard deduction u/s 16(ia)" value={stdDed} sub />
             <OfficialRow label="  (b) Entertainment allowance u/s 16(ii)" value={0} sub />
             <OfficialRow label="  (c) Tax on employment u/s 16(iii)" value={ptNum} sub />
             <OfficialRow label="5. Total deductions u/s 16" value={sec16Total} bold />
             <OfficialRow label="6. Income chargeable under 'Salaries' [3+1(e)-5]" value={incChargeable} bold highlight />
-            <div className="bg-gray-100 p-1.5 font-bold text-xs border-t border-black">7. Other income reported u/s 192(2B)</div>
+            <div className="bg-black/10 p-1.5 font-bold text-xs border-t border-black">7. Other income reported u/s 192(2B)</div>
             <OfficialRow label="  (a) Income / (loss) from house property" value={-hpLossNum} sub />
             <OfficialRow label="  (b) Income from other sources" value={otherSrcNum} sub />
             <OfficialRow label="8. Total other income [7(a)+7(b)]" value={totalOtherIncome} bold />
             <OfficialRow label="9. Gross total income [6+8]" value={grossTotalIncome} bold highlight />
-            <div className="bg-gray-100 p-1.5 font-bold text-xs border-t border-black">10. Deductions under Chapter VI-A</div>
-            <div className="grid grid-cols-[1fr_120px_120px] border-b border-gray-300 font-bold text-xs bg-gray-50">
+            <div className="bg-black/10 p-1.5 font-bold text-xs border-t border-black">10. Deductions under Chapter VI-A</div>
+            <div className="grid grid-cols-[1fr_120px_120px] border-b border-black/15 font-bold text-xs bg-black/5">
               <div className="py-1 border-r border-black pl-2">Section</div>
               <div className="py-1 border-r border-black text-right pr-2">Gross Amt (₹)</div>
               <div className="py-1 text-right pr-2">Deductible (₹)</div>
@@ -1444,8 +1444,8 @@ export default function TaxCalculatorUI() {
               { s: "(j) Section 80TTA", g: cap80TTA, d: cap80TTA },
               { s: "(k) Section 80U", g: n(s80u), d: n(s80u) },
             ].map(({ s, g, d }) => (
-              <div key={s} className="grid grid-cols-[1fr_120px_120px] border-b border-gray-200 text-xs">
-                <div className="py-1 border-r border-black pl-5 text-gray-800">{s}</div>
+              <div key={s} className="grid grid-cols-[1fr_120px_120px] border-b border-black/10 text-xs">
+                <div className="py-1 border-r border-black pl-5 text-black/80">{s}</div>
                 <div className="py-1 border-r border-black text-right pr-2 tabular-nums">{fmt(g)}</div>
                 <div className="py-1 text-right pr-2 tabular-nums">{fmt(d)}</div>
               </div>
@@ -1486,14 +1486,14 @@ export default function TaxCalculatorUI() {
       {(activeTab === "form12bb" || activeTab === "printAll") && (
         <div className="bg-white border-2 border-black p-6 font-['Arial','Segoe_UI',Calibri,sans-serif] text-black space-y-4 print:border-none print:p-0 print-page-break text-xs leading-normal w-full antialiased">
           <div className="text-center border-b-2 border-black pb-2 space-y-0.5">
-            <div className="text-xs font-semibold text-gray-700">INCOME TAX RULES, 1962</div>
+            <div className="text-xs font-semibold text-black/70">INCOME TAX RULES, 1962</div>
             <div className="font-bold text-sm uppercase tracking-wide">FORM NO. 12BB</div>
-            <div className="text-xs font-bold text-gray-800">[See rule 26C]</div>
-            <div className="text-xs text-gray-700">
+            <div className="text-xs font-bold text-black/80">[See rule 26C]</div>
+            <div className="text-xs text-black/70">
               Statement showing particulars of claims by an employee for deduction of tax under section 192
             </div>
           </div>
-          <div className="border border-black p-3 space-y-1 text-xs bg-gray-50">
+          <div className="border border-black p-3 space-y-1 text-xs bg-black/5">
             <div>
               1. Name and address of employee: <b>{empName}</b>, {empDesig}, {empSchool}, {empPlace}, {empMandal}, {empDist}
             </div>
@@ -1506,7 +1506,7 @@ export default function TaxCalculatorUI() {
           </div>
           <table className="w-full border border-black text-left border-collapse text-xs">
             <thead>
-              <tr className="bg-gray-200 font-bold border-b-2 border-black">
+              <tr className="bg-black/15 font-bold border-b-2 border-black">
                 <th className="p-1.5 border-r border-black w-8">Sl No.</th>
                 <th className="p-1.5 border-r border-black">Nature of claim</th>
                 <th className="p-1.5 border-r border-black text-right w-32">Amount (Rs.)</th>
@@ -1518,7 +1518,7 @@ export default function TaxCalculatorUI() {
                 <td className="p-1.5 border-r border-black align-top font-bold">1</td>
                 <td className="p-1.5 border-r border-black align-top">
                   <div className="font-bold">House Rent Allowance u/s 10(13A)</div>
-                  <div className="text-xs mt-1 space-y-0.5 text-gray-800">
+                  <div className="text-xs mt-1 space-y-0.5 text-black/80">
                     <div>
                       Rent paid: <b>₹{fmt(n(rentPaid))}</b>
                     </div>
@@ -1534,7 +1534,7 @@ export default function TaxCalculatorUI() {
                   </div>
                 </td>
                 <td className="p-1.5 border-r border-black text-right align-top font-bold tabular-nums">{fmt(hraEx)}</td>
-                <td className="p-1.5 align-top text-xs text-gray-700">Rent receipts with Revenue Stamp duly signed</td>
+                <td className="p-1.5 align-top text-xs text-black/70">Rent receipts with Revenue Stamp duly signed</td>
               </tr>
               <tr>
                 <td className="p-1.5 border-r border-black align-top font-bold">2</td>
@@ -1542,13 +1542,13 @@ export default function TaxCalculatorUI() {
                   <div className="font-bold">Leave Travel Concessions / Assistance u/s 10(5) [LTC/LTA]</div>
                 </td>
                 <td className="p-1.5 border-r border-black text-right align-top font-bold tabular-nums">{fmt(n(ltcAmt))}</td>
-                <td className="p-1.5 align-top text-xs text-gray-700">{ltcEv}</td>
+                <td className="p-1.5 align-top text-xs text-black/70">{ltcEv}</td>
               </tr>
               <tr>
                 <td className="p-1.5 border-r border-black align-top font-bold">3</td>
                 <td className="p-1.5 border-r border-black align-top">
                   <div className="font-bold">Deduction of interest on borrowing u/s 24(b) [Home Loan]</div>
-                  <div className="text-xs mt-1 space-y-0.5 text-gray-800">
+                  <div className="text-xs mt-1 space-y-0.5 text-black/80">
                     <div>
                       Interest paid: <b>₹{fmt(cap24B)}</b>
                     </div>
@@ -1567,17 +1567,17 @@ export default function TaxCalculatorUI() {
                   </div>
                 </td>
                 <td className="p-1.5 border-r border-black text-right align-top font-bold tabular-nums">{fmt(cap24B)}</td>
-                <td className="p-1.5 align-top text-xs text-gray-700">Certificate from lender showing interest paid</td>
+                <td className="p-1.5 align-top text-xs text-black/70">Certificate from lender showing interest paid</td>
               </tr>
               <tr>
                 <td className="p-1.5 border-r border-black align-top font-bold">4</td>
                 <td className="p-1.5 border-r border-black align-top" colSpan={3}>
                   <div className="font-bold mb-1">Deductions under Chapter VI-A</div>
-                  <table className="w-full border-collapse border border-gray-400 text-xs">
+                  <table className="w-full border-collapse border border-black/25 text-xs">
                     <thead>
-                      <tr className="bg-gray-100 font-bold border-b border-gray-400">
-                        <th className="p-1.5 border-r border-gray-400 text-left">Section</th>
-                        <th className="p-1.5 border-r border-gray-400 text-right">Amount (₹)</th>
+                      <tr className="bg-black/10 font-bold border-b border-black/25">
+                        <th className="p-1.5 border-r border-black/25 text-left">Section</th>
+                        <th className="p-1.5 border-r border-black/25 text-right">Amount (₹)</th>
                         <th className="p-1.5 text-left">Evidence</th>
                       </tr>
                     </thead>
@@ -1602,15 +1602,15 @@ export default function TaxCalculatorUI() {
                       ]
                         .filter((r) => r.a > 0)
                         .map(({ s, a, e }) => (
-                          <tr key={s} className="border-b border-gray-300">
-                            <td className="p-1 border-r border-gray-400">{s}</td>
-                            <td className="p-1 border-r border-gray-400 text-right font-bold tabular-nums">{fmt(a)}</td>
-                            <td className="p-1 text-gray-700">{e}</td>
+                          <tr key={s} className="border-b border-black/15">
+                            <td className="p-1 border-r border-black/25">{s}</td>
+                            <td className="p-1 border-r border-black/25 text-right font-bold tabular-nums">{fmt(a)}</td>
+                            <td className="p-1 text-black/70">{e}</td>
                           </tr>
                         ))}
-                      <tr className="font-bold bg-gray-100 border-t border-gray-400">
-                        <td className="p-1.5 border-r border-gray-400">Total Chapter VI-A</td>
-                        <td className="p-1.5 border-r border-gray-400 text-right tabular-nums">{fmt(totalVIA)}</td>
+                      <tr className="font-bold bg-black/10 border-t border-black/25">
+                        <td className="p-1.5 border-r border-black/25">Total Chapter VI-A</td>
+                        <td className="p-1.5 border-r border-black/25 text-right tabular-nums">{fmt(totalVIA)}</td>
                         <td className="p-1.5"></td>
                       </tr>
                     </tbody>
@@ -1639,10 +1639,10 @@ export default function TaxCalculatorUI() {
       {(activeTab === "form12ba" || activeTab === "printAll") && (
         <div className="bg-white border-2 border-black p-6 font-['Arial','Segoe_UI',Calibri,sans-serif] text-black space-y-4 print:border-none print:p-0 print-page-break text-xs leading-normal w-full antialiased">
           <div className="text-center border-b-2 border-black pb-2 space-y-0.5">
-            <div className="text-xs font-semibold text-gray-700">INCOME TAX RULES, 1962</div>
+            <div className="text-xs font-semibold text-black/70">INCOME TAX RULES, 1962</div>
             <div className="font-bold text-sm uppercase tracking-wide">FORM NO. 12BA</div>
-            <div className="text-xs font-bold text-gray-800">[See rule 26A(2)(b)]</div>
-            <div className="text-xs text-gray-700">
+            <div className="text-xs font-bold text-black/80">[See rule 26A(2)(b)]</div>
+            <div className="text-xs text-black/70">
               Statement showing particulars of perquisites, other fringe benefits or amenities and profits in lieu of salary with
               value thereof
             </div>
@@ -1651,7 +1651,7 @@ export default function TaxCalculatorUI() {
             <div className="p-3 space-y-1">
               <div className="font-bold uppercase border-b border-black pb-1 text-xs">1. Employer</div>
               <div className="font-bold text-black">{ddoName || "[DDO Name]"}</div>
-              <div className="text-gray-800">{empSchool}, {empPlace}</div>
+              <div className="text-black/80">{empSchool}, {empPlace}</div>
               <div>
                 <b>TAN: </b><span className="font-bold">{ddoTan || "—"}</span>
               </div>
@@ -1665,7 +1665,7 @@ export default function TaxCalculatorUI() {
               </div>
             </div>
           </div>
-          <div className="border border-black p-2.5 grid grid-cols-2 gap-2 text-xs bg-gray-50">
+          <div className="border border-black p-2.5 grid grid-cols-2 gap-2 text-xs bg-black/5">
             <div>
               <b>Financial Year: </b><b>{fy}</b>
             </div>
@@ -1676,7 +1676,7 @@ export default function TaxCalculatorUI() {
           <div className="font-bold text-xs">4. Details of perquisites and profits in lieu of salary</div>
           <table className="w-full border border-black text-xs border-collapse">
             <thead>
-              <tr className="bg-gray-200 font-bold border-b border-black">
+              <tr className="bg-black/15 font-bold border-b border-black">
                 <th className="p-1 border-r border-black w-8">Sl.</th>
                 <th className="p-1 border-r border-black">Nature of perquisite</th>
                 <th className="p-1 border-r border-black text-right w-32">Value provided (₹)</th>
@@ -1706,7 +1706,7 @@ export default function TaxCalculatorUI() {
                 "Contributions by employer to approved Superannuation Fund",
                 "Any other (specify)",
               ].map((item, i) => (
-                <tr key={i} className="border-b border-gray-300">
+                <tr key={i} className="border-b border-black/15">
                   <td className="p-1 border-r border-black text-center">{i + 1}</td>
                   <td className="p-1 border-r border-black">{item}</td>
                   <td className="p-1 border-r border-black text-right tabular-nums">
@@ -1718,7 +1718,7 @@ export default function TaxCalculatorUI() {
                   </td>
                 </tr>
               ))}
-              <tr className="font-bold bg-gray-200 border-t border-black">
+              <tr className="font-bold bg-black/15 border-t border-black">
                 <td colSpan={2} className="p-1.5 border-r border-black text-right">
                   Total value of perquisites u/s 17(2)
                 </td>
@@ -1730,24 +1730,24 @@ export default function TaxCalculatorUI() {
           </table>
           <div className="border border-black p-3 text-xs">
             <div className="font-bold border-b border-black pb-1 text-xs">5. Details of profits in lieu of salary u/s 17(3)</div>
-            <table className="w-full border-collapse border border-gray-400 text-xs mt-1.5">
+            <table className="w-full border-collapse border border-black/25 text-xs mt-1.5">
               <thead>
-                <tr className="bg-gray-100 font-bold border-b border-gray-400">
-                  <th className="p-1.5 border-r border-gray-400 w-8">Sl.</th>
-                  <th className="p-1.5 border-r border-gray-400">Nature of profit</th>
+                <tr className="bg-black/10 font-bold border-b border-black/25">
+                  <th className="p-1.5 border-r border-black/25 w-8">Sl.</th>
+                  <th className="p-1.5 border-r border-black/25">Nature of profit</th>
                   <th className="p-1.5 text-right w-40">Amount (₹)</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td className="p-1.5 border-r border-gray-400 text-center">1</td>
-                  <td className="p-1.5 border-r border-gray-400">
+                  <td className="p-1.5 border-r border-black/25 text-center">1</td>
+                  <td className="p-1.5 border-r border-black/25">
                     Compensation on termination / modification of employment
                   </td>
                   <td className="p-1.5 text-right tabular-nums">{fmt(p17_3)}</td>
                 </tr>
-                <tr className="font-bold border-t border-gray-400 bg-gray-50">
-                  <td colSpan={2} className="p-1.5 border-r border-gray-400 text-right">
+                <tr className="font-bold border-t border-black/25 bg-black/5">
+                  <td colSpan={2} className="p-1.5 border-r border-black/25 text-right">
                     Total profits in lieu of salary u/s 17(3)
                   </td>
                   <td className="p-1.5 text-right tabular-nums">{fmt(p17_3)}</td>
@@ -1780,7 +1780,7 @@ export default function TaxCalculatorUI() {
         <div className="bg-white border-2 border-black p-8 font-['Arial','Segoe_UI',Calibri,sans-serif] text-black space-y-6 max-w-2xl mx-auto print:border-none print:p-0 print:max-w-none print:w-full print-page-break text-xs leading-relaxed antialiased">
           <div className="text-center border-b-2 border-black pb-3">
             <h1 className="text-xl font-bold uppercase tracking-wider">RECEIPT OF HOUSE RENT</h1>
-            <div className="text-xs font-semibold text-gray-700">(Under Section 10(13-A) of Income Tax Act, 1961)</div>
+            <div className="text-xs font-semibold text-black/70">(Under Section 10(13-A) of Income Tax Act, 1961)</div>
           </div>
           <div className="space-y-4 text-xs">
             <p className="leading-relaxed">
@@ -1789,15 +1789,15 @@ export default function TaxCalculatorUI() {
               <b>Rs. {fmt(Math.round(n(rentPaid) / 12))}/-</b> per month for the period <b>{empFrom}</b> to <b>{empTo}</b>{" "}
               (Financial Year <b>{fy}</b>) for the residential premises situated at:
             </p>
-            <div className="border-b-2 border-black pb-2 font-semibold text-gray-900 bg-gray-50 p-2.5">
+            <div className="border-b-2 border-black pb-2 font-semibold text-black bg-black/5 p-2.5">
               <b>Residence Address: </b>{llAddr}
             </div>
           </div>
           <div className="pt-6 flex justify-between items-end">
             <div className="space-y-1 text-xs">
-              <div className="font-bold text-gray-900">Tenant (Employee):</div>
+              <div className="font-bold text-black">Tenant (Employee):</div>
               <div className="font-semibold text-sm">{empName}</div>
-              <div className="text-gray-700">{empDesig}</div>
+              <div className="text-black/70">{empDesig}</div>
               <div className="pt-8">Signature: ____________________</div>
             </div>
             <div className="text-center">
@@ -1806,14 +1806,14 @@ export default function TaxCalculatorUI() {
               </div>
             </div>
             <div className="space-y-1 text-xs text-right">
-              <div className="font-bold text-gray-900">House Owner (Landlord):</div>
+              <div className="font-bold text-black">House Owner (Landlord):</div>
               <div className="font-semibold text-sm">{llName || "_______________"}</div>
-              <div className="text-gray-700">{llAddr}</div>
+              <div className="text-black/70">{llAddr}</div>
               {llPan && <div><b>PAN:</b> {llPan}</div>}
               <div className="pt-8">Signature: ____________________</div>
             </div>
           </div>
-          <div className="border-t border-black pt-3 text-center text-[11px] text-gray-600">
+          <div className="border-t border-black pt-3 text-center text-[11px] text-black/60">
             Note: PAN of landlord is mandatory under CBDT rules if total rent paid exceeds ₹1,00,000/- per annum.
           </div>
         </div>

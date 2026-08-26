@@ -128,8 +128,8 @@ export default function CategoryLogList({ posts }: CategoryLogListProps) {
               <span
                 className={`inline-block font-mono text-xs font-semibold px-3 py-1.5 rounded-full border transition-all cursor-pointer ${
                   isActive
-                    ? "bg-[#1B2A4A] text-white border-[#1B2A4A]"
-                    : "bg-[#FAF7F2] text-inkSoft border-hair hover:border-[#1B2A4A]/30 hover:text-ink"
+                    ? "bg-ink text-paper border-ink"
+                    : "bg-paperRaised text-inkSoft border-hair hover:border-ink/30 hover:text-ink"
                 }`}
               >
                 {filter}
@@ -150,7 +150,7 @@ export default function CategoryLogList({ posts }: CategoryLogListProps) {
 
       {/* ── Document Log Entries ─────────────────────────────────────────── */}
       {filteredPosts.length === 0 ? (
-        <div className="bg-[#FAF7F2] border border-hair rounded-xl p-8 text-center">
+        <div className="bg-paperRaised border border-hair rounded-xl p-8 text-center">
           <p className="font-mono text-xs text-inkSoft">
             No documents found for &ldquo;{activeFilter}&rdquo; filter.
           </p>
@@ -162,7 +162,7 @@ export default function CategoryLogList({ posts }: CategoryLogListProps) {
 
             return (
               <Link key={post.id} href={`/posts/${post.slug}`} className="block group">
-                <div className="bg-[#FAF7F2] border border-hair/70 rounded-xl p-4 sm:p-5 hover:border-[#1B2A4A]/30 hover:shadow-sm transition-all space-y-2">
+                <div className="bg-paperRaised border border-hair/70 rounded-xl p-4 sm:p-5 hover:border-ink/30 hover:shadow-sm transition-all space-y-2">
                   {/* Row 1: Meta badges + date */}
                   <div className="flex items-center justify-between gap-2 flex-wrap">
                     <div className="flex items-center gap-2 flex-wrap">
@@ -170,7 +170,7 @@ export default function CategoryLogList({ posts }: CategoryLogListProps) {
                         {pill.label}
                       </Badge>
                       {post.goReference && (
-                        <span className="font-mono text-[10px] font-bold text-[#1B2A4A] bg-[#1B2A4A]/10 px-2 py-0.5 rounded border border-[#1B2A4A]/15">
+                        <span className="font-mono text-[10px] font-bold text-ink bg-ink/10 px-2 py-0.5 rounded border border-ink/15">
                           {post.goReference}
                         </span>
                       )}
@@ -181,7 +181,7 @@ export default function CategoryLogList({ posts }: CategoryLogListProps) {
                   </div>
 
                   {/* Row 2: English title */}
-                  <h3 className="font-bold text-sm text-ink group-hover:text-[#1B2A4A] transition-colors leading-snug">
+                  <h3 className="font-bold text-sm text-ink group-hover:text-inkSoft transition-colors leading-snug">
                     {post.titleEn}
                   </h3>
 
@@ -207,7 +207,7 @@ export default function CategoryLogList({ posts }: CategoryLogListProps) {
 
                   {/* Row 5: CTA arrow */}
                   <div className="flex justify-end">
-                    <span className="font-mono text-[10px] text-[#1B2A4A]/40 group-hover:text-amber-600 transition-colors font-semibold">
+                    <span className="font-mono text-[10px] text-ink/40 group-hover:text-turmericDeep transition-colors font-semibold">
                       Read Full Order →
                     </span>
                   </div>
@@ -220,7 +220,7 @@ export default function CategoryLogList({ posts }: CategoryLogListProps) {
             <div className="pt-2 text-center">
               <button
                 onClick={() => setVisibleCount((prev) => prev + 10)}
-                className="font-mono text-xs font-semibold text-[#1B2A4A] border border-[#1B2A4A]/30 bg-[#FAF7F2] hover:bg-[#1B2A4A] hover:text-white px-5 py-2.5 rounded-full transition-all"
+                className="font-mono text-xs font-semibold text-ink border border-ink/30 bg-paperRaised hover:bg-ink hover:text-paper px-5 py-2.5 rounded-full transition-all"
               >
                 Load More Documents ({filteredPosts.length - visibleCount} remaining)
               </button>
