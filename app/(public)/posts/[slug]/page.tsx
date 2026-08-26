@@ -11,6 +11,7 @@ import { resolveLifecycle } from "@/lib/posts/lifecycle";
 import Button from "@/app/(public)/_components/Button";
 import { Card } from "@/app/(public)/_components/Card";
 import { officialDate, dateLabel, formatDate, ORDER_BY_OFFICIAL_DATE } from "@/lib/dates";
+import { safeQuery, optionalQuery } from "@/lib/db-safe";
 
 export const revalidate = 3600; // ISR revalidation (1 hour)
 
@@ -66,10 +67,9 @@ export default async function PostDetailPage({
 }: {
   params: { slug: string };
 }) {
-  let post: any = null;
-  try {
-    post = await prisma.post.findUnique({
-      where: { slug: params.slug },
+  const post = await safeQuery("post-detail", () =>
+    prisma.post.findFirst({
+      where: { slug: params.slug, isDraft: false },
       include: {
         category: true,
         relatedFrom: {
@@ -89,12 +89,10 @@ export default async function PostDetailPage({
           },
         },
       },
-    });
-  } catch (e) {
-    post = null;
-  }
+    })
+  );
 
-  if (!post || post.isDraft) {
+  if (!post) {
     notFound();
   }
 
@@ -109,23 +107,24 @@ export default async function PostDetailPage({
   const isPastDeadline =
     post.actionDeadline && new Date(post.actionDeadline) < new Date();
 
-  let siblingPosts: any[] = [];
-  if (post.category) {
-    try {
-      siblingPosts = await prisma.post.findMany({
-        where: {
-          isDraft: false,
-          categoryId: post.category.id,
-          id: { not: post.id },
-        },
-        orderBy: ORDER_BY_OFFICIAL_DATE,
-        take: 3,
-        select: { id: true, slug: true, titleEn: true, goReference: true, createdAt: true, documentDate: true },
-      });
-    } catch (e) {
-      siblingPosts = [];
-    }
-  }
+  const postCategory = post.category;
+  const siblingPosts = postCategory
+    ? await optionalQuery(
+        "post-siblings",
+        () =>
+          prisma.post.findMany({
+            where: {
+              isDraft: false,
+              categoryId: postCategory.id,
+              id: { not: post.id },
+            },
+            orderBy: ORDER_BY_OFFICIAL_DATE,
+            take: 3,
+            select: { id: true, slug: true, titleEn: true, goReference: true, createdAt: true, documentDate: true },
+          }),
+        []
+      )
+    : [];
 
   return (
     <div className="max-w-4xl mx-auto space-y-8 pb-24 font-sans">
@@ -283,7 +282,7 @@ export default async function PostDetailPage({
       {siblingPosts.length > 0 && (
         <section aria-label="More from this category" className="space-y-3">
           <div className="font-mono font-bold text-xs tracking-wider text-inkSoft flex items-center gap-2">
-            <span>📂 More from {post.category.nameEn}</span>
+            <span>📂 More from {postCategory?.nameEn}</span>
           </div>
           <div className="space-y-2">
             {siblingPosts.map((sibling) => (

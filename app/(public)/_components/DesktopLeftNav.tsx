@@ -3,6 +3,7 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { Card, CardHeader, CardTitle, CardContent } from "./Card";
 import Badge from "./Badge";
+import { optionalQuery } from "@/lib/db-safe";
 
 const STATUS_FILTERS = [
   { label: "GOIR Verified", variant: "success" as const, desc: "Official AP Govt Gazette" },
@@ -12,26 +13,16 @@ const STATUS_FILTERS = [
 ];
 
 export default async function DesktopLeftNav() {
-  let categories: Array<{
-    id: string;
-    slug: string;
-    nameEn: string;
-    nameTe: string;
-    color: string | null;
-    _count: { posts: number };
-  }> = [];
-
-  try {
-    categories = await prisma.category.findMany({
-      where: { slug: { not: "tools" } },
-      include: { _count: { select: { posts: { where: { isDraft: false } } } } },
-      orderBy: { nameEn: "asc" },
-    });
-  } catch (e) {
-    // Milestone D replaces this with safeQuery(); until then, an empty rail is
-    // preferable to a crashed homepage.
-    categories = [];
-  }
+  const categories = await optionalQuery(
+    "nav-categories",
+    () =>
+      prisma.category.findMany({
+        where: { slug: { not: "tools" } },
+        include: { _count: { select: { posts: { where: { isDraft: false } } } } },
+        orderBy: { nameEn: "asc" },
+      }),
+    []
+  );
 
   return (
     <aside className="space-y-6 sticky top-20 hidden lg:block font-sans">

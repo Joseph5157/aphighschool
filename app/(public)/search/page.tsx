@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import SearchUI from "./_components/SearchUI";
 import type { Metadata } from "next";
 import { ORDER_BY_OFFICIAL_DATE } from "@/lib/dates";
+import { safeQuery } from "@/lib/db-safe";
 
 export const metadata: Metadata = {
   title: "Search AP Teacher Orders — AP Teacher Desk",
@@ -11,9 +12,8 @@ export const metadata: Metadata = {
 };
 
 export default async function SearchPage() {
-  let posts: any[] = [];
-  try {
-    posts = await prisma.post.findMany({
+  const posts = await safeQuery("search-index", () =>
+    prisma.post.findMany({
       where: { isDraft: false },
       select: {
         id: true,
@@ -30,10 +30,8 @@ export default async function SearchPage() {
         },
       },
       orderBy: ORDER_BY_OFFICIAL_DATE,
-    });
-  } catch (e) {
-    posts = [];
-  }
+    })
+  );
 
   return (
     <div className="max-w-4xl mx-auto space-y-6 font-sans">

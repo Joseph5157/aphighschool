@@ -5,6 +5,7 @@ import CategoryLogList from "./_components/CategoryLogList";
 import Breadcrumb from "@/app/(public)/_components/Breadcrumb";
 import Badge from "@/app/(public)/_components/Badge";
 import { ORDER_BY_OFFICIAL_DATE } from "@/lib/dates";
+import { safeQuery } from "@/lib/db-safe";
 
 export const revalidate = 3600;
 
@@ -13,30 +14,26 @@ export async function generateMetadata({
 }: {
   params: { slug: string };
 }): Promise<Metadata> {
-  try {
-    const category = await prisma.category.findUnique({
+  const category = await safeQuery("category-metadata", () =>
+    prisma.category.findUnique({
       where: { slug: params.slug },
       select: { nameEn: true, nameTe: true },
-    });
+    })
+  );
 
-    if (!category) return { title: "Category Not Found — AP Teacher Desk" };
+  if (!category) return { title: "Category Not Found — AP Teacher Desk" };
 
-    return {
-      title: `${category.nameEn} Orders — AP Teacher Desk`,
-      description: `Browse all AP School Education ${category.nameEn} government orders and circulars. ${category.nameTe || ""}`,
-    };
-  } catch (e) {
-    return { title: "AP Teacher Desk" };
-  }
+  return {
+    title: `${category.nameEn} Orders — AP Teacher Desk`,
+    description: `Browse all AP School Education ${category.nameEn} government orders and circulars. ${category.nameTe || ""}`,
+  };
 }
 
 export async function generateStaticParams() {
-  try {
-    const categories = await prisma.category.findMany({ select: { slug: true } });
-    return categories.map((cat) => ({ slug: cat.slug }));
-  } catch (e) {
-    return [];
-  }
+  const categories = await safeQuery("category-static-params", () =>
+    prisma.category.findMany({ select: { slug: true } })
+  );
+  return categories.map((cat) => ({ slug: cat.slug }));
 }
 
 export default async function CategoryDetailPage({
@@ -44,9 +41,8 @@ export default async function CategoryDetailPage({
 }: {
   params: { slug: string };
 }) {
-  let category: any = null;
-  try {
-    category = await prisma.category.findUnique({
+  const category = await safeQuery("category-detail", () =>
+    prisma.category.findUnique({
       where: { slug: params.slug },
       include: {
         posts: {
@@ -55,10 +51,8 @@ export default async function CategoryDetailPage({
         },
         _count: { select: { posts: { where: { isDraft: false } } } },
       },
-    });
-  } catch (e) {
-    category = null;
-  }
+    })
+  );
 
   if (!category) notFound();
 

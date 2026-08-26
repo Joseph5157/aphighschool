@@ -7,6 +7,7 @@ import Button from "@/app/(public)/_components/Button";
 import OrdersFilterTabs from "./_components/OrdersFilterTabs";
 import OrdersSidebar from "./_components/OrdersSidebar";
 import { ORDER_BY_OFFICIAL_DATE, officialDate, dateLabel, formatDate } from "@/lib/dates";
+import { safeQuery } from "@/lib/db-safe";
 
 export const metadata: Metadata = {
   title: "Orders & Circulars — AP Teacher Desk",
@@ -17,9 +18,8 @@ export const metadata: Metadata = {
 export const revalidate = 3600;
 
 export default async function OrdersPage() {
-  let categories: any[] = [];
-  try {
-    categories = await prisma.category.findMany({
+  const categories = await safeQuery("orders-categories", () =>
+    prisma.category.findMany({
       where: { slug: { not: "tools" } },
       include: {
         _count: { select: { posts: { where: { isDraft: false } } } },
@@ -38,14 +38,11 @@ export default async function OrdersPage() {
         },
       },
       orderBy: { nameEn: "asc" },
-    });
-  } catch (e) {
-    categories = [];
-  }
+    })
+  );
 
-  let recentPosts: any[] = [];
-  try {
-    recentPosts = await prisma.post.findMany({
+  const recentPosts = await safeQuery("orders-recent", () =>
+    prisma.post.findMany({
       where: { isDraft: false },
       orderBy: ORDER_BY_OFFICIAL_DATE,
       take: 5,
@@ -57,10 +54,8 @@ export default async function OrdersPage() {
         createdAt: true,
         documentDate: true,
       },
-    });
-  } catch (e) {
-    recentPosts = [];
-  }
+    })
+  );
 
   const totalOrders = categories.reduce(
     (sum, cat) => sum + (cat._count?.posts || 0),

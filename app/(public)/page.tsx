@@ -5,6 +5,7 @@ import PostCard from "./_components/PostCard";
 import DesktopLeftNav from "./_components/DesktopLeftNav";
 import DesktopSidebar from "./_components/DesktopSidebar";
 import { ORDER_BY_OFFICIAL_DATE } from "@/lib/dates";
+import { safeQuery } from "@/lib/db-safe";
 
 import type { Metadata } from "next";
 
@@ -15,10 +16,8 @@ export const metadata: Metadata = {
 export const revalidate = 3600; // ISR
 
 export default async function HomePage() {
-  let posts: any[] = [];
-
-  try {
-    posts = await prisma.post.findMany({
+  const posts = await safeQuery("homepage-feed", () =>
+    prisma.post.findMany({
       where: { isDraft: false },
       orderBy: ORDER_BY_OFFICIAL_DATE,
       take: 6,
@@ -29,10 +28,8 @@ export default async function HomePage() {
           include: { relatedPost: true },
         },
       },
-    });
-  } catch (e) {
-    posts = [];
-  }
+    })
+  );
 
   const heroPost = posts[0];
   const listingPosts = posts.slice(1);
