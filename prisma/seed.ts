@@ -73,12 +73,21 @@ async function main() {
   // verified by a human against GOIR and published deliberately from the admin UI.
 
   // 2. Background Post (GO 21)
+  //
+  // orderState is `superseded`, not the schema default `current`. This row is
+  // the "[DEMO] Original PTR Norms" order, it carries statusBadge "expired",
+  // and the RelatedOrder below points GO 129 at it as its successor — three
+  // independent signals that it is no longer the operative order. Left at the
+  // default it claimed a green "Current" pill and "This order is in force." on
+  // its detail page. It is set in BOTH branches on purpose: a database that
+  // already holds this row only ever runs `update`.
   const background = await prisma.post.upsert({
     where: { slug: "go-21-original-ptr-norms" },
     update: {
       isDraft: true,
       categoryId: govtOrders.id,
       documentType: "go",
+      orderState: "superseded",
       tags: ["Transfers", "PTR"],
       titleEn: "[DEMO] Original PTR Norms & Staff Restructuring Guidelines",
       verifiedAgainstGoir: false,
@@ -100,6 +109,7 @@ async function main() {
       sourceUrl: null,
       categoryId: govtOrders.id,
       documentType: "go",
+      orderState: "superseded",
       tags: ["Transfers", "PTR"],
       verifiedAgainstGoir: false,
       isDraft: true,

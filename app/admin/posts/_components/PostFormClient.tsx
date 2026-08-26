@@ -33,7 +33,15 @@ type PostFormClientProps = {
   candidatePosts: CandidatePost[];
 };
 
-const DOCUMENT_TYPE_OPTIONS = [
+// Hand-copied labels for the three Prisma enums (DocType, OrderState,
+// PostStatus) driving these <select>s. They cannot be derived: PostFormClient
+// is a client component, and importing @prisma/client here to read the enum
+// values would pull Prisma into the client bundle. lib/validation/post.ts can
+// derive its lists via Object.values() because it is server-only.
+// test/post-form-options.test.ts pins the key set of each array against the
+// live Prisma enum, so adding a schema value without adding it here goes red
+// there instead of silently leaving the value unreachable through this form.
+export const DOCUMENT_TYPE_OPTIONS = [
   ["go", "Government Order (GO)"],
   ["circular", "Circular"],
   ["memo", "Memo"],
@@ -42,14 +50,14 @@ const DOCUMENT_TYPE_OPTIONS = [
   ["other", "Other"],
 ];
 
-const ORDER_STATE_OPTIONS = [
+export const ORDER_STATE_OPTIONS = [
   ["current", "Current"],
   ["amended", "Amended"],
   ["superseded", "Superseded"],
   ["archived", "Archived"],
 ];
 
-const STATUS_OPTIONS = [
+export const STATUS_OPTIONS = [
   ["notification", "Notification"],
   ["apply_link", "Apply Open"],
   ["hall_ticket", "Hall Ticket"],

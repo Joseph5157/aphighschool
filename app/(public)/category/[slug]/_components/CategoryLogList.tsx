@@ -10,6 +10,7 @@ import {
   resolveLifecyclePill,
   type RecruitmentPill,
 } from "@/app/(public)/_components/lifecyclePill";
+import { isLifecycleClosed } from "@/lib/posts/lifecycle";
 import { officialDate, dateLabel, formatDate, officialYear } from "@/lib/dates";
 
 // Only reached for documents that actually have an application lifecycle —
@@ -93,12 +94,13 @@ export default function CategoryLogList({ posts }: CategoryLogListProps) {
     const now = new Date();
     return posts.filter((post) => {
       const postYear = officialYearOf(post).toString();
-      const isPast =
-        post.statusBadge === "expired" ||
-        (post.actionDeadline && new Date(post.actionDeadline) < now);
+      // Open/Closed reads the same lifecycle model as the pill rendered on the
+      // row below — see isLifecycleClosed. Never reintroduce a local
+      // statusBadge rule here: it made the filter contradict the pill.
+      const isClosed = isLifecycleClosed(post, now);
 
-      if (activeFilter === "Open") return !isPast;
-      if (activeFilter === "Closed") return isPast;
+      if (activeFilter === "Open") return !isClosed;
+      if (activeFilter === "Closed") return isClosed;
       if (activeFilter === "2026") return postYear === "2026";
       if (activeFilter === "2025") return postYear === "2025";
       if (activeFilter !== "All" && !post.tags?.includes(activeFilter)) return false;
@@ -156,10 +158,6 @@ export default function CategoryLogList({ posts }: CategoryLogListProps) {
       ) : (
         <div className="space-y-3">
           {visiblePosts.map((post) => {
-            const isPast =
-              post.statusBadge === "expired" ||
-              (post.actionDeadline && new Date(post.actionDeadline) < new Date());
-
             const pill = resolveLifecyclePill(post, RECRUITMENT);
 
             return (

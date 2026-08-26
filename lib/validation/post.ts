@@ -29,7 +29,13 @@ export type PostInput = {
 // message. These are derived from the generated Prisma enum objects rather
 // than retyped: a hand-maintained copy of each enum could drift from
 // prisma/schema.prisma without tsc or any test noticing, because the values
-// only ever flow through as `string`. There is now no second list to drift.
+// only ever flow through as `string`. That removes one hand-copied list, but
+// not the only one: app/admin/posts/_components/PostFormClient.tsx still
+// hand-copies the same three enums for its <select> labels, and cannot derive
+// them the way this file does — it is a client component, and importing
+// @prisma/client there would pull Prisma into the client bundle. See
+// test/post-form-options.test.ts, which pins that list against the schema
+// instead.
 const STATUS_BADGES: string[] = Object.values(PostStatus);
 const DOCUMENT_TYPES: string[] = Object.values(DocType);
 const ORDER_STATES: string[] = Object.values(OrderState);
