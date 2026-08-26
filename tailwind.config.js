@@ -15,9 +15,9 @@ module.exports = {
         hair: "#D8D2C1",
       },
       fontFamily: {
-        sans: ["'Noto Sans'", "Arial", "sans-serif"],
-        telugu: ["'Noto Sans Telugu'", "sans-serif"],
-        mono: ["'IBM Plex Mono'", "monospace"],
+        sans: ["var(--font-space-grotesk)", "system-ui", "sans-serif"],
+        telugu: ["var(--font-noto-telugu)", "sans-serif"],
+        mono: ["var(--font-plex-mono)", "monospace"],
       },
     },
   },

@@ -102,7 +102,7 @@ export default async function CategoryDetailPage({
             {category.nameTe && (
               <p
                 className="mt-1.5 text-amber-300 font-medium"
-                style={{ fontFamily: "'Noto Sans Telugu', sans-serif", fontSize: "1rem", lineHeight: "1.75" }}
+                style={{ fontFamily: "var(--font-noto-telugu), sans-serif", fontSize: "1rem", lineHeight: "1.75" }}
               >
                 {category.nameTe}
               </p>

@@ -189,7 +189,7 @@ export default function CategoryLogList({ posts }: CategoryLogListProps) {
                   {post.titleTe && (
                     <div
                       className="text-xs text-inkSoft/90"
-                      style={{ fontFamily: "'Noto Sans Telugu', sans-serif", lineHeight: "1.65" }}
+                      style={{ fontFamily: "var(--font-noto-telugu), sans-serif", lineHeight: "1.65" }}
                     >
                       {post.titleTe}
                     </div>
@@ -199,7 +199,7 @@ export default function CategoryLogList({ posts }: CategoryLogListProps) {
                   {post.summaryTe && post.summaryTe.length > 0 && (
                     <p
                       className="text-xs text-inkSoft/70 line-clamp-1 pt-1.5 border-t border-hair/40"
-                      style={{ fontFamily: "'Noto Sans Telugu', sans-serif", lineHeight: "1.6" }}
+                      style={{ fontFamily: "var(--font-noto-telugu), sans-serif", lineHeight: "1.6" }}
                     >
                       {post.summaryTe[0]}
                     </p>
