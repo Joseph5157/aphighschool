@@ -14,26 +14,30 @@ export async function generateMetadata({
 }: {
   params: { slug: string };
 }): Promise<Metadata> {
-  const category = await safeQuery("category-metadata", () =>
-    prisma.category.findUnique({
+  try {
+    const category = await prisma.category.findUnique({
       where: { slug: params.slug },
       select: { nameEn: true, nameTe: true },
-    })
-  );
+    });
 
-  if (!category) return { title: "Category Not Found — AP Teacher Desk" };
+    if (!category) return { title: "Category Not Found — AP Teacher Desk" };
 
-  return {
-    title: `${category.nameEn} Orders — AP Teacher Desk`,
-    description: `Browse all AP School Education ${category.nameEn} government orders and circulars. ${category.nameTe || ""}`,
-  };
+    return {
+      title: `${category.nameEn} Orders — AP Teacher Desk`,
+      description: `Browse all AP School Education ${category.nameEn} government orders and circulars. ${category.nameTe || ""}`,
+    };
+  } catch (e) {
+    return { title: "AP Teacher Desk" };
+  }
 }
 
 export async function generateStaticParams() {
-  const categories = await safeQuery("category-static-params", () =>
-    prisma.category.findMany({ select: { slug: true } })
-  );
-  return categories.map((cat) => ({ slug: cat.slug }));
+  try {
+    const categories = await prisma.category.findMany({ select: { slug: true } });
+    return categories.map((cat) => ({ slug: cat.slug }));
+  } catch (e) {
+    return [];
+  }
 }
 
 export default async function CategoryDetailPage({
