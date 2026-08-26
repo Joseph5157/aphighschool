@@ -446,8 +446,9 @@ export default function TaxCalculatorUI() {
           <div className="border-b border-hair pb-4 flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div>
               <h1 className="text-2xl font-bold text-ink tracking-tight">AP Teacher Income Tax & Official Form Suite</h1>
-              <p lang="te" className="font-telugu text-sm text-inkSoft mt-1">
-                ఆంధ్రప్రదేశ్ ఉపాధ్యాయుల ఆదాయపు పన్ను మరియు అధికారిక పత్రాలు (Annexures, Form 16, Form 12BB, Form 12BA)
+              <p className="text-sm text-inkSoft mt-1">
+                <span lang="te" className="font-telugu">ఆంధ్రప్రదేశ్ ఉపాధ్యాయుల ఆదాయపు పన్ను మరియు అధికారిక పత్రాలు</span>{" "}
+                <span lang="en">(Annexures, Form 16, Form 12BB, Form 12BA)</span>
               </p>
             </div>
             <div className="flex items-center gap-3">

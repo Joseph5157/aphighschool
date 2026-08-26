@@ -50,12 +50,11 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
 
           <div className="flex items-center gap-3">
             <ThemeToggle />
-            <Link
-              href="/admin"
-              className={`hidden sm:block ${buttonClassName({ variant: "primary", size: "sm" })}`}
-            >
-              CMS →
-            </Link>
+            <div className="hidden sm:block">
+              <Link href="/admin" className={buttonClassName({ variant: "primary", size: "sm" })}>
+                CMS →
+              </Link>
+            </div>
           </div>
         </div>
       </header>

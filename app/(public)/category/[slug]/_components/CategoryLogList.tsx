@@ -117,7 +117,6 @@ export default function CategoryLogList({ posts }: CategoryLogListProps) {
   const visiblePosts = filteredPosts.slice(0, visibleCount);
 
   const filters = ["All", "Open", "Closed", "2026", "2025", ...availableTags];
-  const activeIndex = filters.indexOf(activeFilter);
 
   const selectFilter = (filter: string) => {
     setActiveFilter(filter);
