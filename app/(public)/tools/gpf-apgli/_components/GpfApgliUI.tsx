@@ -139,7 +139,7 @@ export default function GpfApgliUI() {
         <h1 className="text-2xl md:text-3xl font-bold text-ink tracking-tight">
           GPF & APGLI Loan & Interest Estimator
         </h1>
-        <div className="font-telugu text-sm text-inkSoft mt-1 font-medium">
+        <div lang="te" className="font-telugu text-sm text-inkSoft mt-1 font-medium">
           జీపీఎఫ్ లోన్ అర్హత మరియు APGLI ప్రీమియం స్లాబ్ పరిశీలన సాధనం
         </div>
       </div>
@@ -150,7 +150,7 @@ export default function GpfApgliUI() {
         <Card>
           <CardHeader>
             <CardTitle>1. GPF Interest & Part-Final Loan</CardTitle>
-            <div className="font-telugu text-xs text-inkSoft">జీపీఎఫ్ నిల్వ & పార్ట్-ఫైనల్ విత్‌డ్రావల్ అర్హత</div>
+            <div lang="te" className="font-telugu text-xs text-inkSoft">జీపీఎఫ్ నిల్వ & పార్ట్-ఫైనల్ విత్‌డ్రావల్ అర్హత</div>
           </CardHeader>
 
           <CardContent className="space-y-4">
@@ -207,7 +207,7 @@ export default function GpfApgliUI() {
         <Card>
           <CardHeader>
             <CardTitle>2. APGLI Premium Slab Matcher</CardTitle>
-            <div className="font-telugu text-xs text-inkSoft">బేసిక్ పే ఆధారంగా APGLI ప్రీమియం స్లాబ్</div>
+            <div lang="te" className="font-telugu text-xs text-inkSoft">బేసిక్ పే ఆధారంగా APGLI ప్రీమియం స్లాబ్</div>
           </CardHeader>
 
           <CardContent className="space-y-4">

@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { Card, CardHeader, CardTitle, CardContent } from "./Card";
 import Badge from "./Badge";
-import Button from "./Button";
+import { buttonClassName } from "./Button";
 
 const QUICK_TOOLS = [
   { href: "/tools/tax-calculator", label: "Income Tax Calculator", icon: "🧮", badge: "FY 2025-26", desc: "New & Old Regimes" },
@@ -68,10 +68,12 @@ export default function DesktopSidebar() {
             </Link>
           ))}
           <div className="pt-2">
-            <Link href="/tools" className="w-full">
-              <Button variant="secondary" size="sm" fullWidth rightIcon={<span>→</span>}>
-                Explore All Utility Tools
-              </Button>
+            <Link
+              href="/tools"
+              className={buttonClassName({ variant: "secondary", size: "sm", fullWidth: true })}
+            >
+              <span>Explore All Utility Tools</span>
+              <span>→</span>
             </Link>
           </div>
         </CardContent>

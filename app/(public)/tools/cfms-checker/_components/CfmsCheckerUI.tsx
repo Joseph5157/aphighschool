@@ -184,7 +184,7 @@ export default function CfmsCheckerUI() {
         <h1 className="text-2xl md:text-3xl font-bold text-ink tracking-tight">
           CFMS & Govt Status Checker Links Directory
         </h1>
-        <div className="font-telugu text-sm text-inkSoft mt-1 font-medium">
+        <div lang="te" className="font-telugu text-sm text-inkSoft mt-1 font-medium">
           ప్రభుత్వ ఉద్యోగులు & ఉపాధ్యాయుల అధికారిక పోర్టల్స్ మరియు బిల్ స్టేటస్ లింక్స్
         </div>
       </div>

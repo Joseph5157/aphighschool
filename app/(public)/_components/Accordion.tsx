@@ -56,7 +56,7 @@ export default function Accordion({ items, allowMultiple = true, className = "" 
               onClick={() => toggleItem(item.id)}
               aria-expanded={isOpen}
               aria-controls={`accordion-content-${item.id}`}
-              className="w-full text-left p-4 flex items-center justify-between gap-3 focus:outline-none focus:bg-hair/20 hover:bg-hair/10 transition-colors"
+              className="w-full text-left p-4 flex items-center justify-between gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-tamarind focus-visible:ring-inset hover:bg-hair/10 transition-colors"
             >
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap mb-1">
@@ -70,7 +70,7 @@ export default function Accordion({ items, allowMultiple = true, className = "" 
                   )}
                 </div>
                 {item.titleTe && (
-                  <div className="font-telugu text-xs text-inkSoft font-medium">
+                  <div lang="te" className="font-telugu text-xs text-inkSoft font-medium">
                     {item.titleTe}
                   </div>
                 )}

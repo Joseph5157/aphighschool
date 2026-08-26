@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata, Viewport } from "next";
 import BottomNav from "@/app/(public)/_components/BottomNav";
-import Button from "@/app/(public)/_components/Button";
+import { buttonClassName } from "@/app/(public)/_components/Button";
 import DesktopNav from "@/app/(public)/_components/DesktopNav";
 
 import ThemeToggle from "@/app/(public)/_components/ThemeToggle";
@@ -50,10 +50,11 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
 
           <div className="flex items-center gap-3">
             <ThemeToggle />
-            <Link href="/admin" className="hidden sm:block">
-              <Button variant="primary" size="sm">
-                CMS →
-              </Button>
+            <Link
+              href="/admin"
+              className={`hidden sm:block ${buttonClassName({ variant: "primary", size: "sm" })}`}
+            >
+              CMS →
             </Link>
           </div>
         </div>

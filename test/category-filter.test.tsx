@@ -56,7 +56,9 @@ function makePost(id: string, overrides: Partial<LogPost> = {}): LogPost {
 }
 
 function clickFilter(name: "All" | "Open" | "Closed") {
-  fireEvent.click(screen.getByRole("button", { name }));
+  // The filter pills are an ARIA tablist (Task 22) — role="tab", not the
+  // <button> element's implicit role="button".
+  fireEvent.click(screen.getByRole("tab", { name }));
 }
 
 function titlesShown(): string[] {

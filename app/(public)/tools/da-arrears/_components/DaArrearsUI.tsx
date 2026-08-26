@@ -220,7 +220,7 @@ export default function DaArrearsUI() {
         <h1 className="text-2xl md:text-3xl font-bold text-ink tracking-tight">
           DA Arrears Calculator
         </h1>
-        <div className="font-telugu text-sm text-inkSoft mt-1 font-medium">
+        <div lang="te" className="font-telugu text-sm text-inkSoft mt-1 font-medium">
           డిఏ బకాయిల లెక్కింపు సాధనం
         </div>
       </div>
@@ -230,7 +230,7 @@ export default function DaArrearsUI() {
         <Card>
           <CardHeader>
             <CardTitle>1. Enter Your DA Revision Details</CardTitle>
-            <div className="font-telugu text-xs text-inkSoft">మీ డిఏ సవరణ వివరాలు నమోదు చేయండి</div>
+            <div lang="te" className="font-telugu text-xs text-inkSoft">మీ డిఏ సవరణ వివరాలు నమోదు చేయండి</div>
           </CardHeader>
 
           <CardContent className="space-y-4">
@@ -352,7 +352,7 @@ export default function DaArrearsUI() {
         <Card>
           <CardHeader>
             <CardTitle>2. Arrears Estimate</CardTitle>
-            <div className="font-telugu text-xs text-inkSoft">బకాయిల అంచనా</div>
+            <div lang="te" className="font-telugu text-xs text-inkSoft">బకాయిల అంచనా</div>
           </CardHeader>
 
           <CardContent className="space-y-4">

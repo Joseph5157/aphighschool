@@ -29,7 +29,7 @@ export function Field({
           className="block font-mono text-[10px] sm:text-xs uppercase font-bold text-inkSoft tracking-wider"
         >
           {label} {required && <span className="text-red-500">*</span>}
-          {labelTe && <span className="font-telugu text-inkSoft/80 font-normal lowercase ml-1">({labelTe})</span>}
+          {labelTe && <span lang="te" className="font-telugu text-inkSoft/80 font-normal lowercase ml-1">({labelTe})</span>}
         </label>
       )}
 

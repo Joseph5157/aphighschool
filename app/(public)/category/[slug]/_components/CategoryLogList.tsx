@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef, type KeyboardEvent } from "react";
 import Link from "next/link";
 import type { DocType, OrderState } from "@prisma/client";
 import Badge from "@/app/(public)/_components/Badge";
@@ -80,9 +80,15 @@ function officialYearOf(post: PostItem): number {
   return officialYear(normalizedDates(post));
 }
 
+// Stable id for the ARIA link between a filter's tab button and the
+// tabpanel it controls — filters are user-facing labels (tags, years) so
+// they may contain spaces/punctuation, hence the encode.
+const filterTabId = (filter: string) => `filter-tab-${encodeURIComponent(filter)}`;
+
 export default function CategoryLogList({ posts }: CategoryLogListProps) {
   const [activeFilter, setActiveFilter] = useState<string>("All");
   const [visibleCount, setVisibleCount] = useState(10);
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   const availableTags = useMemo(() => {
     const tagSet = new Set<string>();
@@ -110,20 +116,54 @@ export default function CategoryLogList({ posts }: CategoryLogListProps) {
 
   const visiblePosts = filteredPosts.slice(0, visibleCount);
 
+  const filters = ["All", "Open", "Closed", "2026", "2025", ...availableTags];
+  const activeIndex = filters.indexOf(activeFilter);
+
+  const selectFilter = (filter: string) => {
+    setActiveFilter(filter);
+    setVisibleCount(10);
+  };
+
+  // Roving-tabindex arrow key navigation per the WAI-ARIA tabs pattern:
+  // Left/Right (and Home/End) move focus AND activate, since this list has
+  // no separate "confirm" step in the mouse interaction either.
+  const handleTabKeyDown = (event: KeyboardEvent<HTMLButtonElement>, index: number) => {
+    let nextIndex: number | null = null;
+    if (event.key === "ArrowRight") nextIndex = (index + 1) % filters.length;
+    else if (event.key === "ArrowLeft") nextIndex = (index - 1 + filters.length) % filters.length;
+    else if (event.key === "Home") nextIndex = 0;
+    else if (event.key === "End") nextIndex = filters.length - 1;
+
+    if (nextIndex === null) return;
+    event.preventDefault();
+    selectFilter(filters[nextIndex]);
+    tabRefs.current[nextIndex]?.focus();
+  };
+
   return (
     <div className="space-y-6">
-      {/* ── Filter Pills ─────────────────────────────────────────────────── */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar">
-        {(["All", "Open", "Closed", "2026", "2025", ...availableTags]).map((filter) => {
+      {/* ── Filter Pills (ARIA tablist — filtering the log below) ──────────── */}
+      <div
+        role="tablist"
+        aria-label="Filter documents by status or year"
+        className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar"
+      >
+        {filters.map((filter, index) => {
           const isActive = activeFilter === filter;
           return (
             <button
               key={filter}
-              onClick={() => {
-                setActiveFilter(filter);
-                setVisibleCount(10);
+              ref={(el) => {
+                tabRefs.current[index] = el;
               }}
-              className="focus:outline-none shrink-0"
+              id={filterTabId(filter)}
+              role="tab"
+              aria-selected={isActive}
+              aria-controls="category-log-tabpanel"
+              tabIndex={isActive ? 0 : -1}
+              onClick={() => selectFilter(filter)}
+              onKeyDown={(event) => handleTabKeyDown(event, index)}
+              className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-tamarind rounded-full shrink-0"
             >
               <span
                 className={`inline-block font-mono text-xs font-semibold px-3 py-1.5 rounded-full border transition-all cursor-pointer ${
@@ -139,6 +179,7 @@ export default function CategoryLogList({ posts }: CategoryLogListProps) {
         })}
       </div>
 
+      <div id="category-log-tabpanel" role="tabpanel" aria-labelledby={filterTabId(activeFilter)} className="space-y-6">
       {/* ── Results count ────────────────────────────────────────────────── */}
       <div className="flex items-center justify-between text-meta text-inkSoft/70">
         <span>
@@ -228,6 +269,7 @@ export default function CategoryLogList({ posts }: CategoryLogListProps) {
           )}
         </div>
       )}
+      </div>
     </div>
   );
 }

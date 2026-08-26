@@ -3,7 +3,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { Card } from "../_components/Card";
 import Badge from "../_components/Badge";
-import Button from "../_components/Button";
+import { buttonClassName } from "../_components/Button";
 import Breadcrumb from "../_components/Breadcrumb";
 import Accordion from "../_components/Accordion";
 import ToolsSidebar from "./_components/ToolsSidebar";
@@ -157,10 +157,12 @@ export default function ToolsIndexPage() {
                 </div>
 
                 <div className="pt-2 flex justify-end">
-                  <Link href={tool.href}>
-                    <Button variant="tamarind" size="sm" rightIcon={<span>→</span>}>
-                      Open Calculator
-                    </Button>
+                  <Link
+                    href={tool.href}
+                    className={buttonClassName({ variant: "tamarind", size: "sm" })}
+                  >
+                    <span>Open Calculator</span>
+                    <span>→</span>
                   </Link>
                 </div>
               </Card>

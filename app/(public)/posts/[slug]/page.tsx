@@ -216,7 +216,7 @@ export default async function PostDetailPage({
         </div>
 
         {post.summaryTe && post.summaryTe.length > 0 && (
-          <ul className="font-telugu text-sm text-ink font-medium leading-relaxed list-disc list-inside space-y-2.5">
+          <ul lang="te" className="font-telugu text-sm text-ink font-medium leading-relaxed list-disc list-inside space-y-2.5">
             {post.summaryTe.map((bullet: string, idx: number) => (
               <li key={idx} className="pl-1">
                 {bullet}

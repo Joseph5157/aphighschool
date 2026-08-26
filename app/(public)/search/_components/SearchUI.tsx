@@ -174,7 +174,7 @@ export default function SearchUI({ results, query, activeType }: SearchUIProps) 
               <button
                 key={chip}
                 onClick={() => setValue(chip)}
-                className="focus:outline-none"
+                className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-tamarind rounded-full"
               >
                 <Badge variant="neutral" size="sm" shape="pill" className="cursor-pointer hover:border-ink/40">
                   🔍 {chip}

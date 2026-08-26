@@ -108,7 +108,7 @@ export default function LeaveEncashmentUI() {
         <h1 className="text-2xl md:text-3xl font-bold text-ink tracking-tight">
           Earned Leave (EL) & HPL Surrender Encashment Calculator
         </h1>
-        <div className="font-telugu text-sm text-inkSoft mt-1 font-medium">
+        <div lang="te" className="font-telugu text-sm text-inkSoft mt-1 font-medium">
           ఏపీ & టిఎస్ ఉపాధ్యాయుల లీవ్ సరెండర్ ఎన్‌క్యాష్‌మెంట్ లెక్కించే సాధనం
         </div>
       </div>

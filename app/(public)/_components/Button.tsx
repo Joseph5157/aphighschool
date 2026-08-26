@@ -36,6 +36,33 @@ const SIZE_MAP: Record<ButtonSize, string> = {
   lg: "text-sm sm:text-base px-5 py-2.5 rounded-xl gap-2.5 font-mono",
 };
 
+export interface ButtonClassNameOptions {
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+  fullWidth?: boolean;
+  className?: string;
+}
+
+/**
+ * Computes the Tailwind classes Button.tsx applies to its <button>, without
+ * the <button> element itself. Use this to style a non-<button> element
+ * (e.g. the <Link> it would otherwise wrap) so it looks like a Button while
+ * remaining the single interactive element — the asChild-style escape hatch
+ * for "styled like a button, but must not BE a nested button".
+ */
+export function buttonClassName({
+  variant = "primary",
+  size = "md",
+  fullWidth = false,
+  className = "",
+}: ButtonClassNameOptions = {}): string {
+  const variantClass = VARIANT_MAP[variant] || VARIANT_MAP.primary;
+  const sizeClass = SIZE_MAP[size] || SIZE_MAP.md;
+  const widthClass = fullWidth ? "w-full" : "inline-flex";
+
+  return `${widthClass} items-center justify-center font-bold tracking-tight transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-tamarind/40 disabled:opacity-50 disabled:cursor-not-allowed ${variantClass} ${sizeClass} ${className}`;
+}
+
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
@@ -53,16 +80,12 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref
   ) => {
-    const variantClass = VARIANT_MAP[variant] || VARIANT_MAP.primary;
-    const sizeClass = SIZE_MAP[size] || SIZE_MAP.md;
-    const widthClass = fullWidth ? "w-full" : "inline-flex";
-
     return (
       <button
         ref={ref}
         type={type}
         disabled={disabled || isLoading}
-        className={`${widthClass} items-center justify-center font-bold tracking-tight transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-tamarind/40 disabled:opacity-50 disabled:cursor-not-allowed ${variantClass} ${sizeClass} ${className}`}
+        className={buttonClassName({ variant, size, fullWidth, className })}
         {...props}
       >
         {isLoading ? (

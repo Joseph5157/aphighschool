@@ -3,7 +3,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import Badge from "@/app/(public)/_components/Badge";
 import Breadcrumb from "@/app/(public)/_components/Breadcrumb";
-import Button from "@/app/(public)/_components/Button";
+import { buttonClassName } from "@/app/(public)/_components/Button";
 import OrdersFilterTabs from "./_components/OrdersFilterTabs";
 import OrdersSidebar from "./_components/OrdersSidebar";
 import { ORDER_BY_OFFICIAL_DATE, officialDate, dateLabel, formatDate } from "@/lib/dates";
@@ -107,10 +107,17 @@ export default async function OrdersPage() {
 
               {/* Search shortcut inside hero */}
               <div className="flex items-center gap-3 pt-1">
-                <Link href="/search?type=go">
-                  <Button variant="outline" size="sm" leftIcon={<span>🔍</span>} rightIcon={<span>→</span>} className="border-mastheadText/40 text-mastheadText hover:bg-mastheadText/10">
-                    Search Government Orders
-                  </Button>
+                <Link
+                  href="/search?type=go"
+                  className={buttonClassName({
+                    variant: "outline",
+                    size: "sm",
+                    className: "border-mastheadText/40 text-mastheadText hover:bg-mastheadText/10",
+                  })}
+                >
+                  <span>🔍</span>
+                  <span>Search Government Orders</span>
+                  <span>→</span>
                 </Link>
               </div>
             </div>
