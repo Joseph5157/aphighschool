@@ -82,7 +82,7 @@ export default function OrdersFilterTabs({ categories }: { categories: CategoryD
                             <h2 className="font-bold text-ink text-sm tracking-tight group-hover:text-tamarind transition-colors">
                               {cat.nameEn}
                             </h2>
-                            <div className="text-xs text-inkSoft" style={{ fontFamily: "var(--font-noto-telugu), sans-serif", lineHeight: "1.6" }}>
+                            <div lang="te" className="text-xs text-inkSoft" style={{ fontFamily: "var(--font-noto-telugu), sans-serif", lineHeight: "1.6" }}>
                               {cat.nameTe}
                             </div>
                           </div>

@@ -21,7 +21,7 @@
   --color-ink: #1B2A4A;
   --color-inkSoft: #33456B;
   --color-turmeric: #E8A33D;
-  --color-turmericDeep: #C7811F;
+  --color-turmericDeep: #CB8624;
   --color-tamarind: #2F6B4F;
   --color-tamarindDark: #245640;
   --color-kumkum: #B5432E;
@@ -36,6 +36,26 @@
      flip. Never add an html.dark override for these two variables. */
   --color-masthead: #1B2A4A;
   --color-masthead-text: #EDE8DC;
+
+  /* RGB-triplet mirrors of the hex tokens above, used by tailwind.config.js's
+     `rgb(var(--rgb-x) / <alpha-value>)` color definitions so Tailwind's
+     alpha-channel opacity modifiers (bg-ink/10, text-inkSoft/70, etc.) can
+     actually resolve a color to blend — a bare `var(--color-x)` string makes
+     Tailwind's parseColor() return null and silently drop those utilities.
+     Keep both forms in sync: the hex --color-* vars remain for direct
+     consumers (inline styles, color-mix()) that need a plain CSS color. */
+  --rgb-ink: 27 42 74;
+  --rgb-inkSoft: 51 69 107;
+  --rgb-turmeric: 232 163 61;
+  --rgb-turmericDeep: 203 134 36;
+  --rgb-tamarind: 47 107 79;
+  --rgb-tamarindDark: 36 86 64;
+  --rgb-kumkum: 181 67 46;
+  --rgb-paper: 237 232 220;
+  --rgb-paperRaised: 247 244 236;
+  --rgb-hair: 216 210 193;
+  --rgb-masthead: 27 42 74;
+  --rgb-mastheadText: 237 232 220;
 }
 
 html.dark {
@@ -49,6 +69,17 @@ html.dark {
   --color-paper: #131A28;
   --color-paperRaised: #1C2536;
   --color-hair: #33405A;
+
+  --rgb-ink: 245 242 233;
+  --rgb-inkSoft: 169 180 199;
+  --rgb-turmeric: 240 180 92;
+  --rgb-turmericDeep: 232 163 61;
+  --rgb-tamarind: 95 163 126;
+  --rgb-tamarindDark: 74 138 103;
+  --rgb-kumkum: 224 112 90;
+  --rgb-paper: 19 26 40;
+  --rgb-paperRaised: 28 37 54;
+  --rgb-hair: 51 64 90;
 }
 
 body {

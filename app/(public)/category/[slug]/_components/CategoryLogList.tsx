@@ -4,8 +4,6 @@ import { useState, useMemo, useRef, type KeyboardEvent } from "react";
 import Link from "next/link";
 import type { DocType, OrderState } from "@prisma/client";
 import Badge from "@/app/(public)/_components/Badge";
-import { Card } from "@/app/(public)/_components/Card";
-import Button from "@/app/(public)/_components/Button";
 import {
   resolveLifecyclePill,
   type RecruitmentPill,
@@ -228,6 +226,7 @@ export default function CategoryLogList({ posts }: CategoryLogListProps) {
                   {/* Row 3: Telugu title */}
                   {post.titleTe && (
                     <div
+                      lang="te"
                       className="text-xs text-inkSoft/90"
                       style={{ fontFamily: "var(--font-noto-telugu), sans-serif", lineHeight: "1.65" }}
                     >
@@ -238,6 +237,7 @@ export default function CategoryLogList({ posts }: CategoryLogListProps) {
                   {/* Row 4: Summary snippet */}
                   {post.summaryTe && post.summaryTe.length > 0 && (
                     <p
+                      lang="te"
                       className="text-xs text-inkSoft/70 line-clamp-1 pt-1.5 border-t border-hair/40"
                       style={{ fontFamily: "var(--font-noto-telugu), sans-serif", lineHeight: "1.6" }}
                     >

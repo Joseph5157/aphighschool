@@ -23,7 +23,6 @@ const TOOLS = [
     icon: "🧮",
     badge: "FY 2025-26",
     status: "Updated Slabs",
-    popular: true,
   },
   {
     href: "/tools/leave-encashment",
@@ -33,7 +32,6 @@ const TOOLS = [
     icon: "🏖️",
     badge: "EL / HPL",
     status: "Surrender Calculator",
-    popular: false,
   },
   {
     href: "/tools/gpf-apgli",
@@ -43,7 +41,6 @@ const TOOLS = [
     icon: "💰",
     badge: "7.1% Interest",
     status: "Part-Final Loan",
-    popular: false,
   },
   {
     href: "/tools/cfms-checker",
@@ -53,7 +50,6 @@ const TOOLS = [
     icon: "📑",
     badge: "Payslip Portal",
     status: "Direct Status",
-    popular: false,
   },
   {
     href: "/tools/da-arrears",
@@ -63,7 +59,6 @@ const TOOLS = [
     icon: "📈",
     badge: "DA Revision",
     status: "Month-by-Month",
-    popular: false,
   },
 ];
 
@@ -119,14 +114,9 @@ export default function ToolsIndexPage() {
                       <div className="w-8 h-8 rounded-lg bg-ink text-turmeric flex items-center justify-center text-lg shrink-0">
                         {tool.icon}
                       </div>
-                      <Badge variant={tool.popular ? "tamarind" : "neutral"} size="sm" shape="pill">
+                      <Badge variant="neutral" size="sm" shape="pill">
                         {tool.badge}
                       </Badge>
-                      {tool.popular && (
-                        <span className="font-mono text-[9px] font-bold bg-turmeric/20 text-turmericDeep border border-turmeric/40 px-2 py-0.5 rounded-full">
-                          ⭐ Most Used
-                        </span>
-                      )}
                     </div>
                     <span className="text-inkSoft font-semibold">{tool.status}</span>
                   </div>

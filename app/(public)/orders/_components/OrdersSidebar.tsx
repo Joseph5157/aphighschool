@@ -60,11 +60,11 @@ export default function OrdersSidebar() {
         </div>
       </div>
 
-      {/* 2. Trending G.O. Search Tags Widget */}
+      {/* 2. Quick Searches Widget */}
       <div className="bg-paperRaised border border-hair rounded-2xl p-5 space-y-4 shadow-2xs">
         <div className="flex items-center justify-between border-b border-hair/60 pb-3">
           <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-ink flex items-center gap-1.5">
-            <span>🔥</span> Trending G.O. Topics
+            Quick Searches
           </h3>
           <span className="text-[10px] font-mono text-inkSoft">Searched</span>
         </div>

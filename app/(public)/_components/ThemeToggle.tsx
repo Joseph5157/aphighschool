@@ -35,7 +35,7 @@ export default function ThemeToggle() {
 
   if (!mounted) {
     return (
-      <button className="w-8 h-8 rounded-lg bg-hair/40 border border-hair text-xs flex items-center justify-center opacity-0">
+      <button type="button" className="w-8 h-8 rounded-lg bg-hair/40 border border-hair text-xs flex items-center justify-center opacity-0">
         🌙
       </button>
     );
@@ -43,6 +43,7 @@ export default function ThemeToggle() {
 
   return (
     <button
+      type="button"
       onClick={toggleTheme}
       className="px-2.5 py-1.5 rounded-lg border border-hair/80 bg-paperRaised/80 hover:bg-paper text-ink text-xs font-mono font-semibold flex items-center gap-1.5 transition-all shadow-2xs"
       aria-label="Toggle visual theme mode"

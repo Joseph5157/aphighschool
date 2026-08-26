@@ -104,6 +104,7 @@ export default async function CategoryDetailPage({
             </h1>
             {category.nameTe && (
               <p
+                lang="te"
                 className="mt-1.5 text-turmeric font-medium"
                 style={{ fontFamily: "var(--font-noto-telugu), sans-serif", fontSize: "1rem", lineHeight: "1.75" }}
               >

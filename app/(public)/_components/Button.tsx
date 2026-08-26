@@ -23,8 +23,8 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 const VARIANT_MAP: Record<ButtonVariant, string> = {
   primary: "bg-ink text-paper hover:bg-ink/90 active:scale-[0.98]",
   secondary: "bg-paperRaised text-ink border border-hair hover:border-ink/40 active:scale-[0.98]",
-  tamarind: "bg-tamarind text-white hover:bg-tamarindDark active:scale-[0.98]",
-  turmeric: "bg-turmeric text-masthead font-bold hover:bg-turmericDeep hover:text-white active:scale-[0.98]",
+  tamarind: "bg-tamarind text-paper hover:bg-tamarindDark active:scale-[0.98]",
+  turmeric: "bg-turmeric text-masthead font-bold hover:bg-turmericDeep active:scale-[0.98]",
   ghost: "bg-transparent text-inkSoft hover:text-ink hover:bg-hair/30 active:scale-[0.98]",
   danger: "bg-red-600 text-white hover:bg-red-700 active:scale-[0.98]",
   outline: "bg-transparent border border-ink text-ink hover:bg-ink hover:text-paper active:scale-[0.98]",

@@ -96,7 +96,7 @@ export default async function OrdersPage() {
                 <h1 className="text-2xl md:text-3xl font-bold text-mastheadText tracking-tight leading-snug">
                   Orders &amp; Circulars Hub
                 </h1>
-                <p className="font-medium mt-1.5 text-turmeric" style={{ fontFamily: "var(--font-noto-telugu), sans-serif", fontSize: "1.05rem", lineHeight: "1.75" }}>
+                <p lang="te" className="font-medium mt-1.5 text-turmeric" style={{ fontFamily: "var(--font-noto-telugu), sans-serif", fontSize: "1.05rem", lineHeight: "1.75" }}>
                   ఉత్తర్వులు &amp; సర్క్యులర్లు — వర్గాల వారీగా
                 </p>
               </div>

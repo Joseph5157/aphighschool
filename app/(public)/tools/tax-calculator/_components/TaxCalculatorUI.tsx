@@ -388,7 +388,7 @@ export default function TaxCalculatorUI() {
               }}
               className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
                 t.id === "printAll"
-                  ? "bg-tamarind text-white hover:bg-tamarind/90"
+                  ? "bg-tamarind text-paper hover:bg-tamarind/90"
                   : activeTab === t.id
                   ? "bg-ink text-paper"
                   : "text-inkSoft hover:text-ink"
@@ -424,7 +424,7 @@ export default function TaxCalculatorUI() {
               <button
                 type="button"
                 onClick={handlePrintAll}
-                className="bg-tamarind text-white font-mono font-bold text-xs px-3 py-2 rounded-lg hover:bg-tamarind/90 shadow-sm transition-all cursor-pointer active:scale-95"
+                className="bg-tamarind text-paper font-mono font-bold text-xs px-3 py-2 rounded-lg hover:bg-tamarind/90 shadow-sm transition-all cursor-pointer active:scale-95"
               >
                 Print All 7 Docs
               </button>
@@ -795,7 +795,7 @@ export default function TaxCalculatorUI() {
                 <button
                   type="button"
                   onClick={handlePrintAll}
-                  className="w-full text-center bg-tamarind text-white p-2.5 rounded-lg font-bold hover:bg-tamarindDark transition-colors shadow-sm"
+                  className="w-full text-center bg-tamarind text-paper p-2.5 rounded-lg font-bold hover:bg-tamarindDark transition-colors shadow-sm"
                 >
                   🖨️ Print All 7 Official Documents
                 </button>
