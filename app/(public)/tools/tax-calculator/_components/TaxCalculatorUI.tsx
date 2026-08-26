@@ -402,9 +402,9 @@ export default function TaxCalculatorUI() {
 
       {/* Sticky Print Action Banner */}
       {activeTab !== "calculator" && (
-        <div className="bg-ink text-paper rounded-xl p-3 px-4 flex flex-wrap items-center justify-between gap-3 shadow-lg print:hidden border-l-4 border-turmeric sticky top-3 z-30">
+        <div className="bg-ink text-paper rounded-xl p-3 px-4 flex flex-wrap items-center justify-between gap-3 shadow-lg print:hidden border-l-4 border-paper sticky top-3 z-30">
           <div className="flex items-center gap-2">
-            <span className="font-mono text-xs font-bold text-turmeric uppercase">
+            <span className="font-mono text-xs font-bold text-paper uppercase">
               📄 {activeTab === "printAll" ? "Full Print Suite (All 7 Documents)" : TABS.find((t) => t.id === activeTab)?.label}
             </span>
             <span className="text-[11px] text-paper/70 hidden sm:inline">
@@ -415,7 +415,7 @@ export default function TaxCalculatorUI() {
             <button
               type="button"
               onClick={handlePrint}
-              className="bg-turmeric text-ink font-mono font-bold text-xs px-4 py-2 rounded-lg hover:bg-turmeric/90 shadow-sm flex items-center gap-1.5 transition-all cursor-pointer active:scale-95"
+              className="bg-turmeric text-masthead font-mono font-bold text-xs px-4 py-2 rounded-lg hover:bg-turmeric/90 shadow-sm flex items-center gap-1.5 transition-all cursor-pointer active:scale-95"
             >
               <span>🖨️</span>
               <span>Print Now (Ctrl+P)</span>
@@ -723,11 +723,11 @@ export default function TaxCalculatorUI() {
 
             {/* Right Summary Panel */}
             <div className="space-y-4">
-              <div className="bg-ink text-paper rounded-xl p-6 shadow-md border-l-4 border-turmeric space-y-3 sticky top-4">
+              <div className="bg-ink text-paper rounded-xl p-6 shadow-md border-l-4 border-paper space-y-3 sticky top-4">
                 <div className="font-mono text-[9px] text-paper/60 uppercase font-bold tracking-wider">
                   Tax Payable ({regime === "old" ? "Old Regime" : "New Regime"})
                 </div>
-                <div className="text-3xl font-bold text-turmeric font-mono">₹{fmt(taxPayable)}</div>
+                <div className="text-3xl font-bold text-paper font-mono">₹{fmt(taxPayable)}</div>
                 <div className="text-xs text-paper/70 font-mono">Gross Salary: ₹{fmt(totalGross)}</div>
                 <div className="text-xs text-paper/70 font-mono">Taxable Income: ₹{fmt(taxableIncome)}</div>
                 <div className="text-xs text-paper/70 font-mono">Net Tax to Pay Now: ₹{fmt(netPayable)}</div>

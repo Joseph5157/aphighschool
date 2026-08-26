@@ -31,9 +31,9 @@ export default function LifecycleStepper({ stages, currentStage, isExpired }: St
               <div
                 className={`w-8 h-8 rounded-full font-mono text-xs font-bold flex items-center justify-center transition-all ${
                   isDone
-                    ? "bg-turmeric text-ink shadow-sm"
+                    ? "bg-turmeric text-masthead shadow-sm"
                     : isCurrent
-                    ? "bg-ink text-paper border-2 border-turmeric shadow-md"
+                    ? "bg-ink text-paper border-2 border-paper shadow-md"
                     : "bg-paperRaised border-2 border-hair text-inkSoft/60"
                 }`}
               >
