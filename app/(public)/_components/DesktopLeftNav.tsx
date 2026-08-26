@@ -5,13 +5,6 @@ import { Card, CardHeader, CardTitle, CardContent } from "./Card";
 import Badge from "./Badge";
 import { optionalQuery } from "@/lib/db-safe";
 
-const STATUS_FILTERS = [
-  { label: "GOIR Verified", variant: "success" as const, desc: "Official AP Govt Gazette" },
-  { label: "Notified Orders", variant: "turmeric" as const, desc: "Gazette Released" },
-  { label: "Apply Open", variant: "tamarind" as const, desc: "Online Applications" },
-  { label: "Archive / Expired", variant: "neutral" as const, desc: "Historical Records" },
-];
-
 export default async function DesktopLeftNav() {
   const categories = await optionalQuery(
     "nav-categories",
@@ -87,31 +80,6 @@ export default async function DesktopLeftNav() {
               <span aria-hidden="true">→</span>
             </Link>
           </div>
-        </CardContent>
-      </Card>
-
-      {/* 2. Document Status Quick Filters */}
-      <Card className="border-hair">
-        <CardHeader className="pb-3 border-b border-hair/50">
-          <CardTitle className="text-xs font-mono font-bold uppercase tracking-wider text-ink flex items-center gap-1.5">
-            <span>🏷️</span> Status Hierarchy
-          </CardTitle>
-          <p className="text-[10px] font-mono text-inkSoft/70 mt-0.5">
-            Verification status breakdown
-          </p>
-        </CardHeader>
-        <CardContent className="space-y-2 pt-3">
-          {STATUS_FILTERS.map((f, i) => (
-            <div
-              key={i}
-              className="flex items-center justify-between p-2 rounded-lg bg-hair/15 border border-hair/30 text-xs"
-            >
-              <Badge variant={f.variant} size="sm" shape="pill" dot>
-                {f.label}
-              </Badge>
-              <span className="text-[10px] font-mono text-inkSoft/70">{f.desc}</span>
-            </div>
-          ))}
         </CardContent>
       </Card>
     </aside>

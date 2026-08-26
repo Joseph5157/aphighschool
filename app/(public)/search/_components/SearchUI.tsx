@@ -219,7 +219,7 @@ export default function SearchUI({ results, query, activeType }: SearchUIProps) 
                       {post.goReference && (
                         <>
                           <span>/</span>
-                          <span className="text-ink font-bold">{post.goReference}</span>
+                          <span className="text-ink font-bold break-words">{post.goReference}</span>
                         </>
                       )}
                     </div>

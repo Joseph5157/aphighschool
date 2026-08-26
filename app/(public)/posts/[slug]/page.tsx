@@ -180,7 +180,7 @@ export default async function PostDetailPage({
           </div>
 
           {post.goReference && (
-            <span className="font-mono text-xs font-bold text-turmeric bg-mastheadText/10 px-3 py-1 rounded border border-mastheadText/20">
+            <span className="font-mono text-xs font-bold text-turmeric bg-mastheadText/10 px-3 py-1 rounded border border-mastheadText/20 break-words">
               {post.goReference}
             </span>
           )}
@@ -255,11 +255,11 @@ export default async function PostDetailPage({
                   href={`/posts/${rel.relatedPost.slug}`}
                   className="block group space-y-1"
                 >
-                  <div className="flex items-center justify-between text-meta text-inkSoft">
-                    <span className="font-bold text-tamarind">
+                  <div className="flex items-center justify-between gap-2 text-meta text-inkSoft">
+                    <span className="font-bold text-tamarind min-w-0 break-words">
                       {rel.relatedPost.goReference || "Background G.O."}
                     </span>
-                    <span>
+                    <span className="shrink-0">
                       {dateLabel(rel.relatedPost)} · {formatDate(officialDate(rel.relatedPost))}
                     </span>
                   </div>
@@ -288,9 +288,9 @@ export default async function PostDetailPage({
             {siblingPosts.map((sibling) => (
               <Card key={sibling.id} hoverable className="p-4 bg-paperRaised">
                 <Link href={`/posts/${sibling.slug}`} className="block group space-y-0.5">
-                  <div className="flex items-center justify-between text-meta text-inkSoft">
-                    <span className="font-bold text-tamarind">{sibling.goReference || "G.O."}</span>
-                    <span>{dateLabel(sibling)} · {formatDate(officialDate(sibling))}</span>
+                  <div className="flex items-center justify-between gap-2 text-meta text-inkSoft">
+                    <span className="font-bold text-tamarind min-w-0 break-words">{sibling.goReference || "G.O."}</span>
+                    <span className="shrink-0">{dateLabel(sibling)} · {formatDate(officialDate(sibling))}</span>
                   </div>
                   <div className="text-card-title text-ink group-hover:text-tamarind transition-colors line-clamp-2">
                     {sibling.titleEn}

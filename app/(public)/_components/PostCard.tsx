@@ -83,7 +83,7 @@ export default function PostCard({ post }: PostCardProps) {
           </Badge>
 
           {(post.category || post.goReference) && (
-            <span className="font-mono text-[8.5px] text-inkSoft tracking-wide">
+            <span className="font-mono text-[8.5px] text-inkSoft tracking-wide break-words">
               {[post.category?.nameEn, post.goReference].filter(Boolean).join(" · ")}
             </span>
           )}

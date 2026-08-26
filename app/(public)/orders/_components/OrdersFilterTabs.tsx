@@ -101,11 +101,11 @@ export default function OrdersFilterTabs({ categories }: { categories: CategoryD
                               href={`/posts/${post.slug}`}
                               className="flex items-start justify-between gap-2 group/item"
                             >
-                              <span className="text-xs text-ink font-medium leading-snug line-clamp-1 group-hover/item:text-tamarind transition-colors flex-1">
+                              <span className="text-xs text-ink font-medium leading-snug line-clamp-1 group-hover/item:text-tamarind transition-colors flex-1 min-w-0">
                                 {post.titleEn}
                               </span>
                               {post.goReference && (
-                                <span className="font-mono text-[10px] text-inkSoft shrink-0 bg-hair/50 px-1.5 py-0.5 rounded">
+                                <span className="font-mono text-[10px] text-inkSoft shrink-0 bg-hair/50 px-1.5 py-0.5 rounded break-words">
                                   {post.goReference}
                                 </span>
                               )}

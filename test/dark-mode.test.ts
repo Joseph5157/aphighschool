@@ -68,3 +68,12 @@ describe("colour token discipline", () => {
     expect(offenders).toEqual([]);
   });
 });
+
+describe("no engagement-oriented UI", () => {
+  it("uses no streak, trending-count, or nudge language in the sidebars", () => {
+    const banned = /streak|don't miss|hurry|trending now|\d+ people|viewers|most popular/i;
+    for (const file of ["app/(public)/_components/DesktopLeftNav.tsx", "app/(public)/_components/DesktopSidebar.tsx"]) {
+      expect(read(file)).not.toMatch(banned);
+    }
+  });
+});

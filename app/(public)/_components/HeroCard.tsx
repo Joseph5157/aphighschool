@@ -84,7 +84,7 @@ export default function HeroCard({ post }: HeroPostProps) {
           )}
 
           {post.goReference && (
-            <span className="font-mono text-[10px] text-mastheadText/80 bg-mastheadText/10 px-2 py-0.5 rounded border border-mastheadText/20">
+            <span className="font-mono text-[10px] text-mastheadText/80 bg-mastheadText/10 px-2 py-0.5 rounded border border-mastheadText/20 break-words">
               {post.goReference}
             </span>
           )}

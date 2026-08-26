@@ -3,7 +3,6 @@ import Link from "next/link";
 import { Card, CardHeader, CardTitle, CardContent } from "./Card";
 import Badge from "./Badge";
 import Button from "./Button";
-import Separator from "./Separator";
 
 const QUICK_TOOLS = [
   { href: "/tools/tax-calculator", label: "Income Tax Calculator", icon: "🧮", badge: "FY 2025-26", desc: "New & Old Regimes" },
@@ -12,7 +11,7 @@ const QUICK_TOOLS = [
   { href: "/tools/cfms-checker", label: "CFMS Bill Status", icon: "📑", badge: "Payslip", desc: "Direct Status Checker" },
 ];
 
-const POPULAR_TAGS = [
+const QUICK_SEARCHES = [
   { label: "#DAArrears", href: "/search?q=DA+Arrears" },
   { label: "#MegaDSC2026", href: "/search?q=Mega+DSC" },
   { label: "#APTET", href: "/search?q=TET" },
@@ -78,19 +77,19 @@ export default function DesktopSidebar() {
         </CardContent>
       </Card>
 
-      {/* 2. Popular Topics & Tags Widget */}
+      {/* 2. Quick Searches Widget */}
       <Card className="border-hair">
         <CardHeader className="pb-3 border-b border-hair/50">
           <CardTitle className="text-xs font-mono font-bold uppercase tracking-wider text-ink flex items-center gap-1.5">
-            <span>🔥</span> Trending Search Topics
+            Quick Searches
           </CardTitle>
           <p className="text-[10px] font-mono text-inkSoft/70 mt-0.5">
-            Frequently referenced AP orders
+            Jump to a topic
           </p>
         </CardHeader>
         <CardContent className="pt-3">
           <div className="flex flex-wrap gap-2 font-mono text-xs">
-            {POPULAR_TAGS.map((tag) => (
+            {QUICK_SEARCHES.map((tag) => (
               <Link
                 key={tag.label}
                 href={tag.href}
@@ -99,47 +98,6 @@ export default function DesktopSidebar() {
                 {tag.label}
               </Link>
             ))}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* 3. Official App & Portal Hub */}
-      <Card className="bg-gradient-to-br from-paperRaised to-hair/20 border-hair">
-        <CardContent className="space-y-3 p-5">
-          <div className="flex items-center justify-between">
-            <Badge variant="turmeric" size="sm" shape="pill" dot>
-              Official AP & TS Portals
-            </Badge>
-            <span className="text-[10px] font-mono text-inkSoft/70">Government Links</span>
-          </div>
-          
-          <div className="font-bold text-xs text-ink tracking-tight">
-            Teacher Service & Treasury Links
-          </div>
-          
-          <ul className="text-xs text-inkSoft space-y-1.5 font-mono">
-            <li className="flex items-center gap-2">
-              <span className="text-tamarind font-bold">•</span>
-              <span>CFMS Treasury Payslip Portal</span>
-            </li>
-            <li className="flex items-center gap-2">
-              <span className="text-tamarind font-bold">•</span>
-              <span>AP EHS Health Cards Directory</span>
-            </li>
-            <li className="flex items-center gap-2">
-              <span className="text-tamarind font-bold">•</span>
-              <span>DIKSHA App & Teacher e-SR</span>
-            </li>
-          </ul>
-
-          <Separator />
-          
-          <div className="flex justify-between items-center text-xs font-mono font-bold text-tamarind pt-1">
-            <span>Verified Sources</span>
-            <Link href="/tools/cfms-checker" className="hover:underline flex items-center gap-1">
-              <span>Open Guide</span>
-              <span>→</span>
-            </Link>
           </div>
         </CardContent>
       </Card>

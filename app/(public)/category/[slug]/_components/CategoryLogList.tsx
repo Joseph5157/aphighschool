@@ -170,7 +170,7 @@ export default function CategoryLogList({ posts }: CategoryLogListProps) {
                         {pill.label}
                       </Badge>
                       {post.goReference && (
-                        <span className="font-mono text-[10px] font-bold text-ink bg-ink/10 px-2 py-0.5 rounded border border-ink/15">
+                        <span className="font-mono text-[10px] font-bold text-ink bg-ink/10 px-2 py-0.5 rounded border border-ink/15 break-words">
                           {post.goReference}
                         </span>
                       )}
