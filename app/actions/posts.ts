@@ -2,10 +2,10 @@
 
 import type { DocType, OrderState, PostStatus } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
-import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireAdmin } from "@/lib/auth-guard";
 import { parsePostForm, validatePost } from "@/lib/validation/post";
+import { revalidatePostPaths } from "@/lib/posts/revalidate";
 
 function slugify(text: string) {
   return text
@@ -66,6 +66,7 @@ export async function createPost(formData: FormData) {
       // isDraft intentionally omitted — the schema defaults to true.
       // Publishing is a separate, deliberate action (publishPost).
     },
+    include: { category: { select: { slug: true } } },
   });
 
   for (const relatedId of input.relatedPostIds) {
@@ -74,18 +75,18 @@ export async function createPost(formData: FormData) {
     });
   }
 
-  revalidatePath("/admin/posts");
+  revalidatePostPaths({ slug: post.slug, categorySlug: post.category?.slug ?? null });
   redirect("/admin/posts");
 }
 
 export async function publishPost(postId: string) {
   await requireAdmin();
-  await prisma.post.update({
+  const post = await prisma.post.update({
     where: { id: postId },
     data: { isDraft: false },
+    include: { category: { select: { slug: true } } },
   });
-  revalidatePath("/admin/posts");
-  revalidatePath("/");
+  revalidatePostPaths({ slug: post.slug, categorySlug: post.category?.slug ?? null });
 }
 
 export async function updatePost(postId: string, formData: FormData) {
@@ -112,7 +113,7 @@ export async function updatePost(postId: string, formData: FormData) {
     select: { createdAt: true },
   });
 
-  await prisma.post.update({
+  const post = await prisma.post.update({
     where: { id: postId },
     data: {
       titleEn: input.titleEn,
@@ -134,6 +135,7 @@ export async function updatePost(postId: string, formData: FormData) {
       tags: input.tags,
       verifiedAgainstGoir: input.verifiedAgainstGoir,
     },
+    include: { category: { select: { slug: true } } },
   });
 
   // Simplest correct approach for a solo-admin CMS: replace the related-orders set
@@ -146,12 +148,21 @@ export async function updatePost(postId: string, formData: FormData) {
     });
   }
 
-  revalidatePath("/admin/posts");
+  revalidatePostPaths({ slug: post.slug, categorySlug: post.category?.slug ?? null });
   redirect("/admin/posts");
 }
 
 export async function deletePost(postId: string) {
   await requireAdmin();
+
+  const post = await prisma.post.findUnique({
+    where: { id: postId },
+    select: { slug: true, category: { select: { slug: true } } },
+  });
+
   await prisma.post.delete({ where: { id: postId } });
-  revalidatePath("/admin/posts");
+
+  if (post) {
+    revalidatePostPaths({ slug: post.slug, categorySlug: post.category?.slug ?? null });
+  }
 }

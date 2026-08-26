@@ -13,6 +13,12 @@ export const metadata: Metadata = {
   title: "Latest AP Teacher Orders — AP Teacher Desk",
 };
 
+// This hourly window is a safety net, not the primary freshness mechanism:
+// every post create/update/delete/publish calls revalidatePostPaths (see
+// app/actions/posts.ts), which revalidates this route on-demand the moment
+// the write happens. Do not lower this value to "fix" staleness — the write
+// path already handles that; this just bounds drift from any change made
+// directly in the DB outside those actions.
 export const revalidate = 3600; // ISR
 
 export default async function HomePage() {
