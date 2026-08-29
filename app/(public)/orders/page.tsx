@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     "Browse official AP School Education government orders, memos, proceedings and notifications — all verified against goir.ap.gov.in.",
 };
 
-export const revalidate = 3600;
+export const dynamic = 'force-dynamic';
 
 export default async function OrdersPage() {
   const categories = await safeQuery("orders-categories", () =>
