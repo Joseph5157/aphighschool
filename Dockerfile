@@ -1,9 +1,9 @@
 # Dockerfile for Railway.app & Production Deployment
 FROM node:20-alpine AS base
+RUN apk add --no-cache libc6-compat openssl
 
 # 1. Install dependencies
 FROM base AS deps
-RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 COPY package.json package-lock.json ./
