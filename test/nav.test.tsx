@@ -6,17 +6,17 @@ vi.mock("next/navigation", () => ({ usePathname: () => "/" }));
 import BottomNav from "@/app/(public)/_components/BottomNav";
 import DesktopNav from "@/app/(public)/_components/DesktopNav";
 
-const ALLOWED = ["/", "/orders", "/search", "/tools"];
+const ALLOWED = ["/", "/orders", "/search", "/tools", "/pensioners"];
 
 function hrefs() {
   return screen.getAllByRole("link").map((a) => a.getAttribute("href"));
 }
 
 describe("public navigation scope", () => {
-  it("bottom nav exposes exactly the four allowed destinations", () => {
+  it("bottom nav exposes exactly the five allowed destinations", () => {
     render(<BottomNav />);
     const found = hrefs();
-    expect(found).toHaveLength(4);
+    expect(found).toHaveLength(5);
     expect(new Set(found)).toEqual(new Set(ALLOWED));
   });
 
@@ -33,7 +33,7 @@ describe("public navigation scope", () => {
   it("desktop nav links only to in-scope destinations", () => {
     render(<DesktopNav />);
     const found = hrefs();
-    expect(found).toHaveLength(4);
+    expect(found).toHaveLength(5);
     expect(new Set(found)).toEqual(new Set(ALLOWED));
   });
 });

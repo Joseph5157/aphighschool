@@ -1,13 +1,17 @@
 import { Providers } from "../providers";
-import AdminNav from "./_components/AdminNav";
+import { SidebarProvider, SidebarInset } from "@/app/(public)/_components/Sidebar";
+import AdminSidebar from "./_components/AdminSidebar";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
     <Providers>
-      <div className="min-h-screen bg-paper flex">
-        <AdminNav />
-        <div className="flex-1 p-8">{children}</div>
-      </div>
+      <SidebarProvider defaultOpen={true}>
+        <AdminSidebar />
+        <SidebarInset className="p-6 md:p-8">
+          {children}
+        </SidebarInset>
+      </SidebarProvider>
     </Providers>
   );
 }
+

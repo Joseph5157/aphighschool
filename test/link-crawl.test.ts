@@ -17,7 +17,9 @@ function tsxFiles(dir: string): string[] {
 const STATIC_ROUTES = new Set([
   "/", "/orders", "/search", "/tools", "/admin", "/admin/posts", "/admin/posts/new",
   "/tools/cfms-checker", "/tools/da-arrears", "/tools/gpf-apgli",
-  "/tools/leave-encashment", "/tools/tax-calculator",
+  "/tools/leave-encashment", "/tools/tax-calculator", "/tools/prc-calculator",
+  "/pensioners", "/pensioners/pension-calculator", "/pensioners/commutation-tracker",
+  "/pensioners/office-pipeline",
 ]);
 
 let postSlugs: Set<string>;

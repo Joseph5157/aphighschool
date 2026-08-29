@@ -1,0 +1,192 @@
+- generic [ref=f2e2]:
+  - banner [ref=f2e3]:
+    - generic [ref=f2e4]:
+      - link "AP AP Teacher Desk AP School Education" [ref=f2e5] [cursor=pointer]:
+        - /url: /
+        - generic [ref=f2e6]: AP
+        - generic [ref=f2e7]:
+          - generic [ref=f2e8]: AP Teacher Desk
+          - generic [ref=f2e9]: AP School Education
+      - button "🌙" [ref=f2e11] [cursor=pointer]
+  - main [ref=f2e12]:
+    - generic [ref=f2e13]:
+      - navigation "Breadcrumb" [ref=f2e14]:
+        - list [ref=f2e15]:
+          - listitem [ref=f2e16]:
+            - link "Home" [ref=f2e17] [cursor=pointer]:
+              - /url: /
+          - listitem [ref=f2e18]:
+            - generic [ref=f2e19]: /
+            - generic [ref=f2e20]: Orders & Circulars
+      - generic [ref=f2e21]:
+        - generic [ref=f2e22]:
+          - generic [ref=f2e23]:
+            - generic [ref=f2e24]: AP School Education Department — Official G.O. Repository
+            - generic [ref=f2e26]:
+              - generic [ref=f2e27]:
+                - generic [ref=f2e28]: GOIR Verified Repository
+                - generic [ref=f2e31]: 0 Official Documents
+              - generic [ref=f2e32]:
+                - heading "Orders & Circulars Hub" [level=1] [ref=f2e33]
+                - paragraph [ref=f2e34]: ఉత్తర్వులు & సర్క్యులర్లు — వర్గాల వారీగా
+              - paragraph [ref=f2e35]: Official government orders, department memos, proceedings, and notifications — all categories listed below.
+              - link [ref=f2e37] [cursor=pointer]:
+                - /url: /search?type=go
+                - button "🔍 Search Government Orders →" [ref=f2e38]:
+                  - generic [ref=f2e39]: 🔍
+                  - generic [ref=f2e40]: Search Government Orders
+                  - generic [ref=f2e41]: →
+          - generic [ref=f2e42]:
+            - tablist [ref=f2e43]:
+              - tab "All" [selected] [ref=f2e44] [cursor=pointer]
+              - tab "📜 G.O.s" [ref=f2e46] [cursor=pointer]
+              - tab "📋 Memos" [ref=f2e48] [cursor=pointer]
+              - tab "⚖️ Proceedings" [ref=f2e50] [cursor=pointer]
+              - tab "🔄 Circulars" [ref=f2e52] [cursor=pointer]
+              - tab "🔔 Notifications" [ref=f2e54] [cursor=pointer]
+            - tabpanel [ref=f2e56]:
+              - generic [ref=f2e57]:
+                - generic [ref=f2e58]:
+                  - generic [ref=f2e59]:
+                    - generic [ref=f2e60]:
+                      - generic [ref=f2e61]: 🔄
+                      - generic [ref=f2e62]:
+                        - heading "Circulars" [level=2] [ref=f2e63]
+                        - generic [ref=f2e64]: సర్క్యులర్లు
+                    - generic [ref=f2e65]: 0 docs
+                  - paragraph [ref=f2e67]: No documents yet.
+                  - link "View All 0 Documents →" [ref=f2e68] [cursor=pointer]:
+                    - /url: /category/circulars
+                    - generic [ref=f2e69]:
+                      - generic [ref=f2e70]: View All 0 Documents
+                      - generic [ref=f2e71]: →
+                - generic [ref=f2e72]:
+                  - generic [ref=f2e73]:
+                    - generic [ref=f2e74]:
+                      - generic [ref=f2e75]: 📜
+                      - generic [ref=f2e76]:
+                        - heading "Government Orders" [level=2] [ref=f2e77]
+                        - generic [ref=f2e78]: ప్రభుత్వ ఉత్తర్వులు
+                    - generic [ref=f2e79]: 0 docs
+                  - paragraph [ref=f2e81]: No documents yet.
+                  - link "View All 0 Documents →" [ref=f2e82] [cursor=pointer]:
+                    - /url: /category/govt-orders
+                    - generic [ref=f2e83]:
+                      - generic [ref=f2e84]: View All 0 Documents
+                      - generic [ref=f2e85]: →
+                - generic [ref=f2e86]:
+                  - generic [ref=f2e87]:
+                    - generic [ref=f2e88]:
+                      - generic [ref=f2e89]: 📋
+                      - generic [ref=f2e90]:
+                        - heading "Memos" [level=2] [ref=f2e91]
+                        - generic [ref=f2e92]: మెమోలు
+                    - generic [ref=f2e93]: 0 docs
+                  - paragraph [ref=f2e95]: No documents yet.
+                  - link "View All 0 Documents →" [ref=f2e96] [cursor=pointer]:
+                    - /url: /category/memos
+                    - generic [ref=f2e97]:
+                      - generic [ref=f2e98]: View All 0 Documents
+                      - generic [ref=f2e99]: →
+                - generic [ref=f2e100]:
+                  - generic [ref=f2e101]:
+                    - generic [ref=f2e102]:
+                      - generic [ref=f2e103]: 🔔
+                      - generic [ref=f2e104]:
+                        - heading "Notifications" [level=2] [ref=f2e105]
+                        - generic [ref=f2e106]: ప్రకటనలు
+                    - generic [ref=f2e107]: 0 docs
+                  - paragraph [ref=f2e109]: No documents yet.
+                  - link "View All 0 Documents →" [ref=f2e110] [cursor=pointer]:
+                    - /url: /category/notifications
+                    - generic [ref=f2e111]:
+                      - generic [ref=f2e112]: View All 0 Documents
+                      - generic [ref=f2e113]: →
+                - generic [ref=f2e114]:
+                  - generic [ref=f2e115]:
+                    - generic [ref=f2e116]:
+                      - generic [ref=f2e117]: ⚖️
+                      - generic [ref=f2e118]:
+                        - heading "Proceedings" [level=2] [ref=f2e119]
+                        - generic [ref=f2e120]: ప్రొసీడింగ్స్
+                    - generic [ref=f2e121]: 0 docs
+                  - paragraph [ref=f2e123]: No documents yet.
+                  - link "View All 0 Documents →" [ref=f2e124] [cursor=pointer]:
+                    - /url: /category/proceedings
+                    - generic [ref=f2e125]:
+                      - generic [ref=f2e126]: View All 0 Documents
+                      - generic [ref=f2e127]: →
+        - complementary [ref=f2e129]:
+          - generic [ref=f2e130]:
+            - generic [ref=f2e131]:
+              - generic [ref=f2e132]:
+                - heading "🏛️ GOIR Repository Stats" [level=3] [ref=f2e133]:
+                  - generic [ref=f2e134]: 🏛️
+                  - text: GOIR Repository Stats
+                - paragraph [ref=f2e135]: Official Document Classification
+              - generic [ref=f2e136]: Verified
+            - generic [ref=f2e139]:
+              - generic [ref=f2e140]:
+                - generic [ref=f2e143]:
+                  - generic [ref=f2e144]: GOIR Verified Gazette
+                  - generic [ref=f2e145]: goir.ap.gov.in verified
+                - generic [ref=f2e146]: Official
+              - generic [ref=f2e147]:
+                - generic [ref=f2e150]:
+                  - generic [ref=f2e151]: Notified Orders
+                  - generic [ref=f2e152]: Department issued
+                - generic [ref=f2e153]: Gazette
+              - generic [ref=f2e154]:
+                - generic [ref=f2e157]:
+                  - generic [ref=f2e158]: Online Applications
+                  - generic [ref=f2e159]: TET & DSC portals
+                - generic [ref=f2e160]: Active
+              - generic [ref=f2e161]:
+                - generic [ref=f2e164]:
+                  - generic [ref=f2e165]: Archived / Expired
+                  - generic [ref=f2e166]: Past academic years
+                - generic [ref=f2e167]: Historical
+          - generic [ref=f2e168]:
+            - generic [ref=f2e169]:
+              - heading "🔥 Trending G.O. Topics" [level=3] [ref=f2e170]:
+                - generic [ref=f2e171]: 🔥
+                - text: Trending G.O. Topics
+              - generic [ref=f2e172]: Searched
+            - generic [ref=f2e173]:
+              - link "#DAArrears" [ref=f2e174] [cursor=pointer]:
+                - /url: /search?q=DA+Arrears
+              - link "#MegaDSC2026" [ref=f2e175] [cursor=pointer]:
+                - /url: /search?q=Mega+DSC
+              - link "#APTET" [ref=f2e176] [cursor=pointer]:
+                - /url: /search?q=TET
+              - link "#TransferRules" [ref=f2e177] [cursor=pointer]:
+                - /url: /search?q=Transfers
+              - link "#PRC2024" [ref=f2e178] [cursor=pointer]:
+                - /url: /search?q=PRC
+              - link "#Form16Tax" [ref=f2e179] [cursor=pointer]:
+                - /url: /tools/tax-calculator
+              - link "#GPFInterest" [ref=f2e180] [cursor=pointer]:
+                - /url: /tools/gpf-apgli
+              - link "#EHSMedical" [ref=f2e181] [cursor=pointer]:
+                - /url: /tools/cfms-checker
+          - generic [ref=f2e182]:
+            - generic [ref=f2e183]:
+              - generic [ref=f2e184]: goir.ap.gov.in
+              - generic [ref=f2e187]: AP Gazette
+            - generic [ref=f2e188]: Andhra Pradesh Government Orders Repository
+            - paragraph [ref=f2e189]: All G.O. Ms, G.O. Rt, Memos, and Circulars published on AP Teacher Desk are verified against official gazette records.
+            - link "Open GOIR Official Portal ↗" [ref=f2e191] [cursor=pointer]:
+              - /url: https://goir.ap.gov.in
+              - generic [ref=f2e192]: Open GOIR Official Portal
+              - generic [ref=f2e193]: ↗
+      - generic [ref=f2e194]: All G.O.s verified against Andhra Pradesh Government Orders Information Repository (GOIR) · goir.ap.gov.in
+  - navigation [ref=f2e195]:
+    - generic [ref=f2e196]:
+      - link "Home" [ref=f2e197] [cursor=pointer]:
+        - /url: /
+      - link "Orders" [ref=f2e202] [cursor=pointer]:
+        - /url: /orders
+      - link "Search" [ref=f2e208] [cursor=pointer]:
+        - /url: /search
+      - link "Tools" [ref=f2e213] [cursor=pointer]:
+        - /url: /tools

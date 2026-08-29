@@ -41,3 +41,10 @@ Run before every deploy. Automated items are covered by `npm test`; the rest are
 - [ ] No numeric or tabular data has been lifted out of a PDF into post text
 - [ ] Each GO reference matches the source document exactly
 - [ ] Each `verifiedAgainstGoir` post was checked against GOIR by a human, today
+
+## Utility Tools & Pensioners Hub
+- [ ] PRC Pay Fixation Calculator (`/tools/prc-calculator`) correctly looks up AP RPS 2022 Master Scale stages
+- [ ] Income Tax Calculator (`/tools/tax-calculator`) exports clean DDO Annexure-I print statements
+- [ ] Pensioners Hub (`/pensioners`) renders 6-Office Retirement Pipeline guide
+- [ ] Service Pension Calculator (`/pensioners/pension-calculator`) calculates 40% Commutation and DCRG Gratuity with ₹16L cap
+- [ ] Commutation Restoration Tracker (`/pensioners/commutation-tracker`) calculates 180-month timeline and exports STO application letter

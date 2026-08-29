@@ -1,100 +1,83 @@
-# Portal CMS — Local Dev Scaffold
+# AP Teacher Desk — Portal CMS & Public Web Application
 
-Admin CMS for the AP Teachers Living Document Portal (blueprint v2.0). This scaffold
-focuses on the **admin CMS** first, per the agreed build sequence — the public site
-(Home / Category / Article / Search) comes next.
+Full-stack Next.js 14 Web Application & Admin CMS for AP & TS Government Teachers, Employees, and Pensioners.
 
-Docker runs the **stateful services** (Postgres, Redis). The Next.js app itself runs
-directly on your machine via `npm run dev` — this is the standard local setup and keeps
-hot-reload fast (containerizing the Next.js dev server too is possible later, but adds
-friction for no benefit at this stage).
+## 🚀 Key Features
 
-## Prerequisites
+### 1. 🧮 Public Utility Tools Suite (`/tools`)
+- **PRC Pay Fixation & Arrears Calculator (`/tools/prc-calculator`)**: Interactive AP RPS 2022 Master Scale pay stage lookup, gross benefit breakdown, and CPS/GPF arrears split.
+- **Income Tax Calculator (`/tools/tax-calculator`)**: FY 2025-26 (AY 2026-27) New vs Old Tax Regime comparison with instant DDO Annexure-I statement export.
+- **EL & HPL Encashment Bill (`/tools/leave-encashment`)**: Cash equivalent calculator for 15/30-day Earned Leave surrender.
+- **GPF & APGLI Balance Estimator (`/tools/gpf-apgli`)**: 7.1% GPF interest growth and APGLI maturity sum projection.
+- **CFMS Bill Status Guide (`/tools/cfms-checker`)**: Direct guidance for DDO bill submission status and medical reimbursement tracking.
+
+### 2. 👵 Pensioners & Retired Employee Care Hub (`/pensioners`)
+- **Service Pension & Gratuity Calculator (`/pensioners/pension-calculator`)**: Calculates Basic Pension, 40% Commutation lump sum value, DCRG Gratuity (₹16L cap), and EL encashment.
+- **180-Month Commutation Restoration Tracker (`/pensioners/commutation-tracker`)**: Recovery timeline countdown + printable restoration application to STO Treasury.
+- **6-Office Retirement Clearance Pipeline (`/pensioners/office-pipeline`)**: Step-by-step file clearance roadmap (School DDO ➔ MEO/DEO ➔ State Audit ➔ AG AP Vijayawada ➔ STO Treasury ➔ Bank Branch).
+
+### 3. 📄 Living Documents & Orders Hub (`/orders`, `/posts/[slug]`)
+- Verified AP G.O.s (Government Orders) hub with GOIR verification badges, English abstracts, Telugu summaries (`lang="te"`), and full lifecycle tracking (Effective, Superseded, Amendments).
+
+### 4. 🔒 Admin CMS (`/admin`)
+- Solo-operator NextAuth credentials authentication with bcrypt hash verification.
+- Content creation, draft management, and Related Orders linking.
+
+---
+
+## 🛠️ Prerequisites & Setup
 
 - Docker + Docker Compose
 - Node.js 20+
 - npm
 
-## Setup
-
+### 1. Start Stateful Services & Install
 ```bash
-# 1. Start Postgres + Redis
+# Start Postgres 16 & Redis 7
 docker compose up -d
 
-# 2. Install dependencies
+# Install dependencies
 npm install
+```
 
-# 3. Configure environment
-cp .env.example .env
-# Edit .env — at minimum set ADMIN_EMAIL, ADMIN_PASSWORD_HASH, and NEXTAUTH_SECRET
-# Generate a secret with: openssl rand -base64 32
-# Generate the password hash with: npx tsx scripts/hash-password.ts <password>
+### 2. Configure Environment
+Create `.env` file (copied from `.env.example`):
+```env
+DATABASE_URL="postgresql://portal:portal_dev_password@localhost:5432/portal_dev?schema=public"
+REDIS_URL="redis://localhost:6379"
+NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET="dev-secret-key-ap-teachers-portal-2026"
+ADMIN_EMAIL="admin@apteachers.in"
+ADMIN_PASSWORD="adminpassword123"
+# Note: Escape dollar signs (\$) to prevent dotenv variable expansion
+ADMIN_PASSWORD_HASH="\$2a\$10\$8GcYdn2jC4GsBMab92zR9eN.Rl4MQ0irYSHMB1TbxwBLSiawy1JSy"
+```
 
-# 4. Push the schema to Postgres (no migration history yet — fine for local dev)
-npm run db:push
+### 3. Database Push & Seed
+```bash
+# Generate Prisma Client & push schema to Postgres
+npx prisma generate
+npx prisma db push
 
-# 5. Seed sample data (one background order + one linked post, per the blueprint example)
+# Seed initial categories and test G.O. data
 npm run db:seed
 
-# 6. Run the app
+# Start Next.js development server
 npm run dev
 ```
 
-Visit `http://localhost:3000/admin` — you'll be redirected to `/admin/login`. Sign in
-with `ADMIN_EMAIL` and the plain-text password you hashed into `ADMIN_PASSWORD_HASH`
-in `.env`.
+Visit `http://localhost:3000` for the public portal and `http://localhost:3000/admin/login` for admin access.
 
-## What's here
+---
 
-- `docker-compose.yml` — Postgres 16 + Redis 7, matching the blueprint's Section 6.1 stack
-  (Postgres + Redis on Railway in production; this mirrors it locally).
-- `prisma/schema.prisma` — the exact data model from blueprint Section 9, plus a
-  `Category` model that was referenced but not yet defined there.
-- `app/admin/` — the CMS: login, posts list, create/edit form.
-- `app/actions/posts.ts` — server actions for create/update/delete (no separate API
-  routes needed with Next.js App Router).
-- The post form surfaces the **Quality-First checklist** (blueprint Section 4.1) directly
-  in the UI as a reminder banner, and includes the **Related Orders** picker for the
-  completeness requirement (Section 9.2).
+## 🧪 Testing
 
-## Running tests
-
-Tests run against a dedicated `portal_test` Postgres database inside the same Docker
-container as dev (`docker compose up -d db`, published on host port 5433). Config lives
-in `.env.test` (loaded automatically by `vitest.config.mts`); it holds no real secrets.
-
-After every schema change, push the schema to the test database:
+The Vitest test suite covers accessibility (`a11y`), color opacity tokens, navigation, auth guards, pension math, and internal link crawlers.
 
 ```bash
-$env:DATABASE_URL="postgresql://portal:portal_dev_password@localhost:5433/portal_test?schema=public"; npx prisma db push
+# Run full Vitest suite (32 test files / 215 tests)
+npm test
+
+# Type check TypeScript definitions
+npx tsc --noEmit
 ```
-
-(Bash equivalent: `DATABASE_URL="postgresql://portal:portal_dev_password@localhost:5433/portal_test?schema=public" npx prisma db push`)
-
-Then run the tests:
-
-```bash
-npm test          # single run
-npm run test:watch  # watch mode
-```
-
-## What's NOT here yet
-
-- The public-facing site (Home Feed, Category Page, Living Document article view,
-  Search, Utility Tools) — next in the build sequence.
-- AI-assisted drafting (gpt-4o-mini for titles/summaries) and AI-suggested Related
-  Orders — the picker here is fully manual for now; the schema already supports an
-  `ai_suggested` source value for when that's added.
-- Image/PDF upload flow — currently just a text field for a Google Drive link, per the
-  Day-1 storage decision (Section 6.1).
-- Password hashing for the admin login — the local `.env` password is compared in plain
-  text, which is fine for local dev only. Before any real deployment, swap in bcrypt.
-
-## A note on this environment
-
-This scaffold was built and type-checked in a sandboxed container without full internet
-access, so `npx prisma generate` and `npm run build` couldn't be fully verified end-to-end
-here (Prisma's engine binaries are fetched from a domain the sandbox couldn't reach).
-The code follows standard, well-tested patterns for this stack, but run through the setup
-steps above on your own machine as the real verification — and let me know what you hit
-if anything doesn't work as expected.

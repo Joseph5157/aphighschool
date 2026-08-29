@@ -11,14 +11,12 @@ export type BadgeVariant =
 export type BadgeSize = "sm" | "md" | "lg";
 export type BadgeShape = "rounded" | "pill";
 
-export type BadgeProps = {
-  children: React.ReactNode;
+export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
   variant?: BadgeVariant;
   size?: BadgeSize;
   shape?: BadgeShape;
   dot?: boolean;
-  className?: string;
-};
+}
 
 const VARIANT_MAP: Record<BadgeVariant, string> = {
   tamarind: "bg-tamarind/10 text-tamarind border-tamarind/20",
@@ -49,27 +47,39 @@ const DOT_COLOR_MAP: Record<BadgeVariant, string> = {
   dark: "bg-turmeric",
 };
 
-export default function Badge({
-  children,
-  variant = "tamarind",
-  size = "sm",
-  shape = "rounded",
-  dot = false,
-  className = "",
-}: BadgeProps) {
-  const variantClass = VARIANT_MAP[variant] || VARIANT_MAP.tamarind;
-  const sizeClass = SIZE_MAP[size] || SIZE_MAP.sm;
-  const shapeClass = SHAPE_MAP[shape] || SHAPE_MAP.rounded;
-  const dotColorClass = DOT_COLOR_MAP[variant] || DOT_COLOR_MAP.tamarind;
+export const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
+  (
+    {
+      children,
+      variant = "tamarind",
+      size = "sm",
+      shape = "rounded",
+      dot = false,
+      className = "",
+      ...props
+    },
+    ref
+  ) => {
+    const variantClass = VARIANT_MAP[variant] || VARIANT_MAP.tamarind;
+    const sizeClass = SIZE_MAP[size] || SIZE_MAP.sm;
+    const shapeClass = SHAPE_MAP[shape] || SHAPE_MAP.rounded;
+    const dotColorClass = DOT_COLOR_MAP[variant] || DOT_COLOR_MAP.tamarind;
 
-  return (
-    <span
-      className={`inline-flex items-center gap-1.5 font-mono uppercase tracking-wider font-semibold border ${variantClass} ${sizeClass} ${shapeClass} ${className}`}
-    >
-      {dot && (
-        <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${dotColorClass}`} />
-      )}
-      <span>{children}</span>
-    </span>
-  );
-}
+    return (
+      <span
+        ref={ref}
+        className={`inline-flex items-center gap-1.5 font-mono uppercase tracking-wider font-semibold border ${variantClass} ${sizeClass} ${shapeClass} ${className}`}
+        {...props}
+      >
+        {dot && (
+          <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${dotColorClass}`} />
+        )}
+        <span>{children}</span>
+      </span>
+    );
+  }
+);
+
+Badge.displayName = "Badge";
+export default Badge;
+

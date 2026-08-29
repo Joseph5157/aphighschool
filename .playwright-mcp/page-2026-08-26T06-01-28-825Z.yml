@@ -1,0 +1,52 @@
+- generic [ref=f17e2]:
+  - banner [ref=f17e3]:
+    - generic [ref=f17e4]:
+      - link "AP AP Teacher Desk AP School Education" [ref=f17e5] [cursor=pointer]:
+        - /url: /
+        - generic [ref=f17e6]: AP
+        - generic [ref=f17e7]:
+          - generic [ref=f17e8]: AP Teacher Desk
+          - generic [ref=f17e9]: AP School Education
+      - button "🌙" [ref=f17e11] [cursor=pointer]
+  - main [ref=f17e12]:
+    - generic [ref=f17e13]:
+      - generic [ref=f17e14]:
+        - heading "Search Portal" [level=1] [ref=f17e15]
+        - paragraph [ref=f17e16]: Search AP Government Orders, Circulars, and Guidance by GO number, Telugu phrase, or topic tag
+      - generic [ref=f17e17]:
+        - search [ref=f17e18]:
+          - searchbox "Search GO number, Telugu phrase, or topic..." [active] [ref=f17e19]
+        - generic [ref=f17e20]:
+          - link "All" [ref=f17e21] [cursor=pointer]:
+            - /url: /search
+          - link "GO" [ref=f17e24] [cursor=pointer]:
+            - /url: /search?type=go
+          - link "Circular" [ref=f17e27] [cursor=pointer]:
+            - /url: /search?type=circular
+          - link "Memo" [ref=f17e30] [cursor=pointer]:
+            - /url: /search?type=memo
+          - link "Proceeding" [ref=f17e33] [cursor=pointer]:
+            - /url: /search?type=proceeding
+          - link "Notification" [ref=f17e36] [cursor=pointer]:
+            - /url: /search?type=notification
+          - link "Other" [ref=f17e39] [cursor=pointer]:
+            - /url: /search?type=other
+        - generic [ref=f17e42]:
+          - generic [ref=f17e43]: Trending Search Topics
+          - generic [ref=f17e44]:
+            - button "🔍 TET 2026" [ref=f17e45] [cursor=pointer]
+            - button "🔍 DA Arrears" [ref=f17e48] [cursor=pointer]
+            - button "🔍 Mega DSC" [ref=f17e51] [cursor=pointer]
+            - button "🔍 PRC arrears" [ref=f17e54] [cursor=pointer]
+            - button "🔍 Transfers" [ref=f17e57] [cursor=pointer]
+            - button "🔍 Form 16" [ref=f17e60] [cursor=pointer]
+  - navigation [ref=f17e63]:
+    - generic [ref=f17e64]:
+      - link "Home" [ref=f17e65] [cursor=pointer]:
+        - /url: /
+      - link "Orders" [ref=f17e70] [cursor=pointer]:
+        - /url: /orders
+      - link "Search" [ref=f17e75] [cursor=pointer]:
+        - /url: /search
+      - link "Tools" [ref=f17e81] [cursor=pointer]:
+        - /url: /tools

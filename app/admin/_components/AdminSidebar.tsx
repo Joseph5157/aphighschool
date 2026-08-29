@@ -2,58 +2,129 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
-const ADMIN_LINKS = [
-  { href: "/admin", label: "Dashboard", icon: "📊" },
-  { href: "/admin/posts", label: "Manage Posts", icon: "📝" },
-  { href: "/admin/categories", label: "Categories", icon: "📁" },
-  { href: "/", label: "View Public Site", icon: "🌐" },
-];
+import {
+  Sidebar,
+  SidebarHeader,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarGroupContent,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
+  SidebarCollapsible,
+  SidebarMenuSubItem,
+  SidebarMenuSubButton,
+  SidebarTrigger,
+  useSidebar,
+} from "@/app/(public)/_components/Sidebar";
 
 export default function AdminSidebar() {
   const pathname = usePathname();
+  const { open, isMobile } = useSidebar();
+  const collapsed = !open && !isMobile;
+
+  if (pathname === "/admin/login") return null;
 
   return (
-    <aside className="w-64 bg-ink text-white min-h-screen p-5 flex flex-col justify-between shrink-0 font-mono text-xs border-r border-white/10 hidden md:flex">
-      <div className="space-y-6">
-        {/* Brand Header */}
-        <div className="flex items-center gap-3 border-b border-white/10 pb-4">
-          <div className="w-8 h-8 rounded-lg bg-turmeric text-ink font-bold flex items-center justify-center">
+
+    <Sidebar collapsible="icon">
+      {/* Brand Header */}
+      <SidebarHeader>
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="w-8 h-8 rounded-lg bg-turmeric text-ink font-bold flex items-center justify-center shrink-0">
             AP
           </div>
-          <div>
-            <div className="font-bold text-white text-sm">AP Teacher Desk</div>
-            <div className="text-[10px] text-white/50 uppercase tracking-wider">CMS Admin Panel</div>
-          </div>
+          {!collapsed && (
+            <div className="min-w-0 flex-1">
+              <div className="font-bold text-ink text-xs truncate">AP Teacher Desk</div>
+              <div className="text-[10px] text-inkSoft/70 uppercase tracking-wider font-mono truncate">
+                CMS Admin Panel
+              </div>
+            </div>
+          )}
         </div>
+        <SidebarTrigger className="shrink-0" />
+      </SidebarHeader>
 
-        {/* Navigation Links */}
-        <nav className="space-y-1">
-          {ADMIN_LINKS.map((link) => {
-            const isActive = link.href === "/admin" ? pathname === "/admin" : pathname.startsWith(link.href) && link.href !== "/";
+      {/* Main Navigation with Collapsible Submenus */}
+      <SidebarContent>
+        {/* Main Dashboard Group */}
+        <SidebarGroup>
+          <SidebarGroupLabel>Overview</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton href="/admin" icon="📊">
+                  Dashboard
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
 
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`flex items-center gap-2.5 px-3 py-2.5 rounded-lg transition-all ${
-                  isActive
-                    ? "bg-turmeric text-ink font-bold shadow-xs"
-                    : "text-white/70 hover:text-white hover:bg-white/10"
-                }`}
-              >
-                <span>{link.icon}</span>
-                <span>{link.label}</span>
-              </Link>
-            );
-          })}
-        </nav>
-      </div>
+        {/* Content Management Collapsible Submenu */}
+        <SidebarGroup>
+          <SidebarGroupLabel>Management</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarCollapsible title="Content & Posts" icon="📝" defaultOpen>
+                <SidebarMenuSubItem>
+                  <SidebarMenuSubButton href="/admin/posts">All Posts</SidebarMenuSubButton>
+                </SidebarMenuSubItem>
+                <SidebarMenuSubItem>
+                  <SidebarMenuSubButton href="/admin/posts/new">Create New Post</SidebarMenuSubButton>
+                </SidebarMenuSubItem>
+                <SidebarMenuSubItem>
+                  <SidebarMenuSubButton href="/admin/categories">Categories</SidebarMenuSubButton>
+                </SidebarMenuSubItem>
+              </SidebarCollapsible>
+
+              <SidebarCollapsible title="Teacher Tools" icon="🧮">
+                <SidebarMenuSubItem>
+                  <SidebarMenuSubButton href="/tools/tax-calculator">Tax Calculator</SidebarMenuSubButton>
+                </SidebarMenuSubItem>
+                <SidebarMenuSubItem>
+                  <SidebarMenuSubButton href="/tools/prc-calculator">PRC Calculator</SidebarMenuSubButton>
+                </SidebarMenuSubItem>
+                <SidebarMenuSubItem>
+                  <SidebarMenuSubButton href="/tools/gpf-apgli">GPF & APGLI</SidebarMenuSubButton>
+                </SidebarMenuSubItem>
+                <SidebarMenuSubItem>
+                  <SidebarMenuSubButton href="/tools/cfms-checker">CFMS Status</SidebarMenuSubButton>
+                </SidebarMenuSubItem>
+              </SidebarCollapsible>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        {/* External Links */}
+        <SidebarGroup>
+          <SidebarGroupLabel>Quick Links</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton href="/" icon="🌐">
+                  View Public Site
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
 
       {/* Footer */}
-      <div className="border-t border-white/10 pt-4 text-[10px] text-white/40">
-        AP Teacher Desk CMS v1.0
-      </div>
-    </aside>
+      <SidebarFooter>
+        {!collapsed ? (
+          <div className="text-[10px] text-inkSoft/70 font-mono">
+            AP Teacher Desk v1.0
+          </div>
+        ) : (
+          <div className="w-full text-center text-[10px] text-inkSoft font-mono">v1.0</div>
+        )}
+      </SidebarFooter>
+    </Sidebar>
   );
 }
+

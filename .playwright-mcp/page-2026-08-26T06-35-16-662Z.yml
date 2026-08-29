@@ -1,0 +1,162 @@
+- generic [ref=f1e2]:
+  - banner [ref=f1e3]:
+    - generic [ref=f1e4]:
+      - link "AP AP Teacher Desk AP School Education" [ref=f1e5] [cursor=pointer]:
+        - /url: /
+        - generic [ref=f1e6]: AP
+        - generic [ref=f1e7]:
+          - generic [ref=f1e8]: AP Teacher Desk
+          - generic [ref=f1e9]: AP School Education
+      - navigation [ref=f1e10]:
+        - link "Home" [ref=f1e11] [cursor=pointer]:
+          - /url: /
+        - link "Orders & Circulars" [ref=f1e12] [cursor=pointer]:
+          - /url: /orders
+        - link "Utility Tools" [ref=f1e13] [cursor=pointer]:
+          - /url: /tools
+        - link "Search" [ref=f1e14] [cursor=pointer]:
+          - /url: /search
+      - generic [ref=f1e15]:
+        - button "🌙" [ref=f1e16] [cursor=pointer]
+        - link "CMS →" [ref=f1e17] [cursor=pointer]:
+          - /url: /admin
+  - main [ref=f1e18]:
+    - generic [ref=f1e19]:
+      - complementary [ref=f1e21]:
+        - generic [ref=f1e22]:
+          - generic [ref=f1e24]:
+            - generic [ref=f1e25]:
+              - heading "🏛️ Document Categories" [level=3] [ref=f1e26]:
+                - generic [ref=f1e27]: 🏛️
+                - text: Document Categories
+              - paragraph [ref=f1e28]: AP School Education
+            - generic [ref=f1e29]: "5"
+          - generic [ref=f1e31]:
+            - link "Circulars సర్క్యులర్లు 0" [ref=f1e32] [cursor=pointer]:
+              - /url: /category/circulars
+              - generic [ref=f1e33]:
+                - generic [ref=f1e34]: Circulars
+                - generic [ref=f1e35]: సర్క్యులర్లు
+              - generic [ref=f1e36]: "0"
+            - link "Government Orders ప్రభుత్వ ఉత్తర్వులు 1" [ref=f1e38] [cursor=pointer]:
+              - /url: /category/govt-orders
+              - generic [ref=f1e39]:
+                - generic [ref=f1e40]: Government Orders
+                - generic [ref=f1e41]: ప్రభుత్వ ఉత్తర్వులు
+              - generic [ref=f1e42]: "1"
+            - link "Memos మెమోలు 0" [ref=f1e44] [cursor=pointer]:
+              - /url: /category/memos
+              - generic [ref=f1e45]:
+                - generic [ref=f1e46]: Memos
+                - generic [ref=f1e47]: మెమోలు
+              - generic [ref=f1e48]: "0"
+            - link "Notifications ప్రకటనలు 0" [ref=f1e50] [cursor=pointer]:
+              - /url: /category/notifications
+              - generic [ref=f1e51]:
+                - generic [ref=f1e52]: Notifications
+                - generic [ref=f1e53]: ప్రకటనలు
+              - generic [ref=f1e54]: "0"
+            - link "Proceedings ప్రొసీడింగ్స్ 0" [ref=f1e56] [cursor=pointer]:
+              - /url: /category/proceedings
+              - generic [ref=f1e57]:
+                - generic [ref=f1e58]: Proceedings
+                - generic [ref=f1e59]: ప్రొసీడింగ్స్
+              - generic [ref=f1e60]: "0"
+            - link "Explore All Categories" [ref=f1e63] [cursor=pointer]:
+              - /url: /orders
+              - generic [ref=f1e65]: →
+      - generic [ref=f1e66]:
+        - generic [ref=f1e68]:
+          - heading "Latest Orders & Living Documents" [level=1] [ref=f1e69]
+          - paragraph [ref=f1e70]: AP School Education Department · Verified Government Orders & Guidance
+        - region "Featured Order" [ref=f1e71]:
+          - article [ref=f1e73]:
+            - generic [ref=f1e74]:
+              - generic [ref=f1e75]: Current
+              - generic [ref=f1e78]: Government Orders
+              - generic [ref=f1e79]: G.O.Ms.No.129
+            - link "[DEMO] New District Allocation Guidelines for Teachers & Educational Staff నూతన జిల్లాల్లో ఉపాధ్యాయులు మరియు విద్యాశాఖ సిబ్బంది కేటాయింపు మార్గదర్శకాలు" [ref=f1e80] [cursor=pointer]:
+              - /url: /posts/go-129-district-allocation-2026
+              - heading "[DEMO] New District Allocation Guidelines for Teachers & Educational Staff" [level=2] [ref=f1e81]
+              - generic [ref=f1e82]: నూతన జిల్లాల్లో ఉపాధ్యాయులు మరియు విద్యాశాఖ సిబ్బంది కేటాయింపు మార్గదర్శకాలు
+            - generic [ref=f1e83]:
+              - generic [ref=f1e84]:
+                - generic [ref=f1e85]: •
+                - generic [ref=f1e86]: అర్హులైన ఉపాధ్యాయులు మరియు ఉద్యోగులు ఆగస్టు 30లోగా ఆన్‌లైన్ దరఖాస్తు చేసుకోవాలి.
+              - generic [ref=f1e87]:
+                - generic [ref=f1e88]: •
+                - generic [ref=f1e89]: సీనియారిటీ మరియు స్పౌజ్ పాయింట్ల ఆధారంగా జిల్లాల కేటాయింపు ప్రక్రియ నిర్వహించబడుతుంది.
+              - generic [ref=f1e90]:
+                - generic [ref=f1e91]: •
+                - generic [ref=f1e92]: కేటాయింపు ఉత్తర్వులు వెలువడిన 3 రోజుల్లోగా నూతన స్థానాల్లో చేరవలసి ఉంటుంది.
+            - generic [ref=f1e93]:
+              - generic [ref=f1e94]: Added to portal · 24 Aug 2026
+              - link "Read Summary →" [ref=f1e95] [cursor=pointer]:
+                - /url: /posts/go-129-district-allocation-2026
+                - generic [ref=f1e96]: Read Summary
+                - generic [ref=f1e97]: →
+      - complementary [ref=f1e99]:
+        - generic [ref=f1e100]:
+          - generic [ref=f1e102]:
+            - generic [ref=f1e103]:
+              - heading "⚡ Teacher Calculators" [level=3] [ref=f1e104]:
+                - generic [ref=f1e105]: ⚡
+                - text: Teacher Calculators
+              - paragraph [ref=f1e106]: Client-Side & Offline Ready
+            - generic [ref=f1e107]: Client-Side
+          - generic [ref=f1e110]:
+            - link "🧮 Income Tax Calculator New & Old Regimes FY 2025-26" [ref=f1e111] [cursor=pointer]:
+              - /url: /tools/tax-calculator
+              - generic [ref=f1e112]:
+                - generic [ref=f1e113]: 🧮
+                - generic [ref=f1e114]:
+                  - generic [ref=f1e115]: Income Tax Calculator
+                  - generic [ref=f1e116]: New & Old Regimes
+              - generic [ref=f1e117]: FY 2025-26
+            - link "🏖️ Leave Encashment Bill Surrender Calculator EL / HPL" [ref=f1e119] [cursor=pointer]:
+              - /url: /tools/leave-encashment
+              - generic [ref=f1e120]:
+                - generic [ref=f1e121]: 🏖️
+                - generic [ref=f1e122]:
+                  - generic [ref=f1e123]: Leave Encashment Bill
+                  - generic [ref=f1e124]: Surrender Calculator
+              - generic [ref=f1e125]: EL / HPL
+            - link "💰 GPF & APGLI Estimator Part-Final Eligibility 7.1% Growth" [ref=f1e127] [cursor=pointer]:
+              - /url: /tools/gpf-apgli
+              - generic [ref=f1e128]:
+                - generic [ref=f1e129]: 💰
+                - generic [ref=f1e130]:
+                  - generic [ref=f1e131]: GPF & APGLI Estimator
+                  - generic [ref=f1e132]: Part-Final Eligibility
+              - generic [ref=f1e133]: 7.1% Growth
+            - link "📑 CFMS Bill Status Direct Status Checker Payslip" [ref=f1e135] [cursor=pointer]:
+              - /url: /tools/cfms-checker
+              - generic [ref=f1e136]:
+                - generic [ref=f1e137]: 📑
+                - generic [ref=f1e138]:
+                  - generic [ref=f1e139]: CFMS Bill Status
+                  - generic [ref=f1e140]: Direct Status Checker
+              - generic [ref=f1e141]: Payslip
+            - link "Explore All Utility Tools→" [ref=f1e144] [cursor=pointer]:
+              - /url: /tools
+        - generic [ref=f1e145]:
+          - generic [ref=f1e146]:
+            - heading "Quick Searches" [level=3] [ref=f1e147]
+            - paragraph [ref=f1e148]: Jump to a topic
+          - generic [ref=f1e150]:
+            - link "#DAArrears" [ref=f1e151] [cursor=pointer]:
+              - /url: /search?q=DA+Arrears
+            - link "#MegaDSC2026" [ref=f1e152] [cursor=pointer]:
+              - /url: /search?q=Mega+DSC
+            - link "#APTET" [ref=f1e153] [cursor=pointer]:
+              - /url: /search?q=TET
+            - link "#TransferRules" [ref=f1e154] [cursor=pointer]:
+              - /url: /search?q=Transfers
+            - link "#Form16Tax" [ref=f1e155] [cursor=pointer]:
+              - /url: /tools/tax-calculator
+            - link "#PRC2024" [ref=f1e156] [cursor=pointer]:
+              - /url: /search?q=PRC
+            - link "#GPFInterest" [ref=f1e157] [cursor=pointer]:
+              - /url: /tools/gpf-apgli
+            - link "#EHSMedical" [ref=f1e158] [cursor=pointer]:
+              - /url: /tools/cfms-checker

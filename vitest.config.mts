@@ -20,5 +20,6 @@ export default defineConfig(() => ({
     // do nothing here — fileParallelism keeps working regardless of which
     // pool Vitest defaults to.
     fileParallelism: false,
+    exclude: ["**/node_modules/**", "**/.claude/**", "**/.next/**"],
   },
 }));

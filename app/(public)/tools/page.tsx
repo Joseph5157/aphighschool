@@ -52,6 +52,15 @@ const TOOLS = [
     status: "Direct Status",
   },
   {
+    href: "/tools/prc-calculator",
+    title: "PRC Pay Fixation & Arrears Calculator",
+    titleTe: "పీఆర్‌సి పే ఫిక్సేషన్ మరియు బకాయిల లెక్కింపు సాధనం",
+    desc: "Calculate revised Basic Pay under AP RPS 2022 Master Scale, fitment percentage, gross benefit, and CPS/GPF arrears allocation.",
+    icon: "📊",
+    badge: "RPS 2022",
+    status: "Pay Fixation",
+  },
+  {
     href: "/tools/da-arrears",
     title: "DA Arrears Calculator",
     titleTe: "డిఏ బకాయిల లెక్కింపు సాధనం",

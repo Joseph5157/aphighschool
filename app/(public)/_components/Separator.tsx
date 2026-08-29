@@ -1,16 +1,35 @@
 import React from "react";
 
-export interface SeparatorProps {
+export interface SeparatorProps extends React.HTMLAttributes<HTMLDivElement> {
   orientation?: "horizontal" | "vertical";
-  className?: string;
 }
 
-export function Separator({ orientation = "horizontal", className = "" }: SeparatorProps) {
-  if (orientation === "vertical") {
-    return <div className={`w-[1px] bg-hair self-stretch ${className}`} role="separator" aria-orientation="vertical" />;
+export const Separator = React.forwardRef<HTMLDivElement, SeparatorProps>(
+  ({ orientation = "horizontal", className = "", ...props }, ref) => {
+    if (orientation === "vertical") {
+      return (
+        <div
+          ref={ref}
+          className={`w-[1px] bg-hair self-stretch ${className}`}
+          role="separator"
+          aria-orientation="vertical"
+          {...props}
+        />
+      );
+    }
+
+    return (
+      <div
+        ref={ref}
+        className={`h-[1px] w-full bg-hair ${className}`}
+        role="separator"
+        aria-orientation="horizontal"
+        {...props}
+      />
+    );
   }
+);
 
-  return <div className={`h-[1px] w-full bg-hair ${className}`} role="separator" aria-orientation="horizontal" />;
-}
-
+Separator.displayName = "Separator";
 export default Separator;
+
