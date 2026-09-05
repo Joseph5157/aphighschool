@@ -72,6 +72,9 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
                   <SidebarMenuButton href="/tools" icon="🧮">Utility Tools</SidebarMenuButton>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
+                  <SidebarMenuButton href="/service-desk" icon="SD">Teacher Service Desk</SidebarMenuButton>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
                   <SidebarMenuButton href="/pensioners" icon="👵">Pensioners Hub</SidebarMenuButton>
                 </SidebarMenuItem>
                 <SidebarMenuItem>

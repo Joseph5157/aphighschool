@@ -7,6 +7,7 @@ const NAV_LINKS = [
   { href: "/", label: "Home", exact: true },
   { href: "/orders", label: "Orders & Circulars", exact: false },
   { href: "/tools", label: "Utility Tools", exact: false },
+  { href: "/service-desk", label: "Service Desk", exact: false },
   { href: "/pensioners", label: "Pensioners Hub", exact: false },
   { href: "/search", label: "Search", exact: false },
 ];

@@ -14,6 +14,10 @@ function walk(dir: string): string[] {
 }
 
 describe("public route scope", () => {
+  it("has the Teacher Service Desk route", () => {
+    expect(fs.existsSync(path.join(PUBLIC_DIR, "service-desk", "page.tsx"))).toBe(true);
+  });
+
   it("has no education route", () => {
     expect(fs.existsSync(path.join(PUBLIC_DIR, "education"))).toBe(false);
   });

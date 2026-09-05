@@ -15,7 +15,7 @@ function tsxFiles(dir: string): string[] {
 
 // Static routes that exist as page.tsx files.
 const STATIC_ROUTES = new Set([
-  "/", "/orders", "/search", "/tools", "/admin", "/admin/posts", "/admin/posts/new",
+  "/", "/orders", "/search", "/tools", "/service-desk", "/admin", "/admin/posts", "/admin/posts/new",
   "/tools/cfms-checker", "/tools/da-arrears", "/tools/gpf-apgli",
   "/tools/leave-encashment", "/tools/tax-calculator", "/tools/prc-calculator",
   "/pensioners", "/pensioners/pension-calculator", "/pensioners/commutation-tracker",
