@@ -6,6 +6,7 @@ import Breadcrumb from "@/app/(public)/_components/Breadcrumb";
 import { buttonClassName } from "@/app/(public)/_components/Button";
 import OrdersFilterTabs from "./_components/OrdersFilterTabs";
 import OrdersSidebar from "./_components/OrdersSidebar";
+import TopicTagBar from "@/app/(public)/_components/TopicTagBar";
 import { ORDER_BY_OFFICIAL_DATE, officialDate, dateLabel, formatDate } from "@/lib/dates";
 import { safeQuery } from "@/lib/db-safe";
 
@@ -122,6 +123,9 @@ export default async function OrdersPage() {
               </div>
             </div>
           </div>
+
+          {/* ── Topic Tag Bar ────────────────────────────────────────── */}
+          <TopicTagBar baseUrl="/search" />
 
           {/* ── Recently Added strip ─────────────────────────────────────────── */}
           {recentPosts.length > 0 && (

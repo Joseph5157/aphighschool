@@ -36,38 +36,40 @@ def draft_post_with_fallback(go_data: dict) -> Optional[dict]:
   dept_text = go_data.get("department", "")
   go_num = go_data.get("go_number", "G.O.Ms.No.00")
 
-  if "School Education" not in dept_text and "Teacher" not in title_text and "TET" not in title_text:
-    logger.info(f"Fallback AI filter: Skipping out-of-scope GO ({dept_text}): {go_num}")
-    return {"skip": True, "reason": "Not related to AP School Education / Teachers"}
+  title_upper = title_text.upper()
+  if not any(k in title_upper for k in ["TEACHER", "TET", "SCHOOL", "EDUCATION", "MDM", "AWARD", "NOC", "SERVICE", "PENSION", "APGLI", "ZPPF", "PRC", "DA", "FA1", "SA1", "DSC"]):
+    if "School Education" not in dept_text:
+      logger.info(f"Fallback AI filter: Skipping out-of-scope post ({dept_text}): {go_num}")
+      return {"skip": True, "reason": "Not related to AP School Education / Teachers"}
 
-  if "TET" in title_text or "Eligibility Test" in title_text:
+  if "TET" in title_upper or "ELIGIBILITY TEST" in title_upper:
     return {
-      "titleEn": "TET 2026 Notification & Guidelines",
+      "titleEn": title_text or "TET 2026 Notification & Guidelines",
       "titleTe": "ఉపాధ్యాయ అర్హత పరీక్ష (TET 2026) ప్రకటన & మార్గదర్శకాలు",
       "summaryTe": [
         "ఆంధ్రప్రదేశ్ ఉపాధ్యాయులు మరియు అర్హులైన అభ్యర్థులకు వర్తిస్తుంది.",
-        "టెట్ పరీక్షా తేదీలు మరియు ఆన్‌లైన్ దరఖాస్తు రుసుము వివరాలు విడుదలయ్యాయి.",
+        "పాఠశాల విద్యా శాఖ ద్వారా అధికారిక మార్గదర్శకాలు విడుదలయ్యాయి.",
         "అభ్యర్థులు నిర్ణీత గడువులోగా దరఖాస్తు దాఖలు చేయాల్సి ఉంటుంది."
       ],
-      "englishAbstract": "Applies to: Aspiring and in-service AP teachers · Key rule: TET qualification mandatory · Deadline: 2026-08-30",
+      "englishAbstract": f"Applies to: Aspiring and in-service AP teachers · Title: {title_text}",
       "goReference": go_num,
       "sourceDept": "School Education, AP",
       "statusBadge": "notification",
-      "actionDeadline": "2026-08-30"
+      "actionDeadline": "2026-09-24"
     }
 
   return {
-    "titleEn": f"Teacher Transfer & Service Rules ({go_num})",
-    "titleTe": f"ఉపాధ్యాయ బదిలీలు మరియు సేవా నిబంధనల మార్గదర్శకాలు ({go_num})",
+    "titleEn": title_text or f"Teacher Guidelines ({go_num})",
+    "titleTe": f"ఉపాధ్యాయ మరియు పాఠశాల విద్యాశాఖ మార్గదర్శకాలు",
     "summaryTe": [
       "ఆంధ్రప్రదేశ్ పాఠశాల విద్యాశాఖ పరిధిలోని ఉపాధ్యాయులకు వర్తిస్తుంది.",
-      "బదిలీల ప్రక్రియ మరియు సీనియారిటీ నిబంధనలు నవీకరించబడ్డాయి.",
-      "సంబంధిత డిడిఓలు మరియు డిఇఓలు తక్షణ చర్యలు తీసుకోవాలి."
+      "లేటెస్ట్ సమాచారం మరియు అధికారిక మార్గదర్శకాలు అందుబాటులో ఉన్నాయి.",
+      "సంబంధిత ఉపాధ్యాయులు తగిన చర్యలు తీసుకోవాలి."
     ],
-    "englishAbstract": f"Applies to: AP School Education teachers · Key rule: Seniority-based transfers · Deadline: None",
+    "englishAbstract": f"Applies to: AP School Education teachers · Title: {title_text}",
     "goReference": go_num,
     "sourceDept": "School Education, AP",
-    "statusBadge": "apply_link",
+    "statusBadge": "notification",
     "actionDeadline": None
   }
 

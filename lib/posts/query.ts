@@ -81,7 +81,16 @@ export async function searchPosts(params: SearchParams): Promise<SearchResult[]>
   }
 
   if (params.category) and.push({ category: { slug: params.category } });
-  if (params.tag) and.push({ tags: { has: params.tag } });
+  if (params.tag) {
+    const t = params.tag.trim();
+    and.push({
+      OR: [
+        { tags: { has: t } },
+        { titleEn: { contains: t, mode: "insensitive" } },
+        { titleTe: { contains: t, mode: "insensitive" } },
+      ],
+    });
+  }
 
   if (params.from || params.to) {
     const range: Prisma.DateTimeFilter = {};

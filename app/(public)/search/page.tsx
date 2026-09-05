@@ -1,6 +1,7 @@
 import { searchPosts, type SearchParams } from "@/lib/posts/query";
 import { safeQuery } from "@/lib/db-safe";
 import SearchUI from "./_components/SearchUI";
+import TopicTagBar from "@/app/(public)/_components/TopicTagBar";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -28,6 +29,8 @@ export default async function SearchPage({
           phrase, or topic tag
         </p>
       </div>
+
+      <TopicTagBar baseUrl="/search" />
 
       <SearchUI
         results={results}

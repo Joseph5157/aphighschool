@@ -77,7 +77,7 @@ export default function AdminSidebar() {
                   <SidebarMenuSubButton href="/admin/posts/new">Create New Post</SidebarMenuSubButton>
                 </SidebarMenuSubItem>
                 <SidebarMenuSubItem>
-                  <SidebarMenuSubButton href="/admin/categories">Categories</SidebarMenuSubButton>
+                  <SidebarMenuSubButton href="/orders">Categories</SidebarMenuSubButton>
                 </SidebarMenuSubItem>
               </SidebarCollapsible>
 

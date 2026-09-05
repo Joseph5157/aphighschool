@@ -82,12 +82,12 @@ def insert_draft(post_data: dict, pdf_url: str) -> bool:
           INSERT INTO "Post" (
             "id", "slug", "titleEn", "titleTe", "summaryTe", "englishAbstract",
             "statusBadge", "pdfUrl", "actionDeadline", "categoryId",
-            "goReference", "sourceDept", "sourceUrl", "verifiedAgainstGoir", "isDraft",
+            "goReference", "sourceDept", "sourceUrl", "content", "verifiedAgainstGoir", "isDraft",
             "createdAt", "updatedAt"
           ) VALUES (
             %s, %s, %s, %s, %s, %s,
             %s::"PostStatus", %s, %s, %s,
-            %s, %s, %s, %s, %s,
+            %s, %s, %s, %s, %s, %s,
             NOW(), NOW()
           );
         """
@@ -105,14 +105,15 @@ def insert_draft(post_data: dict, pdf_url: str) -> bool:
           category_id,
           post_data.get("goReference"),
           post_data.get("sourceDept", "School Education, AP"),
-          "https://goir.ap.gov.in",
+          post_data.get("sourceUrl", "https://goir.ap.gov.in"),
+          post_data.get("contentHtml") or post_data.get("content"),
           True, # verifiedAgainstGoir
           True  # isDraft
         ))
 
         conn.commit()
         inserted = True
-        print(f"✓ Draft created: {title_en}")
+        print(f"[OK] Draft created: {title_en}")
       except psycopg2.IntegrityError as ie:
         conn.rollback()
         attempts += 1

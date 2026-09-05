@@ -87,6 +87,7 @@ model Post {
   goReference        String?    // e.g. G.O.Ms.No.129
   sourceDept         String?
   sourceUrl          String?
+  content            String?    // Full structured content / tables / guides
   verifiedAgainstGoir Boolean   @default(false)
   isDraft             Boolean   @default(true)
 
