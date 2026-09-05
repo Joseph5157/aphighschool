@@ -84,6 +84,8 @@ describe("SearchUI", () => {
     expect(screen.getByText(/Quick Searches/i)).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Recent Documents" })).toBeInTheDocument();
     expect(screen.getByText("Recent Government Order")).toBeInTheDocument();
+    expect(screen.getByText("Published documents")).toBeInTheDocument();
+    expect(screen.queryByText("Current")).not.toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Find by Task" })).toBeInTheDocument();
   });
 

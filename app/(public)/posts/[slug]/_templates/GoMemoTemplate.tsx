@@ -23,7 +23,7 @@ export default function GoMemoTemplate({ post, lifecycleView, prevPost, nextPost
       <div className="bg-masthead text-mastheadText border border-mastheadText/40 rounded-2xl p-6 md:p-8 lg:p-10 space-y-5 shadow-md relative overflow-hidden">
         <div className="flex items-center justify-between gap-3 flex-wrap border-b border-mastheadText/20 pb-4">
           <div className="flex items-center gap-2 flex-wrap">
-            {post.verifiedAgainstGoir && <Badge variant="success" size="sm" shape="pill" dot>GOIR Verified Gazette</Badge>}
+            {post.verifiedAgainstGoir && <Badge variant="success" size="sm" shape="pill" dot>GOIR Verified</Badge>}
             {post.category && <span className="font-mono text-xs font-semibold text-turmeric bg-turmeric/10 px-2.5 py-1 rounded border border-turmeric/20">{post.category.nameEn}</span>}
           </div>
           {post.goReference && <span className="font-mono text-xs font-bold text-turmeric bg-mastheadText/10 px-3 py-1 rounded border border-mastheadText/20 break-words">{post.goReference}</span>}

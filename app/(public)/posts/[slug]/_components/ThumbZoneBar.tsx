@@ -36,8 +36,8 @@ export default function ThumbZoneBar({ pdfUrl, sourceUrl }: ThumbZoneProps) {
             target="_blank"
             rel="noopener noreferrer"
             className="w-[48px] h-[48px] min-w-[48px] min-h-[48px] bg-paperRaised border border-hair rounded-xl flex items-center justify-center text-ink hover:text-turmericDeep hover:border-ink/30 transition-all shadow-sm"
-            title="Open Original Source URL"
-            aria-label="Open Official Source"
+            title="Open source link"
+            aria-label="Open source link"
           >
             ↗
           </a>

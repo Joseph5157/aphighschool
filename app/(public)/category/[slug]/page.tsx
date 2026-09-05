@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import CategoryLogList from "./_components/CategoryLogList";
 import Breadcrumb from "@/app/(public)/_components/Breadcrumb";
-import Badge from "@/app/(public)/_components/Badge";
 import { ORDER_BY_OFFICIAL_DATE } from "@/lib/dates";
 import { safeQuery } from "@/lib/db-safe";
 
@@ -80,8 +79,8 @@ export default async function CategoryDetailPage({
           className="border-b border-mastheadText/20 px-6 py-2 flex items-center justify-between text-[10px] font-mono text-mastheadText/40 tracking-widest uppercase"
           style={{ backgroundColor: "color-mix(in srgb, var(--color-masthead) 85%, black)" }}
         >
-          <span>AP School Education · Official Document Category</span>
-          <span className="hidden sm:block">GOIR Verified</span>
+          <span>AP School Education · Document Category</span>
+          <span className="hidden sm:block">Published documents</span>
         </div>
 
         {/* Main Header */}
@@ -90,9 +89,6 @@ export default async function CategoryDetailPage({
           style={{ borderLeftColor: category.color || "var(--color-turmeric)" }}
         >
           <div className="flex items-center gap-3 flex-wrap">
-            <Badge variant="success" size="sm" shape="pill" dot>
-              GOIR Verified Category
-            </Badge>
             <span className="font-mono text-xs text-turmeric/70">
               {postCount} {postCount === 1 ? "document" : "documents"}
             </span>
@@ -114,7 +110,7 @@ export default async function CategoryDetailPage({
           </div>
 
           <p className="text-xs font-mono text-mastheadText/50 max-w-lg">
-            All official {category.nameEn} government orders — sorted by publication date, newest first.
+            Published {category.nameEn} government orders — sorted by publication date, newest first.
           </p>
         </div>
       </div>
@@ -124,7 +120,7 @@ export default async function CategoryDetailPage({
 
       {/* ── Gazette Footer ───────────────────────────────────────────────── */}
       <div className="border-t border-hair pt-4 font-mono text-[10px] text-inkSoft/60 text-center tracking-wide">
-        All G.O.s verified against AP Government Orders Information Repository · goir.ap.gov.in
+        GOIR status is shown per document where recorded.
       </div>
     </div>
   );

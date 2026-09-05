@@ -1,7 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import type { Metadata } from "next";
-import Badge from "@/app/(public)/_components/Badge";
 import Breadcrumb from "@/app/(public)/_components/Breadcrumb";
 import { buttonClassName } from "@/app/(public)/_components/Button";
 import OrdersFilterTabs from "./_components/OrdersFilterTabs";
@@ -13,7 +12,7 @@ import { safeQuery } from "@/lib/db-safe";
 export const metadata: Metadata = {
   title: "Orders & Circulars — AP Teacher Desk",
   description:
-    "Browse official AP School Education government orders, memos, proceedings and notifications — all verified against goir.ap.gov.in.",
+    "Browse AP School Education government orders, memos, proceedings, and notifications.",
 };
 
 export const dynamic = 'force-dynamic';
@@ -77,18 +76,15 @@ export default async function OrdersPage() {
               className="border-b border-mastheadText/20 px-6 py-2 flex items-center justify-between text-[11px] font-mono text-mastheadText/50 tracking-widest uppercase"
               style={{ backgroundColor: "color-mix(in srgb, var(--color-masthead) 85%, black)" }}
             >
-              <span>AP School Education Department — Official G.O. Repository</span>
-              <span className="hidden sm:block">goir.ap.gov.in verified</span>
+              <span>AP School Education Document Index</span>
+              <span className="hidden sm:block">GOIR status shown per document</span>
             </div>
 
             <div className="px-6 py-7 md:px-10 md:py-9 space-y-4">
               {/* Kicker badges */}
               <div className="flex items-center gap-2 flex-wrap">
-                <Badge variant="success" size="sm" shape="pill" dot>
-                  GOIR Verified Repository
-                </Badge>
                 <span className="font-mono text-xs text-turmeric/70">
-                  {totalOrders} Official Documents
+                  {totalOrders} Published documents
                 </span>
               </div>
 
@@ -103,7 +99,7 @@ export default async function OrdersPage() {
               </div>
 
               <p className="text-body text-mastheadText/60 max-w-xl">
-                Official government orders, department memos, proceedings, and notifications — all categories listed below.
+                Government orders, department memos, proceedings, and notifications — all categories listed below.
               </p>
 
               {/* Search shortcut inside hero */}
@@ -127,11 +123,11 @@ export default async function OrdersPage() {
           {/* ── Topic Tag Bar ────────────────────────────────────────── */}
           <TopicTagBar baseUrl="/search" />
 
-          {/* ── Recently Added strip ─────────────────────────────────────────── */}
+          {/* ── Recent documents strip ─────────────────────────────────────────── */}
           {recentPosts.length > 0 && (
             <div className="space-y-2">
               <h2 className="font-mono text-[10px] uppercase tracking-widest text-inkSoft font-semibold">
-                🕐 Recently Added
+                🕐 Recent Documents
               </h2>
               <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
                 {recentPosts.map((post) => (
@@ -167,7 +163,7 @@ export default async function OrdersPage() {
 
       {/* ── Gazette Footer Note ─────────────────────────────────────────── */}
       <div className="border-t border-hair pt-4 font-mono text-[10px] text-inkSoft/60 text-center tracking-wide">
-        All G.O.s verified against Andhra Pradesh Government Orders Information Repository (GOIR) · goir.ap.gov.in
+        GOIR status is shown per document where recorded.
       </div>
     </div>
   );

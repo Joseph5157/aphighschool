@@ -215,7 +215,7 @@ export default function SearchUI({
                 <h2 id="recent-documents-heading" className="font-mono text-[10px] uppercase tracking-widest text-inkSoft font-semibold">
                   Recent Documents
                 </h2>
-                <span className="text-meta font-mono text-inkSoft/70">Published updates</span>
+                <span className="text-meta font-mono text-inkSoft/70">Published documents</span>
               </div>
               <div className="space-y-2">
                 {recentDocuments.map((post) => (
@@ -237,11 +237,6 @@ export default function SearchUI({
                       {post.verifiedAgainstGoir && (
                         <Badge variant="success" size="sm" shape="pill" dot>
                           GOIR Verified
-                        </Badge>
-                      )}
-                      {post.orderState === "current" && (
-                        <Badge variant="success" size="sm" shape="pill">
-                          Current
                         </Badge>
                       )}
                       <span className="text-meta font-mono text-inkSoft/75">

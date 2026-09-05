@@ -42,7 +42,7 @@ export async function generateMetadata({
 
     return {
       title: `${post.titleEn} — AP Teacher Desk`,
-      description: `${description} Official AP School Education government order summary.`,
+      description: `${description} AP School Education government order summary.`,
     };
   } catch (e) {
     return {
