@@ -97,7 +97,7 @@ export default function ToolsIndexPage() {
               </p>
             </div>
 
-            <p className="text-xs text-mastheadText/70 font-mono leading-relaxed">
+            <p className="text-body text-mastheadText/70">
               All calculations execute strictly inside your browser. No financial data or personal pay details leave your device.
             </p>
           </div>
@@ -139,7 +139,7 @@ export default function ToolsIndexPage() {
                     </div>
                   </div>
 
-                  <p className="text-xs text-inkSoft font-mono leading-relaxed pt-2 border-t border-hair/50">
+                  <p className="text-body text-inkSoft pt-2 border-t border-hair/50">
                     {tool.desc}
                   </p>
 

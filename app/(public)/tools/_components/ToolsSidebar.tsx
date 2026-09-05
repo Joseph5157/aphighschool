@@ -77,7 +77,7 @@ export default function ToolsSidebar() {
                   <div className="font-bold text-xs text-ink group-hover:text-inkSoft transition-colors">
                     {item.title}
                   </div>
-                  <div className="text-[10px] font-mono text-inkSoft/70">
+                  <div className="text-[11px] font-sans leading-snug text-inkSoft/70">
                     {item.desc}
                   </div>
                 </div>
@@ -101,7 +101,7 @@ export default function ToolsSidebar() {
           Client-Side Security Guarantee
         </div>
 
-        <p className="text-xs text-mastheadText/70 font-mono leading-relaxed">
+        <p className="text-body text-mastheadText/70">
           Zero network requests executed when calculating salary, tax statements, or leave bills. All data stays local to your web browser.
         </p>
       </div>

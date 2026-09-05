@@ -49,7 +49,7 @@ export default function OrdersSidebar() {
                 <span className={`w-2 h-2 rounded-full bg-${item.dot} shrink-0`} />
                 <div>
                   <div className="text-xs font-bold text-ink">{item.label}</div>
-                  <div className="text-[10px] font-mono text-inkSoft">{item.desc}</div>
+                  <div className="text-[11px] font-sans leading-snug text-inkSoft">{item.desc}</div>
                 </div>
               </div>
               <span className="font-mono text-xs font-bold text-ink bg-ink/10 px-2 py-0.5 rounded">
@@ -95,7 +95,7 @@ export default function OrdersSidebar() {
           Andhra Pradesh Government Orders Repository
         </div>
 
-        <p className="text-xs text-mastheadText/80 font-mono leading-relaxed">
+        <p className="text-body text-mastheadText/80">
           All G.O. Ms, G.O. Rt, Memos, and Circulars published on AP Teacher Desk are verified against official gazette records.
         </p>
 

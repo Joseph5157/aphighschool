@@ -83,7 +83,7 @@ export const AccordionContentPrimitive = React.forwardRef<HTMLDivElement, Accord
       {...props}
     >
       <div className="overflow-hidden">
-        <div className="p-4 pt-1 border-t border-hair/50 text-xs sm:text-sm text-inkSoft leading-relaxed space-y-2 font-sans">
+        <div className="p-4 pt-1 border-t border-hair/50 text-body text-inkSoft space-y-2 font-sans">
           {children}
         </div>
       </div>
@@ -140,7 +140,7 @@ export function Accordion({ items, allowMultiple = true, className = "" }: Accor
                   )}
                 </div>
                 {item.titleTe && (
-                  <div lang="te" className="font-telugu text-xs text-inkSoft font-medium">
+                  <div lang="te" className="text-telugu-body text-inkSoft">
                     {item.titleTe}
                   </div>
                 )}

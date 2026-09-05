@@ -93,7 +93,7 @@ export default function CommutationTrackerUI() {
           <Card className="lg:col-span-6 p-5 space-y-5 bg-paperRaised border-hair">
             <CardHeader className="p-0 space-y-1">
               <CardTitle className="text-card-title text-ink">Commutation Parameters</CardTitle>
-              <p className="text-xs text-inkSoft font-mono">
+              <p className="text-body text-inkSoft">
                 Enter your commutation payout date to calculate your 180-month recovery timeline.
               </p>
             </CardHeader>

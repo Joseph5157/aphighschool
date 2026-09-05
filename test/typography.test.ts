@@ -26,4 +26,19 @@ describe("typography configuration", () => {
   it("no longer blocks rendering on a Google Fonts @import", () => {
     expect(read("app/globals.css")).not.toContain("@import url(\"https://fonts.googleapis.com");
   });
+
+  it("sets readable shared body sizes for English and Telugu", () => {
+    const css = read("app/globals.css");
+    expect(css).toContain("font-size: 0.9375rem; /* 15px mobile */");
+    expect(css).toContain("font-size: 1rem; /* 16px desktop */");
+    expect(css).toContain("font-size: 1rem; /* 16px mobile */");
+    expect(css).toContain("font-size: 1.0625rem; /* 17px desktop */");
+  });
+
+  it("keeps Telugu reading text on a diacritic-safe line height", () => {
+    const css = read("app/globals.css");
+    expect(css).toContain(".text-telugu-body {");
+    expect(css).toContain("line-height: 1.75;");
+    expect(css).toMatch(/\.text-telugu-title \{[\s\S]*line-height: 1\.75;/);
+  });
 });

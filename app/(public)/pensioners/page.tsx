@@ -81,7 +81,7 @@ export default function PensionersHubPage() {
               </p>
             </div>
 
-            <p className="text-xs text-mastheadText/70 font-mono leading-relaxed">
+            <p className="text-body text-mastheadText/70">
               Dedicated guidance for retired teachers and government employees in AP & TS — clear pension math, commutation restoration countdowns, and office clearance workflows.
             </p>
           </div>
@@ -130,7 +130,7 @@ export default function PensionersHubPage() {
                     <div className="text-telugu-body text-inkSoft mt-1">{tool.titleTe}</div>
                   </div>
 
-                  <p className="text-xs text-inkSoft font-mono leading-relaxed pt-2 border-t border-hair/50">
+                  <p className="text-body text-inkSoft pt-2 border-t border-hair/50">
                     {tool.desc}
                   </p>
                 </div>

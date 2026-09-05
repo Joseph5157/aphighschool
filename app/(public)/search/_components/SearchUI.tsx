@@ -186,7 +186,7 @@ export default function SearchUI({ results, query, activeType }: SearchUIProps) 
       )}
 
       {isNoMatches && (
-        <Card className="p-8 text-center text-xs font-mono text-inkSoft">
+        <Card className="p-8 text-center text-body text-inkSoft">
           No documents match your search.
         </Card>
       )}

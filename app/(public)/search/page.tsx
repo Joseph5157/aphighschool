@@ -24,7 +24,7 @@ export default async function SearchPage({
     <div className="max-w-4xl mx-auto space-y-6 font-sans">
       <div className="border-b border-hair pb-4">
         <h1 className="text-display tracking-tight text-ink">Search Portal</h1>
-        <p className="text-xs text-inkSoft font-mono mt-1">
+        <p className="text-body text-inkSoft mt-1">
           Search AP Government Orders, Circulars, and Guidance by GO number, Telugu
           phrase, or topic tag
         </p>

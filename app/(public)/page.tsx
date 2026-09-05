@@ -49,7 +49,7 @@ export default async function HomePage() {
             <h1 className="text-display tracking-tight text-ink">
               Latest Orders & Living Documents
             </h1>
-            <p className="text-xs text-inkSoft font-mono mt-1">
+            <p className="text-body text-inkSoft mt-1">
               AP School Education Department · Verified Government Orders & Guidance
             </p>
           </div>

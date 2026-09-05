@@ -98,7 +98,7 @@ export default function OfficePipelinePage() {
             <p className="text-telugu-title text-turmeric font-medium mt-1">
               విశ్రాంత ఉద్యోగుల పెన్షన్ ఫైలు ఆమోదం మరియు కార్యాలయాల మార్గదర్శి
             </p>
-            <p className="text-xs text-mastheadText/70 font-mono leading-relaxed">
+            <p className="text-body text-mastheadText/70">
               Step-by-step guide explaining where your pension proposal moves, which office handles audit objections, and how final bills are credited.
             </p>
           </div>
@@ -118,7 +118,7 @@ export default function OfficePipelinePage() {
                   </Badge>
                 </div>
 
-                <ul className="space-y-2 text-xs font-mono text-inkSoft pl-2">
+                <ul className="space-y-2 text-body text-inkSoft font-sans pl-2">
                   {item.tasks.map((task, idx) => (
                     <li key={idx} className="flex items-start gap-2">
                       <span className="text-turmericDeep font-bold">✓</span>

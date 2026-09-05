@@ -125,7 +125,7 @@ body {
   .text-telugu-title {
     font-family: var(--font-noto-telugu), sans-serif;
     font-size: 1.125rem; /* 18px mobile */
-    line-height: 1.65;
+    line-height: 1.75;
     font-weight: 600;
   }
   @media (min-width: 768px) {
@@ -158,20 +158,27 @@ body {
   }
 
   .text-body {
-    font-size: 0.875rem; /* 14px */
-    line-height: 1.5;
+    font-family: var(--font-space-grotesk), system-ui, sans-serif;
+    font-size: 0.9375rem; /* 15px mobile */
+    line-height: 1.6;
     font-weight: 400;
+  }
+
+  @media (min-width: 768px) {
+    .text-body {
+      font-size: 1rem; /* 16px desktop */
+    }
   }
 
   .text-telugu-body {
     font-family: var(--font-noto-telugu), sans-serif;
-    font-size: 0.875rem; /* 14px mobile */
+    font-size: 1rem; /* 16px mobile */
     line-height: 1.75;
     font-weight: 500;
   }
   @media (min-width: 768px) {
     .text-telugu-body {
-      font-size: 0.9375rem; /* 15px desktop */
+      font-size: 1.0625rem; /* 17px desktop */
     }
   }
 

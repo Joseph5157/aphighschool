@@ -81,7 +81,7 @@ export default function PensionersSidebar() {
                 </span>
                 <span className="text-xs text-inkSoft">↗</span>
               </div>
-              <p className="text-[11px] text-inkSoft font-mono mt-1 leading-snug">
+              <p className="text-[11px] text-inkSoft font-sans mt-1 leading-relaxed">
                 {portal.desc}
               </p>
             </a>

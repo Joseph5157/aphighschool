@@ -135,7 +135,7 @@ export default function NotificationTemplate({
         )}
 
         {post.englishAbstract && (
-          <div className="border-t border-dashed border-hair/80 pt-3 mt-4 text-xs text-inkSoft italic font-sans leading-relaxed">
+          <div className="border-t border-dashed border-hair/80 pt-3 mt-4 text-body text-inkSoft italic font-sans">
             <strong className="font-mono text-[10px] font-bold text-inkSoft not-italic block mb-1">
               English Executive Abstract
             </strong>
@@ -328,7 +328,7 @@ export default function NotificationTemplate({
       <CategoryStacksGrid stacks={categoryStacks} />
 
       {/* Footer */}
-      <footer className="border-t border-hair pt-4 text-center font-mono text-[10px] text-inkSoft/70">
+      <footer className="border-t border-hair pt-4 text-center text-xs text-inkSoft/70 font-sans leading-relaxed">
         <p>
           AP Teacher Desk is an independent information service for teachers. Official G.O. documents are verified against goir.ap.gov.in.
         </p>

@@ -163,7 +163,7 @@ export default function PrcCalculatorUI() {
           <Card className="lg:col-span-6 p-5 space-y-5 bg-paperRaised border-hair">
             <CardHeader className="p-0 space-y-1">
               <CardTitle className="text-card-title text-ink">Pay Fixation Parameters</CardTitle>
-              <p className="text-xs text-inkSoft font-mono">
+              <p className="text-body text-inkSoft">
                 Enter your existing pay scale details to calculate your revised pay step under PRC.
               </p>
             </CardHeader>
