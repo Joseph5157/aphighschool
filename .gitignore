@@ -39,3 +39,13 @@ next-env.d.ts
 __pycache__/
 *.pyc
 
+# Local AI / agent workspaces
+/.claude/worktrees/
+/.claude/settings.local.json
+
+# Playwright MCP generated browser artifacts
+/.playwright-mcp/
+
+# Next.js build output at any depth
+**/.next/
+
