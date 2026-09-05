@@ -91,9 +91,13 @@ describe("SearchUI", () => {
 
   it("keeps the topic bar in the page and does not duplicate its heading in SearchUI", () => {
     const pageSource = fs.readFileSync(path.join(process.cwd(), "app/(public)/search/page.tsx"), "utf8");
+    const ordersSource = fs.readFileSync(path.join(process.cwd(), "app/(public)/orders/page.tsx"), "utf8");
     const componentSource = fs.readFileSync(path.join(process.cwd(), "app/(public)/search/_components/SearchUI.tsx"), "utf8");
+    const topicBarSource = fs.readFileSync(path.join(process.cwd(), "app/(public)/_components/TopicTagBar.tsx"), "utf8");
     expect(pageSource).toContain("<TopicTagBar baseUrl=\"/search\" />");
+    expect(ordersSource).toContain("<TopicTagBar baseUrl=\"/search\" />");
     expect(componentSource).not.toContain("Popular Teacher Topics");
+    expect(topicBarSource).toContain('href="/topics"');
   });
 
   it("hides discovery content when a query or filter is active", () => {

@@ -27,7 +27,12 @@ export default function TopicTagBar({ baseUrl = "/search" }: TopicTagBarProps) {
     <div className="space-y-2 font-sans">
       <div className="font-mono text-[11px] font-bold text-inkSoft uppercase tracking-wider flex items-center justify-between">
         <span>🏷️ ప్రసిద్ధ అంశాలు — Popular Teacher Topics</span>
-        <span className="text-[10px] text-inkSoft/70">1-Click Filter</span>
+        <div className="flex items-center gap-3 shrink-0">
+          <Link href="/topics" className="text-[10px] text-tamarind hover:text-tamarindDark transition-colors">
+            All topics <span aria-hidden="true">→</span>
+          </Link>
+          <span className="text-[10px] text-inkSoft/70">1-Click Filter</span>
+        </div>
       </div>
 
       <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">

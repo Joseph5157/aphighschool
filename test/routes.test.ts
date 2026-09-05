@@ -18,6 +18,10 @@ describe("public route scope", () => {
     expect(fs.existsSync(path.join(PUBLIC_DIR, "service-desk", "page.tsx"))).toBe(true);
   });
 
+  it("has the Teacher Topics route", () => {
+    expect(fs.existsSync(path.join(PUBLIC_DIR, "topics", "page.tsx"))).toBe(true);
+  });
+
   it("has no education route", () => {
     expect(fs.existsSync(path.join(PUBLIC_DIR, "education"))).toBe(false);
   });
