@@ -447,15 +447,20 @@ export default function PostFormClient({
           </div>
         </div>
 
-        <label className="flex items-center gap-2 text-sm">
-          <input
-            type="checkbox"
-            name="verifiedAgainstGoir"
-            checked={verifiedAgainstGoir}
-            onChange={(e) => setVerifiedAgainstGoir(e.target.checked)}
-          />
-          Verified against GOIR (goir.ap.gov.in)
-        </label>
+        <div className="space-y-1">
+          <label className="flex items-center gap-2 text-sm font-medium text-ink">
+            <input
+              type="checkbox"
+              name="verifiedAgainstGoir"
+              checked={verifiedAgainstGoir}
+              onChange={(e) => setVerifiedAgainstGoir(e.target.checked)}
+            />
+            Verified against GOIR (goir.ap.gov.in)
+          </label>
+          <p className="text-xs text-inkSoft pl-5">
+            Check only after manually verifying this document against the official GOIR portal. Requires a valid https://goir.ap.gov.in source URL.
+          </p>
+        </div>
 
         <div>
           <label className="block text-xs font-mono uppercase text-inkSoft mb-2">

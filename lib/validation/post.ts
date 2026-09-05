@@ -57,6 +57,16 @@ function isHttpsUrl(value: string): boolean {
   }
 }
 
+export function isGoirSourceUrl(urlStr: string | null | undefined): boolean {
+  if (!urlStr) return false;
+  try {
+    const parsed = new URL(urlStr);
+    return parsed.protocol === "https:" && parsed.hostname === "goir.ap.gov.in";
+  } catch {
+    return false;
+  }
+}
+
 export function validatePost(input: PostInput): string[] {
   const errors: string[] = [];
 
@@ -129,11 +139,17 @@ export function validatePost(input: PostInput): string[] {
     errors.push("Related orders must be unique.");
   }
 
-  // The verification claim is the site's core trust signal — it must be traceable.
-  if (input.verifiedAgainstGoir && !input.sourceUrl) {
-    errors.push(
-      "A GOIR-verified post must carry the source URL it was verified against."
-    );
+  // The verification claim is the site's core trust signal — it must be traceable directly to goir.ap.gov.in.
+  if (input.verifiedAgainstGoir) {
+    if (!input.sourceUrl) {
+      errors.push(
+        "A GOIR-verified post must carry the source URL it was verified against."
+      );
+    } else if (!isGoirSourceUrl(input.sourceUrl)) {
+      errors.push(
+        "A GOIR-verified post must carry a valid https://goir.ap.gov.in source URL."
+      );
+    }
   }
 
   return errors;

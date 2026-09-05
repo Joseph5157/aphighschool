@@ -170,10 +170,19 @@ describe("validatePost", () => {
     }
   });
 
-  it("requires a source URL when the post claims GOIR verification", () => {
-    const errors = validatePost({ ...base, verifiedAgainstGoir: true, sourceUrl: null });
-    expect(errors).toContain(
+  it("requires a valid https://goir.ap.gov.in source URL when the post claims GOIR verification", () => {
+    const missingSource = validatePost({ ...base, verifiedAgainstGoir: true, sourceUrl: null });
+    expect(missingSource).toContain(
       "A GOIR-verified post must carry the source URL it was verified against."
+    );
+
+    const nonGoirSource = validatePost({
+      ...base,
+      verifiedAgainstGoir: true,
+      sourceUrl: "https://amaravathiteacher.com/post",
+    });
+    expect(nonGoirSource).toContain(
+      "A GOIR-verified post must carry a valid https://goir.ap.gov.in source URL."
     );
   });
 });

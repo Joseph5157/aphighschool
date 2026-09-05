@@ -105,9 +105,9 @@ def insert_draft(post_data: dict, pdf_url: str) -> bool:
           category_id,
           post_data.get("goReference"),
           post_data.get("sourceDept", "School Education, AP"),
-          post_data.get("sourceUrl", "https://goir.ap.gov.in"),
+          post_data.get("sourceUrl"),
           post_data.get("contentHtml") or post_data.get("content"),
-          True, # verifiedAgainstGoir
+          False, # verifiedAgainstGoir
           True  # isDraft
         ))
 

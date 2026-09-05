@@ -51,7 +51,7 @@ async function main() {
       categoryId: notifications.id,
       documentType: "notification",
       tags: ["APPSC", "Departmental Test", "GOT88", "EOT97"],
-      verifiedAgainstGoir: true,
+      verifiedAgainstGoir: false,
     },
     create: {
       slug: "appsc-departmental-tests-notification-material",
@@ -71,7 +71,7 @@ async function main() {
       categoryId: notifications.id,
       documentType: "notification",
       tags: ["APPSC", "Departmental Test", "GOT88", "EOT97"],
-      verifiedAgainstGoir: true,
+      verifiedAgainstGoir: false,
       isDraft: false,
     },
   });
@@ -103,7 +103,7 @@ async function main() {
       categoryId: govtOrders.id,
       documentType: "go",
       tags: ["Transfers", "PTR", "Seniority Points"],
-      verifiedAgainstGoir: true,
+      verifiedAgainstGoir: false,
     },
     create: {
       slug: "ap-teachers-transfers-seniority-rules-guidelines",
@@ -123,7 +123,7 @@ async function main() {
       categoryId: govtOrders.id,
       documentType: "go",
       tags: ["Transfers", "PTR", "Seniority Points"],
-      verifiedAgainstGoir: true,
+      verifiedAgainstGoir: false,
       isDraft: false,
     },
   });
@@ -149,7 +149,7 @@ async function main() {
       categoryId: notifications.id,
       documentType: "proceeding",
       tags: ["Academic Instructors", "DSE AP", "Recruitment", "TET"],
-      verifiedAgainstGoir: true,
+      verifiedAgainstGoir: false,
     },
     create: {
       slug: "ap-academic-instructors-recruitment-2026-27",
@@ -169,7 +169,7 @@ async function main() {
       categoryId: notifications.id,
       documentType: "proceeding",
       tags: ["Academic Instructors", "DSE AP", "Recruitment", "TET"],
-      verifiedAgainstGoir: true,
+      verifiedAgainstGoir: false,
       isDraft: false,
     },
   });
@@ -195,7 +195,7 @@ async function main() {
       categoryId: toolsCategory.id,
       documentType: "notification",
       tags: ["APTET", "Response Sheet", "Score Calculator", "APCFSS"],
-      verifiedAgainstGoir: true,
+      verifiedAgainstGoir: false,
     },
     create: {
       slug: "aptet-response-sheet-calculator-link-2026",
@@ -215,7 +215,7 @@ async function main() {
       categoryId: toolsCategory.id,
       documentType: "notification",
       tags: ["APTET", "Response Sheet", "Score Calculator", "APCFSS"],
-      verifiedAgainstGoir: true,
+      verifiedAgainstGoir: false,
       isDraft: false,
     },
   });
@@ -241,7 +241,7 @@ async function main() {
       categoryId: circulars.id,
       documentType: "circular",
       tags: ["APSCERT", "FA-1", "Question Papers", "Answer Key"],
-      verifiedAgainstGoir: true,
+      verifiedAgainstGoir: false,
     },
     create: {
       slug: "apscert-fa1-question-papers-answer-keys-2026",
@@ -261,7 +261,7 @@ async function main() {
       categoryId: circulars.id,
       documentType: "circular",
       tags: ["APSCERT", "FA-1", "Question Papers", "Answer Key"],
-      verifiedAgainstGoir: true,
+      verifiedAgainstGoir: false,
       isDraft: false,
     },
   });
