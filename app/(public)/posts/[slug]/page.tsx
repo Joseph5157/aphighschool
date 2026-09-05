@@ -74,7 +74,7 @@ export default async function PostDetailPage({
   params: { slug: string };
 }) {
   const post = await safeQuery("post-detail", async () => {
-    let item = await prisma.post.findFirst({
+    return prisma.post.findFirst({
       where: { slug: params.slug, isDraft: false },
       include: {
         category: true,
@@ -96,32 +96,6 @@ export default async function PostDetailPage({
         },
       },
     });
-
-    if (!item) {
-      item = await prisma.post.findFirst({
-        where: { slug: params.slug },
-        include: {
-          category: true,
-          relatedFrom: {
-            include: {
-              relatedPost: {
-                select: {
-                  id: true,
-                  slug: true,
-                  titleEn: true,
-                  titleTe: true,
-                  goReference: true,
-                  createdAt: true,
-                  documentDate: true,
-                },
-              },
-            },
-          },
-        },
-      });
-    }
-
-    return item;
   });
 
   if (!post) {
@@ -137,6 +111,7 @@ export default async function PostDetailPage({
             where: {
               categoryId: postCategory.id,
               id: { not: post.id },
+              isDraft: false,
             },
             orderBy: ORDER_BY_OFFICIAL_DATE,
             take: 3,
@@ -152,6 +127,7 @@ export default async function PostDetailPage({
       where: {
         createdAt: { lt: post.createdAt },
         id: { not: post.id },
+        isDraft: false,
       },
       orderBy: { createdAt: "desc" },
       select: { slug: true, titleEn: true, goReference: true },
@@ -164,6 +140,7 @@ export default async function PostDetailPage({
       where: {
         createdAt: { gt: post.createdAt },
         id: { not: post.id },
+        isDraft: false,
       },
       orderBy: { createdAt: "asc" },
       select: { slug: true, titleEn: true, goReference: true },
@@ -176,7 +153,7 @@ export default async function PostDetailPage({
     "latest-news-stack",
     () =>
       prisma.post.findMany({
-        where: { id: { not: post.id } },
+        where: { id: { not: post.id }, isDraft: false },
         orderBy: { createdAt: "desc" },
         take: 6,
         select: { id: true, slug: true, titleEn: true },

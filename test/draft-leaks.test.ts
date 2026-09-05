@@ -15,12 +15,39 @@ const home = fs.readFileSync(
 );
 
 describe("draft leak guards", () => {
+  it("the public detail lookup is published-only and has no unrestricted slug fallback", () => {
+    const start = detail.indexOf("const post = await safeQuery");
+    const detailBlock = detail.slice(start, detail.indexOf("if (!post)", start));
+
+    expect(detailBlock).toMatch(/where:\s*\{\s*slug:\s*params\.slug,\s*isDraft:\s*false\s*\}/);
+    expect(detailBlock).not.toMatch(/where:\s*\{\s*slug:\s*params\.slug\s*\}/);
+  });
+
+  it("all public detail navigation queries exclude drafts", () => {
+    const siblingBlock = detail.slice(detail.indexOf('"post-siblings"'), detail.indexOf("// Query previous"));
+    const previousBlock = detail.slice(detail.indexOf('"prev-post"'), detail.indexOf('"next-post"'));
+    const nextBlock = detail.slice(detail.indexOf('"next-post"'), detail.indexOf("// Query latest"));
+    const latestBlock = detail.slice(detail.indexOf('"latest-news-stack"'), detail.indexOf("const categoryStacks"));
+
+    for (const block of [siblingBlock, previousBlock, nextBlock, latestBlock]) {
+      expect(block).toMatch(/isDraft:\s*false/);
+    }
+  });
+
   it("generateMetadata filters out drafts", () => {
     const block = detail.slice(
       detail.indexOf("generateMetadata"),
       detail.indexOf("generateStaticParams")
     );
     expect(block).toMatch(/isDraft\s*:\s*false/);
+  });
+
+  it("generateStaticParams filters out drafts", () => {
+    const block = detail.slice(
+      detail.indexOf("generateStaticParams"),
+      detail.indexOf("import NotificationTemplate")
+    );
+    expect(block).toMatch(/where:\s*\{\s*isDraft:\s*false\s*\}/);
   });
 
   it("the homepage only includes approved related orders", () => {
