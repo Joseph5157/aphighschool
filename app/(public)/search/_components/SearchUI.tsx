@@ -8,12 +8,14 @@ import Input from "@/app/(public)/_components/Input";
 import Badge from "@/app/(public)/_components/Badge";
 import { Card } from "@/app/(public)/_components/Card";
 import { dateLabel, formatDate, officialDate } from "@/lib/dates";
-import type { SearchResult } from "@/lib/posts/query";
+import type { RecentDocument, SearchResult } from "@/lib/posts/query";
 
 type SearchUIProps = {
   results: SearchResult[];
   query: string;
   activeType: string | null;
+  isDiscovery: boolean;
+  recentDocuments: RecentDocument[];
 };
 
 const QUICK_SEARCH_CHIPS = [
@@ -32,6 +34,23 @@ const TYPE_FILTERS: { value: string; label: string }[] = [
   { value: "proceeding", label: "Proceeding" },
   { value: "notification", label: "Notification" },
   { value: "other", label: "Other" },
+];
+
+const DOCUMENT_TYPE_LABELS: Record<string, string> = {
+  go: "GO",
+  circular: "Circular",
+  memo: "Memo",
+  proceeding: "Proceeding",
+  notification: "Notification",
+  other: "Other",
+};
+
+const TASK_LINKS = [
+  { href: "/tools/da-arrears", label: "Pay & DA", detail: "DA arrears calculator" },
+  { href: "/orders", label: "Government Orders", detail: "Orders and circulars" },
+  { href: "/pensioners", label: "Pension", detail: "Pensioner guidance" },
+  { href: "/tools/cfms-checker", label: "Official Portal Guides", detail: "CFMS and service links" },
+  { href: "/tools/tax-calculator", label: "Tax Forms", detail: "Tax calculator and forms" },
 ];
 
 function highlightMatch(text: string, query: string) {
@@ -75,7 +94,13 @@ function buildSearchHref(
   return qs ? `/search?${qs}` : "/search";
 }
 
-export default function SearchUI({ results, query, activeType }: SearchUIProps) {
+export default function SearchUI({
+  results,
+  query,
+  activeType,
+  isDiscovery,
+  recentDocuments,
+}: SearchUIProps) {
   const router = useRouter();
   const params = useSearchParams();
   const [value, setValue] = useState(query);
@@ -104,8 +129,7 @@ export default function SearchUI({ results, query, activeType }: SearchUIProps) 
   };
 
   const trimmedQuery = query.trim();
-  const isEmptyPrompt = trimmedQuery === "" && results.length === 0;
-  const isNoMatches = trimmedQuery !== "" && results.length === 0;
+  const isNoMatches = !isDiscovery && results.length === 0;
 
   return (
     <div className="w-full space-y-6">
@@ -164,34 +188,105 @@ export default function SearchUI({ results, query, activeType }: SearchUIProps) 
         ))}
       </div>
 
-      {isEmptyPrompt && (
-        <div className="space-y-2.5 pt-2">
-          <div className="font-mono text-[9.5px] uppercase tracking-wider text-inkSoft font-semibold">
-            Quick Searches
-          </div>
-          <div className="flex items-center gap-2 flex-wrap">
-            {QUICK_SEARCH_CHIPS.map((chip) => (
-              <button
-                key={chip}
-                onClick={() => setValue(chip)}
-                className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-tamarind rounded-full"
-              >
-                <Badge variant="neutral" size="sm" shape="pill" className="cursor-pointer hover:border-ink/40">
-                  🔍 {chip}
-                </Badge>
-              </button>
-            ))}
-          </div>
+      {isDiscovery && (
+        <div className="space-y-6 pt-2">
+          <section className="space-y-2.5" aria-labelledby="quick-searches-heading">
+            <h2 id="quick-searches-heading" className="font-mono text-[9.5px] uppercase tracking-wider text-inkSoft font-semibold">
+              Quick Searches
+            </h2>
+            <div className="flex items-center gap-2 flex-wrap">
+              {QUICK_SEARCH_CHIPS.map((chip) => (
+                <button
+                  key={chip}
+                  onClick={() => setValue(chip)}
+                  className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-tamarind rounded-full"
+                >
+                  <Badge variant="neutral" size="sm" shape="pill" className="cursor-pointer hover:border-ink/40">
+                    🔍 {chip}
+                  </Badge>
+                </button>
+              ))}
+            </div>
+          </section>
+
+          {recentDocuments.length > 0 && (
+            <section className="space-y-3" aria-labelledby="recent-documents-heading">
+              <div className="flex items-center justify-between gap-3 border-b border-hair pb-2">
+                <h2 id="recent-documents-heading" className="font-mono text-[10px] uppercase tracking-widest text-inkSoft font-semibold">
+                  Recent Documents
+                </h2>
+                <span className="text-meta font-mono text-inkSoft/70">Published updates</span>
+              </div>
+              <div className="space-y-2">
+                {recentDocuments.map((post) => (
+                  <Link
+                    key={post.id}
+                    href={`/posts/${post.slug}`}
+                    className="block rounded-xl border border-hair bg-paperRaised px-3.5 py-3 transition-all hover:border-ink/40 hover:shadow-2xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-tamarind"
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <h3 className="text-sm font-semibold leading-snug text-ink">{post.titleEn}</h3>
+                      <span className="shrink-0 text-inkSoft" aria-hidden="true">→</span>
+                    </div>
+                    <div className="mt-2 flex flex-wrap items-center gap-1.5">
+                      {post.documentType && (
+                        <Badge variant="neutral" size="sm" shape="pill">
+                          {DOCUMENT_TYPE_LABELS[post.documentType]}
+                        </Badge>
+                      )}
+                      {post.verifiedAgainstGoir && (
+                        <Badge variant="success" size="sm" shape="pill" dot>
+                          GOIR Verified
+                        </Badge>
+                      )}
+                      {post.orderState === "current" && (
+                        <Badge variant="success" size="sm" shape="pill">
+                          Current
+                        </Badge>
+                      )}
+                      <span className="text-meta font-mono text-inkSoft/75">
+                        {dateLabel(post)} · {formatDate(officialDate(post))}
+                      </span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          )}
+
+          <section className="space-y-3" aria-labelledby="find-by-task-heading">
+            <div className="border-b border-hair pb-2">
+              <h2 id="find-by-task-heading" className="font-mono text-[10px] uppercase tracking-widest text-inkSoft font-semibold">
+                Find by Task
+              </h2>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              {TASK_LINKS.map((task) => (
+                <Card key={task.href} hoverable className="p-0">
+                  <Link
+                    href={task.href}
+                    className="flex items-center justify-between gap-3 p-3.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-tamarind rounded-xl"
+                  >
+                    <span>
+                      <span className="block text-sm font-semibold text-ink">{task.label}</span>
+                      <span className="block pt-0.5 text-meta font-mono text-inkSoft/75">{task.detail}</span>
+                    </span>
+                    <span className="shrink-0 text-tamarind" aria-hidden="true">→</span>
+                  </Link>
+                </Card>
+              ))}
+            </div>
+          </section>
         </div>
       )}
 
       {isNoMatches && (
         <Card className="p-8 text-center text-body text-inkSoft">
-          No documents match your search.
+          No matching documents found.
         </Card>
       )}
 
-      {!isEmptyPrompt && !isNoMatches && (
+      {!isDiscovery && !isNoMatches && (
         <div className="space-y-3 pt-2">
           <div className="font-mono text-[10px] uppercase tracking-wider text-inkSoft">
             Results ({results.length})

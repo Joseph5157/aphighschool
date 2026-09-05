@@ -1,6 +1,6 @@
 // @vitest-environment node
 import { describe, it, expect, beforeEach } from "vitest";
-import { searchPosts } from "@/lib/posts/query";
+import { recentPublishedDocuments, searchPosts } from "@/lib/posts/query";
 import { resetDb, seedCategory, testDb } from "./db";
 
 async function fixture() {
@@ -113,6 +113,22 @@ describe("searchPosts", () => {
   it("returns nothing for an empty parameter set", async () => {
     const r = await searchPosts({});
     expect(r).toEqual([]);
+  });
+
+  it("lists published recent documents in official-date order and excludes drafts", async () => {
+    await testDb.post.update({
+      where: { slug: "da-arrears-2026" },
+      data: { documentDate: new Date("2026-02-08") },
+    });
+    await testDb.post.update({
+      where: { slug: "transfers-go-129" },
+      data: { documentDate: new Date("2026-03-10") },
+    });
+
+    const recent = await recentPublishedDocuments(6);
+
+    expect(recent.map((post) => post.slug)).toEqual(["transfers-go-129", "da-arrears-2026"]);
+    expect(recent.map((post) => post.slug)).not.toContain("hidden-draft");
   });
 
   it("returns approved related orders alongside each result", async () => {

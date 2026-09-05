@@ -33,6 +33,19 @@ const SELECT = {
 
 export type SearchResult = Prisma.PostGetPayload<{ select: typeof SELECT }>;
 
+const RECENT_DOCUMENT_SELECT = {
+  id: true,
+  slug: true,
+  titleEn: true,
+  documentType: true,
+  documentDate: true,
+  createdAt: true,
+  verifiedAgainstGoir: true,
+  orderState: true,
+} satisfies Prisma.PostSelect;
+
+export type RecentDocument = Prisma.PostGetPayload<{ select: typeof RECENT_DOCUMENT_SELECT }>;
+
 function textFilter(q: string): Prisma.PostWhereInput {
   const contains = { contains: q, mode: "insensitive" } as const;
   return {
@@ -104,5 +117,15 @@ export async function searchPosts(params: SearchParams): Promise<SearchResult[]>
     select: SELECT,
     orderBy: ORDER_BY_OFFICIAL_DATE as never,
     take: 100,
+  });
+}
+
+/** A compact discovery list. This is intentionally separate from search results. */
+export async function recentPublishedDocuments(take = 5): Promise<RecentDocument[]> {
+  return prisma.post.findMany({
+    where: { isDraft: false },
+    select: RECENT_DOCUMENT_SELECT,
+    orderBy: ORDER_BY_OFFICIAL_DATE as never,
+    take: Math.min(Math.max(take, 1), 6),
   });
 }

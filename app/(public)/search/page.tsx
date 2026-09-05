@@ -1,5 +1,9 @@
-import { searchPosts, type SearchParams } from "@/lib/posts/query";
-import { safeQuery } from "@/lib/db-safe";
+import {
+  recentPublishedDocuments,
+  searchPosts,
+  type SearchParams,
+} from "@/lib/posts/query";
+import { optionalQuery, safeQuery } from "@/lib/db-safe";
 import SearchUI from "./_components/SearchUI";
 import TopicTagBar from "@/app/(public)/_components/TopicTagBar";
 import type { Metadata } from "next";
@@ -13,12 +17,20 @@ export const metadata: Metadata = {
 // Results depend on the query string, so this route cannot be statically cached.
 export const dynamic = "force-dynamic";
 
+function isDiscoveryState(params: SearchParams) {
+  return !params.q?.trim() && !params.type && !params.category && !params.tag && !params.from && !params.to;
+}
+
 export default async function SearchPage({
   searchParams,
 }: {
   searchParams: SearchParams;
 }) {
+  const isDiscovery = isDiscoveryState(searchParams);
   const results = await safeQuery("search", () => searchPosts(searchParams));
+  const recentDocuments = isDiscovery
+    ? await optionalQuery("search-recent-documents", () => recentPublishedDocuments(5), [])
+    : [];
 
   return (
     <div className="max-w-4xl mx-auto space-y-6 font-sans">
@@ -36,6 +48,8 @@ export default async function SearchPage({
         results={results}
         query={searchParams.q ?? ""}
         activeType={searchParams.type ?? null}
+        isDiscovery={isDiscovery}
+        recentDocuments={recentDocuments}
       />
     </div>
   );
