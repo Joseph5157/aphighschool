@@ -12,13 +12,13 @@
 
 ## Current UI program state
 
-- Current phase: Phase 6
-- Active gate: `UI-MOBILE-NAV-1` (CLOSED)
-- Scope in this gate: mobile navigation behaviour only
+- Current phase: Phase 7
+- Active gate: `UI-PATTERNS-1` (CLOSED)
+- Scope in this gate: repeated application-level patterns only
 - UI redesign performed: no
 - Application behaviour changed: yes — foundation tokens, focus system, active-navigation
   treatment, state colours. Information architecture, routes and page composition unchanged.
-- Next planned gate: `UI-PATTERNS-1`
+- Next planned gate: `UI-STATES-1`
 
 ### Gate history
 
@@ -31,6 +31,7 @@
 | `UI-SYSTEM-2` | CLOSED | Primitives standardised; carried-forward defects closed; Dialog/IconButton/Textarea/Checkbox added. 318 tests pass. |
 | `UI-RESPONSIVE-1` | CLOSED | Audit F1 closed via BottomBarSlot; overflow and gutter repair; 768–1023 band guarded. 330 tests pass. |
 | `UI-MOBILE-NAV-1` | CLOSED | Audit F5 and F28 closed; drawer given the full modal contract. 347 tests pass. |
+| `UI-PATTERNS-1` | CLOSED | Templates merged; GOIR/date/callout patterns standardised; a lifecycle bug fixed. 365 tests pass. |
 
 ## Repository observations
 
@@ -64,15 +65,19 @@ MERGE / REPLACE / DELETE decisions are intentionally deferred to `UI-AUDIT-1`.
 
 - Shared public primitives and navigation components live in
   `app/(public)/_components`.
-- Existing shared primitives include Accordion, Badge, Breadcrumb, Button, Card, Field,
-  Input, NativeSelect, Pagination, Separator, Sheet, Sidebar, Table, and Tabs.
+- Shared primitives: Accordion, Badge, Breadcrumb, Button, Callout, Card, Checkbox, Dialog,
+  Field, IconButton, Input, NativeSelect, Pagination, Separator, Sidebar, Table, Tabs,
+  Textarea. *(Sheet was deleted in `UI-SYSTEM-1` as unused; the Phase 0 list above predates
+  `UI-SYSTEM-2` and `UI-PATTERNS-1`.)*
+- Shared trust/document patterns: `GoirBadge`, `DocumentDate`, `OrderStateBadge`,
+  `lifecyclePill`.
 - Shared domain/navigation components include PostCard, OrderStateBadge, HeroCard,
   TopicTagBar, UpcomingActionDates, ThemeToggle, DesktopNav, BottomNav, and sidebar
   variants.
 - Route-specific client components are colocated in route `_components` directories.
-- Post detail uses route-local templates for notifications and GO/memo documents, plus
+- Post detail uses ONE route-local shell, `DocumentTemplate`, for every document kind, plus
   route-local lifecycle, navigation, summary, table-of-contents, and related-content
-  components.
+  components. *(The two per-kind templates were merged in `UI-PATTERNS-1`.)*
 - Admin components are separately colocated under `app/admin/_components` and
   `app/admin/posts/_components`.
 
@@ -465,6 +470,55 @@ silenced: it split template literals on `${...}` with a pattern that stopped at 
 so a hole containing a nested template literal ended mid-expression and the remainder was
 tokenised as class text. It now counts braces.
 
+## `UI-PATTERNS-1` outcome summary
+
+### Merged
+
+| Pattern | Before | After |
+|---|---|---|
+| Document templates | `GoMemoTemplate` + `NotificationTemplate`, 95% identical | One `DocumentTemplate`; the three real differences survive as data |
+| GOIR marker | 10 hand-guarded call sites | `GoirBadge` — no unverified state is expressible |
+| Document date | 10 hand-assembled label+date pairs | `DocumentDate` — label and date inseparable |
+| Tinted panels | 6 sites each picking a colour | `Callout` with meaning-named tones |
+
+### Kept apart, deliberately
+
+- **The two filter strips.** `OrdersFilterTabs` switches between panels of categories;
+  `CategoryLogList` filters one list in place with a roving-tabindex strip. Different
+  problems.
+- **`ActionSummary`'s GOIR row and the admin marker.** A `FactRow` in a definition list and an
+  operator marker; both still guarded, neither with an unverified branch.
+- **Search and list cards.** Surface-specific by design; their metadata is now shared, which
+  is where the drift risk was.
+- **`PageHeader`.** Four pages, two hero shapes differing in five ways. Reconciling them
+  behind a props-switch would freeze the inconsistency while looking resolved; picking one
+  look is a visual decision for `UI-IMPECCABLE-1`.
+- **`Pagination`.** Still zero consumers. No usage invented.
+
+### A lifecycle bug the merge exposed
+
+`lib/posts/lifecycle.ts` states an action deadline is orthogonal to the lifecycle *kind*, and
+`isLifecycleClosed()` already treats a passed deadline as closing either kind — but only the
+notification template rendered it. **A GO with an application window was filtered as closed
+while its own page showed no deadline at all.** The merged shell shows it for both, so the
+page and the filter now agree.
+
+### A miscoloured warning the tone model exposed
+
+`GpfApgliUI` told a user their APGLI premium was *below* the required minimum, painted
+`tamarind` — the in-force colour — with a ⚠️ emoji carrying the meaning the colour
+contradicted. Now `tone="warning"`, and the emoji is gone.
+
+### Guards
+
+`test/patterns.test.tsx` (18), covering GOIR in both directions, `Issued` vs
+`Added to portal`, callout tone mapping, and both lifecycle kinds through the merged shell.
+Six mutations run — **all six caught, zero survivors**.
+
+Three older source-text assertions were updated rather than deleted: they pinned the *old
+implementation* (`post.verifiedAgainstGoir && <Badge`) of a rule the new structure enforces
+more strongly, so they now assert the new mechanism.
+
 ## Known limitations
 
 - Browser acceptance tooling is not currently runnable in this environment.
@@ -526,6 +580,7 @@ tokenised as class text. It now counts braces.
 | `UI-SYSTEM-2` | pass (`npx tsc --noEmit`, exit 0) | clean | **46 files, 318 tests pass**; Tailwind utility validation passes | unavailable |
 | `UI-RESPONSIVE-1` | pass (`npx tsc --noEmit`, exit 0) | clean | **47 files, 330 tests pass**; Tailwind utility validation passes | unavailable |
 | `UI-MOBILE-NAV-1` | pass (`npx tsc --noEmit`, exit 0) | clean | **48 files, 347 tests pass**; Tailwind utility validation passes | unavailable |
+| `UI-PATTERNS-1` | pass (`npx tsc --noEmit`, exit 0) | clean | **49 files, 365 tests pass**; Tailwind utility validation passes | unavailable |
 
 ## Gate transition rule
 
@@ -533,33 +588,35 @@ Update `UI_ACTIVE_GATE.md` only when work on the next gate actually begins. Each
 gate's evidence remains recoverable from this document, from `docs/ui/UI_AUDIT.md`, and from
 Git history.
 
-`UI-PATTERNS-1` is next per the master plan: consolidating domain-level patterns —
-PageHeader, DocumentCard, SearchResult, DocumentMetadata, GOIR/trust presentation,
-Breadcrumbs, FilterBar, Pagination — and merging the duplicates `UI_AUDIT.md` recorded.
+`UI-STATES-1` is next per the master plan: deliberate loading, empty, error and success
+states.
 
-Named candidates already on record: the two post templates (`GoMemoTemplate` and
-`NotificationTemplate` are near-identical shells), the two filter strips (`OrdersFilterTabs`
-and `CategoryLogList`), and the recurring tinted-callout pattern that `UI-SYSTEM-2` left
-deliberately unconsolidated because its three uses carry different meanings. That semantic
-decision is this gate's to make.
+Groundwork already in place. `UI-AUDIT-1` established that **no route has a `loading.tsx`**,
+that the home page is `force-dynamic` and both category and post pages are DB-backed, and that
+`SearchUI` navigates on a 400ms debounce with no pending affordance at all. `UI-SYSTEM-2`
+deliberately did **not** build `Skeleton`, recording that `UI-STATES-1` introducing
+`loading.tsx` is exactly the condition that would justify it — so that is the gate to build it
+in, with a real consumer.
 
-Two constraints apply harder there than anywhere else. **Trust semantics must survive
-consolidation**: `dateLabel()`'s Issued / Added-to-portal distinction, GOIR shown only where
-recorded with no "unverified" state, and the `superseded` → `kumkum` mapping. And
-**`Pagination` is still unused** — `UI-SYSTEM-2` refined it without adopting it, so the gate
-that introduces real pagination is the one that finally exercises it.
+Two constraints carry in hard. **Success states must not be invented**: the public surface is
+read-only plus client-side calculators, and the only action is `window.print()`, which the
+browser confirms — `UI-AUDIT-1` closed that checklist item as correctly not applicable, and it
+should stay closed. And **errors must not leak internals**: `app/(public)/error.tsx` is the
+model — bilingual, specific, offers a retry, exposes nothing.
 
 Four practices are worth carrying forward.
 
-**Mutate every new guard.** This project's history is defects that survived a green suite. In
-three of the last four gates a guard passed its first mutation and had to be rewritten.
+**Mutate every new guard.** In four of the last five gates a guard passed its first mutation
+and had to be rewritten.
+
+**Check the harness too.** This gate's first mutation battery reported six false "survived"
+results — an ANSI strip that left the ESC byte, and `String.replace` hitting a doc comment
+instead of the code. A mutation harness that under-reports manufactures false confidence in
+precisely the tests meant to prevent it.
 
 **Test the screen, not only the mechanism.** A `Field` unit test passed while five real inputs
-stayed unlabelled; a drawer test passed while the state reset it was meant to cover was gone.
+stayed unlabelled; a drawer test passed while the state reset it covered was gone.
 
-**Match the sweep to the data.** `UI-SYSTEM-2` declared the primitives clear of sub-12px type
-because its regex matched integers; `text-[8.5px]` survived.
-
-**Harden a noisy guard, never silence it.** The class scanner produced one false alarm and was
-taught about nested interpolation. A guard that cries wolf is how people learn to ignore
-guards.
+**Merging duplicates surfaces divergence.** Both bugs fixed in this gate — the missing deadline
+and the miscoloured warning — were invisible while the code was duplicated, and obvious the
+moment it was not.

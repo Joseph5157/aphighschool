@@ -65,8 +65,7 @@ export async function generateStaticParams() {
   }
 }
 
-import NotificationTemplate from "./_templates/NotificationTemplate";
-import GoMemoTemplate from "./_templates/GoMemoTemplate";
+import DocumentTemplate from "./_templates/DocumentTemplate";
 
 export default async function PostDetailPage({
   params,
@@ -176,23 +175,16 @@ export default async function PostDetailPage({
     },
   ];
 
+  // One shell for every document. The branch that used to live here picked
+  // between two 95%-identical templates to express a distinction
+  // `resolveLifecycle()` had already made — and the second half of its
+  // condition (`|| post.documentType === "notification"`) was dead, because
+  // resolveLifecycle returns `kind: "recruitment"` for exactly that case.
+  // DocumentTemplate reads the view instead.
   const lifecycleView = resolveLifecycle(post);
 
-  if (lifecycleView.kind === "recruitment" || post.documentType === "notification") {
-    return (
-      <NotificationTemplate
-        post={post}
-        lifecycleView={lifecycleView}
-        prevPost={prevPost}
-        nextPost={nextPost}
-        categoryStacks={categoryStacks}
-        siblingPosts={siblingPosts}
-      />
-    );
-  }
-
   return (
-    <GoMemoTemplate
+    <DocumentTemplate
       post={post}
       lifecycleView={lifecycleView}
       prevPost={prevPost}

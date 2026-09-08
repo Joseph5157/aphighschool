@@ -8,6 +8,7 @@ import Field from "@/app/(public)/_components/Field";
 import Input from "@/app/(public)/_components/Input";
 import Badge from "@/app/(public)/_components/Badge";
 import Separator from "@/app/(public)/_components/Separator";
+import Callout from "@/app/(public)/_components/Callout";
 
 function formatCurrency(val: number): string {
   return new Intl.NumberFormat("en-IN", {
@@ -231,9 +232,16 @@ export default function GpfApgliUI() {
               </div>
 
               {parseFloat(currentPremium) < recommendedApgliPremium && (
-                <div className="p-3 bg-tamarind/10 border border-tamarind/30 rounded-lg text-xs text-tamarind font-medium leading-relaxed">
-                  ⚠️ Your current premium ({formatCurrency(parseFloat(currentPremium) || 0)}) is below the recommended slab minimum ({formatCurrency(recommendedApgliPremium)}). Consider submitting a proposal for policy enhancement.
-                </div>
+                // Was painted `tamarind` — the in-force/positive colour — while
+                // saying the user's premium is BELOW the required minimum, with
+                // a ⚠️ emoji carrying the meaning the colour contradicted. This
+                // is the miscolouring the semantic tone model exists to
+                // prevent: the tone now follows what the sentence means.
+                <Callout tone="warning" className="text-xs">
+                  Your current premium ({formatCurrency(parseFloat(currentPremium) || 0)}) is
+                  below the recommended slab minimum ({formatCurrency(recommendedApgliPremium)}).
+                  Consider submitting a proposal for policy enhancement.
+                </Callout>
               )}
             </div>
           </CardContent>

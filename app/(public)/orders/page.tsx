@@ -8,6 +8,7 @@ import OrdersSidebar from "./_components/OrdersSidebar";
 import TopicTagBar from "@/app/(public)/_components/TopicTagBar";
 import { ORDER_BY_OFFICIAL_DATE, officialDate, dateLabel, formatDate } from "@/lib/dates";
 import { safeQuery } from "@/lib/db-safe";
+import DocumentDate from "@/app/(public)/_components/DocumentDate";
 
 export const metadata: Metadata = {
   title: "Orders & Circulars — AP Teacher Desk",
@@ -143,7 +144,7 @@ export default async function OrdersPage() {
                         {post.titleEn}
                       </span>
                       <span className="font-mono text-[9px] text-inkSoft/50 shrink-0">
-                        {dateLabel(post)} · {formatDate(officialDate(post))}
+                        <DocumentDate post={post} />
                       </span>
                     </div>
                   </Link>

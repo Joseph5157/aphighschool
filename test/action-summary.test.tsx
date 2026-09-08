@@ -4,7 +4,8 @@ import fs from "node:fs";
 import path from "node:path";
 import ActionSummary from "@/app/(public)/posts/[slug]/_components/ActionSummary";
 
-const templates = ["GoMemoTemplate.tsx", "NotificationTemplate.tsx"].map((file) =>
+// UI-PATTERNS-1 merged the two 95%-identical templates into one shell.
+const templates = ["DocumentTemplate.tsx"].map((file) =>
   fs.readFileSync(path.join(process.cwd(), "app", "(public)", "posts", "[slug]", "_templates", file), "utf8")
 );
 
@@ -80,13 +81,19 @@ describe("ActionSummary", () => {
   });
 
   it("removes unsupported official-source and procedure claims from the templates", () => {
-    const [goMemo, notification] = templates;
+    // One template now serves both document kinds, so every banned phrase is
+    // checked against it rather than split by which template used to render it.
+    const BANNED = [
+      "Official Gazette PDF Attachment",
+      "Verified PDF source",
+      "Open Original GO PDF",
+      "Apply Online / Official Portal",
+      "Download Official Notification PDF",
+      "Official Repository",
+    ];
 
-    for (const text of ["Official Gazette PDF Attachment", "Verified PDF source", "Open Original GO PDF"]) {
-      expect(goMemo).not.toContain(text);
-    }
-    for (const text of ["Apply Online / Official Portal", "Download Official Notification PDF", "Official Repository"]) {
-      expect(notification).not.toContain(text);
+    for (const template of templates) {
+      for (const text of BANNED) expect(template).not.toContain(text);
     }
   });
 });

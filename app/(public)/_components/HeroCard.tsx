@@ -1,8 +1,10 @@
 import Link from "next/link";
 import type { DocType, OrderState } from "@prisma/client";
 import Badge from "./Badge";
+import GoirBadge from "./GoirBadge";
 import { officialDate, dateLabel, formatDate } from "@/lib/dates";
 import { resolveLifecyclePill, type RecruitmentPill } from "./lifecyclePill";
+import DocumentDate from "./DocumentDate";
 
 // Only reached for documents that actually have an application lifecycle —
 // see resolveLifecyclePill. Everything else shows its order state instead.
@@ -89,11 +91,7 @@ export default function HeroCard({ post }: HeroPostProps) {
             </span>
           )}
 
-          {post.verifiedAgainstGoir && (
-            <Badge variant="tamarind" size="sm" shape="pill" dot>
-              GOIR Verified
-            </Badge>
-          )}
+          <GoirBadge verified={post.verifiedAgainstGoir} />
         </div>
 
         {/* Main Titles */}
@@ -121,7 +119,7 @@ export default function HeroCard({ post }: HeroPostProps) {
         {/* Date & Meta Footer */}
         <div className="mt-6 pt-4 border-t border-mastheadText/20 flex items-center justify-between text-xs font-mono text-mastheadText/60">
           <span>
-            {dateLabel(post)} · {formatDate(officialDate(post))}
+            <DocumentDate post={post} />
           </span>
           <Link
             href={`/posts/${post.slug}`}

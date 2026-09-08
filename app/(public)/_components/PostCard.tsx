@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { DocType, OrderState } from "@prisma/client";
 import Card from "./Card";
 import Badge from "./Badge";
+import GoirBadge from "./GoirBadge";
 import { resolveLifecyclePill, type RecruitmentPill } from "./lifecyclePill";
 
 // Only reached for documents that actually have an application lifecycle —
@@ -88,11 +89,7 @@ export default function PostCard({ post }: PostCardProps) {
             </span>
           )}
 
-          {post.verifiedAgainstGoir && (
-            <Badge variant="tamarind" size="sm" shape="pill" dot>
-              GOIR Verified
-            </Badge>
-          )}
+          <GoirBadge verified={post.verifiedAgainstGoir} />
         </div>
 
         <Link href={`/posts/${post.slug}`} className="group block">

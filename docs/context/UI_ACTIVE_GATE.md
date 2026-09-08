@@ -2,7 +2,7 @@
 
 ## Active gate
 
-`UI-MOBILE-NAV-1`
+`UI-PATTERNS-1`
 
 ## Status
 
@@ -10,66 +10,70 @@ CLOSED
 
 ## Purpose
 
-Complete the mobile navigation experience: close audit finding F5 (the off-canvas drawer's
-missing modal behaviour) and F28 (the global keyboard shortcut), without duplicating the
-navigation systems already in place.
+Standardise repeated application-level patterns, resolve the tinted-callout semantic model,
+and put the trust-bearing rules into shared components rather than conventions.
 
-## Retain / refine / merge / replace decision
+## Pattern dispositions
 
-**REFINE**, as `UI-AUDIT-1` recorded. The existing two-part model — a bottom tab bar for the
-five most-used destinations below `lg`, and an off-canvas drawer for the full menu — is sound
-and was not changed. Nothing was replaced and no second navigation system was introduced. The
-drawer's *behaviour* was rebuilt; its structure, contents and destinations are untouched.
+| Pattern | Decision | Reasoning |
+|---|---|---|
+| Post/document templates | **MERGE** | `GoMemoTemplate` and `NotificationTemplate` were 95% the same file. Now one `DocumentTemplate`; the three genuine differences survive as data. |
+| GOIR presentation | **MERGE** | 10 call sites re-derived the same guarded badge. `GoirBadge` makes the "no unverified state" rule unexpressible. |
+| Date presentation | **MERGE** | 10 call sites re-assembled label + date by hand. `DocumentDate` makes them inseparable. |
+| Tinted callouts | **MERGE + REPLACE the model** | One `Callout` with meaning-named tones. Colour is no longer the API. |
+| Filter/tab strips | **KEEP both** | They solve different problems: `OrdersFilterTabs` switches between panels of categories; `CategoryLogList` filters one list in place with a roving-tabindex strip. Merging would force one into the other's shape. |
+| PageHeader | **REFINE — deferred** | See below. |
+| Breadcrumbs | **KEEP** | Already a shared primitive; its only duplication was the trail built twice in the two templates, which the merge removed. |
+| Search/list result cards | **KEEP** | `PostCard`, `HeroCard`, the category log row and the search result are surface-specific by design. Their *metadata* is now standardised through `DocumentDate` and `GoirBadge`, which is where the drift risk actually was. |
+| `ActionSummary` GOIR row, admin GOIR marker | **KEEP** | Genuinely different presentations — a `FactRow` in a definition list, and an operator marker. Both still guarded by the recorded boolean with no unverified branch. |
+| Pagination | **DEFER** | Still zero consumers. Not adopted, and no usage invented for it. |
 
-21st.dev was not available in this environment, so the external-component rule was not
-exercised. It would not have applied regardless: the defect was missing behaviour in a
-component that already fits the product, not a component that needed replacing.
+### Why PageHeader was deferred
 
-## Change boundary
+Four pages carry a masthead hero in **two different shapes**: `service-desk` and `topics`
+share one (a `<section>` with a turmeric wash and a `max-w-3xl` content column), `tools` and
+`pensioners` share another (a `<div>` with a badge row and no wash). They differ in element,
+border opacity, spacing, content width and the wash.
 
-Mobile navigation behaviour only: `Sidebar.tsx` (provider and drawer) plus the test scanner
-it exposed. Navigation structure, destinations, information architecture and page layout are
-unchanged.
+Merging them behind a component would need four or five props to reconcile five differences —
+an abstraction shaped by its call sites rather than by the product — and it would freeze the
+inconsistency in place while making it look resolved. Picking **one** hero look is a visual
+decision, and this gate must not redesign pages. Recorded for `UI-IMPECCABLE-1`, which owns
+visual critique; the extraction becomes trivial once one shape is chosen.
 
 ## Required closure evidence
 
-- Starting worktree clean on `ui-system-production-readiness` at
-  `e29383d344e23a1126ba98249ff076eee14eff39`, local and live remote in agreement.
-- Every behaviour the gate names has a test: opening, closing, active route, route changes,
-  outside interaction, Escape, focus handling, scroll locking, touch targets, accessible
-  labels, responsive transitions.
-- A mutation battery ran **eight** deliberate reintroductions of the defects being fixed.
-  Seven were caught immediately; the eighth survived and the test was rewritten until it
-  failed for the right reason.
-- Full Vitest suite passes: 48 files, 347 tests. `npx tsc --noEmit` passes, Tailwind utility
+- Starting worktree clean at `9988e281326769d90fde36a5a423dc12aa99ddd9`, local and remote in
+  agreement.
+- Trust semantics verified by behaviour, not only by source text: GOIR conditional in both
+  directions, no unverified state reachable, `Issued` vs `Added to portal` preserved, and the
+  lifecycle indicator correct for both document kinds.
+- Six mutations run against the new tests; **all six caught, zero survivors**.
+- Full Vitest suite passes: 49 files, 365 tests. `npx tsc --noEmit` passes, Tailwind utility
   validation passes, `git diff --check` clean.
 - Committed, pushed, and local branch HEAD matches the live remote branch SHA.
 
 ## Closure notes
 
-**The mutation battery earned its keep — one test was passing for the wrong reason.** The
-viewport-transition test asserted the drawer was gone at desktop width. It always is:
-`Sidebar` renders the desktop aside instead, so the drawer unmounts whether or not its open
-state was reset. Removing the reset entirely did not fail the test. The rewritten version does
-the round trip — open on a phone, cross to desktop, come back — and now catches it. This is
-the same shape as the `Field` defect in `UI-SYSTEM-2`: a test that observes the right thing at
-the wrong moment.
+**The merge exposed a real lifecycle bug.** `lib/posts/lifecycle.ts` states that an action
+deadline is orthogonal to the lifecycle *kind*, and `isLifecycleClosed()` already treats a
+passed deadline as closing a document of either kind — but only `NotificationTemplate`
+rendered the deadline. A GO that opens an application window was therefore filtered as closed
+once its deadline passed while its own page showed no deadline at all. One shell means the
+page and the filter now agree. This is the kind of divergence that duplicated templates
+produce and that nothing else would have surfaced.
 
-**Inertness without losing the slide.** Unmounting the closed drawer would have been the
-simplest way to make it inert, and is what `Dialog` does — but it would have thrown away the
-drawer's slide animation, which is motion answering a user action and worth keeping.
-`visibility: hidden` removes an element from the tab order and the accessibility tree while
-still transitioning, so transitioning it alongside `transform` flips it exactly at the end of
-the closing slide. The `inert` attribute is set from an effect as well, both as belt-and-braces
-and because it is the half jsdom can observe.
+**The callout model found a miscoloured warning.** `GpfApgliUI` told a user their premium was
+*below* the required minimum in `tamarind` — the in-force colour — with a ⚠️ emoji doing the
+semantic work the colour contradicted. Naming tones by meaning made the contradiction visible.
 
-**A guard produced a false alarm and was hardened rather than silenced.** The dead-class
-scanner split template literals on `${...}` with a pattern that stopped at the first `}`, so a
-hole containing a nested template literal ended mid-expression and the remainder was tokenised
-as class text — reporting `translate-x-0"`, a class that does not exist, at a line where
-nothing was wrong. The scanner now counts braces. The component was also restructured to
-compute its state classes in named variables, which is clearer regardless.
+**My first mutation harness produced six false "survived" results.** Two bugs: the ANSI strip
+left the ESC byte so every run parsed as zero failures, and `String.replace` with a string
+pattern hits the *first* occurrence — which, in components that document themselves by quoting
+their own code, was a doc comment. Both fixed, and the corrected battery caught all six. Worth
+recording because a mutation harness that under-reports is worse than none: it manufactures
+false confidence in exactly the tests meant to prevent it.
 
 ## Next gate after closure
 
-`UI-PATTERNS-1`
+`UI-STATES-1`

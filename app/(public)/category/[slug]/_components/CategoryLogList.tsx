@@ -4,12 +4,14 @@ import { useState, useMemo, useRef, type KeyboardEvent } from "react";
 import Link from "next/link";
 import type { DocType, OrderState } from "@prisma/client";
 import Badge from "@/app/(public)/_components/Badge";
+import GoirBadge from "@/app/(public)/_components/GoirBadge";
 import {
   resolveLifecyclePill,
   type RecruitmentPill,
 } from "@/app/(public)/_components/lifecyclePill";
 import { isLifecycleClosed } from "@/lib/posts/lifecycle";
 import { officialDate, dateLabel, formatDate, officialYear } from "@/lib/dates";
+import DocumentDate from "@/app/(public)/_components/DocumentDate";
 
 // Only reached for documents that actually have an application lifecycle —
 // see resolveLifecyclePill. Everything else shows its order state instead.
@@ -208,11 +210,7 @@ export default function CategoryLogList({ posts }: CategoryLogListProps) {
                       <Badge variant={pill.variant} size="sm" dot>
                         {pill.label}
                       </Badge>
-                      {post.verifiedAgainstGoir && (
-                        <Badge variant="tamarind" size="sm" shape="pill" dot>
-                          GOIR Verified
-                        </Badge>
-                      )}
+                      <GoirBadge verified={post.verifiedAgainstGoir} />
                       {post.goReference && (
                         <span className="font-mono text-[10px] font-bold text-ink bg-ink/10 px-2 py-0.5 rounded border border-ink/15 break-words">
                           {post.goReference}
@@ -220,7 +218,7 @@ export default function CategoryLogList({ posts }: CategoryLogListProps) {
                       )}
                     </div>
                     <span className="font-mono text-[10px] text-inkSoft/70 shrink-0">
-                      {dateLabelOf(post)} · {formatDate(officialDateOf(post))}
+                      <DocumentDate post={normalizedDates(post)} />
                     </span>
                   </div>
 

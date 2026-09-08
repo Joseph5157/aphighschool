@@ -454,6 +454,27 @@ Sizes meet the 44px floor: `sm` 36px tall with a 44px hit area, `md` 44px, `lg` 
   a third of the product's form fields have labels that are not programmatically associated.
   Wrappers that render a `Field` must generate an id (`useId`) and thread it through.
 
+### 8.4a Callout — tinted guidance panels
+
+A tinted panel carrying short, self-contained guidance. **Tones name what the callout MEANS,
+never what colour it is**, and map onto the semantic roles in §2.2:
+
+| Tone | Token | Use |
+|---|---|---|
+| `note` | `hair` | Neutral aside, no urgency |
+| `guidance` | `turmeric` | Read this before acting; disclaimers |
+| `positive` | `tamarind` | Confirmation, something in force |
+| `warning` | `kumkum` | Something is wrong or will cost the reader |
+
+The same markup was hand-written in six places with the colour chosen per site, so the
+palette *was* the API — and one panel told a user their APGLI premium was **below** the
+required minimum while painted `tamarind`, the colour that elsewhere means in force, with a
+⚠️ emoji carrying the meaning the colour contradicted. Choosing a tone is now a statement
+about the sentence, not about the styling.
+
+A Callout is page furniture. Status **on a document** is `Badge` and `OrderStateBadge`, which
+carry lifecycle meaning. A stat tile that happens to be tinted is neither — leave it alone.
+
 ### 8.5 Overlays — drawer, sheet, dialog
 
 Required behaviour for anything that overlays the page:
@@ -570,6 +591,24 @@ Rules:
 
 The product's credibility depends on this section more than on any other. `PRODUCT.md` states
 the promises; these are the presentation rules.
+
+### 12.0 The trust rules live in components, not conventions
+
+Two rules were previously restated at ten call sites each, which made them
+conventions any new surface could get wrong. They are now held in one place, where the
+wrong thing is not expressible:
+
+- **`GoirBadge`** takes the recorded boolean and can return only the positive marker or
+  nothing. There is no prop that produces an "unverified" state.
+- **`DocumentDate`** renders `dateLabel()` and the date as one unit. There is no prop that
+  renders the date without its label, and the pair sits in a single non-wrapping element so a
+  flex row cannot strand "Added to portal" above an unrelated date.
+
+Use them. A surface that hand-assembles either rule is re-opening a closed defect.
+
+Two presentations legitimately differ and stay hand-written: `ActionSummary` shows GOIR as a
+`FactRow` inside a definition list, and the admin post list shows a plain operator marker.
+Both are still guarded by the recorded boolean and neither has an unverified branch.
 
 ### 12.1 Verification is provenance, not endorsement
 

@@ -11,8 +11,7 @@ const ordersSidebar = read("app/(public)/orders/_components/OrdersSidebar.tsx");
 const categoryPage = read("app/(public)/category/[slug]/page.tsx");
 const homePage = read("app/(public)/page.tsx");
 const searchUi = read("app/(public)/search/_components/SearchUI.tsx");
-const goMemoTemplate = read("app/(public)/posts/[slug]/_templates/GoMemoTemplate.tsx");
-const notificationTemplate = read("app/(public)/posts/[slug]/_templates/NotificationTemplate.tsx");
+const documentTemplate = read("app/(public)/posts/[slug]/_templates/DocumentTemplate.tsx");
 const postPage = read("app/(public)/posts/[slug]/page.tsx");
 const thumbZoneBar = read("app/(public)/posts/[slug]/_components/ThumbZoneBar.tsx");
 const actionSummary = read("app/(public)/posts/[slug]/_components/ActionSummary.tsx");
@@ -40,13 +39,15 @@ describe("FRESHNESS-1 public trust language", () => {
   });
 
   it("retains individual GOIR badges only behind their recorded boolean and uses the bounded label", () => {
-    for (const template of [goMemoTemplate, notificationTemplate]) {
-      expect(template).toContain("post.verifiedAgainstGoir && <Badge");
-      expect(template).toContain(">GOIR Verified</Badge>");
+    for (const template of [documentTemplate]) {
+      // The guard now goes through GoirBadge, which takes the recorded boolean
+      // and can only return the positive marker or nothing — a stronger form of
+      // the same rule than the inline conditional this used to match.
+      expect(template).toContain("<GoirBadge verified={post.verifiedAgainstGoir} />");
       expect(template).not.toContain("GOIR Verified Gazette");
+      expect(template).not.toMatch(/Unverified|Not verified/i);
     }
-    expect(upcomingActionDates).toContain("post.verifiedAgainstGoir && (");
-    expect(upcomingActionDates).toContain("GOIR Verified");
+    expect(upcomingActionDates).toContain("<GoirBadge verified={post.verifiedAgainstGoir} />");
   });
 
   it("does not render a compact discovery Current badge and preserves published-document wording", () => {
@@ -61,14 +62,14 @@ describe("FRESHNESS-1 public trust language", () => {
 
   it("does not make metadata or updatedAt into an official or freshness claim", () => {
     expect(postPage).not.toContain("Official AP School Education government order summary.");
-    for (const source of [ordersPage, ordersSidebar, categoryPage, homePage, searchUi, goMemoTemplate, notificationTemplate, postPage, thumbZoneBar]) {
+    for (const source of [ordersPage, ordersSidebar, categoryPage, homePage, searchUi, documentTemplate, postPage, thumbZoneBar]) {
       expect(source).not.toMatch(/Last verified|updatedAt/i);
     }
   });
 
   it("labels an explicit passed deadline without inventing a broad closed state", () => {
-    expect(notificationTemplate).toContain("Deadline passed: ${formattedDeadline}");
-    expect(notificationTemplate).not.toContain('isPastDeadline ? "Closed"');
+    expect(documentTemplate).toContain("Deadline passed: ${formattedDeadline}");
+    expect(documentTemplate).not.toContain('isPastDeadline ? "Closed"');
   });
 
   it("continues to distinguish issued documents from posts added to the portal", () => {

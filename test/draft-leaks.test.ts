@@ -45,7 +45,7 @@ describe("draft leak guards", () => {
   it("generateStaticParams filters out drafts", () => {
     const block = detail.slice(
       detail.indexOf("generateStaticParams"),
-      detail.indexOf("import NotificationTemplate")
+      detail.indexOf("import DocumentTemplate")
     );
     expect(block).toMatch(/where:\s*\{\s*isDraft:\s*false\s*\}/);
   });

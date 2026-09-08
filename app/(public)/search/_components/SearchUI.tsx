@@ -6,10 +6,12 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 import Input from "@/app/(public)/_components/Input";
 import Badge from "@/app/(public)/_components/Badge";
+import GoirBadge from "@/app/(public)/_components/GoirBadge";
 import IconButton from "@/app/(public)/_components/IconButton";
 import { Card } from "@/app/(public)/_components/Card";
 import { dateLabel, formatDate, officialDate } from "@/lib/dates";
 import type { RecentDocument, SearchResult } from "@/lib/posts/query";
+import DocumentDate from "@/app/(public)/_components/DocumentDate";
 
 type SearchUIProps = {
   results: SearchResult[];
@@ -239,13 +241,9 @@ export default function SearchUI({
                           {DOCUMENT_TYPE_LABELS[post.documentType]}
                         </Badge>
                       )}
-                      {post.verifiedAgainstGoir && (
-                        <Badge variant="tamarind" size="sm" shape="pill" dot>
-                          GOIR Verified
-                        </Badge>
-                      )}
+                      <GoirBadge verified={post.verifiedAgainstGoir} />
                       <span className="text-meta font-mono text-inkSoft/75">
-                        {dateLabel(post)} · {formatDate(officialDate(post))}
+                        <DocumentDate post={post} />
                       </span>
                     </div>
                   </Link>
@@ -311,8 +309,7 @@ export default function SearchUI({
                     {/* flex-wrap + min-w-0: label, date and a long GO reference
                         on one unwrapping row pushed past the card at 320px. */}
                     <div className="text-meta text-inkSoft/70 uppercase tracking-wider pt-1 border-t border-hair/30 flex flex-wrap items-center gap-x-2 gap-y-1 min-w-0 font-mono">
-                      <span>{dateLabel(post)}</span>
-                      <span>{formatDate(officialDate(post))}</span>
+                      <DocumentDate post={post} />
                       {post.goReference && (
                         <>
                           <span>/</span>

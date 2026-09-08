@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Badge from "./Badge";
+import GoirBadge from "./GoirBadge";
 import Card from "./Card";
 import { formatDate } from "@/lib/dates";
 
@@ -44,11 +45,7 @@ export default function UpcomingActionDates({ posts }: UpcomingActionDatesProps)
                   >
                     Action date · {formatDate(post.actionDeadline)}
                   </time>
-                  {post.verifiedAgainstGoir && (
-                    <Badge variant="tamarind" size="sm" shape="pill" dot>
-                      GOIR Verified
-                    </Badge>
-                  )}
+                  <GoirBadge verified={post.verifiedAgainstGoir} />
                 </div>
 
                 <Link href={`/posts/${post.slug}`} className="group mt-2 block w-fit focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-turmericDeep">
