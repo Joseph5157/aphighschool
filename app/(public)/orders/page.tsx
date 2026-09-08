@@ -33,6 +33,7 @@ export default async function OrdersPage() {
             titleEn: true,
             goReference: true,
             statusBadge: true,
+            verifiedAgainstGoir: true,
             createdAt: true,
           },
         },

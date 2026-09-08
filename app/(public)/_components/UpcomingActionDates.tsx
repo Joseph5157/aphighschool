@@ -51,7 +51,7 @@ export default function UpcomingActionDates({ posts }: UpcomingActionDatesProps)
                   )}
                 </div>
 
-                <Link href={`/posts/${post.slug}`} className="group mt-2 block w-fit focus:outline-none">
+                <Link href={`/posts/${post.slug}`} className="group mt-2 block w-fit focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-turmericDeep">
                   <h3 className="text-card-title text-ink transition-colors group-hover:text-turmericDeep group-focus-visible:text-turmericDeep">
                     {post.titleEn}
                   </h3>

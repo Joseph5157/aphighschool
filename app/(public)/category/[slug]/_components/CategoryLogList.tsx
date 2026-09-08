@@ -42,6 +42,7 @@ type PostItem = {
   statusBadge: string;
   documentType: DocType | null;
   orderState: OrderState;
+  verifiedAgainstGoir?: boolean;
   goReference?: string | null;
   actionDeadline?: Date | string | null;
   createdAt: Date | string;
@@ -207,6 +208,11 @@ export default function CategoryLogList({ posts }: CategoryLogListProps) {
                       <Badge variant={pill.variant} size="sm" dot>
                         {pill.label}
                       </Badge>
+                      {post.verifiedAgainstGoir && (
+                        <Badge variant="success" size="sm" shape="pill" dot>
+                          GOIR Verified
+                        </Badge>
+                      )}
                       {post.goReference && (
                         <span className="font-mono text-[10px] font-bold text-ink bg-ink/10 px-2 py-0.5 rounded border border-ink/15 break-words">
                           {post.goReference}

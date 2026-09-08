@@ -27,6 +27,9 @@ export type PostOverrides = Partial<{
   documentType: DocType | null;
   orderState: OrderState;
   statusBadge: PostStatus;
+  verifiedAgainstGoir: boolean;
+  sourceUrl: string | null;
+  pdfUrl: string | null;
 }>;
 
 let counter = 0;
@@ -49,6 +52,11 @@ export async function makePost(overrides: PostOverrides = {}) {
       ...(overrides.documentType !== undefined && { documentType: overrides.documentType }),
       ...(overrides.orderState !== undefined && { orderState: overrides.orderState }),
       ...(overrides.statusBadge !== undefined && { statusBadge: overrides.statusBadge }),
+      ...(overrides.verifiedAgainstGoir !== undefined && {
+        verifiedAgainstGoir: overrides.verifiedAgainstGoir,
+      }),
+      ...(overrides.sourceUrl !== undefined && { sourceUrl: overrides.sourceUrl }),
+      ...(overrides.pdfUrl !== undefined && { pdfUrl: overrides.pdfUrl }),
     },
   });
 }

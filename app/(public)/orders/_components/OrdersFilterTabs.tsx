@@ -2,6 +2,7 @@
 
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "../../_components/Tabs";
 import Link from "next/link";
+import Badge from "../../_components/Badge";
 
 // Maps category slug → display emoji icon
 const SLUG_ICON: Record<string, string> = {
@@ -30,7 +31,14 @@ type CategoryData = {
   icon: string | null;
   color?: string | null;
   _count: { posts: number };
-  posts: { id: string; slug: string; titleEn: string; goReference?: string | null; createdAt: Date }[];
+  posts: {
+    id: string;
+    slug: string;
+    titleEn: string;
+    goReference?: string | null;
+    verifiedAgainstGoir: boolean;
+    createdAt: Date;
+  }[];
 };
 
 const DOC_TYPE_TABS = [
@@ -104,6 +112,11 @@ export default function OrdersFilterTabs({ categories }: { categories: CategoryD
                               <span className="text-xs text-ink font-medium leading-snug line-clamp-1 group-hover/item:text-tamarind transition-colors flex-1 min-w-0">
                                 {post.titleEn}
                               </span>
+                              {post.verifiedAgainstGoir && (
+                                <Badge variant="success" size="sm" shape="pill" dot>
+                                  GOIR Verified
+                                </Badge>
+                              )}
                               {post.goReference && (
                                 <span className="font-mono text-[10px] text-inkSoft shrink-0 bg-hair/50 px-1.5 py-0.5 rounded break-words">
                                   {post.goReference}
