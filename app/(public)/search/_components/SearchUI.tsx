@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, startTransition } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -12,6 +12,7 @@ import { Card } from "@/app/(public)/_components/Card";
 import { dateLabel, formatDate, officialDate } from "@/lib/dates";
 import type { RecentDocument, SearchResult } from "@/lib/posts/query";
 import DocumentDate from "@/app/(public)/_components/DocumentDate";
+import EmptyState from "@/app/(public)/_components/EmptyState";
 
 type SearchUIProps = {
   results: SearchResult[];
@@ -118,7 +119,13 @@ export default function SearchUI({
       const next = new URLSearchParams(params?.toString() ?? "");
       if (value.trim()) next.set("q", value.trim());
       else next.delete("q");
-      router.push(`/search?${next.toString()}`);
+      // Wrapped in a transition so this same-route, params-only navigation
+      // keeps the current results on screen (React marks it pending instead
+      // of falling back to the route's loading.tsx) — otherwise every
+      // keystroke would blank the page to a full-page skeleton mid-typing.
+      startTransition(() => {
+        router.push(`/search?${next.toString()}`);
+      });
     }, 400);
     return () => clearTimeout(timer);
   }, [value, params, router]);
@@ -128,11 +135,18 @@ export default function SearchUI({
     const next = new URLSearchParams(params?.toString() ?? "");
     if (value.trim()) next.set("q", value.trim());
     else next.delete("q");
-    router.push(`/search?${next.toString()}`);
+    startTransition(() => {
+      router.push(`/search?${next.toString()}`);
+    });
   };
 
   const trimmedQuery = query.trim();
   const isNoMatches = !isDiscovery && results.length === 0;
+  // Derived rather than stored: the input reads ahead of `query` (the last
+  // navigation Next actually completed) for exactly as long as a search is
+  // in flight, and lands back in sync the instant new props confirm it —
+  // no separate state to keep consistent with that completion signal.
+  const isSearching = value.trim() !== trimmedQuery;
 
   return (
     <div className="w-full space-y-6">
@@ -161,6 +175,14 @@ export default function SearchUI({
           />
         )}
       </form>
+
+      {/* Pending affordance for the debounced navigation — announced, not just
+          visual, since the results below update with no other cue. */}
+      {isSearching && (
+        <p role="status" aria-live="polite" className="font-mono text-xs text-inkSoft/70">
+          Searching…
+        </p>
+      )}
 
       {/* Document type filter chips */}
       <div className="flex items-center gap-2 flex-wrap">
@@ -216,14 +238,14 @@ export default function SearchUI({
             </div>
           </section>
 
-          {recentDocuments.length > 0 && (
-            <section className="space-y-3" aria-labelledby="recent-documents-heading">
-              <div className="flex items-center justify-between gap-3 border-b border-hair pb-2">
-                <h2 id="recent-documents-heading" className="font-mono text-[10px] uppercase tracking-widest text-inkSoft font-semibold">
-                  Recent Documents
-                </h2>
-                <span className="text-meta font-mono text-inkSoft/70">Published documents</span>
-              </div>
+          <section className="space-y-3" aria-labelledby="recent-documents-heading">
+            <div className="flex items-center justify-between gap-3 border-b border-hair pb-2">
+              <h2 id="recent-documents-heading" className="font-mono text-[10px] uppercase tracking-widest text-inkSoft font-semibold">
+                Recent Documents
+              </h2>
+              <span className="text-meta font-mono text-inkSoft/70">Published documents</span>
+            </div>
+            {recentDocuments.length > 0 ? (
               <div className="space-y-2">
                 {recentDocuments.map((post) => (
                   <Link
@@ -249,8 +271,10 @@ export default function SearchUI({
                   </Link>
                 ))}
               </div>
-            </section>
-          )}
+            ) : (
+              <EmptyState compact title="No recent documents yet." />
+            )}
+          </section>
 
           <section className="space-y-3" aria-labelledby="find-by-task-heading">
             <div className="border-b border-hair pb-2">
@@ -279,9 +303,15 @@ export default function SearchUI({
       )}
 
       {isNoMatches && (
-        <Card className="p-8 text-center text-body text-inkSoft">
-          No matching documents found.
-        </Card>
+        <EmptyState
+          title="No matching documents found."
+          description="Try a different keyword or GO number, or browse documents by category."
+          action={
+            <Link href="/orders" className="text-sm font-semibold text-tamarind hover:underline">
+              Browse Orders & Circulars →
+            </Link>
+          }
+        />
       )}
 
       {!isDiscovery && !isNoMatches && (

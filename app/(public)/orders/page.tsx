@@ -9,6 +9,7 @@ import TopicTagBar from "@/app/(public)/_components/TopicTagBar";
 import { ORDER_BY_OFFICIAL_DATE, officialDate, dateLabel, formatDate } from "@/lib/dates";
 import { safeQuery } from "@/lib/db-safe";
 import DocumentDate from "@/app/(public)/_components/DocumentDate";
+import EmptyState from "@/app/(public)/_components/EmptyState";
 
 export const metadata: Metadata = {
   title: "Orders & Circulars — AP Teacher Desk",
@@ -126,11 +127,11 @@ export default async function OrdersPage() {
           <TopicTagBar baseUrl="/search" />
 
           {/* ── Recent documents strip ─────────────────────────────────────────── */}
-          {recentPosts.length > 0 && (
-            <div className="space-y-2">
-              <h2 className="font-mono text-[10px] uppercase tracking-widest text-inkSoft font-semibold">
-                🕐 Recent Documents
-              </h2>
+          <div className="space-y-2">
+            <h2 className="font-mono text-[10px] uppercase tracking-widest text-inkSoft font-semibold">
+              🕐 Recent Documents
+            </h2>
+            {recentPosts.length > 0 ? (
               <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
                 {recentPosts.map((post) => (
                   <Link key={post.id} href={`/posts/${post.slug}`} className="shrink-0">
@@ -150,8 +151,10 @@ export default async function OrdersPage() {
                   </Link>
                 ))}
               </div>
-            </div>
-          )}
+            ) : (
+              <EmptyState compact title="No recent documents yet." />
+            )}
+          </div>
 
           {/* ── Document Type Filter Tabs + Category Cards Grid ──────────────── */}
           <OrdersFilterTabs categories={categories} />

@@ -12,6 +12,7 @@ import {
 import { isLifecycleClosed } from "@/lib/posts/lifecycle";
 import { officialDate, dateLabel, formatDate, officialYear } from "@/lib/dates";
 import DocumentDate from "@/app/(public)/_components/DocumentDate";
+import EmptyState from "@/app/(public)/_components/EmptyState";
 
 // Only reached for documents that actually have an application lifecycle —
 // see resolveLifecyclePill. Everything else shows its order state instead.
@@ -191,11 +192,7 @@ export default function CategoryLogList({ posts }: CategoryLogListProps) {
 
       {/* ── Document Log Entries ─────────────────────────────────────────── */}
       {filteredPosts.length === 0 ? (
-        <div className="bg-paperRaised border border-hair rounded-xl p-8 text-center">
-          <p className="font-mono text-xs text-inkSoft">
-            No documents found for &ldquo;{activeFilter}&rdquo; filter.
-          </p>
-        </div>
+        <EmptyState title={`No documents found for "${activeFilter}" filter.`} />
       ) : (
         <div className="space-y-3">
           {visiblePosts.map((post) => {

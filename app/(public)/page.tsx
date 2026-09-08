@@ -5,6 +5,7 @@ import PostCard from "./_components/PostCard";
 import DesktopLeftNav from "./_components/DesktopLeftNav";
 import DesktopSidebar from "./_components/DesktopSidebar";
 import UpcomingActionDates from "./_components/UpcomingActionDates";
+import EmptyState from "./_components/EmptyState";
 import { ORDER_BY_OFFICIAL_DATE, startOfTodayIST } from "@/lib/dates";
 import { safeQuery } from "@/lib/db-safe";
 
@@ -89,9 +90,7 @@ export default async function HomePage() {
             <HeroCard post={heroPost} />
           </section>
         ) : (
-          <div className="bg-paperRaised border border-hair rounded-xl p-8 text-center text-inkSoft text-sm">
-            No published posts found.
-          </div>
+          <EmptyState title="No published orders found." />
         )}
 
         {/* Remaining Listing Cards & Reserved Ad Placement */}

@@ -12,13 +12,14 @@
 
 ## Current UI program state
 
-- Current phase: Phase 7
-- Active gate: `UI-PATTERNS-1` (CLOSED)
-- Scope in this gate: repeated application-level patterns only
+- Current phase: Phase 8
+- Active gate: `UI-STATES-1` (CLOSED)
+- Scope in this gate: loading/empty/error/success states on `app/(public)` only
 - UI redesign performed: no
-- Application behaviour changed: yes — foundation tokens, focus system, active-navigation
-  treatment, state colours. Information architecture, routes and page composition unchanged.
-- Next planned gate: `UI-STATES-1`
+- Application behaviour changed: yes — five new `loading.tsx` routes, standardised empty-state
+  markup, a debounce-safe search pending affordance. Information architecture, routes and page
+  composition unchanged.
+- Next planned gate: `UI-CONTENT-1`
 
 ### Gate history
 
@@ -32,6 +33,7 @@
 | `UI-RESPONSIVE-1` | CLOSED | Audit F1 closed via BottomBarSlot; overflow and gutter repair; 768–1023 band guarded. 330 tests pass. |
 | `UI-MOBILE-NAV-1` | CLOSED | Audit F5 and F28 closed; drawer given the full modal contract. 347 tests pass. |
 | `UI-PATTERNS-1` | CLOSED | Templates merged; GOIR/date/callout patterns standardised; a lifecycle bug fixed. 365 tests pass. |
+| `UI-STATES-1` | CLOSED | Five `loading.tsx` routes added with `Skeleton`; seven ad hoc empty-state divs standardised onto `EmptyState`; search's debounce pending gap closed. 389 tests pass. |
 
 ## Repository observations
 
@@ -66,9 +68,9 @@ MERGE / REPLACE / DELETE decisions are intentionally deferred to `UI-AUDIT-1`.
 - Shared public primitives and navigation components live in
   `app/(public)/_components`.
 - Shared primitives: Accordion, Badge, Breadcrumb, Button, Callout, Card, Checkbox, Dialog,
-  Field, IconButton, Input, NativeSelect, Pagination, Separator, Sidebar, Table, Tabs,
-  Textarea. *(Sheet was deleted in `UI-SYSTEM-1` as unused; the Phase 0 list above predates
-  `UI-SYSTEM-2` and `UI-PATTERNS-1`.)*
+  EmptyState, Field, IconButton, Input, NativeSelect, Pagination, Separator, Sidebar, Skeleton,
+  Table, Tabs, Textarea. *(Sheet was deleted in `UI-SYSTEM-1` as unused; the Phase 0 list above
+  predates `UI-SYSTEM-2`, `UI-PATTERNS-1` and `UI-STATES-1`.)*
 - Shared trust/document patterns: `GoirBadge`, `DocumentDate`, `OrderStateBadge`,
   `lifecyclePill`.
 - Shared domain/navigation components include PostCard, OrderStateBadge, HeroCard,
@@ -164,7 +166,8 @@ MERGE / REPLACE / DELETE decisions are intentionally deferred to `UI-AUDIT-1`.
   rendering falls back to Next.js behavior.
 - `app/(public)/error.tsx` provides a public route-group error boundary with a retry
   action.
-- No route-level `loading.tsx` files were found.
+- `UI-STATES-1` added `loading.tsx` for the five DB-backed public routes: `/`, `/orders`,
+  `/category/[slug]`, `/posts/[slug]`, `/search`. No other public route queries Prisma.
 
 ### Documentation and context conventions
 
@@ -519,6 +522,67 @@ Three older source-text assertions were updated rather than deleted: they pinned
 implementation* (`post.verifiedAgainstGoir && <Badge`) of a rule the new structure enforces
 more strongly, so they now assert the new mechanism.
 
+## `UI-STATES-1` outcome summary
+
+Full route/workflow classification (loading/empty/error/success × every public route) lives in
+`docs/context/UI_ACTIVE_GATE.md`, which stays the recoverable record for this gate; this is the
+summary.
+
+### Loading — five `loading.tsx` routes added
+
+`/`, `/orders`, `/category/[slug]`, `/posts/[slug]`, `/search` are the only public routes that
+query Prisma (confirmed by grep this gate); each now has a route-level `loading.tsx` built from
+the new `Skeleton` primitive. Static chrome that needs no data (`DesktopLeftNav`,
+`DesktopSidebar`, `OrdersSidebar`) renders for real inside the loading state rather than being
+skeletoned too, so only the genuinely async part of the page shows a placeholder.
+
+### The search debounce needed a mechanism, not just a skeleton
+
+`UI_AUDIT.md`/this document flagged `SearchUI`'s 400ms debounce as having "no pending affordance
+at all." A naive `search/loading.tsx` would have fired on every keystroke's `router.push` (a
+searchParams-only navigation still re-invokes the page and hits the nearest `loading.tsx`),
+blanking the input mid-type. Wrapping the debounced `router.push` calls in `startTransition`
+keeps the previous results mounted instead; `SearchUI` derives its own pending state as
+`value.trim() !== query.trim()` (no second state variable to keep in sync with a completion
+signal `router.push` doesn't provide) and shows an inline "Searching…" `role="status"` text.
+`search/loading.tsx` still exists, covering the one case `startTransition` does not: a fresh
+hard navigation into the route.
+
+### Empty states — one primitive replacing seven hand-written divs
+
+`EmptyState` (with a `compact` variant for the two in-card instances) replaced independently
+hand-written "nothing here" panels in: the home feed, `CategoryLogList`'s filtered/empty log
+(which a genuinely empty category also hits), both of `OrdersFilterTabs`'s empty branches, and
+two in `SearchUI` (no-matches, and the previously-silent "Recent Documents" section on both
+`/search` and `/orders`). The no-matches state also gained a next step (a link to `/orders`).
+
+Decorative surfaces that already degrade silently — `PostNavCards`, `CategoryStacksGrid`,
+`UpcomingActionDates` — were left alone: converting a bonus surface's "nothing to show" into a
+visible panel would add weight `DESIGN.md`'s restraint rule does not ask for, and
+`lib/db-safe.ts`'s `optionalQuery` doc comment already names silent degradation as the correct
+contract for exactly this kind of surface.
+
+### Error and success — mostly already adequate, confirmed rather than rebuilt
+
+`app/(public)/error.tsx` (bilingual, specific, retry action, no internals exposed) already
+covers every `safeQuery` failure across all five DB-backed routes, and `notFound()` is
+unchanged everywhere it was already used. Success states remain **not applicable** on the
+public surface — re-confirmed this gate that `window.print()` is still the only action and
+still browser-confirmed, exactly as `UI-AUDIT-1` closed it. "Invalid user input" for the
+tools/pensioners calculators was checked and found to have no genuine consumer: none of them
+currently reject or flag input (blank reads as 0), so a validation-error UI would invent a
+rejection behaviour the product doesn't have — deferred, recorded in `UI_ACTIVE_GATE.md`.
+`app/admin`'s real mutations remain outside this program's scope, per `UI-AUDIT-1`.
+
+### Guards
+
+`test/states.test.tsx` (21) plus 3 added to `test/search-ui.test.tsx`, covering: `Skeleton`'s
+and `EmptyState`'s contracts, structural presence of `role="status"` and `Skeleton` in all five
+`loading.tsx` files (and absence from four confirmed-static routes), `OrdersFilterTabs`'s and
+`CategoryLogList`'s empty branches, the home feed's empty/populated branches via the same
+mocked-Prisma render technique as `test/today-attention.test.tsx`, and the search pending
+indicator's appear/clear cycle. Eight mutations run — **all eight caught, zero survivors**.
+
 ## Known limitations
 
 - Browser acceptance tooling is not currently runnable in this environment.
@@ -581,6 +645,7 @@ more strongly, so they now assert the new mechanism.
 | `UI-RESPONSIVE-1` | pass (`npx tsc --noEmit`, exit 0) | clean | **47 files, 330 tests pass**; Tailwind utility validation passes | unavailable |
 | `UI-MOBILE-NAV-1` | pass (`npx tsc --noEmit`, exit 0) | clean | **48 files, 347 tests pass**; Tailwind utility validation passes | unavailable |
 | `UI-PATTERNS-1` | pass (`npx tsc --noEmit`, exit 0) | clean | **49 files, 365 tests pass**; Tailwind utility validation passes | unavailable |
+| `UI-STATES-1` | pass (`npx tsc --noEmit`, exit 0) | clean | **50 files, 389 tests pass**; Tailwind utility validation passes | unavailable |
 
 ## Gate transition rule
 
@@ -588,28 +653,27 @@ Update `UI_ACTIVE_GATE.md` only when work on the next gate actually begins. Each
 gate's evidence remains recoverable from this document, from `docs/ui/UI_AUDIT.md`, and from
 Git history.
 
-`UI-STATES-1` is next per the master plan: deliberate loading, empty, error and success
-states.
+`UI-CONTENT-1` is next per the master plan: remove placeholder/demo text, fake
+counters/statistics, unsupported claims, stale copy, and dead UI.
 
-Groundwork already in place. `UI-AUDIT-1` established that **no route has a `loading.tsx`**,
-that the home page is `force-dynamic` and both category and post pages are DB-backed, and that
-`SearchUI` navigates on a 400ms debounce with no pending affordance at all. `UI-SYSTEM-2`
-deliberately did **not** build `Skeleton`, recording that `UI-STATES-1` introducing
-`loading.tsx` is exactly the condition that would justify it — so that is the gate to build it
-in, with a real consumer.
+Groundwork already in place from `UI-STATES-1`. The five DB-backed public routes now have
+`loading.tsx`; `EmptyState` and `Skeleton` exist as shared primitives with real consumers.
+`UI-STATES-1` did **not** touch copy accuracy — it standardised the *presentation* of "nothing
+here," not whether any given piece of static copy on the page is still true. That is squarely
+`UI-CONTENT-1`'s job. Two things this gate noticed in passing but deliberately left alone,
+because they are content-accuracy questions rather than state-presentation ones: `PostCard`'s
+and other surfaces' "🕐 Recent Documents" / "📜" emoji iconography (already carried forward from
+`UI-SYSTEM-2`'s backlog), and whether the tools/pensioners pages' descriptive copy still matches
+current product behaviour.
 
-Two constraints carry in hard. **Success states must not be invented**: the public surface is
-read-only plus client-side calculators, and the only action is `window.print()`, which the
-browser confirms — `UI-AUDIT-1` closed that checklist item as correctly not applicable, and it
-should stay closed. And **errors must not leak internals**: `app/(public)/error.tsx` is the
-model — bilingual, specific, offers a retry, exposes nothing.
+Five practices are worth carrying forward.
 
-Four practices are worth carrying forward.
+**Mutate every new guard.** In five of the last six gates a guard passed its first mutation and
+had to be rewritten or, this gate, needed a genuinely new test to exist at all —
+`CategoryLogList`'s empty-filter branch had zero coverage before this gate despite the component
+itself being well-tested for its Open/Closed logic.
 
-**Mutate every new guard.** In four of the last five gates a guard passed its first mutation
-and had to be rewritten.
-
-**Check the harness too.** This gate's first mutation battery reported six false "survived"
+**Check the harness too.** `UI-PATTERNS-1`'s first mutation battery reported six false "survived"
 results — an ANSI strip that left the ESC byte, and `String.replace` hitting a doc comment
 instead of the code. A mutation harness that under-reports manufactures false confidence in
 precisely the tests meant to prevent it.
@@ -617,6 +681,13 @@ precisely the tests meant to prevent it.
 **Test the screen, not only the mechanism.** A `Field` unit test passed while five real inputs
 stayed unlabelled; a drawer test passed while the state reset it covered was gone.
 
-**Merging duplicates surfaces divergence.** Both bugs fixed in this gate — the missing deadline
-and the miscoloured warning — were invisible while the code was duplicated, and obvious the
-moment it was not.
+**Merging duplicates surfaces divergence.** Both bugs fixed in `UI-PATTERNS-1` — the missing
+deadline and the miscoloured warning — were invisible while the code was duplicated, and obvious
+the moment it was not.
+
+**Derive UI state from props already flowing through a component before adding a new state
+variable.** `SearchUI`'s pending indicator (`UI-STATES-1`) is `value.trim() !== query.trim()`,
+not a `useState` set by one effect and cleared by another — the two-effect version raced against
+an unstable `useSearchParams()` reference in the test mock and, worse, would have raced for the
+same underlying reason against real Next.js re-renders. A derived value has no completion
+signal to get out of sync with, because it never depended on one.
