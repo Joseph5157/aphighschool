@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata, Viewport } from "next";
 import BottomNav from "@/app/(public)/_components/BottomNav";
+import { BottomBarProvider } from "@/app/(public)/_components/BottomBarSlot";
 import { buttonClassName } from "@/app/(public)/_components/Button";
 import DesktopNav from "@/app/(public)/_components/DesktopNav";
 import ThemeToggle from "@/app/(public)/_components/ThemeToggle";
@@ -43,7 +44,8 @@ export const viewport: Viewport = {
 
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
   return (
-    <SidebarProvider defaultOpen={false}>
+    <BottomBarProvider>
+      <SidebarProvider defaultOpen={false}>
       {/* Sliding Sidebar Drawer for Public Navigation & Tools */}
       <Sidebar side="left" collapsible="offcanvas">
         <SidebarHeader>
@@ -165,15 +167,21 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
           </div>
         </header>
 
-        {/* Main Content Area */}
-        <main className="flex-1 w-full max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 py-8 pb-[64px] print:p-0 print:m-0 print:max-w-none print:w-full">
+        {/* Main Content Area.
+
+            The bottom reservation is conditional: `pb-[64px]` applied at every
+            width, including `lg` and above where no bottom bar is mounted at
+            all, leaving dead space under every desktop page. Below `lg` it
+            clears the bar plus the iOS home indicator. */}
+        <main className="flex-1 w-full max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 py-8 pb-[calc(76px+env(safe-area-inset-bottom))] lg:pb-8 print:p-0 print:m-0 print:max-w-none print:w-full">
           {children}
         </main>
 
-        {/* Sticky Bottom Tab Bar */}
+        {/* Sticky Bottom Tab Bar. Yields to a page-level bar via BottomBarSlot. */}
         <BottomNav />
       </div>
-    </SidebarProvider>
+      </SidebarProvider>
+    </BottomBarProvider>
   );
 }
 

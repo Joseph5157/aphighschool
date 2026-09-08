@@ -19,7 +19,7 @@ export default function NotificationTemplate({ post, lifecycleView, prevPost, ne
   const isPastDeadline = post.actionDeadline && new Date(post.actionDeadline) < new Date();
 
   return (
-    <div className="w-full max-w-[1700px] mx-auto space-y-8 pb-24 font-sans px-2 sm:px-4">
+    <div className="w-full max-w-[1700px] mx-auto space-y-8 pb-24 font-sans">
       <Breadcrumb items={[{ label: "Orders", href: "/orders" }, ...(post.category ? [{ label: post.category.nameEn, href: `/category/${post.category.slug}` }] : []), { label: post.goReference || post.titleEn }]} />
       {lifecycleView.kind === "recruitment" && <LifecycleStepper stages={lifecycleView.stages} currentStage={lifecycleView.currentStage} isExpired={lifecycleView.isExpired} />}
 
@@ -50,7 +50,7 @@ export default function NotificationTemplate({ post, lifecycleView, prevPost, ne
           {post.content && (
             <section aria-label="Full Article & Guidelines" className="bg-paperRaised border border-hair/80 rounded-xl p-6 md:p-8 space-y-4">
               <div className="font-mono font-bold text-xs tracking-wider text-inkSoft border-b border-hair pb-3 flex items-center justify-between"><span>Complete Guidelines & Schedules</span><span className="text-[10px] text-inkSoft/70">Structured Document</span></div>
-              <div className="prose-gazette overflow-x-auto" dangerouslySetInnerHTML={{ __html: post.content }} />
+              <div className="prose-gazette" dangerouslySetInnerHTML={{ __html: post.content }} />
             </section>
           )}
           {post.relatedFrom && post.relatedFrom.length > 0 && (

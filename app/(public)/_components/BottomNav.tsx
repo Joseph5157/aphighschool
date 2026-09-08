@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useBottomBarClaimed } from "./BottomBarSlot";
 
 const NAV_ITEMS = [
   {
@@ -59,11 +60,19 @@ const NAV_ITEMS = [
 
 export default function BottomNav() {
   const pathname = usePathname();
+  const claimed = useBottomBarClaimed();
+
+  // A page-level bar (post detail's ThumbZoneBar) holds the slot, so this one
+  // stands down rather than stacking on top of it — audit F1. The sticky header
+  // still carries the menu trigger, so navigation remains reachable.
+  if (claimed) return null;
 
   return (
     <nav
       aria-label="Primary"
-      className="fixed bottom-0 left-0 right-0 w-full bg-paperRaised/95 backdrop-blur-md border-t border-hair z-45 lg:hidden print:hidden"
+      // pb from the safe-area inset so the bar clears the iPhone home
+      // indicator instead of sitting under it.
+      className="fixed bottom-0 left-0 right-0 w-full bg-paperRaised/95 backdrop-blur-md border-t border-hair z-45 pb-[env(safe-area-inset-bottom)] lg:hidden print:hidden"
     >
       <div className="w-full max-w-md mx-auto flex items-center justify-around py-1 px-1">
         {NAV_ITEMS.map((item) => {

@@ -6,6 +6,8 @@
 import { describe, expect, it } from "vitest";
 import { render, screen } from "@testing-library/react";
 import React from "react";
+import fs from "node:fs";
+import path from "node:path";
 import Button from "@/app/(public)/_components/Button";
 import IconButton from "@/app/(public)/_components/IconButton";
 import Input from "@/app/(public)/_components/Input";
@@ -236,5 +238,28 @@ describe("the 33 unassociated tax-calculator fields", () => {
     });
 
     expect(unlabelled.map((i) => i.outerHTML.slice(0, 80))).toEqual([]);
+  });
+});
+
+describe("typography floor in shared primitives", () => {
+  // UI-SYSTEM-1 raised 21 occurrences and UI-SYSTEM-2 reported the directory
+  // clear. It was not: the sweep matched `text-[9px]`, `text-[10px]` and
+  // `text-[11px]` by integer, so PostCard's `text-[8.5px]` — the smallest text
+  // in the product — survived both gates unseen. Decimals count.
+  it("has no arbitrary text size below 12px", () => {
+    const componentsDir = path.join(process.cwd(), "app/(public)/_components");
+    const offenders: string[] = [];
+
+    for (const name of fs.readdirSync(componentsDir)) {
+      if (!name.endsWith(".tsx")) continue;
+      const source = fs.readFileSync(path.join(componentsDir, name), "utf8");
+      source.split("\n").forEach((line, index) => {
+        for (const match of line.matchAll(/text-\[(\d+(?:\.\d+)?)px\]/g)) {
+          if (Number(match[1]) < 12) offenders.push(`${name}:${index + 1} ${match[0]}`);
+        }
+      });
+    }
+
+    expect(offenders).toEqual([]);
   });
 });

@@ -1,8 +1,22 @@
 import React from "react";
 
-export function Table({ children, className = "", ...props }: React.TableHTMLAttributes<HTMLTableElement>) {
+export interface TableProps extends React.TableHTMLAttributes<HTMLTableElement> {
+  /** Names the scroll region. Give every table one. */
+  label?: string;
+}
+
+export function Table({ children, className = "", label, ...props }: TableProps) {
   return (
-    <div className="w-full overflow-x-auto border border-hair rounded-xl">
+    // A bare overflow-x-auto div scrolls with a pointer but cannot be reached
+    // by keyboard, so a wide table's right-hand columns were unreachable
+    // without a mouse. tabIndex + role make it a focusable scroll region
+    // (DESIGN_SYSTEM.md §8.7).
+    <div
+      className="w-full overflow-x-auto border border-hair rounded-xl"
+      tabIndex={0}
+      role="region"
+      aria-label={label ?? "Table"}
+    >
       <table className={`w-full text-left border-collapse text-xs sm:text-sm ${className}`} {...props}>
         {children}
       </table>

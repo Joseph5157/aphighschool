@@ -12,13 +12,13 @@
 
 ## Current UI program state
 
-- Current phase: Phase 4
-- Active gate: `UI-SYSTEM-2` (CLOSED)
-- Scope in this gate: reusable UI primitives only
+- Current phase: Phase 5
+- Active gate: `UI-RESPONSIVE-1` (CLOSED)
+- Scope in this gate: responsive layout and overflow only
 - UI redesign performed: no
 - Application behaviour changed: yes — foundation tokens, focus system, active-navigation
   treatment, state colours. Information architecture, routes and page composition unchanged.
-- Next planned gate: `UI-RESPONSIVE-1`
+- Next planned gate: `UI-MOBILE-NAV-1`
 
 ### Gate history
 
@@ -29,6 +29,7 @@
 | `UI-DESIGN-1` | CLOSED | `PRODUCT.md`, `DESIGN.md`, `docs/ui/DESIGN_SYSTEM.md` created; P0s specified for `UI-SYSTEM-1`. |
 | `UI-SYSTEM-1` | CLOSED | Foundations implemented; audit P0s F2/F3/F4 fixed and guarded. 288 tests pass. |
 | `UI-SYSTEM-2` | CLOSED | Primitives standardised; carried-forward defects closed; Dialog/IconButton/Textarea/Checkbox added. 318 tests pass. |
+| `UI-RESPONSIVE-1` | CLOSED | Audit F1 closed via BottomBarSlot; overflow and gutter repair; 768–1023 band guarded. 330 tests pass. |
 
 ## Repository observations
 
@@ -361,6 +362,53 @@ Escape, removing the focus trap, and reverting `Field`'s cloning each fail on-to
 it was already weaker than `test/focus-visible.test.ts` and its last act was to fail on
 `Textarea.tsx` for a comment explaining the defect.
 
+## `UI-RESPONSIVE-1` outcome summary
+
+### Audit F1 — closed
+
+`ThumbZoneBar` (page) and `BottomNav` (layout) both mounted `fixed bottom-0` below `lg`.
+Neither could hide the other in CSS because neither knows the other exists, so the fix is a
+mechanism: `BottomBarSlot`. A page-level bar claims the slot on mount and the site-wide nav
+yields while it is held; the sticky header keeps navigation reachable. Stacking was rejected —
+two bars would take roughly 110px of a 640px phone viewport on the most-read page.
+
+Both bars also moved to `z-45` (below the `z-50` scrim) and gained
+`env(safe-area-inset-bottom)`. The shell's unconditional `pb-[64px]` became
+`pb-[calc(76px+env(safe-area-inset-bottom))] lg:pb-8`, so desktop pages no longer carry dead
+space under them.
+
+### Overflow repair
+
+| Defect | Fix |
+|---|---|
+| Tax calculator: five `grid-cols-3` input rows, unshrinkable at 320px | `grid-cols-1 sm:grid-cols-3` |
+| Tax calculator: `grid-cols-5` quarterly TDS block | Kept tabular; scrolls in its own focusable region with `min-w-[34rem]` |
+| Grid-cell inputs overriding their track | `w-full min-w-0` |
+| A wide table scrolling the whole article | `.prose-gazette table` now `display: block; overflow-x: auto` so the table scrolls itself |
+| `Table`'s scroll region unreachable by keyboard | `tabIndex={0}` + `role="region"` + name |
+| Search result metadata row not wrapping | `flex-wrap` + `min-w-0` |
+| Post templates double-padded against the shell gutter | Template `px-2 sm:px-4` removed |
+| Tax calculator sticky bars at `top-3`/`top-4` sliding under the `z-40` sticky header | `top-[76px]` |
+
+### Not a defect after all
+
+The audit listed long URLs as an overflow risk. **No raw URL renders as visible text
+anywhere** — every source and PDF link carries a written label. Recorded rather than "fixed".
+
+### A UI-SYSTEM-2 claim corrected
+
+That gate reported no sub-12px type left in `app/(public)/_components`. Its sweep matched
+sizes by integer, so `PostCard`'s `text-[8.5px]` — the smallest text in the product — survived
+two gates unseen. Fixed, and the guard in `test/primitives.test.tsx` is now decimal-aware.
+
+### Guards added
+
+`test/responsive-layout.test.tsx` (11): one fixed bottom bar per route and the nav bar's
+return, bar layer and safe area, no shell-level `overflow-x-hidden`, no `w-screen` or
+oversized fixed width, the single `lg` navigation breakpoint in both CSS and JS, and
+keyboard-reachable wide scroll regions. Mutation-tested — reverting `BottomNav`'s yield
+restores the F1 collision and fails the guard.
+
 ## Known limitations
 
 - Browser acceptance tooling is not currently runnable in this environment.
@@ -390,6 +438,14 @@ it was already weaker than `test/focus-visible.test.ts` and its last act was to 
   12px, shared-primitive type 10/11px → 12px, form controls 12px → 16px on mobile with a 44px
   minimum height, the active-navigation rule replacing coloured fills, and the removal of
   shadows that never rendered. `UI-ACCEPTANCE-1` owns confirming these.
+- **`UI-RESPONSIVE-1` is the gate least served by the test suite.** jsdom does not lay out, so
+  nothing here proves a page does not scroll sideways at 320px. What is proven is structural:
+  bar count, absence of `w-screen` and oversized fixed widths, absence of a shell-level
+  `overflow-x-hidden`, breakpoint agreement, and keyboard-reachable scroll regions. Every
+  claim about actual rendering at 320/360/375/390/430/768/1024/1440 remains unverified and
+  belongs to `UI-ACCEPTANCE-1` — in particular the single-column tax-calculator forms, the
+  scrolling TDS block, post pages with one bottom bar, and the sticky bars at `top-[76px]`
+  now that the header height is assumed rather than measured.
 - **No visual verification was possible for `UI-SYSTEM-2` either.** Changes with a visible
   effect and no browser check: `Button` `md`/`lg` and pagination controls are taller, the
   theme toggle is now an inline SVG rather than emoji, the search clear control is a 44px
@@ -412,6 +468,7 @@ it was already weaker than `test/focus-visible.test.ts` and its last act was to 
 | `UI-DESIGN-1` | pass (`npx tsc --noEmit`, exit 0) | clean | not required (docs only) | unavailable |
 | `UI-SYSTEM-1` | pass (`npx tsc --noEmit`, exit 0) | clean | **44 files, 288 tests pass** (incl. DB-backed trust + dark-mode suites) | unavailable |
 | `UI-SYSTEM-2` | pass (`npx tsc --noEmit`, exit 0) | clean | **46 files, 318 tests pass**; Tailwind utility validation passes | unavailable |
+| `UI-RESPONSIVE-1` | pass (`npx tsc --noEmit`, exit 0) | clean | **47 files, 330 tests pass**; Tailwind utility validation passes | unavailable |
 
 ## Gate transition rule
 
@@ -419,20 +476,27 @@ Update `UI_ACTIVE_GATE.md` only when work on the next gate actually begins. Each
 gate's evidence remains recoverable from this document, from `docs/ui/UI_AUDIT.md`, and from
 Git history.
 
-`UI-RESPONSIVE-1` is next per the master plan: removing accidental horizontal scrolling and
-repairing responsive structure at 320–1440px. Its largest single item is audit finding **F1**,
-the two `fixed bottom-0 z-50` bars that stack on post detail pages below `lg` — untouched so
-far, because it is a layout defect rather than a primitive one.
+`UI-MOBILE-NAV-1` is next per the master plan: the drawer's own behaviour — Escape, focus
+trap, focus return, scroll lock, and closed-state inertness. Every one of those was left
+untouched by the last three gates and is still a defect (audit F5).
 
-Two practices are worth carrying into it.
+Two things make that gate easier than it looks. `Dialog` already implements the whole contract
+against `DESIGN_SYSTEM.md` §8.5, and `test/dialog.test.tsx` already pins each behaviour — so
+the drawer has a worked example and a test shape to copy rather than a specification to
+interpret. `BottomBarSlot` also settled the z-order the drawer scrim depends on: the scrim is
+`z-50` and every bottom bar is `z-45`, so the scrim now genuinely disables what it covers.
+
+Three practices are worth carrying forward.
 
 **Mutate every new guard.** This project's history is defects that survived a green suite, not
-defects that broke one. Every guard added in the last two gates was run against a deliberate
-reintroduction of the bug it covers, and in both gates one guard failed that check and had to
-be rewritten.
+defects that broke one. Every guard added in the last three gates was run against a deliberate
+reintroduction of the bug it covers, and in two of those gates a guard failed that check and
+had to be rewritten.
 
-**Test the screen, not only the mechanism.** In this gate a unit test proving `Field`
-associates its parts passed while five inputs in `TaxCalculatorUI` were still unlabelled —
-they bypass `Field` entirely. Only rendering the real component and asserting that *every*
-input has an accessible name found them. `UI-RESPONSIVE-1` has the same shape of risk: a
-primitive that behaves correctly in isolation says nothing about the page it sits on.
+**Test the screen, not only the mechanism.** A unit test proving `Field` associates its parts
+passed while five inputs in `TaxCalculatorUI` were still unlabelled — they bypass `Field`
+entirely, and only rendering the real component found them.
+
+**Match the sweep to the data.** `UI-SYSTEM-2` declared the shared primitives clear of
+sub-12px type because its regex matched integers; `text-[8.5px]` survived. When a sweep
+reports zero, check that it could have reported non-zero.

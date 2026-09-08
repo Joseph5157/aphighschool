@@ -338,8 +338,17 @@ html.dark {
   line-height: 1.75;
 }
 
+/* `display: block` + `overflow-x: auto` scopes horizontal scrolling to the
+   TABLE. Post content arrives through dangerouslySetInnerHTML, so a table
+   cannot be wrapped in a scroll container from JSX; the templates instead put
+   `overflow-x-auto` on the whole prose block, which made one wide table scroll
+   the entire article sideways. Scoping it here means the surrounding paragraphs
+   stay put and only the table moves. */
 .prose-gazette table {
+  display: block;
   width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
   border-collapse: collapse;
   margin: 2em 0;
   font-size: 0.9375rem;

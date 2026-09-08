@@ -308,7 +308,9 @@ export default function SearchUI({
                     <div className="text-telugu-body text-inkSoft font-telugu" lang="te">
                       {highlightMatch(post.titleTe, trimmedQuery)}
                     </div>
-                    <div className="text-meta text-inkSoft/70 uppercase tracking-wider pt-1 border-t border-hair/30 flex items-center gap-2 font-mono">
+                    {/* flex-wrap + min-w-0: label, date and a long GO reference
+                        on one unwrapping row pushed past the card at 320px. */}
+                    <div className="text-meta text-inkSoft/70 uppercase tracking-wider pt-1 border-t border-hair/30 flex flex-wrap items-center gap-x-2 gap-y-1 min-w-0 font-mono">
                       <span>{dateLabel(post)}</span>
                       <span>{formatDate(officialDate(post))}</span>
                       {post.goReference && (

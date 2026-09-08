@@ -271,13 +271,19 @@ content, not by a fixed minimum.
 
 ### 5.4 Bottom-anchored elements
 
-**At most one fixed bottom bar may be mounted on any route.** Post detail pages currently
-mount two (`ThumbZoneBar` and `BottomNav`, both `fixed bottom-0 z-50`).
+**At most one fixed bottom bar may be mounted on any route.**
 
-- The shell reserves space equal to the bar actually present, at the widths where it is
-  present — not an unconditional `pb-[64px]`.
+The rule is enforced at runtime by `BottomBarSlot`, not by convention. A page-level bar
+claims the slot on mount (`useClaimBottomBar()`) and the site-wide `BottomNav` yields while
+it is held. CSS alone cannot express this: one bar is rendered by the layout and the other by
+the page, so neither can see the other. Navigation is not lost when the nav bar yields —
+the sticky header carries the menu trigger at every width.
+
+- The shell reserves space only at the widths where a bar exists:
+  `pb-[calc(76px+env(safe-area-inset-bottom))] lg:pb-8`, not an unconditional `pb-[64px]`.
 - Every fixed bottom bar adds `env(safe-area-inset-bottom)` to its bottom padding.
-- The page-level scrim sits above the bottom bar, not below it (§7.2).
+- Bottom bars sit on `z-45`, below the scrim at `z-50` (§7.2), so an overlay that disables
+  the page also disables them.
 
 ---
 
@@ -504,8 +510,14 @@ the same value as the CSS, and should derive it from one shared constant.
 - **`overflow-x-hidden` on `body` or the page wrapper is forbidden** — it conceals structural
   bugs rather than fixing them.
 - Intentional horizontal scroll is allowed for tables, filter chip rows, breadcrumbs and tag
-  strips. Where the scrollbar is hidden, `no-scrollbar` **must actually be defined** (§R0.1) —
-  it is used in 7 places today and does not exist.
+  strips.
+- A scroll container holding **wide content** must be focusable — `tabIndex={0}` plus
+  `role="region"` and a name — or its far columns are unreachable without a pointer. Chip and
+  tab rows are exempt: every chip is itself a link or button, so tabbing already scrolls them.
+- Post content arrives through `dangerouslySetInnerHTML`, so its tables cannot be wrapped from
+  JSX. `.prose-gazette table` therefore carries `display: block; overflow-x: auto` so a wide
+  table scrolls **itself** — putting `overflow-x-auto` on the whole prose block instead made
+  one wide table scroll the entire article sideways.
 - Long unbroken strings (GO references, URLs) use `break-words`; truncation must expose the
   full value via `title` or an accessible alternative.
 
