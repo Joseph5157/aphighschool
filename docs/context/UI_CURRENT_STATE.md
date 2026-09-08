@@ -12,13 +12,12 @@
 
 ## Current UI program state
 
-- Current phase: Phase 1
-- Active gate: `UI-AUDIT-1` (CLOSED)
-- Gate commit SHA: `e1ec932c7ff411c81e72e9fcb89db7df55a53b8f` (audit starting point)
-- Scope in this gate: read-only audit of the public application and documentation only
+- Current phase: Phase 2
+- Active gate: `UI-DESIGN-1` (CLOSED)
+- Scope in this gate: design definition and documentation only
 - UI redesign performed: no
 - Application or production behavior changed: no
-- Next planned gate: `UI-DESIGN-1`
+- Next planned gate: `UI-SYSTEM-1`
 
 ### Gate history
 
@@ -26,6 +25,7 @@
 |---|---|---|
 | `UI-BASELINE-0` | CLOSED | Branch, baseline, roadmap and state tracking established. |
 | `UI-AUDIT-1` | CLOSED | `docs/ui/UI_AUDIT.md` created; 36 findings, all components classified. |
+| `UI-DESIGN-1` | CLOSED | `PRODUCT.md`, `DESIGN.md`, `docs/ui/DESIGN_SYSTEM.md` created; P0s specified for `UI-SYSTEM-1`. |
 
 ## Repository observations
 
@@ -211,6 +211,55 @@ have settled the three P0 findings below.
 - No test compiles the stylesheet and asserts that every class used in `app/` exists in the
   output. Adding that guard is the highest-value test work in `UI-SYSTEM-1`.
 
+## `UI-DESIGN-1` outcome summary
+
+Design direction and specification are recorded in `PRODUCT.md`, `DESIGN.md` and
+`docs/ui/DESIGN_SYSTEM.md`. This is the recoverable summary.
+
+### Direction
+
+**"A government gazette that a teacher can read on a phone in a corridor."** The existing
+identity — navy masthead that deliberately does not invert, warm paper grounds, turmeric /
+tamarind / kumkum accents, IBM Plex Mono reserved for data — was **codified, not replaced**.
+Every P0 and P1 audit finding is a correctness defect rather than evidence that the aesthetic
+is failing, and the master plan forbids redesigning information architecture at this gate.
+
+### Decisions that change current behaviour
+
+- **`accent` is retired, never defined.** `AGENTS.md` fixes a closed token set, and navigation
+  position is chrome that must not borrow a document-status colour. Active navigation becomes
+  `paperRaised` fill + `ink` 700 text + a 3px `turmeric` structural rule, plus
+  `aria-current="page"`.
+- **`superseded` moves from `tamarind` to `kumkum`.** A replaced order currently renders in
+  the same green family as one in force, which is the most consequential visual defect in the
+  product. `lifecyclePill.ts` already names this as the intended fix.
+- **`Badge` `success` / `warning` move off raw `emerald-*` / `amber-*`** onto project tokens.
+  Those variants violate `AGENTS.md`, do not participate in the dark-mode flip, and style the
+  two most trust-bearing markers in the product ("GOIR Verified" and "Current").
+- **One focus treatment**, context-aware: `ink` on light, `turmeric` in dark and on masthead
+  panels. Bare `outline-none` is banned; ring width and ring colour must always travel
+  together.
+- **One navigation breakpoint (`lg`, 1024px)** for both the CSS and the JS viewport check.
+- **Shadows are minimal**; bordered surfaces plus a `paper`→`paperRaised` step are the default
+  elevation, with a documented z-index scale that puts the scrim above fixed bars.
+- **Typography floors:** 12px absolute minimum, 16px minimum for mobile form controls. The
+  `--label-*` custom properties are replaced by a single scale.
+
+### Trust semantics restated as design rules (unchanged in substance)
+
+- Dates always carry their `dateLabel()` value; a bare date is never rendered, and
+  "Added to portal" is never presented as an issue date.
+- "GOIR Verified" renders only where recorded, styled as metadata rather than a promotional
+  badge. **There is no "unverified" state** — absence renders nothing.
+- The independence disclaimer stays on document surfaces; no government insignia; every post
+  keeps a route to its source document; nothing is invented to fill space.
+
+### Open product questions recorded in `PRODUCT.md`
+
+Contact/legal surface (blocks the clickable email and phone checklist items), the Telangana
+references in three tool metadata descriptions against the AP-only scope lock, the WhatsApp
+banner that violates a standing `AGENTS.md` hard rule, and final domain/branding.
+
 ## Known limitations
 
 - Browser acceptance tooling is not currently runnable in this environment.
@@ -221,8 +270,18 @@ have settled the three P0 findings below.
   horizontal-scroll behaviour at 320–430px, the visual result of the stacked bottom bars,
   the 768–1023px navigation band, iOS focus zoom and safe-area clipping, and colour-contrast
   ratios for the `inkSoft` family in both themes.
-- The full Vitest suite was not run for `UI-AUDIT-1` because the gate changed no application
-  code. `npx tsc --noEmit` passes. `UI-REGRESSION-1` owns full regression verification.
+- The full Vitest suite was not run for `UI-AUDIT-1` or `UI-DESIGN-1` because neither gate
+  changed application code. `npx tsc --noEmit` passes for both. `UI-REGRESSION-1` owns full
+  regression verification.
+- **Impeccable was not available** in this environment, so no external design critique was run
+  for `UI-DESIGN-1`. The critique recorded in `DESIGN.md` is self-applied against the audit
+  findings and the product constraints. `UI-IMPECCABLE-1` remains the gate that would use it,
+  and `DESIGN.md` is what it should critique against.
+- **No colour-contrast ratios have been measured.** `DESIGN_SYSTEM.md` specifies token pairings
+  and roles, but the 4.5:1 / 3:1 requirements are unverified in both themes. `UI-A11Y-1` owns
+  verification and may adjust values; the roles should survive any such adjustment.
+- `DESIGN_SYSTEM.md` is a specification, not a description of current behaviour. Where it and
+  the code disagree today, the code is the defect and `UI_AUDIT.md` records it.
 
 ## Validation evidence
 
@@ -230,6 +289,7 @@ have settled the three P0 findings below.
 |---|---|---|---|---|
 | `UI-BASELINE-0` | pass | clean | not required (docs only) | unavailable |
 | `UI-AUDIT-1` | pass (`npx tsc --noEmit`, exit 0) | clean | not required (docs only) | unavailable |
+| `UI-DESIGN-1` | pass (`npx tsc --noEmit`, exit 0) | clean | not required (docs only) | unavailable |
 
 ## Gate transition rule
 
@@ -237,7 +297,15 @@ Update `UI_ACTIVE_GATE.md` only when work on the next gate actually begins. Each
 gate's evidence remains recoverable from this document, from `docs/ui/UI_AUDIT.md`, and from
 Git history.
 
-`UI-DESIGN-1` is next per the master plan and should proceed as planned. Note that P0
-findings 1–4 above are correctness defects rather than design questions: they will need
-fixing regardless of which visual direction `UI-DESIGN-1` selects, and findings 2–4 are
-token/foundation-layer problems that later gates would otherwise build on top of.
+`UI-SYSTEM-1` is next per the master plan. Its scope is the design-system foundations only —
+tokens, scales, focus treatment, and the guard tests — not component migration
+(`UI-SYSTEM-2`), responsive repair (`UI-RESPONSIVE-1`), or navigation behaviour
+(`UI-MOBILE-NAV-1`).
+
+`DESIGN_SYSTEM.md` §15 carries the ordered implementation checklist for that gate. Its first
+item is the dead-class guard test, deliberately: audit findings F2 and F3 both reached
+production through a green suite, so the guard is what keeps every later item true. Each
+checklist item needs a test that can fail for the right reason — a passing suite is not
+evidence a token behaves correctly, since the `accent` defect survived an existing
+colour-token test that only checked *defined* tokens compile and never that *used* classes
+resolve.

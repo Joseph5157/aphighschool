@@ -243,8 +243,15 @@ Three routes render **no `h1`** in the page or its components:
 `aria-invalid` and no `aria-describedby` linking control to message, so assistive technology
 is never told a field is invalid or why.
 
-Label association is largely correct — 36 of 39 `<Field>` usages pass `htmlFor`; the
-`CommutationTrackerUI` and `PensionCalculatorUI` call sites are the exceptions to check.
+Label association is correct at 33 of 35 direct `<Field>` call sites. The two exceptions are
+the `TxtF` (line 113) and `NumF` (line 133) wrapper components in `TaxCalculatorUI`, which
+render `<Field label={...}>` with no `htmlFor` and an `<Input>` with no `id`. `NumF` is used
+**33 times** in that file, so the real blast radius is 33 unassociated fields, not two —
+roughly a third of the product's form controls. `TxtF` is used zero times and is dead code.
+
+*(Corrected during `UI-DESIGN-1`: this paragraph originally named `CommutationTrackerUI` and
+`PensionCalculatorUI` as the exceptions. Both were re-checked and pass `htmlFor` at every
+call site; the defect is in `TaxCalculatorUI`'s wrappers.)*
 
 #### F14. `Sheet` is unused, keyboard-inoperable, and lacks dialog semantics · CONFIRMED (code)
 

@@ -2,7 +2,7 @@
 
 ## Active gate
 
-`UI-AUDIT-1`
+`UI-DESIGN-1`
 
 ## Status
 
@@ -10,48 +10,70 @@ CLOSED
 
 ## Purpose
 
-Audit the public application end to end and record an evidence-backed, repository-native
-inventory of UI defects, reusable-component dispositions, and production-readiness
-checklist status. Do not implement fixes.
+Define the product's visual and interaction direction, and the design-system specification
+that later gates implement, before any broad UI change is made.
 
 ## Change boundary
 
-This gate is AUDIT ONLY. It may only add or update:
+This gate is DESIGN DEFINITION. It may only add or update:
 
-- `docs/ui/UI_AUDIT.md`
+- `PRODUCT.md`
+- `DESIGN.md`
+- `docs/ui/DESIGN_SYSTEM.md`
 - `docs/context/UI_ACTIVE_GATE.md`
 - `docs/context/UI_CURRENT_STATE.md`
 
 Application code, styles, components, routes, assets, database files, tests, and runtime
-configuration are out of scope for this gate and were not modified.
+configuration are out of scope for this gate and were not modified. No audit finding was
+fixed in this gate; the P0 findings are specified as intended behaviour for `UI-SYSTEM-1`.
+
+Information architecture — routes, navigation structure, page composition — is explicitly
+out of scope and unchanged.
 
 ## Required closure evidence
 
 - The starting worktree was clean on `ui-system-production-readiness` at
-  `e1ec932c7ff411c81e72e9fcb89db7df55a53b8f`, with local and live remote branch SHAs in
-  agreement.
-- `docs/ui/UI_AUDIT.md` exists and covers all 18 public routes, the shared primitive set,
-  the root and public layouts, `app/globals.css`, and `tailwind.config.js`.
-- Every item of the original production-readiness checklist is mapped to a status, an
-  evidence class, and the gate that owns its fix.
-- Every reusable UI component is classified KEEP / REFINE / MERGE / REPLACE / DELETE.
-- Findings are prioritised P0–P3 and each is labelled CONFIRMED (code), HIGH RISK, or
-  NEEDS BROWSER, so that unverifiable claims are not presented as verified.
-- Items that genuinely require a rendered browser or a real device are listed explicitly
-  rather than assumed to pass.
+  `fe309109acceaf8b4a3fd4e31889527882e3f0da`, local and live remote in agreement.
+- `docs/ui/UI_AUDIT.md`, the master plan, and both context documents were read before any
+  design decision was made, along with the binding constraints in `AGENTS.md` and
+  `.agents/skills/design-tokens.md`.
+- `PRODUCT.md` states the product, audience, jobs, promises and non-goals, and records the
+  open product questions that block specific checklist items.
+- `DESIGN.md` states the direction, target character, principles, what to avoid, and the
+  reasoning for each decision made in this gate.
+- `docs/ui/DESIGN_SYSTEM.md` specifies typography, colour roles, active/navigation state,
+  focus treatment, spacing, containers, radius, borders, shadows, density, responsive
+  philosophy, interaction states, motion, dark mode, trust/GOIR presentation, and
+  lifecycle/freshness presentation.
+- All three P0 audit findings named in the gate brief are accounted for as specification:
+  invalid Tailwind utility usage (§R0.1), undefined `accent` (§4.1–4.2), and the
+  non-rendering focus treatment (§6) — defined, not fixed.
 - `npx tsc --noEmit` passes and `git diff --check` is clean.
-- The audit and context documents are committed and pushed on the program branch, and the
-  local branch HEAD matches the live remote branch SHA.
+- The documents are committed and pushed on the program branch, and the local branch HEAD
+  matches the live remote branch SHA.
 
 ## Closure notes
 
-Styling findings were established by compiling the project's own Tailwind configuration and
-diffing every class used in `app/**/*.tsx` against the selectors actually emitted, rather
-than by reading class names and assuming they resolve. This method produced three P0
-findings that source reading alone would not have settled.
+The existing visual identity was **codified rather than replaced**. Every P0 and P1 finding in
+`UI-AUDIT-1` is a correctness defect — utilities that do not compile, an undefined colour, a
+focus ring that never paints, two stacked bottom bars — and none is evidence that the
+aesthetic direction is failing. Redesigning in response to build defects would have treated
+the wrong problem, and the master plan forbids redesigning information architecture here.
 
-No application behaviour was changed. No fixes were implemented.
+Three decisions go beyond restating the current design because the current design contradicts
+itself:
+
+- `accent` is **retired, not defined**. `AGENTS.md` fixes a closed token set, and navigation
+  position is chrome that must not borrow a document-status colour.
+- `superseded` moves from the green family to `kumkum`, because a document that has been
+  replaced currently renders in the same colour family as one that is in force.
+- `Badge`'s `success` and `warning` variants move off raw `emerald-*` / `amber-*`, which
+  violate `AGENTS.md` and do not participate in the dark-mode flip — and which style the two
+  most trust-bearing markers in the product.
+
+Impeccable was not available in this environment, so no external design critique was run; this
+is recorded in `DESIGN.md` and `UI-IMPECCABLE-1` remains the gate that would use it.
 
 ## Next gate after closure
 
-`UI-DESIGN-1`
+`UI-SYSTEM-1`
