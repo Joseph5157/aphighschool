@@ -25,13 +25,13 @@ export default function TopicTagBar({ baseUrl = "/search" }: TopicTagBarProps) {
 
   return (
     <div className="space-y-2 font-sans">
-      <div className="font-mono text-[11px] font-bold text-inkSoft uppercase tracking-wider flex items-center justify-between">
+      <div className="font-mono text-xs font-bold text-inkSoft uppercase tracking-wider flex items-center justify-between">
         <span>🏷️ ప్రసిద్ధ అంశాలు — Popular Teacher Topics</span>
         <div className="flex items-center gap-3 shrink-0">
-          <Link href="/topics" className="text-[10px] text-tamarind hover:text-tamarindDark transition-colors">
+          <Link href="/topics" className="text-xs text-tamarind hover:text-tamarindDark transition-colors">
             All topics <span aria-hidden="true">→</span>
           </Link>
-          <span className="text-[10px] text-inkSoft/70">1-Click Filter</span>
+          <span className="text-xs text-inkSoft/70">1-Click Filter</span>
         </div>
       </div>
 
@@ -42,7 +42,7 @@ export default function TopicTagBar({ baseUrl = "/search" }: TopicTagBarProps) {
             <Link
               key={topic.tag}
               href={`${baseUrl}?tag=${encodeURIComponent(topic.tag)}`}
-              className={`shrink-0 text-xs font-semibold px-3 py-1.5 rounded-full border transition-all flex items-center gap-1.5 shadow-2xs ${
+              className={`shrink-0 text-xs font-semibold px-3 py-1.5 rounded-full border transition-all flex items-center gap-1.5 ${
                 isActive
                   ? "bg-tamarind text-white border-tamarindDark font-bold scale-105"
                   : "bg-paperRaised text-ink border-hair hover:border-tamarind hover:text-tamarind"

@@ -71,7 +71,7 @@ export default async function OrdersPage() {
         {/* Main Feed Column (8 cols on Desktop) */}
         <div className="lg:col-span-8 space-y-8">
           {/* ── Option A: Imperial Gazette Masthead ─────────────────────────── */}
-          <div className="bg-masthead text-mastheadText rounded-2xl overflow-hidden shadow-md">
+          <div className="on-masthead bg-masthead text-mastheadText rounded-2xl overflow-hidden shadow-md">
             {/* Top ribbon */}
             <div
               className="border-b border-mastheadText/20 px-6 py-2 flex items-center justify-between text-[11px] font-mono text-mastheadText/50 tracking-widest uppercase"

@@ -26,7 +26,10 @@ const VARIANT_MAP: Record<ButtonVariant, string> = {
   tamarind: "bg-tamarind text-paper hover:bg-tamarindDark active:scale-[0.98]",
   turmeric: "bg-turmeric text-masthead font-bold hover:bg-turmericDeep active:scale-[0.98]",
   ghost: "bg-transparent text-inkSoft hover:text-ink hover:bg-hair/30 active:scale-[0.98]",
-  danger: "bg-red-600 text-white hover:bg-red-700 active:scale-[0.98]",
+  // kumkum is the project's error/destructive token; red-600 was the only raw
+  // default-palette colour left in a shared primitive and never flipped for
+  // dark mode. DESIGN_SYSTEM.md §8.3.
+  danger: "bg-kumkum text-paper hover:bg-kumkum/90 active:scale-[0.98]",
   outline: "bg-transparent border border-ink text-ink hover:bg-ink hover:text-paper active:scale-[0.98]",
 };
 

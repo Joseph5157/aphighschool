@@ -38,7 +38,7 @@ export default function AdminNav() {
                 href={item.href}
                 className={`flex items-center gap-2.5 px-3 py-2.5 rounded-lg transition-all ${
                   isActive
-                    ? "bg-ink text-white font-bold shadow-xs"
+                    ? "bg-ink text-white font-bold"
                     : "text-inkSoft hover:text-ink hover:bg-hair/30"
                 }`}
               >

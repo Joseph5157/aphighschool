@@ -33,7 +33,7 @@ export default function CategoryStacksGrid({ stacks }: CategoryStacksGridProps) 
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {stacks.map((stack, sIdx) => (
-          <Card key={sIdx} className="p-5 bg-paperRaised border border-hair rounded-xl space-y-4 shadow-2xs">
+          <Card key={sIdx} className="p-5 bg-paperRaised border border-hair rounded-xl space-y-4">
             {/* Header */}
             <div className="flex items-center justify-between border-b border-hair/80 pb-3">
               <div className="flex items-center gap-2">

@@ -34,7 +34,7 @@ export const AccordionItemPrimitive = React.forwardRef<HTMLDivElement, React.HTM
   ({ className = "", ...props }, ref) => (
     <div
       ref={ref}
-      className={`bg-paperRaised border border-hair rounded-xl overflow-hidden transition-all duration-200 shadow-2xs hover:border-ink/20 ${className}`}
+      className={`bg-paperRaised border border-hair rounded-xl overflow-hidden transition-all duration-200 hover:border-ink/20 ${className}`}
       {...props}
     />
   )

@@ -536,7 +536,7 @@ export default function PostFormClient({
                 }}
                 placeholder={`{\n  "titleEn": "...",\n  "titleTe": "...",\n  "summaryTe": [...],\n  "englishAbstract": "...",\n  "goReference": "...",\n  "sourceDept": "...",\n  "statusBadge": "notification",\n  "actionDeadline": "YYYY-MM-DD"\n}`}
                 rows={10}
-                className="w-full font-mono text-xs p-3 border border-hair rounded-lg focus:outline-none focus:border-turmeric bg-paperRaised/50 text-ink"
+                className="w-full font-mono text-xs p-3 border border-hair rounded-lg focus:border-turmeric bg-paperRaised/50 text-ink"
               />
 
               <div className="flex items-center justify-end gap-3 pt-2">

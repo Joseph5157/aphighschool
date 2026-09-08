@@ -56,7 +56,7 @@ export default function HeroCard({ post }: HeroPostProps) {
         background: `linear-gradient(135deg, ${gradientFrom}, color-mix(in srgb, var(--color-turmeric) 33%, transparent), transparent)`,
       }}
     >
-      <article className="bg-masthead text-mastheadText rounded-2xl p-6 md:p-8 relative overflow-hidden">
+      <article className="on-masthead bg-masthead text-mastheadText rounded-2xl p-6 md:p-8 relative overflow-hidden">
         {/* Background Accent Pill & Badges */}
         <div className="flex items-center gap-3 mb-4 flex-wrap">
           <Badge variant={pill.variant} size="sm" shape="pill" dot>
@@ -65,7 +65,7 @@ export default function HeroCard({ post }: HeroPostProps) {
 
           {post.category && (
             <span
-              className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded font-semibold"
+              className="font-mono text-xs uppercase tracking-wider px-2 py-0.5 rounded font-semibold"
               style={
                 post.category.color
                   ? {
@@ -84,7 +84,7 @@ export default function HeroCard({ post }: HeroPostProps) {
           )}
 
           {post.goReference && (
-            <span className="font-mono text-[10px] text-mastheadText/80 bg-mastheadText/10 px-2 py-0.5 rounded border border-mastheadText/20 break-words">
+            <span className="font-mono text-xs text-mastheadText/80 bg-mastheadText/10 px-2 py-0.5 rounded border border-mastheadText/20 break-words">
               {post.goReference}
             </span>
           )}

@@ -45,7 +45,7 @@ export default function ThemeToggle() {
     <button
       type="button"
       onClick={toggleTheme}
-      className="px-2.5 py-1.5 rounded-lg border border-hair/80 bg-paperRaised/80 hover:bg-paper text-ink text-xs font-mono font-semibold flex items-center gap-1.5 transition-all shadow-2xs"
+      className="px-2.5 py-1.5 rounded-lg border border-hair/80 bg-paperRaised/80 hover:bg-paper text-ink text-xs font-mono font-semibold flex items-center gap-1.5 transition-all"
       aria-label="Toggle visual theme mode"
       title={theme === "light" ? "Switch to Night Mode (Digital Secretariat)" : "Switch to Day Mode (Imperial Gazette)"}
     >

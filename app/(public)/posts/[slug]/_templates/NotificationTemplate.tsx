@@ -23,7 +23,7 @@ export default function NotificationTemplate({ post, lifecycleView, prevPost, ne
       <Breadcrumb items={[{ label: "Orders", href: "/orders" }, ...(post.category ? [{ label: post.category.nameEn, href: `/category/${post.category.slug}` }] : []), { label: post.goReference || post.titleEn }]} />
       {lifecycleView.kind === "recruitment" && <LifecycleStepper stages={lifecycleView.stages} currentStage={lifecycleView.currentStage} isExpired={lifecycleView.isExpired} />}
 
-      <div className="bg-masthead text-mastheadText border border-mastheadText/40 rounded-2xl p-6 md:p-8 lg:p-10 space-y-5 shadow-md relative overflow-hidden">
+      <div className="on-masthead bg-masthead text-mastheadText border border-mastheadText/40 rounded-2xl p-6 md:p-8 lg:p-10 space-y-5 shadow-md relative overflow-hidden">
         <div className="flex items-center justify-between gap-3 flex-wrap border-b border-mastheadText/20 pb-4">
           <div className="flex items-center gap-2 flex-wrap">
             {post.verifiedAgainstGoir && <Badge variant="success" size="sm" shape="pill" dot>GOIR Verified</Badge>}
@@ -48,7 +48,7 @@ export default function NotificationTemplate({ post, lifecycleView, prevPost, ne
       <div className="lg:grid lg:grid-cols-12 lg:gap-8 xl:gap-10 space-y-8 lg:space-y-0 items-start">
         <div className="lg:col-span-8 xl:col-span-9 space-y-8 min-w-0">
           {post.content && (
-            <section aria-label="Full Article & Guidelines" className="bg-paperRaised border border-hair/80 rounded-xl p-6 md:p-8 shadow-2xs space-y-4">
+            <section aria-label="Full Article & Guidelines" className="bg-paperRaised border border-hair/80 rounded-xl p-6 md:p-8 space-y-4">
               <div className="font-mono font-bold text-xs tracking-wider text-inkSoft border-b border-hair pb-3 flex items-center justify-between"><span>Complete Guidelines & Schedules</span><span className="text-[10px] text-inkSoft/70">Structured Document</span></div>
               <div className="prose-gazette overflow-x-auto" dangerouslySetInnerHTML={{ __html: post.content }} />
             </section>

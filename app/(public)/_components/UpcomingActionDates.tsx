@@ -40,7 +40,7 @@ export default function UpcomingActionDates({ posts }: UpcomingActionDatesProps)
                 <div className="flex flex-wrap items-center gap-2">
                   <time
                     dateTime={post.actionDeadline.toISOString()}
-                    className="font-mono text-[10px] font-semibold uppercase tracking-wider text-turmericDeep"
+                    className="font-mono text-xs font-semibold uppercase tracking-wider text-turmericDeep"
                   >
                     Action date · {formatDate(post.actionDeadline)}
                   </time>
@@ -58,7 +58,7 @@ export default function UpcomingActionDates({ posts }: UpcomingActionDatesProps)
                 </Link>
 
                 {(post.goReference || post.sourceDept) && (
-                  <p className="mt-2 font-mono text-[10px] leading-relaxed text-inkSoft">
+                  <p className="mt-2 font-mono text-xs leading-relaxed text-inkSoft">
                     {[post.goReference, post.sourceDept].filter(Boolean).join(" · ")}
                   </p>
                 )}

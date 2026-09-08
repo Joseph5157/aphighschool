@@ -18,7 +18,7 @@ export default function OrderStateBadge({
 }) {
   return (
     <div className="w-full bg-paperRaised border border-hair rounded-xl p-4 md:p-5 mb-6">
-      <div className="text-[10px] font-mono tracking-wider text-inkSoft mb-2">
+      <div className="text-xs font-mono tracking-wider text-inkSoft mb-2">
         Document Status
       </div>
       <div className="flex items-center gap-3 flex-wrap">

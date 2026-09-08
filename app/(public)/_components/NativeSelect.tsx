@@ -6,13 +6,18 @@ export interface NativeSelectProps extends React.SelectHTMLAttributes<HTMLSelect
 
 export const NativeSelect = forwardRef<HTMLSelectElement, NativeSelectProps>(
   ({ children, className = "", error = false, ...props }, ref) => {
-    const errorClass = error ? "border-red-500 focus:border-red-600" : "border-hair focus:border-tamarind";
+    // See Input.tsx: no `outline-none`, so the global focus treatment applies.
+    const errorClass = error
+      ? "border-kumkum focus:border-kumkum"
+      : "border-hair focus:border-tamarind";
 
     return (
       <div className="relative w-full">
         <select
           ref={ref}
-          className={`w-full appearance-none bg-paperRaised border rounded-lg px-3 py-2 pr-8 text-xs sm:text-sm text-ink outline-none transition-all shadow-2xs font-sans cursor-pointer ${errorClass} ${className}`}
+          aria-invalid={error || undefined}
+          // text-base on mobile prevents iOS Safari zooming on focus.
+          className={`w-full appearance-none bg-paperRaised border rounded-lg px-3 py-2 pr-8 min-h-[44px] text-base sm:text-sm text-ink transition-colors duration-150 font-sans cursor-pointer ${errorClass} ${className}`}
           {...props}
         >
           {children}

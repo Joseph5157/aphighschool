@@ -27,7 +27,7 @@ BreadcrumbNav.displayName = "BreadcrumbNav";
 
 export const BreadcrumbList = React.forwardRef<HTMLOListElement, React.ComponentPropsWithoutRef<"ol">>(
   ({ className = "", ...props }, ref) => (
-    <ol ref={ref} className={`flex items-center gap-1.5 font-mono text-[11px] text-inkSoft whitespace-nowrap ${className}`} {...props} />
+    <ol ref={ref} className={`flex items-center gap-1.5 font-mono text-xs text-inkSoft whitespace-nowrap ${className}`} {...props} />
   )
 );
 BreadcrumbList.displayName = "BreadcrumbList";

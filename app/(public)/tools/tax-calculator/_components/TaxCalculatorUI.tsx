@@ -374,7 +374,7 @@ export default function TaxCalculatorUI() {
         <Link href="/tools" className="text-xs font-mono text-inkSoft hover:text-ink font-semibold">
           ← Back to Tools / ఇతర సాధనాలు
         </Link>
-        <div className="flex flex-wrap items-center bg-paperRaised border border-hair rounded-xl p-1 text-xs font-mono font-bold gap-1 shadow-2xs">
+        <div className="flex flex-wrap items-center bg-paperRaised border border-hair rounded-xl p-1 text-xs font-mono font-bold gap-1">
           {TABS.map((t) => (
             <button
               key={t.id}
@@ -476,7 +476,7 @@ export default function TaxCalculatorUI() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
             <div className="lg:col-span-2 space-y-5">
               {/* Employee Particulars */}
-              <div className="bg-paperRaised border border-hair rounded-xl p-5 space-y-3 shadow-xs">
+              <div className="bg-paperRaised border border-hair rounded-xl p-5 space-y-3">
                 <h2 className="font-bold text-sm text-ink border-b border-hair pb-2">
                   Part A: Employee & DDO Particulars
                 </h2>
@@ -506,13 +506,13 @@ export default function TaxCalculatorUI() {
               </div>
 
               {/* Salary Inputs */}
-              <div className="bg-paperRaised border border-hair rounded-xl p-5 space-y-3 shadow-xs">
+              <div className="bg-paperRaised border border-hair rounded-xl p-5 space-y-3">
                 <h2 className="font-bold text-sm text-ink border-b border-hair pb-2">
                   Part B: Salary & Allowances
                 </h2>
                 <div className="grid grid-cols-3 gap-3">
                   <div>
-                    <label className="block text-[var(--label-primary)] md:text-[var(--label-secondary)] text-inkSoft font-semibold mb-0.5 tracking-wide">
+                    <label className="block text-xs text-inkSoft font-semibold mb-0.5 tracking-wide">
                       Monthly Basic Pay (₹)
                     </label>
                     <input
@@ -523,7 +523,7 @@ export default function TaxCalculatorUI() {
                     />
                   </div>
                   <div>
-                    <label className="block text-[var(--label-primary)] md:text-[var(--label-secondary)] text-inkSoft font-semibold mb-0.5 tracking-wide">
+                    <label className="block text-xs text-inkSoft font-semibold mb-0.5 tracking-wide">
                       DA Rate %
                     </label>
                     <select
@@ -539,7 +539,7 @@ export default function TaxCalculatorUI() {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-[var(--label-primary)] md:text-[var(--label-secondary)] text-inkSoft font-semibold mb-0.5 tracking-wide">
+                    <label className="block text-xs text-inkSoft font-semibold mb-0.5 tracking-wide">
                       HRA Rate %
                     </label>
                     <select
@@ -566,13 +566,13 @@ export default function TaxCalculatorUI() {
               </div>
 
               {/* Section 10 Exemptions */}
-              <div className="bg-paperRaised border border-hair rounded-xl p-5 space-y-3 shadow-xs">
+              <div className="bg-paperRaised border border-hair rounded-xl p-5 space-y-3">
                 <h2 className="font-bold text-sm text-ink border-b border-hair pb-2">
                   Section 10 Exemptions
                 </h2>
                 <div className="grid grid-cols-3 gap-3">
                   <div>
-                    <label className="block text-[var(--label-primary)] md:text-[var(--label-secondary)] text-inkSoft font-semibold mb-0.5 tracking-wide">
+                    <label className="block text-xs text-inkSoft font-semibold mb-0.5 tracking-wide">
                       House Status
                     </label>
                     <select
@@ -595,7 +595,7 @@ export default function TaxCalculatorUI() {
               </div>
 
               {/* Deductions */}
-              <div className="bg-paperRaised border border-hair rounded-xl p-5 space-y-3 shadow-xs">
+              <div className="bg-paperRaised border border-hair rounded-xl p-5 space-y-3">
                 <h2 className="font-bold text-sm text-ink border-b border-hair pb-2">
                   Part C: Chapter VI-A & Other Deductions
                 </h2>
@@ -633,14 +633,14 @@ export default function TaxCalculatorUI() {
               </div>
 
               {/* Quarterly TDS & BIN for Govt Deductors */}
-              <div className="bg-paperRaised border border-hair rounded-xl p-5 space-y-3 shadow-xs">
+              <div className="bg-paperRaised border border-hair rounded-xl p-5 space-y-3">
                 <h2 className="font-bold text-sm text-ink border-b border-hair pb-2">
                   Quarterly TDS & BIN Details (Form 16 Part A)
                 </h2>
                 <p className="text-xs text-inkSoft">
                   For AP Govt Teachers: Book Adjustment (BIN) entries are used by Treasury/DDOs
                 </p>
-                <div className="grid grid-cols-5 gap-2 text-[var(--label-primary)] md:text-[var(--label-secondary)] font-semibold text-inkSoft">
+                <div className="grid grid-cols-5 gap-2 text-xs font-semibold text-inkSoft">
                   <div>Quarter</div>
                   <div>Amt Paid (₹)</div>
                   <div>Tax Deducted (₹)</div>
@@ -689,7 +689,7 @@ export default function TaxCalculatorUI() {
               </div>
 
               {/* Landlord & Lender Information */}
-              <div className="bg-paperRaised border border-hair rounded-xl p-5 space-y-3 shadow-xs">
+              <div className="bg-paperRaised border border-hair rounded-xl p-5 space-y-3">
                 <h2 className="font-bold text-sm text-ink border-b border-hair pb-2">
                   Landlord & Lender Particulars (Form 12BB)
                 </h2>
@@ -705,7 +705,7 @@ export default function TaxCalculatorUI() {
                   <InputF label="Lender Address" value={lenderAddr} onChange={setLenderAddr} />
                   <InputF label="Lender PAN" value={lenderPan} onChange={setLenderPan} />
                   <div>
-                    <label className="block text-[var(--label-primary)] md:text-[var(--label-secondary)] text-inkSoft font-semibold mb-0.5 tracking-wide">
+                    <label className="block text-xs text-inkSoft font-semibold mb-0.5 tracking-wide">
                       Lender Type
                     </label>
                     <select
@@ -732,7 +732,7 @@ export default function TaxCalculatorUI() {
                 <div className="text-xs text-paper/70 font-mono">Gross Salary: ₹{fmt(totalGross)}</div>
                 <div className="text-xs text-paper/70 font-mono">Taxable Income: ₹{fmt(taxableIncome)}</div>
                 <div className="text-xs text-paper/70 font-mono">Net Tax to Pay Now: ₹{fmt(netPayable)}</div>
-                <div className="border-t border-hair/20 pt-3 space-y-1 text-[var(--label-primary)] md:text-[var(--label-secondary)] font-mono">
+                <div className="border-t border-hair/20 pt-3 space-y-1 text-xs font-mono">
                   <div className="flex justify-between">
                     <span>Gross Salary</span>
                     <span>₹{fmt(totalGross)}</span>
@@ -770,7 +770,7 @@ export default function TaxCalculatorUI() {
                 </div>
               </div>
 
-              <div className="bg-paperRaised border border-hair rounded-xl p-4 text-xs font-mono space-y-1.5 shadow-xs">
+              <div className="bg-paperRaised border border-hair rounded-xl p-4 text-xs font-mono space-y-1.5">
                 <div className="font-bold text-ink border-b border-hair pb-2 mb-2">📂 Official Documents to Print</div>
                 {(
                   [
@@ -877,7 +877,7 @@ export default function TaxCalculatorUI() {
             <div className="text-xs font-normal text-black/70">DESIG: <b>{empDesig}</b> | PAN: <b>{empPan}</b></div>
           </div>
           <div className="overflow-x-auto">
-            <table className="w-full text-center border-collapse border border-black text-[var(--label-primary)] md:text-[var(--label-secondary)]" style={{ tableLayout: "fixed" }}>
+            <table className="w-full text-center border-collapse border border-black text-xs" style={{ tableLayout: "fixed" }}>
               <thead>
                 <tr className="bg-black/15 font-bold border-b-2 border-black text-[9.5px]">
                   {[
@@ -953,7 +953,7 @@ export default function TaxCalculatorUI() {
                     <td colSpan={20}></td>
                   </tr>
                 ))}
-                <tr className="font-bold bg-black/15 border-t-2 border-black text-[var(--label-primary)] md:text-[var(--label-secondary)]">
+                <tr className="font-bold bg-black/15 border-t-2 border-black text-xs">
                   <td className="border-r border-black p-1.5">Grand Totals</td>
                   <td className="border-r border-black p-1.5">{totBasic}</td>
                   <td className="border-r border-black p-1.5"></td>
@@ -1024,7 +1024,7 @@ export default function TaxCalculatorUI() {
               <div className="pl-4 text-black/80">Standard deduction. Sec-16(ia)</div>
               <div className="text-right tabular-nums pr-2">{fmt(stdDed)}</div>
               <div className="text-right tabular-nums pr-2 font-bold">
-                <span className="text-[var(--label-primary)] md:text-[var(--label-secondary)] font-normal mr-2 text-black/60">Sec-16(ia)</span>
+                <span className="text-xs font-normal mr-2 text-black/60">Sec-16(ia)</span>
                 {fmt(stdDed)}
               </div>
             </div>
@@ -1063,7 +1063,7 @@ export default function TaxCalculatorUI() {
               <div className="pl-4 text-black/80">Profession Tax Sec.16(iii)</div>
               <div className="text-right tabular-nums pr-2">{fmt(ptNum)}</div>
               <div className="text-right tabular-nums pr-2 font-bold">
-                <span className="text-[var(--label-primary)] md:text-[var(--label-secondary)] font-normal mr-2 text-black/60">Sec.16(iii)</span>
+                <span className="text-xs font-normal mr-2 text-black/60">Sec.16(iii)</span>
                 {fmt(ptNum)}
               </div>
             </div>
@@ -1802,7 +1802,7 @@ export default function TaxCalculatorUI() {
               <div className="pt-8">Signature: ____________________</div>
             </div>
             <div className="text-center">
-              <div className="w-28 h-28 border-2 border-dashed border-black mx-auto flex items-center justify-center text-[var(--label-primary)] md:text-[var(--label-secondary)] font-bold leading-tight p-2 bg-amber-50/50">
+              <div className="w-28 h-28 border-2 border-dashed border-black mx-auto flex items-center justify-center text-xs font-bold leading-tight p-2 bg-amber-50/50">
                 Affix<br />Revenue Stamp<br />of ₹1/-
               </div>
             </div>

@@ -73,7 +73,7 @@ export default async function CategoryDetailPage({
       />
 
       {/* ── Option A: Imperial Gazette Category Masthead ─────────────────── */}
-      <div className="bg-masthead text-mastheadText rounded-2xl overflow-hidden shadow-md">
+      <div className="on-masthead bg-masthead text-mastheadText rounded-2xl overflow-hidden shadow-md">
         {/* Top classification ribbon */}
         <div
           className="border-b border-mastheadText/20 px-6 py-2 flex items-center justify-between text-[10px] font-mono text-mastheadText/40 tracking-widest uppercase"

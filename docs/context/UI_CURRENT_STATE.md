@@ -12,12 +12,13 @@
 
 ## Current UI program state
 
-- Current phase: Phase 2
-- Active gate: `UI-DESIGN-1` (CLOSED)
-- Scope in this gate: design definition and documentation only
+- Current phase: Phase 3
+- Active gate: `UI-SYSTEM-1` (CLOSED)
+- Scope in this gate: design-system foundations only
 - UI redesign performed: no
-- Application or production behavior changed: no
-- Next planned gate: `UI-SYSTEM-1`
+- Application behaviour changed: yes — foundation tokens, focus system, active-navigation
+  treatment, state colours. Information architecture, routes and page composition unchanged.
+- Next planned gate: `UI-SYSTEM-2`
 
 ### Gate history
 
@@ -26,6 +27,7 @@
 | `UI-BASELINE-0` | CLOSED | Branch, baseline, roadmap and state tracking established. |
 | `UI-AUDIT-1` | CLOSED | `docs/ui/UI_AUDIT.md` created; 36 findings, all components classified. |
 | `UI-DESIGN-1` | CLOSED | `PRODUCT.md`, `DESIGN.md`, `docs/ui/DESIGN_SYSTEM.md` created; P0s specified for `UI-SYSTEM-1`. |
+| `UI-SYSTEM-1` | CLOSED | Foundations implemented; audit P0s F2/F3/F4 fixed and guarded. 288 tests pass. |
 
 ## Repository observations
 
@@ -260,6 +262,55 @@ Contact/legal surface (blocks the clickable email and phone checklist items), th
 references in three tool metadata descriptions against the AP-only scope lock, the WhatsApp
 banner that violates a standing `AGENTS.md` hard rule, and final domain/branding.
 
+## `UI-SYSTEM-1` outcome summary
+
+### Audit findings closed
+
+- **F2 — seven non-compiling utilities.** `shadow-2xs` (23), `shadow-xs` (9), `no-scrollbar`
+  (7), `animate-fadeIn` (3), `backdrop-blur-xs` (2), `animate-slideUp` (1), `py-0.2` (1). The
+  dead shadows were deleted rather than replaced: they never painted, so removal is visually a
+  no-op and matches bordered-surfaces-by-default. `no-scrollbar` and a `fadeIn` keyframe are
+  now properly defined; `backdrop-blur-xs` → `backdrop-blur-sm`; `py-0.2` → `py-0.5`.
+- **F3 — undefined `accent`.** Retired, not defined. Active navigation is now a
+  `paperRaised` fill, `ink` 700 text and a 3px `turmeric` rule, plus `aria-current="page"` on
+  the sidebar, submenu, bottom nav and desktop nav. Pagination's current page inverts to
+  `ink`/`paperRaised`.
+- **F4 — no visible focus on form controls.** One treatment in `app/globals.css`, moved out of
+  `@layer base` and onto element selectors so a utility cannot outrank it, with `--focus-ring`
+  resolving to `ink` on light, `turmeric` in dark and `turmeric` on `.on-masthead` panels
+  (applied to all 13 letterhead sites). `outline-none` removed from `Input` and
+  `NativeSelect`.
+- **F19 — scrim below the bottom bar.** z-index scale applied: bottom bar 45, scrim 50,
+  drawer 60.
+- **F18 — split navigation breakpoint.** `lib/breakpoints.ts` exports `NAV_BREAKPOINT`
+  (1024); the sidebar's JS check no longer disagrees with the `lg:` CSS.
+- **F22 — raw palette in primitives.** Badge `success`/`warning` and Button `danger` moved
+  onto project tokens; `red-500` → `kumkum` in `Input`, `NativeSelect`, `Field`.
+- **F14 (part) — `Sheet` deleted.** Zero imports, zero test references, audit disposition
+  DELETE.
+- **F34 — perpetual motion.** The pulsing dot on the active bottom-nav item is gone.
+
+### Trust-bearing change
+
+`superseded` moved from `tamarind` to the new `kumkum` Badge variant. An order that a later
+order has replaced no longer renders in the same green family as one in force. `OrderStateBadge`
+already pairs every state with a plain-language sentence, so the status is not carried by
+colour alone.
+
+### Guards added
+
+| Test | Covers |
+|---|---|
+| `test/tailwind-classes.test.ts` | Every utility used in `app/**` compiles; project classes exist; no `accent` |
+| `test/focus-visible.test.ts` | Cascade order and specificity of the focus rule; no unreplaced `outline-none`; no ring colour without ring width |
+| `test/order-state-colour.test.tsx` | `superseded` ≠ in-force family; states stay distinct; badge palette is token-only; badge type ≥ 12px |
+| `test/class-source.ts` | Shared file-level source scanner used by both style guards |
+
+All were mutation-tested. One had to be rewritten: reinserting `shadow-2xs` into `Card.tsx`
+**passed** the first version, because the scanner read line by line and a class string written
+as a multi-line template literal has only one backtick on its opening line. Whole-file scanning
+closed it.
+
 ## Known limitations
 
 - Browser acceptance tooling is not currently runnable in this environment.
@@ -280,8 +331,18 @@ banner that violates a standing `AGENTS.md` hard rule, and final domain/branding
 - **No colour-contrast ratios have been measured.** `DESIGN_SYSTEM.md` specifies token pairings
   and roles, but the 4.5:1 / 3:1 requirements are unverified in both themes. `UI-A11Y-1` owns
   verification and may adjust values; the roles should survive any such adjustment.
-- `DESIGN_SYSTEM.md` is a specification, not a description of current behaviour. Where it and
-  the code disagree today, the code is the defect and `UI_AUDIT.md` records it.
+- `DESIGN_SYSTEM.md` is a specification. `UI-SYSTEM-1` implemented its foundation sections;
+  §15 records exactly what is done and what is carried forward. Where the rest of it and the
+  code still disagree, the code is the defect and `UI_AUDIT.md` records it.
+- **No visual verification was possible for `UI-SYSTEM-1`.** The suite proves the classes
+  compile, the cascade resolves, and the mappings are right; it cannot show what the pages
+  look like. The changes with a visible effect and no browser check are: badge type 9/10px →
+  12px, shared-primitive type 10/11px → 12px, form controls 12px → 16px on mobile with a 44px
+  minimum height, the active-navigation rule replacing coloured fills, and the removal of
+  shadows that never rendered. `UI-ACCEPTANCE-1` owns confirming these.
+- Carried forward from this gate (see `DESIGN_SYSTEM.md` §15): ~100 sub-12px sizes in
+  route-local components, `Button`/pagination touch targets, `Field` `aria-describedby`
+  wiring and `TaxCalculatorUI`'s `NumF` ids, and all overlay behaviour.
 
 ## Validation evidence
 
@@ -290,6 +351,7 @@ banner that violates a standing `AGENTS.md` hard rule, and final domain/branding
 | `UI-BASELINE-0` | pass | clean | not required (docs only) | unavailable |
 | `UI-AUDIT-1` | pass (`npx tsc --noEmit`, exit 0) | clean | not required (docs only) | unavailable |
 | `UI-DESIGN-1` | pass (`npx tsc --noEmit`, exit 0) | clean | not required (docs only) | unavailable |
+| `UI-SYSTEM-1` | pass (`npx tsc --noEmit`, exit 0) | clean | **44 files, 288 tests pass** (incl. DB-backed trust + dark-mode suites) | unavailable |
 
 ## Gate transition rule
 
@@ -297,15 +359,13 @@ Update `UI_ACTIVE_GATE.md` only when work on the next gate actually begins. Each
 gate's evidence remains recoverable from this document, from `docs/ui/UI_AUDIT.md`, and from
 Git history.
 
-`UI-SYSTEM-1` is next per the master plan. Its scope is the design-system foundations only —
-tokens, scales, focus treatment, and the guard tests — not component migration
-(`UI-SYSTEM-2`), responsive repair (`UI-RESPONSIVE-1`), or navigation behaviour
-(`UI-MOBILE-NAV-1`).
+`UI-SYSTEM-2` is next per the master plan: standardising reusable UI primitives on the
+foundations now in place. `DESIGN_SYSTEM.md` §15 lists what `UI-SYSTEM-1` carried forward into
+it — touch targets on `Button` and pagination, the remaining sub-12px type in route-local
+components, and `Field`'s error association.
 
-`DESIGN_SYSTEM.md` §15 carries the ordered implementation checklist for that gate. Its first
-item is the dead-class guard test, deliberately: audit findings F2 and F3 both reached
-production through a green suite, so the guard is what keeps every later item true. Each
-checklist item needs a test that can fail for the right reason — a passing suite is not
-evidence a token behaves correctly, since the `accent` defect survived an existing
-colour-token test that only checked *defined* tokens compile and never that *used* classes
-resolve.
+The guards added in this gate are the constraint that keeps later gates honest, and they are
+only worth what their failure modes are worth. Every one was run against a deliberate
+reintroduction of the bug it covers; the one that passed that check on the first attempt was
+rewritten until it failed correctly. Continue that practice — this project's history is
+defects that survived a green suite, not defects that broke one.

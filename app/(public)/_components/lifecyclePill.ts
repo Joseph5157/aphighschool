@@ -1,19 +1,21 @@
 import type { OrderState } from "@prisma/client";
 import { resolveLifecycle, type LifecycleInput } from "@/lib/posts/lifecycle";
 
-export type BadgeVariant = "success" | "turmeric" | "tamarind" | "neutral";
+export type BadgeVariant = "success" | "turmeric" | "tamarind" | "kumkum" | "neutral";
 
 // The R16 order-state mapping, stated once. OrderStateBadge (the full-width
 // detail-page block) and every card surface read it from here.
 //
-// Badge has no `kumkum` variant today, so `superseded` uses `tamarind` — the
-// nearest existing red-family variant. It cannot fall back to `neutral`: that
-// is already `archived`, and the two states would render identically. Adding a
-// real `kumkum` Badge token is a Milestone F item.
+// `superseded` now uses `kumkum`, the Badge variant added in UI-SYSTEM-1. It
+// previously used `tamarind` because no red-family variant existed — which put
+// a replaced order in the SAME green family as one still in force, the exact
+// misreading this mapping exists to prevent. A user who acts on a superseded
+// order is materially harmed, so it earns the warning colour; `archived` stays
+// neutral because it is merely historical with no successor to redirect to.
 export const ORDER_STATE_VARIANT: Record<OrderState, BadgeVariant> = {
   current: "success",
   amended: "turmeric",
-  superseded: "tamarind",
+  superseded: "kumkum",
   archived: "neutral",
 };
 

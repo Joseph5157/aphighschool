@@ -62,7 +62,7 @@ export default function PensionersHubPage() {
         {/* Mainfeed Column */}
         <div className="lg:col-span-8 space-y-6">
           {/* Emerald Treasury Hero Header */}
-          <div className="bg-masthead text-mastheadText border border-mastheadText/40 rounded-2xl p-6 md:p-8 space-y-3 shadow-md relative overflow-hidden">
+          <div className="on-masthead bg-masthead text-mastheadText border border-mastheadText/40 rounded-2xl p-6 md:p-8 space-y-3 shadow-md relative overflow-hidden">
             <div className="flex items-center justify-between">
               <Badge variant="success" size="sm" shape="pill" dot>
                 Emerald Treasury Care Suite

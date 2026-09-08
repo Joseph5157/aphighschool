@@ -31,11 +31,11 @@ export const FieldLabel = React.forwardRef<HTMLLabelElement, FieldLabelProps>(
   ({ children, required, labelTe, className = "", ...props }, ref) => (
     <label
       ref={ref}
-      className={`block font-mono text-[10px] sm:text-xs uppercase font-bold text-inkSoft tracking-wider ${className}`}
+      className={`block font-mono text-xs uppercase font-bold text-inkSoft tracking-wider ${className}`}
       {...props}
     >
       {children}
-      {required && <span className="text-red-500 ml-0.5">*</span>}
+      {required && <span className="text-kumkum ml-0.5">*</span>}
       {labelTe && (
         <span lang="te" className="font-telugu text-inkSoft/80 font-normal lowercase ml-1">
           ({labelTe})
@@ -48,14 +48,14 @@ FieldLabel.displayName = "FieldLabel";
 
 export const FieldDescription = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(
   ({ className = "", ...props }, ref) => (
-    <p ref={ref} className={`text-[11px] text-inkSoft/80 font-sans leading-tight ${className}`} {...props} />
+    <p ref={ref} className={`text-xs text-inkSoft/80 font-sans leading-tight ${className}`} {...props} />
   )
 );
 FieldDescription.displayName = "FieldDescription";
 
 export const FieldError = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(
   ({ className = "", ...props }, ref) => (
-    <p ref={ref} className={`text-[11px] text-red-500 font-medium leading-tight ${className}`} {...props} />
+    <p ref={ref} className={`text-xs text-kumkum font-medium leading-tight ${className}`} {...props} />
   )
 );
 FieldError.displayName = "FieldError";

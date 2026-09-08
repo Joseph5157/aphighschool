@@ -2,7 +2,7 @@ import React from "react";
 
 export default function WhatsAppBanner() {
   return (
-    <div className="bg-tamarind/10 border border-tamarind/30 rounded-xl p-4 md:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-2xs">
+    <div className="bg-tamarind/10 border border-tamarind/30 rounded-xl p-4 md:p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
       <div className="flex items-center gap-3 text-center sm:text-left">
         <div className="w-10 h-10 rounded-full bg-tamarind text-white flex items-center justify-center text-xl shrink-0 font-bold">
           📢

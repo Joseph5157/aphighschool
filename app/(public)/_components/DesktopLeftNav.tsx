@@ -27,7 +27,7 @@ export default async function DesktopLeftNav() {
               <CardTitle className="text-xs font-mono font-bold uppercase tracking-wider text-ink flex items-center gap-1.5">
                 <span>🏛️</span> Document Categories
               </CardTitle>
-              <p className="text-[10px] font-mono text-inkSoft/70 mt-0.5">
+              <p className="text-xs font-mono text-inkSoft/70 mt-0.5">
                 AP School Education
               </p>
             </div>
@@ -41,7 +41,7 @@ export default async function DesktopLeftNav() {
             <Link
               key={cat.slug}
               href={`/category/${cat.slug}`}
-              className="group flex items-center justify-between p-3 rounded-xl border border-hair/60 hover:border-tamarind/50 bg-paper/30 hover:bg-paperRaised transition-all shadow-2xs"
+              className="group flex items-center justify-between p-3 rounded-xl border border-hair/60 hover:border-tamarind/50 bg-paper/30 hover:bg-paperRaised transition-all"
               style={
                 cat.color
                   ? { borderLeftWidth: "4px", borderLeftColor: cat.color }
@@ -54,7 +54,7 @@ export default async function DesktopLeftNav() {
                 </div>
                 <div
                   lang="te"
-                  className="font-telugu text-[11px] text-inkSoft leading-relaxed truncate mt-0.5"
+                  className="font-telugu text-xs text-inkSoft leading-relaxed truncate mt-0.5"
                 >
                   {cat.nameTe}
                 </div>
@@ -66,7 +66,7 @@ export default async function DesktopLeftNav() {
           ))}
 
           {categories.length === 0 && (
-            <p className="text-[11px] font-mono text-inkSoft/70 px-1 py-2">
+            <p className="text-xs font-mono text-inkSoft/70 px-1 py-2">
               No categories available.
             </p>
           )}

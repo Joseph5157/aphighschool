@@ -61,7 +61,10 @@ export default function BottomNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 w-full bg-paperRaised/95 backdrop-blur-md border-t border-hair z-50 lg:hidden print:hidden">
+    <nav
+      aria-label="Primary"
+      className="fixed bottom-0 left-0 right-0 w-full bg-paperRaised/95 backdrop-blur-md border-t border-hair z-45 lg:hidden print:hidden"
+    >
       <div className="w-full max-w-md mx-auto flex items-center justify-around py-1 px-1">
         {NAV_ITEMS.map((item) => {
           const isActive = item.exact
@@ -69,20 +72,22 @@ export default function BottomNav() {
             : pathname.startsWith(item.href);
 
           return (
+            // The active item is marked by a turmeric rule on its top edge plus
+            // ink weight, not by colour alone and not by the pulsing dot this
+            // replaces — that was perpetual motion signalling nothing
+            // (DESIGN_SYSTEM.md §4.2, §10).
             <Link
               key={item.href}
               href={item.href}
-              className={`flex flex-col items-center p-1.5 transition-all relative ${
-                isActive ? "text-tamarind font-bold" : "text-inkSoft hover:text-ink"
+              aria-current={isActive ? "page" : undefined}
+              className={`relative flex min-h-[44px] min-w-[44px] flex-col items-center justify-center px-2 py-1.5 transition-colors duration-150 border-t-[3px] ${
+                isActive
+                  ? "border-turmeric text-ink font-bold"
+                  : "border-transparent text-inkSoft hover:text-ink"
               }`}
             >
-              <div className="relative mb-0.5">
-                {item.icon}
-                {isActive && (
-                  <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-tamarind animate-pulse" />
-                )}
-              </div>
-              <span className="text-[10px] font-mono tracking-tight">{item.label}</span>
+              <div className="relative mb-0.5">{item.icon}</div>
+              <span className="text-xs font-mono tracking-tight">{item.label}</span>
             </Link>
           );
         })}

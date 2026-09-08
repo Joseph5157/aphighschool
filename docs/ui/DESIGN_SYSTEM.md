@@ -337,16 +337,23 @@ override applies in both themes.
 
 ### 7.1 Radius
 
-| Token | Value | Use |
-|---|---|---|
-| `sm` | 4px | Badges, chips, inline marks |
-| `md` | 8px | Buttons, inputs, small controls |
-| `lg` | 12px | Cards, list rows, panels |
-| `xl` | 16px | Letterhead panels, drawers, sheets |
-| `full` | 9999px | Pills and dots only |
+Tailwind's default radius scale is kept. Radius scales with the size of the thing; one radius
+on everything is a listed anti-pattern (`DESIGN.md`). Nothing exceeds 16px except pills.
 
-Radius scales with the size of the thing. One radius on everything is a listed anti-pattern
-(`DESIGN.md`). Nothing exceeds 16px except pills.
+| Class | Value | Use |
+|---|---|---|
+| `rounded` | 4px | Badges, chips, inline marks |
+| `rounded-lg` | 8px | Buttons, inputs, small controls |
+| `rounded-xl` | 12px | Cards, list rows, panels |
+| `rounded-2xl` | 16px | Letterhead panels, drawers |
+| `rounded-full` | — | Pills and dots only |
+
+*(Corrected during `UI-SYSTEM-1`.* This table originally specified a custom `sm 4 / md 8 /
+lg 12 / xl 16` scale. Implementing it would have redefined Tailwind's own token names under
+163 existing usages — every `rounded-lg` silently shifting 8px → 12px, and `rounded-2xl`
+disappearing entirely — which is a breaking rename dressed as a token definition. The intent
+of the rule is the hierarchy, not the names, and Tailwind's existing scale already expresses
+it.*)
 
 ### 7.2 Borders and elevation
 
@@ -624,23 +631,41 @@ Non-negotiable, and the definition of done for `UI-A11Y-1`:
 
 ---
 
-## 15. Implementation checklist for `UI-SYSTEM-1`
+## 15. Implementation status
 
-Foundations only. Component migration is `UI-SYSTEM-2`; responsive repair is
-`UI-RESPONSIVE-1`; navigation behaviour is `UI-MOBILE-NAV-1`.
+`UI-SYSTEM-1` closed the foundation items below. Component migration is `UI-SYSTEM-2`;
+responsive repair is `UI-RESPONSIVE-1`; navigation behaviour is `UI-MOBILE-NAV-1`.
 
-1. Add the dead-class guard test (§R0.1). Do this **first** — it is what keeps the rest true.
-2. Remove or replace the seven non-compiling utilities; define `no-scrollbar` and the two
-   keyframe animations properly, or delete their usages.
-3. Remove every `accent` usage and implement the active-navigation treatment (§4.2).
-4. Implement the focus treatment (§6) and replace the file-level a11y guard with an
-   element-level one.
-5. Add the `kumkum` Badge variant, remap `superseded` (§3.2), and move `success` / `warning`
-   off the default palette (§8.2).
-6. Replace the `--label-*` custom properties with the §1.1 scale and apply the §1.2 floors.
-7. Add the radius, shadow and z-index scales (§7) to `tailwind.config.js`.
-8. Correct `turmericDeep` in `.agents/skills/design-tokens.md` (§2.1).
+| # | Item | Status |
+|---|---|---|
+| 1 | Dead-class guard test (§R0.1) | Done — `test/tailwind-classes.test.ts` |
+| 2 | Remove/replace the non-compiling utilities; define `no-scrollbar` and the animation | Done |
+| 3 | Remove every `accent` usage; active-navigation treatment (§4.2, §4.3) | Done |
+| 4 | Focus treatment (§6) + element-level guard | Done — `test/focus-visible.test.ts` |
+| 5 | `kumkum` Badge variant, `superseded` remap, palette cleanup (§3.2, §8.2) | Done — `test/order-state-colour.test.tsx` |
+| 6 | Replace `--label-*`; apply the §1.2 floors | Done in shared primitives; see backlog |
+| 7 | z-index scale and motion keyframes in `tailwind.config.js` (§7, §10) | Done |
+| 8 | Correct `turmericDeep` in `.agents/skills/design-tokens.md` (§2.1) | Done |
 
-Each item needs a test that can fail for the right reason. A passing suite is not evidence
-that a token behaves correctly — the `accent` defect survived an existing colour-token test
-that only checked *defined* tokens compile, never that *used* classes resolve.
+### Carried forward
+
+- **Sub-12px type outside the shared primitives.** All 21 occurrences in
+  `app/(public)/_components` were raised to 12px. Roughly 100 remain in route-local
+  components across 42 files. Raising those is per-component work with a visible density
+  effect that cannot be checked without a browser, so it belongs to `UI-SYSTEM-2` /
+  `UI-A11Y-1`. The guard in `test/order-state-colour.test.tsx` covers Badge only.
+- **44px touch targets (§8.1).** `Input`, `NativeSelect` and the bottom-nav items now meet it.
+  `Button`'s `sm` and `md` sizes and the pagination links do not; resizing them changes
+  density on every page and belongs to `UI-SYSTEM-2`.
+- **`Field` error association (§8.4).** `Input` and `NativeSelect` now set `aria-invalid`.
+  Wiring `aria-describedby` from control to `FieldError`, and giving `TaxCalculatorUI`'s
+  `NumF` wrapper a generated id, is `UI-A11Y-1`.
+- **Overlay behaviour (§8.5)** — Escape, focus trap, scroll lock, closed-state inertness —
+  remains `UI-MOBILE-NAV-1`. Only the z-index inversion was fixed here.
+
+Each item needed a test that can fail for the right reason. That is not a formality here: the
+`accent` defect survived an existing colour-token test that checked only that *defined* tokens
+compile, never that *used* classes resolve. Every guard added in this gate was run against a
+deliberate reintroduction of the bug it covers, and one of them had to be rewritten when the
+mutation showed it scanned line by line and could not see a class inside a multi-line template
+literal.

@@ -31,9 +31,9 @@ interface PaginationLinkProps extends React.ComponentProps<typeof Link> {
 export const PaginationLink = ({ isActive, className = "", ...props }: PaginationLinkProps) => (
   <Link
     aria-current={isActive ? "page" : undefined}
-    className={`inline-flex items-center justify-center min-w-[32px] h-8 px-2.5 rounded-lg border font-bold text-xs transition-all ${
+    className={`inline-flex items-center justify-center min-w-[32px] h-8 px-2.5 rounded-lg border font-bold text-xs transition-colors duration-150 ${
       isActive
-        ? "bg-accent/15 border-accent text-accent shadow-sm"
+        ? "bg-ink border-ink text-paperRaised"
         : "bg-paperRaised border-hair text-ink hover:border-ink/40"
     } ${className}`}
     {...props}

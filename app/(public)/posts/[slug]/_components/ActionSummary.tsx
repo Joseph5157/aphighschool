@@ -31,7 +31,7 @@ export default function ActionSummary({ post }: { post: ActionSummaryPost }) {
   return (
     <section
       aria-label="At a glance"
-      className="bg-paperRaised border border-hair/80 border-l-4 border-l-kumkum rounded-xl p-5 md:p-6 shadow-2xs space-y-5"
+      className="bg-paperRaised border border-hair/80 border-l-4 border-l-kumkum rounded-xl p-5 md:p-6 space-y-5"
     >
       <div className="border-b border-hair pb-3">
         <h2 className="font-mono font-bold text-xs tracking-wider text-kumkum"><span lang="te">సంక్షిప్తంగా</span> — At a Glance</h2>

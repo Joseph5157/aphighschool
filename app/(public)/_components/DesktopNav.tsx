@@ -16,14 +16,24 @@ export default function DesktopNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="hidden lg:flex items-center gap-6 font-mono text-xs font-semibold text-inkSoft">
+    <nav
+      aria-label="Main"
+      className="hidden lg:flex items-center gap-6 font-mono text-xs font-semibold text-inkSoft"
+    >
       {NAV_LINKS.map((link) => {
         const isActive = link.exact ? pathname === link.href : pathname.startsWith(link.href);
         return (
           <Link
             key={link.href}
             href={link.href}
-            className={`transition-colors ${isActive ? "text-ink font-bold border-b-2 border-tamarind pb-0.5" : "hover:text-ink"}`}
+            aria-current={isActive ? "page" : undefined}
+            // Turmeric bottom rule: navigation position is chrome and must not
+            // borrow tamarind, which means "in force" on a document.
+            className={`transition-colors duration-150 border-b-[3px] pb-0.5 ${
+              isActive
+                ? "text-ink font-bold border-turmeric"
+                : "border-transparent hover:text-ink"
+            }`}
           >
             {link.label}
           </Link>

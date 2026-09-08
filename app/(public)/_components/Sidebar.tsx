@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { NAV_BREAKPOINT } from "@/lib/breakpoints";
 
 // ---------------------------------------------------------------------------
 // Sidebar Context & Provider
@@ -63,10 +64,12 @@ export function SidebarProvider({
     }
   };
 
-  // Detect screen size changes
+  // Detect screen size changes. NAV_BREAKPOINT is the same value the `lg:`
+  // variant uses for BottomNav and DesktopNav; hard-coding 768 here put
+  // viewports between 768px and 1023px into a mixed navigation model.
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
+      setIsMobile(window.innerWidth < NAV_BREAKPOINT);
     };
     checkMobile();
     window.addEventListener("resize", checkMobile);
@@ -115,14 +118,17 @@ export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
       return (
         <>
           {openMobile && (
+            // z-50 scrim over a z-45 bottom bar: the scrim was z-40 while
+            // BottomNav was z-50, so the tab bar stayed lit and clickable above
+            // the overlay meant to disable it. DESIGN_SYSTEM.md §7.2.
             <div
-              className="fixed inset-0 z-40 bg-black/50 backdrop-blur-xs transition-opacity"
+              className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm transition-opacity"
               onClick={() => setOpenMobile(false)}
             />
           )}
           <aside
             ref={ref}
-            className={`fixed inset-y-0 ${side === "left" ? "left-0" : "right-0"} z-50 w-72 bg-paperRaised border-r border-hair p-4 shadow-xl transition-transform duration-300 ${
+            className={`fixed inset-y-0 ${side === "left" ? "left-0" : "right-0"} z-60 w-72 bg-paperRaised border-r border-hair p-4 shadow-md transition-transform duration-300 ${
               openMobile
                 ? "translate-x-0"
                 : side === "left"
@@ -207,7 +213,7 @@ export const SidebarGroupLabel = React.forwardRef<HTMLDivElement, React.HTMLAttr
     return (
       <div
         ref={ref}
-        className={`px-2.5 py-1 font-mono text-[10px] uppercase font-bold text-inkSoft/70 tracking-wider ${className}`}
+        className={`px-2.5 py-1 font-mono text-xs uppercase font-bold text-inkSoft/70 tracking-wider ${className}`}
         {...props}
       >
         {children}
@@ -270,10 +276,11 @@ export const SidebarMenuButton = React.forwardRef<HTMLAnchorElement, SidebarMenu
         href={href}
         onClick={handleClick}
         title={collapsed ? String(children) : undefined}
-        className={`group relative flex items-center gap-2.5 px-3 py-2 rounded-lg font-medium transition-all ${
+        aria-current={isActive ? "page" : undefined}
+        className={`group relative flex items-center gap-2.5 px-3 py-2 rounded-lg font-medium transition-colors duration-150 ${
           isActive
-            ? "bg-accent/15 text-accent border border-accent/20 font-bold shadow-2xs"
-            : "text-inkSoft hover:text-ink hover:bg-hair/30"
+            ? "bg-paperRaised text-ink font-bold border-l-[3px] border-turmeric"
+            : "border-l-[3px] border-transparent text-inkSoft hover:text-ink hover:bg-hair/30"
         } ${collapsed ? "justify-center px-0" : ""} ${className}`}
         {...props}
       >
@@ -382,9 +389,10 @@ export const SidebarMenuSubButton = React.forwardRef<HTMLAnchorElement, SidebarM
         ref={ref}
         href={href}
         onClick={handleClick}
-        className={`block px-2.5 py-1.5 rounded-md font-mono text-[11px] transition-all ${
+        aria-current={isActive ? "page" : undefined}
+        className={`block px-2.5 py-1.5 rounded-md font-mono text-xs transition-colors duration-150 ${
           isActive
-            ? "text-accent font-bold bg-accent/10"
+            ? "bg-paperRaised text-ink font-bold border-l-[3px] border-turmeric -ml-[3px] pl-2"
             : "text-inkSoft hover:text-ink hover:bg-hair/20"
         } ${className}`}
         {...props}

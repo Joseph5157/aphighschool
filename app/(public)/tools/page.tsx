@@ -80,7 +80,7 @@ export default function ToolsIndexPage() {
         {/* Main Feed Column (8 cols on Desktop) */}
         <div className="lg:col-span-8 space-y-6">
           {/* Option C Royal Indigo Hero Header */}
-          <div className="bg-masthead text-mastheadText border border-mastheadText/40 rounded-2xl p-6 md:p-8 space-y-3 shadow-md relative overflow-hidden">
+          <div className="on-masthead bg-masthead text-mastheadText border border-mastheadText/40 rounded-2xl p-6 md:p-8 space-y-3 shadow-md relative overflow-hidden">
             <div className="flex items-center justify-between">
               <Badge variant="turmeric" size="sm" shape="pill" dot>
                 Heritage Craft Utility Suite

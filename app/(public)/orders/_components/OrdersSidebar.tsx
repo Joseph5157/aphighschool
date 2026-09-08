@@ -17,7 +17,7 @@ export default function OrdersSidebar() {
   return (
     <aside className="space-y-6 font-sans">
       {/* 1. Quick Searches Widget */}
-      <div className="bg-paperRaised border border-hair rounded-2xl p-5 space-y-4 shadow-2xs">
+      <div className="bg-paperRaised border border-hair rounded-2xl p-5 space-y-4">
         <div className="flex items-center justify-between border-b border-hair/60 pb-3">
           <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-ink flex items-center gap-1.5">
             Quick Searches
@@ -30,7 +30,7 @@ export default function OrdersSidebar() {
             <Link
               key={tag.label}
               href={tag.href}
-              className="px-3 py-1 rounded-full border border-hair bg-paper/50 hover:bg-ink hover:text-paper text-inkSoft font-semibold transition-all shadow-2xs"
+              className="px-3 py-1 rounded-full border border-hair bg-paper/50 hover:bg-ink hover:text-paper text-inkSoft font-semibold transition-all"
             >
               {tag.label}
             </Link>
@@ -39,7 +39,7 @@ export default function OrdersSidebar() {
       </div>
 
       {/* 2. GOIR resource banner */}
-      <div className="bg-masthead text-mastheadText rounded-2xl p-5 space-y-3 shadow-md border border-mastheadText/40">
+      <div className="on-masthead bg-masthead text-mastheadText rounded-2xl p-5 space-y-3 shadow-md border border-mastheadText/40">
         <div className="flex items-center justify-between">
           <Badge variant="turmeric" size="sm" shape="pill" dot>
             goir.ap.gov.in

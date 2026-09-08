@@ -61,7 +61,7 @@ export default function ServiceDeskPage() {
     <div className="mx-auto max-w-5xl space-y-6 pb-12 font-sans">
       <Breadcrumb items={[{ label: "Teacher Service Desk" }]} />
 
-      <section className="relative overflow-hidden rounded-2xl border border-mastheadText/35 bg-masthead p-6 text-mastheadText shadow-md md:p-8">
+      <section className="relative overflow-hidden rounded-2xl border border-mastheadText/35 on-masthead bg-masthead p-6 text-mastheadText shadow-md md:p-8">
         <div className="absolute inset-y-0 right-0 w-1/3 bg-turmeric/10" aria-hidden="true" />
         <div className="relative max-w-3xl space-y-4">
           <div className="flex items-center gap-2">

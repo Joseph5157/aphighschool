@@ -222,7 +222,7 @@ export default function SearchUI({
                   <Link
                     key={post.id}
                     href={`/posts/${post.slug}`}
-                    className="block rounded-xl border border-hair bg-paperRaised px-3.5 py-3 transition-all hover:border-ink/40 hover:shadow-2xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-tamarind"
+                    className="block rounded-xl border border-hair bg-paperRaised px-3.5 py-3 transition-all hover:border-ink/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-tamarind"
                   >
                     <div className="flex items-start justify-between gap-3">
                       <h3 className="text-sm font-semibold leading-snug text-ink">{post.titleEn}</h3>

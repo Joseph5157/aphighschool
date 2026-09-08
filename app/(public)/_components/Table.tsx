@@ -2,7 +2,7 @@ import React from "react";
 
 export function Table({ children, className = "", ...props }: React.TableHTMLAttributes<HTMLTableElement>) {
   return (
-    <div className="w-full overflow-x-auto border border-hair rounded-xl shadow-2xs">
+    <div className="w-full overflow-x-auto border border-hair rounded-xl">
       <table className={`w-full text-left border-collapse text-xs sm:text-sm ${className}`} {...props}>
         {children}
       </table>
@@ -12,7 +12,7 @@ export function Table({ children, className = "", ...props }: React.TableHTMLAtt
 
 export function TableHeader({ children, className = "", ...props }: React.HTMLAttributes<HTMLTableSectionElement>) {
   return (
-    <thead className={`bg-hair/30 font-mono text-[11px] uppercase tracking-wider text-inkSoft border-b border-hair ${className}`} {...props}>
+    <thead className={`bg-hair/30 font-mono text-xs uppercase tracking-wider text-inkSoft border-b border-hair ${className}`} {...props}>
       {children}
     </thead>
   );

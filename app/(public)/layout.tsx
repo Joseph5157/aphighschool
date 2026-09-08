@@ -137,7 +137,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
             <div className="flex items-center gap-3">
               <SidebarTrigger />
               <Link href="/" className="group flex items-center gap-3 shrink-0">
-                <div className="w-9 h-9 rounded-lg bg-masthead text-turmeric font-mono font-bold flex items-center justify-center border border-mastheadText/30 shadow-sm">
+                <div className="w-9 h-9 rounded-lg on-masthead bg-masthead text-turmeric font-mono font-bold flex items-center justify-center border border-mastheadText/30 shadow-sm">
                   AP
                 </div>
                 <div>

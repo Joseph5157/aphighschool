@@ -33,7 +33,7 @@ export default function DesktopSidebar() {
               <CardTitle className="text-xs font-mono font-bold uppercase tracking-wider text-ink flex items-center gap-1.5">
                 <span>⚡</span> Teacher Calculators
               </CardTitle>
-              <p className="text-[10px] font-mono text-inkSoft/70 mt-0.5">
+              <p className="text-xs font-mono text-inkSoft/70 mt-0.5">
                 Client-Side & Offline Ready
               </p>
             </div>
@@ -47,7 +47,7 @@ export default function DesktopSidebar() {
             <Link
               key={tool.href}
               href={tool.href}
-              className="group flex items-center justify-between p-3 rounded-xl border border-hair/60 hover:border-ink/40 bg-paper/30 hover:bg-paperRaised transition-all shadow-2xs"
+              className="group flex items-center justify-between p-3 rounded-xl border border-hair/60 hover:border-ink/40 bg-paper/30 hover:bg-paperRaised transition-all"
             >
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-lg bg-tamarind/10 text-tamarind border border-tamarind/20 flex items-center justify-center text-base shrink-0">
@@ -57,7 +57,7 @@ export default function DesktopSidebar() {
                   <div className="font-bold text-xs text-ink group-hover:text-tamarind transition-colors">
                     {tool.label}
                   </div>
-                  <div className="text-[10px] font-mono text-inkSoft/70">
+                  <div className="text-xs font-mono text-inkSoft/70">
                     {tool.desc}
                   </div>
                 </div>
@@ -85,7 +85,7 @@ export default function DesktopSidebar() {
           <CardTitle className="text-xs font-mono font-bold uppercase tracking-wider text-ink flex items-center gap-1.5">
             Quick Searches
           </CardTitle>
-          <p className="text-[10px] font-mono text-inkSoft/70 mt-0.5">
+          <p className="text-xs font-mono text-inkSoft/70 mt-0.5">
             Jump to a topic
           </p>
         </CardHeader>
@@ -95,7 +95,7 @@ export default function DesktopSidebar() {
               <Link
                 key={tag.label}
                 href={tag.href}
-                className="px-3 py-1 rounded-full border border-hair bg-paper/40 hover:bg-ink hover:text-paper text-inkSoft font-semibold transition-all shadow-2xs"
+                className="px-3 py-1 rounded-full border border-hair bg-paper/40 hover:bg-ink hover:text-paper text-inkSoft font-semibold transition-all"
               >
                 {tag.label}
               </Link>

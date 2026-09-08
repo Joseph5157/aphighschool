@@ -2,7 +2,7 @@
 
 ## Active gate
 
-`UI-DESIGN-1`
+`UI-SYSTEM-1`
 
 ## Status
 
@@ -10,70 +10,67 @@ CLOSED
 
 ## Purpose
 
-Define the product's visual and interaction direction, and the design-system specification
-that later gates implement, before any broad UI change is made.
+Implement the approved design-system foundations from `docs/ui/DESIGN_SYSTEM.md`: the
+regression guard for non-compiling utilities, removal of the invalid utilities themselves,
+retirement of `accent`, a working focus-visible system, normalised trust-bearing state
+colours, and the foundation token rules.
 
 ## Change boundary
 
-This gate is DESIGN DEFINITION. It may only add or update:
+This gate is FOUNDATIONS ONLY. In scope:
 
-- `PRODUCT.md`
-- `DESIGN.md`
-- `docs/ui/DESIGN_SYSTEM.md`
-- `docs/context/UI_ACTIVE_GATE.md`
-- `docs/context/UI_CURRENT_STATE.md`
+- `tailwind.config.js`, `app/globals.css`, `lib/breakpoints.ts`
+- shared primitives in `app/(public)/_components`
+- mechanical removal of non-compiling utilities wherever they appeared
+- new guard tests
 
-Application code, styles, components, routes, assets, database files, tests, and runtime
-configuration are out of scope for this gate and were not modified. No audit finding was
-fixed in this gate; the P0 findings are specified as intended behaviour for `UI-SYSTEM-1`.
-
-Information architecture — routes, navigation structure, page composition — is explicitly
-out of scope and unchanged.
+Out of scope and deliberately untouched: page redesign, information architecture, component
+API changes, full component migration (`UI-SYSTEM-2`), responsive repair
+(`UI-RESPONSIVE-1`), and navigation behaviour — Escape, focus trap, scroll lock, closed-state
+inertness — which remain `UI-MOBILE-NAV-1`.
 
 ## Required closure evidence
 
-- The starting worktree was clean on `ui-system-production-readiness` at
-  `fe309109acceaf8b4a3fd4e31889527882e3f0da`, local and live remote in agreement.
-- `docs/ui/UI_AUDIT.md`, the master plan, and both context documents were read before any
-  design decision was made, along with the binding constraints in `AGENTS.md` and
-  `.agents/skills/design-tokens.md`.
-- `PRODUCT.md` states the product, audience, jobs, promises and non-goals, and records the
-  open product questions that block specific checklist items.
-- `DESIGN.md` states the direction, target character, principles, what to avoid, and the
-  reasoning for each decision made in this gate.
-- `docs/ui/DESIGN_SYSTEM.md` specifies typography, colour roles, active/navigation state,
-  focus treatment, spacing, containers, radius, borders, shadows, density, responsive
-  philosophy, interaction states, motion, dark mode, trust/GOIR presentation, and
-  lifecycle/freshness presentation.
-- All three P0 audit findings named in the gate brief are accounted for as specification:
-  invalid Tailwind utility usage (§R0.1), undefined `accent` (§4.1–4.2), and the
-  non-rendering focus treatment (§6) — defined, not fixed.
+- Starting worktree clean on `ui-system-production-readiness` at
+  `177d631c2e118ba1d1265b0a8f12e36aff63c00e`, local and live remote in agreement.
+- The dead-class guard was written and run **before** any fix, and failed naming all seven
+  non-compiling utility families and all three `accent` sites with file and line.
+- Every guard added in this gate was mutation-tested: the defect it covers was deliberately
+  reintroduced and the guard failed with an on-topic message, then the code was restored.
+- Full Vitest suite passes: 44 files, 288 tests, including the DB-backed trust suites
+  (`goir-provenance`, `freshness-trust`, `freshness-rendered`, `seed-integrity`) and
+  `dark-mode`.
 - `npx tsc --noEmit` passes and `git diff --check` is clean.
-- The documents are committed and pushed on the program branch, and the local branch HEAD
-  matches the live remote branch SHA.
+- Tailwind class validation passes: every utility used in `app/**` compiles, every
+  project-defined class exists, and no `accent` utility remains in source or output.
+- Committed, pushed, and local branch HEAD matches the live remote branch SHA.
 
 ## Closure notes
 
-The existing visual identity was **codified rather than replaced**. Every P0 and P1 finding in
-`UI-AUDIT-1` is a correctness defect — utilities that do not compile, an undefined colour, a
-focus ring that never paints, two stacked bottom bars — and none is evidence that the
-aesthetic direction is failing. Redesigning in response to build defects would have treated
-the wrong problem, and the master plan forbids redesigning information architecture here.
+The guard found a hole in itself. After the main fixes went in, a mutation that reinserted
+`shadow-2xs` into `Card.tsx` **passed** — the scanner read source line by line, and a class
+string written as a multi-line template literal has only one backtick on its opening line, so
+it was never scanned at all. Card, Sidebar and every other component that builds a conditional
+`className` that way were invisible to the guard. Scanning whole files and deriving line
+numbers from offsets closed it; the shared scanner now lives in `test/class-source.ts` and
+both style guards use it.
 
-Three decisions go beyond restating the current design because the current design contradicts
-itself:
+Two spec corrections were made from implementation, and both are recorded in place in
+`DESIGN_SYSTEM.md`:
 
-- `accent` is **retired, not defined**. `AGENTS.md` fixes a closed token set, and navigation
-  position is chrome that must not borrow a document-status colour.
-- `superseded` moves from the green family to `kumkum`, because a document that has been
-  replaced currently renders in the same colour family as one that is in force.
-- `Badge`'s `success` and `warning` variants move off raw `emerald-*` / `amber-*`, which
-  violate `AGENTS.md` and do not participate in the dark-mode flip — and which style the two
-  most trust-bearing markers in the product.
+- **§7.1 radius.** The specified `sm 4 / md 8 / lg 12 / xl 16` scale would have redefined
+  Tailwind's own token names under 163 existing usages — every `rounded-lg` shifting 8px →
+  12px and `rounded-2xl` disappearing. That is a breaking rename, not a token definition.
+  Tailwind's default scale is kept and the rule is now expressed in its names.
+- **§6 focus.** Moving the rule out of `@layer base` and onto element selectors is necessary
+  but not sufficient: `focus:outline-none` compiles to `(0,2,0)` and still outranks it. The
+  three sites using that form were audited individually; the one with only a border-colour
+  fallback was fixed.
 
-Impeccable was not available in this environment, so no external design critique was run; this
-is recorded in `DESIGN.md` and `UI-IMPECCABLE-1` remains the gate that would use it.
+`Sheet.tsx` was deleted rather than repaired. It had zero imports, zero test references, three
+dead animation classes, a `<div onClick>` trigger and no dialog semantics; `UI-AUDIT-1`
+classified it DELETE.
 
 ## Next gate after closure
 
-`UI-SYSTEM-1`
+`UI-SYSTEM-2`
