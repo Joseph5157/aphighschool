@@ -4,7 +4,8 @@ import HeroCard from "./_components/HeroCard";
 import PostCard from "./_components/PostCard";
 import DesktopLeftNav from "./_components/DesktopLeftNav";
 import DesktopSidebar from "./_components/DesktopSidebar";
-import { ORDER_BY_OFFICIAL_DATE } from "@/lib/dates";
+import UpcomingActionDates from "./_components/UpcomingActionDates";
+import { ORDER_BY_OFFICIAL_DATE, startOfTodayIST } from "@/lib/dates";
 import { safeQuery } from "@/lib/db-safe";
 
 import type { Metadata } from "next";
@@ -16,20 +17,41 @@ export const metadata: Metadata = {
 export const dynamic = 'force-dynamic';
 
 export default async function HomePage() {
-  const posts = await safeQuery("homepage-feed", () =>
-    prisma.post.findMany({
-      where: { isDraft: false },
-      orderBy: ORDER_BY_OFFICIAL_DATE,
-      take: 6,
-      include: {
-        category: true,
-        relatedFrom: {
-          where: { approved: true, relatedPost: { isDraft: false } },
-          include: { relatedPost: true },
+  const [posts, upcomingActionPosts] = await Promise.all([
+    safeQuery("homepage-feed", () =>
+      prisma.post.findMany({
+        where: { isDraft: false },
+        orderBy: ORDER_BY_OFFICIAL_DATE,
+        take: 6,
+        include: {
+          category: true,
+          relatedFrom: {
+            where: { approved: true, relatedPost: { isDraft: false } },
+            include: { relatedPost: true },
+          },
         },
-      },
-    })
-  );
+      })
+    ),
+    safeQuery("homepage-upcoming-action-dates", () =>
+      prisma.post.findMany({
+        where: {
+          isDraft: false,
+          actionDeadline: { gte: startOfTodayIST() },
+        },
+        orderBy: { actionDeadline: "asc" },
+        take: 4,
+        select: {
+          id: true,
+          slug: true,
+          titleEn: true,
+          actionDeadline: true,
+          goReference: true,
+          sourceDept: true,
+          verifiedAgainstGoir: true,
+        },
+      })
+    ),
+  ]);
 
   const heroPost = posts[0];
   const listingPosts = posts.slice(1);
@@ -54,6 +76,12 @@ export default async function HomePage() {
             </p>
           </div>
         </div>
+
+        <UpcomingActionDates
+          posts={upcomingActionPosts.filter(
+            (post): post is typeof post & { actionDeadline: Date } => post.actionDeadline !== null
+          )}
+        />
 
         {/* Hero Card: Most Recent Post */}
         {heroPost ? (

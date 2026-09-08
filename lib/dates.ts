@@ -58,6 +58,15 @@ export function isAfterTodayIST(date: Date): boolean {
 }
 
 /**
+ * The first instant of today's Asia/Kolkata calendar day. This is suitable
+ * for database queries over recorded action dates: a date on the current IST
+ * day remains included until that day ends.
+ */
+export function startOfTodayIST(): Date {
+  return new Date(`${todayInIST()}T00:00:00+05:30`);
+}
+
+/**
  * The calendar year (Asia/Kolkata) a post's official date falls in, for year
  * grouping/filtering. Pinned the same way formatDate() is pinned: getFullYear()
  * reads the browser's local time, so a document dated 01 Jan (stored as

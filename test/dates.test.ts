@@ -1,6 +1,14 @@
 // @vitest-environment node
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { officialDate, dateLabel, formatDate, officialYear, todayInIST, isAfterTodayIST } from "@/lib/dates";
+import {
+  officialDate,
+  dateLabel,
+  formatDate,
+  officialYear,
+  todayInIST,
+  isAfterTodayIST,
+  startOfTodayIST,
+} from "@/lib/dates";
 
 const createdAt = new Date("2026-08-24T10:00:00.000Z");
 const issued = new Date("2024-02-08T00:00:00.000Z");
@@ -86,6 +94,13 @@ describe("todayInIST / isAfterTodayIST", () => {
 
     const tomorrow = new Date("2026-08-26T00:00:00.000Z");
     expect(isAfterTodayIST(tomorrow)).toBe(true);
+  });
+
+  it("keeps a recorded action date visible for the full IST calendar day", () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-08-25T17:00:00.000Z")); // 22:30 IST
+
+    expect(startOfTodayIST()).toEqual(new Date("2026-08-24T18:30:00.000Z"));
   });
 });
 

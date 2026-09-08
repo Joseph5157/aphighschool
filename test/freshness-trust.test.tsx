@@ -16,6 +16,7 @@ const notificationTemplate = read("app/(public)/posts/[slug]/_templates/Notifica
 const postPage = read("app/(public)/posts/[slug]/page.tsx");
 const thumbZoneBar = read("app/(public)/posts/[slug]/_components/ThumbZoneBar.tsx");
 const actionSummary = read("app/(public)/posts/[slug]/_components/ActionSummary.tsx");
+const upcomingActionDates = read("app/(public)/_components/UpcomingActionDates.tsx");
 
 describe("FRESHNESS-1 public trust language", () => {
   it("keeps the Orders Hub bounded to published documents and per-document GOIR status", () => {
@@ -44,6 +45,8 @@ describe("FRESHNESS-1 public trust language", () => {
       expect(template).toContain(">GOIR Verified</Badge>");
       expect(template).not.toContain("GOIR Verified Gazette");
     }
+    expect(upcomingActionDates).toContain("post.verifiedAgainstGoir && (");
+    expect(upcomingActionDates).toContain("GOIR Verified");
   });
 
   it("does not render a compact discovery Current badge and preserves published-document wording", () => {
