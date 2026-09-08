@@ -465,6 +465,15 @@ Required behaviour for anything that overlays the page:
 - Body scroll is locked while open.
 - When closed, the panel is removed from the DOM or made `inert` — translating it off-screen
   is not enough, because its links stay focusable and screen-reader reachable.
+- A drawer that must keep its slide animation uses `visibility` rather than unmounting:
+  `visibility: hidden` is out of the tab order and out of the accessibility tree, and unlike
+  `display: none` it still transitions, so transitioning it alongside `transform` flips it
+  only at the end of the closing slide. Set the `inert` attribute from an effect as well —
+  React 18 has no `inert` prop.
+- Anything that closes on navigation must watch the route, not just its own links: a link
+  elsewhere on the page navigates without the overlay ever hearing about it.
+- A viewport change that removes the overlay must also reset its open state, or it reappears
+  on the way back down.
 - The scrim is dismissible by pointer **and** by Escape; a scrim with only an `onClick` is not
   an accessible control.
 - Triggers are `<button>` elements. A `<div onClick>` is not a trigger.

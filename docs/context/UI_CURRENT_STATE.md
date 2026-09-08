@@ -12,13 +12,13 @@
 
 ## Current UI program state
 
-- Current phase: Phase 5
-- Active gate: `UI-RESPONSIVE-1` (CLOSED)
-- Scope in this gate: responsive layout and overflow only
+- Current phase: Phase 6
+- Active gate: `UI-MOBILE-NAV-1` (CLOSED)
+- Scope in this gate: mobile navigation behaviour only
 - UI redesign performed: no
 - Application behaviour changed: yes — foundation tokens, focus system, active-navigation
   treatment, state colours. Information architecture, routes and page composition unchanged.
-- Next planned gate: `UI-MOBILE-NAV-1`
+- Next planned gate: `UI-PATTERNS-1`
 
 ### Gate history
 
@@ -30,6 +30,7 @@
 | `UI-SYSTEM-1` | CLOSED | Foundations implemented; audit P0s F2/F3/F4 fixed and guarded. 288 tests pass. |
 | `UI-SYSTEM-2` | CLOSED | Primitives standardised; carried-forward defects closed; Dialog/IconButton/Textarea/Checkbox added. 318 tests pass. |
 | `UI-RESPONSIVE-1` | CLOSED | Audit F1 closed via BottomBarSlot; overflow and gutter repair; 768–1023 band guarded. 330 tests pass. |
+| `UI-MOBILE-NAV-1` | CLOSED | Audit F5 and F28 closed; drawer given the full modal contract. 347 tests pass. |
 
 ## Repository observations
 
@@ -103,8 +104,10 @@ MERGE / REPLACE / DELETE decisions are intentionally deferred to `UI-AUDIT-1`.
   `min-w-0`, wrapping, and overflow utilities.
 - The public shell has a fixed bottom tab bar below `lg` and a desktop link navigation at
   `lg` and above.
-- A shared sidebar provider implements viewport detection at 768px, a mobile off-canvas
-  drawer, a desktop collapsible sidebar, an overlay, and a keyboard toggle shortcut.
+- A shared sidebar provider implements viewport detection at `NAV_BREAKPOINT` (1024px, the
+  single navigation breakpoint), a mobile off-canvas drawer with the full modal contract, a
+  desktop collapsible sidebar, a scrim, and a keyboard toggle shortcut. *(The 768px figure
+  recorded at Phase 0 was corrected in `UI-SYSTEM-1`.)*
 - Global CSS provides `prefers-reduced-motion` handling; shared focus-visible styling is
   present.
 - Browser and viewport acceptance results are not recorded here because browser tooling
@@ -409,6 +412,59 @@ oversized fixed width, the single `lg` navigation breakpoint in both CSS and JS,
 keyboard-reachable wide scroll regions. Mutation-tested — reverting `BottomNav`'s yield
 restores the F1 collision and fails the guard.
 
+## `UI-MOBILE-NAV-1` outcome summary
+
+### Decision: REFINE, as the audit recorded
+
+The two-part model — a bottom tab bar for the five most-used destinations below `lg`, plus an
+off-canvas drawer for the full menu — is sound and unchanged. Nothing was replaced and no
+second navigation system was introduced. The drawer's *behaviour* was rebuilt; its structure,
+contents and destinations are untouched.
+
+### Audit F5 closed
+
+| Behaviour | Before | Now |
+|---|---|---|
+| Closed-state inertness | `-translate-x-full` only — links stayed focusable and screen-reader reachable | `visibility: hidden` + `inert` attribute |
+| Escape | none | closes |
+| Focus trap | none | Tab cycles inside the panel |
+| Focus in / return | none | moves to the first item, returns to the trigger |
+| Body scroll lock | none | locked while open, restored on close |
+| Semantics | bare `<aside>` | `role="dialog"`, `aria-modal`, `aria-label="Site navigation"` |
+| Scrim | unlabelled click target | `aria-hidden`; Escape is the keyboard route out |
+| Route change | only the drawer's own links closed it | any navigation closes it |
+| Viewport crossing | open state persisted | reset when crossing to desktop |
+| Touch targets | ~30–36px rows | 44px |
+
+### Audit F28 closed
+
+`Ctrl/Cmd+B` no longer fires while the user is typing in an input, textarea, select or
+contenteditable, and `preventDefault()` is called only when the shortcut is actually handled —
+so the browser's own bookmark shortcut works again in text fields. The listener also registers
+once instead of being rebuilt on every open/close.
+
+### Why `visibility` rather than unmounting
+
+Unmounting is what `Dialog` does and is simpler, but it would discard the drawer's slide —
+motion answering a user action, which `DESIGN.md` §7 wants kept. `visibility: hidden` is out of
+the tab order and the accessibility tree yet still transitions, so transitioning it alongside
+`transform` flips it exactly at the end of the closing slide.
+
+### Guards added
+
+`test/mobile-nav.test.tsx` (17) — one test per behaviour the gate names.
+
+**A mutation battery of eight ran against them. Seven were caught; one survived.** The
+viewport-transition test asserted the drawer was gone at desktop width, which is always true
+because `Sidebar` renders the desktop aside instead — so removing the state reset did not fail
+it. Rewritten as a round trip (open on a phone → desktop → back), it now catches it. Same shape
+as the `Field` defect in `UI-SYSTEM-2`: observing the right thing at the wrong moment.
+
+The dead-class scanner also produced a **false alarm** here and was hardened rather than
+silenced: it split template literals on `${...}` with a pattern that stopped at the first `}`,
+so a hole containing a nested template literal ended mid-expression and the remainder was
+tokenised as class text. It now counts braces.
+
 ## Known limitations
 
 - Browser acceptance tooling is not currently runnable in this environment.
@@ -469,6 +525,7 @@ restores the F1 collision and fails the guard.
 | `UI-SYSTEM-1` | pass (`npx tsc --noEmit`, exit 0) | clean | **44 files, 288 tests pass** (incl. DB-backed trust + dark-mode suites) | unavailable |
 | `UI-SYSTEM-2` | pass (`npx tsc --noEmit`, exit 0) | clean | **46 files, 318 tests pass**; Tailwind utility validation passes | unavailable |
 | `UI-RESPONSIVE-1` | pass (`npx tsc --noEmit`, exit 0) | clean | **47 files, 330 tests pass**; Tailwind utility validation passes | unavailable |
+| `UI-MOBILE-NAV-1` | pass (`npx tsc --noEmit`, exit 0) | clean | **48 files, 347 tests pass**; Tailwind utility validation passes | unavailable |
 
 ## Gate transition rule
 
@@ -476,27 +533,33 @@ Update `UI_ACTIVE_GATE.md` only when work on the next gate actually begins. Each
 gate's evidence remains recoverable from this document, from `docs/ui/UI_AUDIT.md`, and from
 Git history.
 
-`UI-MOBILE-NAV-1` is next per the master plan: the drawer's own behaviour — Escape, focus
-trap, focus return, scroll lock, and closed-state inertness. Every one of those was left
-untouched by the last three gates and is still a defect (audit F5).
+`UI-PATTERNS-1` is next per the master plan: consolidating domain-level patterns —
+PageHeader, DocumentCard, SearchResult, DocumentMetadata, GOIR/trust presentation,
+Breadcrumbs, FilterBar, Pagination — and merging the duplicates `UI_AUDIT.md` recorded.
 
-Two things make that gate easier than it looks. `Dialog` already implements the whole contract
-against `DESIGN_SYSTEM.md` §8.5, and `test/dialog.test.tsx` already pins each behaviour — so
-the drawer has a worked example and a test shape to copy rather than a specification to
-interpret. `BottomBarSlot` also settled the z-order the drawer scrim depends on: the scrim is
-`z-50` and every bottom bar is `z-45`, so the scrim now genuinely disables what it covers.
+Named candidates already on record: the two post templates (`GoMemoTemplate` and
+`NotificationTemplate` are near-identical shells), the two filter strips (`OrdersFilterTabs`
+and `CategoryLogList`), and the recurring tinted-callout pattern that `UI-SYSTEM-2` left
+deliberately unconsolidated because its three uses carry different meanings. That semantic
+decision is this gate's to make.
 
-Three practices are worth carrying forward.
+Two constraints apply harder there than anywhere else. **Trust semantics must survive
+consolidation**: `dateLabel()`'s Issued / Added-to-portal distinction, GOIR shown only where
+recorded with no "unverified" state, and the `superseded` → `kumkum` mapping. And
+**`Pagination` is still unused** — `UI-SYSTEM-2` refined it without adopting it, so the gate
+that introduces real pagination is the one that finally exercises it.
 
-**Mutate every new guard.** This project's history is defects that survived a green suite, not
-defects that broke one. Every guard added in the last three gates was run against a deliberate
-reintroduction of the bug it covers, and in two of those gates a guard failed that check and
-had to be rewritten.
+Four practices are worth carrying forward.
 
-**Test the screen, not only the mechanism.** A unit test proving `Field` associates its parts
-passed while five inputs in `TaxCalculatorUI` were still unlabelled — they bypass `Field`
-entirely, and only rendering the real component found them.
+**Mutate every new guard.** This project's history is defects that survived a green suite. In
+three of the last four gates a guard passed its first mutation and had to be rewritten.
 
-**Match the sweep to the data.** `UI-SYSTEM-2` declared the shared primitives clear of
-sub-12px type because its regex matched integers; `text-[8.5px]` survived. When a sweep
-reports zero, check that it could have reported non-zero.
+**Test the screen, not only the mechanism.** A `Field` unit test passed while five real inputs
+stayed unlabelled; a drawer test passed while the state reset it was meant to cover was gone.
+
+**Match the sweep to the data.** `UI-SYSTEM-2` declared the primitives clear of sub-12px type
+because its regex matched integers; `text-[8.5px]` survived.
+
+**Harden a noisy guard, never silence it.** The class scanner produced one false alarm and was
+taught about nested interpolation. A guard that cries wolf is how people learn to ignore
+guards.

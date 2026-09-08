@@ -2,7 +2,7 @@
 
 ## Active gate
 
-`UI-RESPONSIVE-1`
+`UI-MOBILE-NAV-1`
 
 ## Status
 
@@ -10,59 +10,66 @@ CLOSED
 
 ## Purpose
 
-Repair responsive structure and overflow: close audit finding F1, remove the causes of
-accidental page-level horizontal scrolling, and standardise gutters where the audit showed
-inconsistency.
+Complete the mobile navigation experience: close audit finding F5 (the off-canvas drawer's
+missing modal behaviour) and F28 (the global keyboard shortcut), without duplicating the
+navigation systems already in place.
+
+## Retain / refine / merge / replace decision
+
+**REFINE**, as `UI-AUDIT-1` recorded. The existing two-part model — a bottom tab bar for the
+five most-used destinations below `lg`, and an off-canvas drawer for the full menu — is sound
+and was not changed. Nothing was replaced and no second navigation system was introduced. The
+drawer's *behaviour* was rebuilt; its structure, contents and destinations are untouched.
+
+21st.dev was not available in this environment, so the external-component rule was not
+exercised. It would not have applied regardless: the defect was missing behaviour in a
+component that already fits the product, not a component that needed replacing.
 
 ## Change boundary
 
-Responsive layout and overflow only. In scope: fixed/sticky positioning, grids that cannot
-shrink, scroll containers, page gutters, and the 768–1023px band.
-
-Out of scope and untouched: page redesign, information architecture, and **all drawer
-behaviour** — Escape, focus trap, scroll lock, closed-state inertness remain
-`UI-MOBILE-NAV-1`. Typography was touched only where a size was itself a defect.
+Mobile navigation behaviour only: `Sidebar.tsx` (provider and drawer) plus the test scanner
+it exposed. Navigation structure, destinations, information architecture and page layout are
+unchanged.
 
 ## Required closure evidence
 
 - Starting worktree clean on `ui-system-production-readiness` at
-  `447f8ae7be8db5660c2e2c1d8f1bad83db560263`, local and live remote in agreement.
-- F1 is closed and mutation-tested: reverting `BottomNav`'s yield restores the collision and
-  fails the guard.
-- No global `overflow-x-hidden` masks any structural problem; a guard forbids it on the shell.
-- The single `lg` navigation breakpoint is preserved and guarded against a second one being
-  hard-coded in JS.
-- Full Vitest suite passes: 47 files, 330 tests. `npx tsc --noEmit` passes, Tailwind utility
+  `e29383d344e23a1126ba98249ff076eee14eff39`, local and live remote in agreement.
+- Every behaviour the gate names has a test: opening, closing, active route, route changes,
+  outside interaction, Escape, focus handling, scroll locking, touch targets, accessible
+  labels, responsive transitions.
+- A mutation battery ran **eight** deliberate reintroductions of the defects being fixed.
+  Seven were caught immediately; the eighth survived and the test was rewritten until it
+  failed for the right reason.
+- Full Vitest suite passes: 48 files, 347 tests. `npx tsc --noEmit` passes, Tailwind utility
   validation passes, `git diff --check` clean.
-- Every new arbitrary utility — including the `calc()`/`env()` safe-area values — was
-  confirmed to compile against the project's own Tailwind build.
 - Committed, pushed, and local branch HEAD matches the live remote branch SHA.
 
 ## Closure notes
 
-**F1 needed a mechanism, not a class.** `ThumbZoneBar` is rendered by the page and `BottomNav`
-by the layout, so neither could hide the other in CSS. `BottomBarSlot` is the smallest thing
-that lets them agree, and it makes the design system's "at most one fixed bottom bar" rule
-enforceable rather than aspirational. Stacking the two bars was rejected: two bars would eat
-roughly 110px of a 640px phone viewport on the product's most-read page.
+**The mutation battery earned its keep — one test was passing for the wrong reason.** The
+viewport-transition test asserted the drawer was gone at desktop width. It always is:
+`Sidebar` renders the desktop aside instead, so the drawer unmounts whether or not its open
+state was reset. Removing the reset entirely did not fail the test. The rewritten version does
+the round trip — open on a phone, cross to desktop, come back — and now catches it. This is
+the same shape as the `Field` defect in `UI-SYSTEM-2`: a test that observes the right thing at
+the wrong moment.
 
-**The audit's "long URLs" risk was not real.** No raw URL renders as visible text anywhere —
-every source and PDF link carries a written label. Recorded rather than "fixed", because
-inventing a fix for a defect that does not exist is its own kind of error.
+**Inertness without losing the slide.** Unmounting the closed drawer would have been the
+simplest way to make it inert, and is what `Dialog` does — but it would have thrown away the
+drawer's slide animation, which is motion answering a user action and worth keeping.
+`visibility: hidden` removes an element from the tab order and the accessibility tree while
+still transitioning, so transitioning it alongside `transform` flips it exactly at the end of
+the closing slide. The `inert` attribute is set from an effect as well, both as belt-and-braces
+and because it is the half jsdom can observe.
 
-**A UI-SYSTEM-2 claim was wrong and is corrected.** That gate reported no sub-12px type left
-in `app/(public)/_components`. Its sweep matched sizes by integer, so `PostCard`'s
-`text-[8.5px]` — the smallest text in the product — survived two gates unseen. It is fixed,
-and the guard is now decimal-aware.
-
-## What this gate could NOT verify
-
-jsdom does not lay out, so **no test here proves a page does not scroll sideways at 320px.**
-What is proven is structural: how many fixed bars mount, that no `w-screen` or oversized
-fixed width exists, that no shell-level `overflow-x-hidden` hides anything, and that wide
-scroll regions are keyboard-reachable. Actual rendering at the eight target widths is
-`UI-ACCEPTANCE-1`.
+**A guard produced a false alarm and was hardened rather than silenced.** The dead-class
+scanner split template literals on `${...}` with a pattern that stopped at the first `}`, so a
+hole containing a nested template literal ended mid-expression and the remainder was tokenised
+as class text — reporting `translate-x-0"`, a class that does not exist, at a line where
+nothing was wrong. The scanner now counts braces. The component was also restructured to
+compute its state classes in named variables, which is clearer regardless.
 
 ## Next gate after closure
 
-`UI-MOBILE-NAV-1`
+`UI-PATTERNS-1`

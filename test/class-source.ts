@@ -71,6 +71,44 @@ export function stringLiterals(source: string): StringLiteral[] {
 }
 
 /**
+ * Splits a template body on `${...}` holes, counting braces so a hole
+ * containing a NESTED template literal is consumed whole.
+ *
+ * A `[^}]*` pattern stops at the first `}` it sees, so
+ *
+ *   `... ${open ? "a" : `b ${side === "l" ? "c" : "d"}`} ...`
+ *
+ * ended mid-expression and the remainder was tokenised as if it were static
+ * class text, emitting garbage like `translate-x-0"` — a class that does not
+ * exist, reported at a line where nothing is wrong. False alarms are how a
+ * guard loses its authority, so the scanner has to understand nesting.
+ */
+function splitOnHoles(body: string): string[] {
+  const segments: string[] = [];
+  let segment = "";
+
+  for (let i = 0; i < body.length; i += 1) {
+    if (body[i] === "$" && body[i + 1] === "{") {
+      let depth = 1;
+      let j = i + 2;
+      while (j < body.length && depth > 0) {
+        if (body[j] === "{") depth += 1;
+        else if (body[j] === "}") depth -= 1;
+        j += 1;
+      }
+      segments.push(segment);
+      segment = "";
+      i = j - 1;
+      continue;
+    }
+    segment += body[i];
+  }
+
+  segments.push(segment);
+  return segments;
+}
+
+/**
  * Whole class tokens inside one string literal body.
  *
  * A template literal's static text is still literal class names, so skipping
@@ -80,7 +118,7 @@ export function stringLiterals(source: string): StringLiteral[] {
  * genuine fragments such as the `bg-` of `bg-${tone}-500`.
  */
 export function classTokens(body: string): string[] {
-  const segments = body.split(/\$\{[^}]*\}/);
+  const segments = splitOnHoles(body);
   const tokens: string[] = [];
 
   segments.forEach((segment, index) => {
