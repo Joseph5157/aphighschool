@@ -33,10 +33,15 @@ const VARIANT_MAP: Record<ButtonVariant, string> = {
   outline: "bg-transparent border border-ink text-ink hover:bg-ink hover:text-paper active:scale-[0.98]",
 };
 
+// DESIGN_SYSTEM.md §8.1: 44px minimum touch target, measured on the HIT AREA
+// rather than the painted box. `sm` stays visually 36px — raising it to 44
+// would change density on every page that uses a compact button — and reaches
+// the floor through a transparent ::after overlay that extends the hit area
+// without affecting layout. `md` and `lg` meet it directly.
 const SIZE_MAP: Record<ButtonSize, string> = {
-  sm: "text-xs px-2.5 py-1.5 rounded-md gap-1.5 font-mono",
-  md: "text-xs sm:text-sm px-4 py-2 rounded-lg gap-2 font-mono",
-  lg: "text-sm sm:text-base px-5 py-2.5 rounded-xl gap-2.5 font-mono",
+  sm: "text-xs px-2.5 min-h-[36px] rounded-md gap-1.5 font-mono relative after:absolute after:inset-x-0 after:-inset-y-1 after:content-['']",
+  md: "text-xs sm:text-sm px-4 min-h-[44px] rounded-lg gap-2 font-mono",
+  lg: "text-sm sm:text-base px-5 min-h-[48px] rounded-xl gap-2.5 font-mono",
 };
 
 export interface ButtonClassNameOptions {
@@ -88,11 +93,22 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         type={type}
         disabled={disabled || isLoading}
+        // aria-busy is what tells assistive tech the control is working. The
+        // spinner alone is decorative and announces nothing, so the label stays
+        // rendered and unchanged — swapping it for the spinner would make the
+        // button lose its accessible name mid-action.
+        aria-busy={isLoading || undefined}
         className={buttonClassName({ variant, size, fullWidth, className })}
         {...props}
       >
         {isLoading ? (
-          <svg className="animate-spin w-4 h-4 text-current" fill="none" viewBox="0 0 24 24">
+          <svg
+            className="animate-spin w-4 h-4 text-current shrink-0"
+            fill="none"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            focusable="false"
+          >
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
             <path
               className="opacity-75"

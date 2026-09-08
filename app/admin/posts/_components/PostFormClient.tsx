@@ -1,7 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { todayInIST } from "@/lib/dates";
+import Button from "@/app/(public)/_components/Button";
+import Checkbox from "@/app/(public)/_components/Checkbox";
+import Dialog from "@/app/(public)/_components/Dialog";
+import Textarea from "@/app/(public)/_components/Textarea";
 
 type Category = { id: string; nameEn: string };
 type CandidatePost = { id: string; titleEn: string; goReference: string | null };
@@ -104,8 +108,17 @@ export default function PostFormClient({
 
   // Modal state
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   const [jsonInput, setJsonInput] = useState("");
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  // One handler behind every way out of the dialog: the close button, the
+  // scrim, Escape, and Cancel. Previously two of those cleared the error and
+  // the other two did not exist.
+  const closeJsonDialog = useCallback(() => {
+    setIsModalOpen(false);
+    setErrorMsg(null);
+  }, []);
 
   const relatedSet = new Set(initial?.relatedPostIds || []);
 
@@ -447,20 +460,13 @@ export default function PostFormClient({
           </div>
         </div>
 
-        <div className="space-y-1">
-          <label className="flex items-center gap-2 text-sm font-medium text-ink">
-            <input
-              type="checkbox"
-              name="verifiedAgainstGoir"
-              checked={verifiedAgainstGoir}
-              onChange={(e) => setVerifiedAgainstGoir(e.target.checked)}
-            />
-            Verified against GOIR (goir.ap.gov.in)
-          </label>
-          <p className="text-xs text-inkSoft pl-5">
-            Check only after manually verifying this document against the official GOIR portal. Requires a valid https://goir.ap.gov.in source URL.
-          </p>
-        </div>
+        <Checkbox
+          name="verifiedAgainstGoir"
+          checked={verifiedAgainstGoir}
+          onChange={(e) => setVerifiedAgainstGoir(e.target.checked)}
+          label="Verified against GOIR (goir.ap.gov.in)"
+          description="Check only after manually verifying this document against the official GOIR portal. Requires a valid https://goir.ap.gov.in source URL."
+        />
 
         <div>
           <label className="block text-xs font-mono uppercase text-inkSoft mb-2">
@@ -473,20 +479,21 @@ export default function PostFormClient({
               </p>
             )}
             {candidatePosts.map((p) => (
-              <label
+              <Checkbox
                 key={p.id}
-                className="flex items-center gap-2 text-sm px-3 py-2 border-b border-hair last:border-b-0"
-              >
-                <input
-                  type="checkbox"
-                  name="relatedPostIds"
-                  value={p.id}
-                  defaultChecked={relatedSet.has(p.id)}
-                />
-                <span className="truncate">
-                  {p.titleEn} {p.goReference && <span className="font-mono text-[10px] text-inkSoft">· {p.goReference}</span>}
-                </span>
-              </label>
+                name="relatedPostIds"
+                value={p.id}
+                defaultChecked={relatedSet.has(p.id)}
+                className="border-b border-hair px-3 last:border-b-0"
+                label={
+                  <span className="truncate">
+                    {p.titleEn}{" "}
+                    {p.goReference && (
+                      <span className="font-mono text-xs text-inkSoft">· {p.goReference}</span>
+                    )}
+                  </span>
+                }
+              />
             ))}
           </div>
         </div>
@@ -499,69 +506,49 @@ export default function PostFormClient({
         </button>
       </form>
 
-      {/* Textarea Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/50 backdrop-blur-sm">
-          <div className="bg-white rounded-xl shadow-xl border border-hair w-full max-w-lg overflow-hidden">
-            <div className="flex items-center justify-between px-5 py-4 border-b border-hair bg-paperRaised">
-              <h3 className="text-sm font-semibold text-ink font-mono uppercase">Paste JSON Draft</h3>
-              <button
-                type="button"
-                onClick={() => {
-                  setIsModalOpen(false);
-                  setErrorMsg(null);
-                }}
-                className="text-inkSoft hover:text-ink text-sm px-2 py-1 rounded"
-              >
-                ✕
-              </button>
-            </div>
+      <Dialog
+        open={isModalOpen}
+        onClose={closeJsonDialog}
+        title="Paste JSON Draft"
+        footer={
+          <>
+            <Button variant="secondary" size="sm" onClick={closeJsonDialog}>
+              Cancel
+            </Button>
+            <Button variant="turmeric" size="sm" onClick={handleLoadJson}>
+              Load
+            </Button>
+          </>
+        }
+      >
+        <div className="space-y-4">
+          <p className="text-xs text-inkSoft">
+            Paste the JSON output from the LLM template below to automatically fill the post form fields.
+          </p>
 
-            <div className="p-5 space-y-4">
-              <p className="text-xs text-inkSoft">
-                Paste the JSON output from the LLM template below to automatically fill the post form fields.
-              </p>
+          {errorMsg && (
+            <p
+              role="alert"
+              className="p-3 bg-kumkum/10 border border-kumkum/30 rounded-lg text-xs text-kumkum font-mono"
+            >
+              {errorMsg}
+            </p>
+          )}
 
-              {errorMsg && (
-                <div className="p-3 bg-kumkum/10 border border-kumkum/30 rounded-lg text-xs text-kumkum font-mono">
-                  {errorMsg}
-                </div>
-              )}
-
-              <textarea
-                value={jsonInput}
-                onChange={(e) => {
-                  setJsonInput(e.target.value);
-                  if (errorMsg) setErrorMsg(null);
-                }}
-                placeholder={`{\n  "titleEn": "...",\n  "titleTe": "...",\n  "summaryTe": [...],\n  "englishAbstract": "...",\n  "goReference": "...",\n  "sourceDept": "...",\n  "statusBadge": "notification",\n  "actionDeadline": "YYYY-MM-DD"\n}`}
-                rows={10}
-                className="w-full font-mono text-xs p-3 border border-hair rounded-lg focus:border-turmeric bg-paperRaised/50 text-ink"
-              />
-
-              <div className="flex items-center justify-end gap-3 pt-2">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setIsModalOpen(false);
-                    setErrorMsg(null);
-                  }}
-                  className="px-4 py-2 text-xs font-mono font-medium text-inkSoft hover:text-ink border border-hair rounded-lg bg-white"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  onClick={handleLoadJson}
-                  className="px-4 py-2 text-xs font-mono font-semibold text-white bg-turmericDeep hover:bg-turmericDeep/90 rounded-lg shadow-sm"
-                >
-                  Load
-                </button>
-              </div>
-            </div>
-          </div>
+          <Textarea
+            mono
+            aria-label="JSON draft"
+            error={Boolean(errorMsg)}
+            value={jsonInput}
+            onChange={(e) => {
+              setJsonInput(e.target.value);
+              if (errorMsg) setErrorMsg(null);
+            }}
+            placeholder={`{\n  "titleEn": "...",\n  "titleTe": "...",\n  "summaryTe": [...],\n  "englishAbstract": "...",\n  "goReference": "...",\n  "sourceDept": "...",\n  "statusBadge": "notification",\n  "actionDeadline": "YYYY-MM-DD"\n}`}
+            rows={10}
+          />
         </div>
-      )}
+      </Dialog>
     </>
   );
 }

@@ -419,13 +419,15 @@ means they do not participate in the dark-mode flip.
 |---|---|---|
 | `tamarind` | `tamarind/10` · `tamarind` · `tamarind/25` | In force, open, verified |
 | `turmeric` | `turmeric/15` · `turmericDeep` · `turmeric/30` | Attention, amended |
-| `kumkum` | `kumkum/10` · `kumkum` · `kumkum/25` | **New.** Superseded, past deadline |
+| `kumkum` | `kumkum/10` · `kumkum` · `kumkum/25` | Superseded, past deadline |
 | `neutral` | `hair/50` · `inkSoft` · `hair` | Archived, historical |
-| `ink` | `ink` · `paperRaised` · `ink` | Selected filter (replaces `dark`) |
+| `ink` | `ink` · `paperRaised` · `ink` | Selected filter |
 
-`success` and `warning` are removed as names — they duplicate `tamarind` and `turmeric` while
-implying a judgement the product does not make. Sizes: `sm` 12px, `md` 12px, `lg` 13px; the
-9px size is removed.
+Variants name the **token**, not a judgement. `success` and `warning` were removed in
+`UI-SYSTEM-2` after their 14 call sites moved to `tamarind` and `turmeric`: they duplicated
+those two while implying an assessment the product does not make — "GOIR Verified" is a
+statement of provenance, not a quality rating (§12.1). `dark` became `ink` for the same
+reason and because it read as a dark-mode flag. Sizes: `sm` 12px, `md` 12px, `lg` 13px.
 
 ### 8.3 Button
 
@@ -647,21 +649,43 @@ responsive repair is `UI-RESPONSIVE-1`; navigation behaviour is `UI-MOBILE-NAV-1
 | 7 | z-index scale and motion keyframes in `tailwind.config.js` (§7, §10) | Done |
 | 8 | Correct `turmericDeep` in `.agents/skills/design-tokens.md` (§2.1) | Done |
 
-### Carried forward
+### Carried forward from `UI-SYSTEM-1`, closed by `UI-SYSTEM-2`
 
-- **Sub-12px type outside the shared primitives.** All 21 occurrences in
-  `app/(public)/_components` were raised to 12px. Roughly 100 remain in route-local
-  components across 42 files. Raising those is per-component work with a visible density
-  effect that cannot be checked without a browser, so it belongs to `UI-SYSTEM-2` /
-  `UI-A11Y-1`. The guard in `test/order-state-colour.test.tsx` covers Badge only.
-- **44px touch targets (§8.1).** `Input`, `NativeSelect` and the bottom-nav items now meet it.
-  `Button`'s `sm` and `md` sizes and the pagination links do not; resizing them changes
-  density on every page and belongs to `UI-SYSTEM-2`.
-- **`Field` error association (§8.4).** `Input` and `NativeSelect` now set `aria-invalid`.
-  Wiring `aria-describedby` from control to `FieldError`, and giving `TaxCalculatorUI`'s
-  `NumF` wrapper a generated id, is `UI-A11Y-1`.
-- **Overlay behaviour (§8.5)** — Escape, focus trap, scroll lock, closed-state inertness —
-  remains `UI-MOBILE-NAV-1`. Only the z-index inversion was fixed here.
+- **44px touch targets (§8.1).** `Button` (`md` 44 / `lg` 48; `sm` stays 36px painted and
+  reaches 44px through a transparent `::after` overlay so page density is unchanged),
+  pagination links, `IconButton`, and the form controls.
+- **`Field` error association (§8.4).** `Field` now generates an id and clones its child to
+  thread `id`, `aria-describedby`, `aria-invalid` and `aria-required`. This fixes
+  `TaxCalculatorUI`'s `NumF` wrapper at all 33 call sites without touching them.
+- **Overlay behaviour (§8.5).** `Dialog` implements the full contract. The sidebar *drawer*
+  is still `UI-MOBILE-NAV-1`.
+- **Sub-12px type.** None remains in `app/(public)/_components`.
+
+### Still carried forward
+
+- **Sub-12px type in route-local components** — roughly 100 occurrences across 42 files.
+  Per-component work with a visible density effect that cannot be checked without a browser:
+  `UI-A11Y-1` with `UI-ACCEPTANCE-1`.
+- **Emoji used as iconography** (`DESIGN.md`) — sidebar menu, `DesktopLeftNav`,
+  search chips, `ThumbZoneBar`, `WhatsAppBanner`. `ThemeToggle`'s were replaced here because
+  it was already being rebuilt for `aria-pressed`; the rest are page-level edits.
+- **The recurring tinted-callout pattern** — `rounded-lg border border-<token>/30
+  bg-<token>/10` appears as guidance, disclaimer and status panels in at least five places.
+  It is a genuine duplicate, but the three uses carry different meanings and consolidating
+  them needs the semantic decision that `UI-PATTERNS-1` owns.
+
+### Primitives deliberately NOT created
+
+Building these now would add abstractions with no consumer, against `DESIGN.md`'s
+restraint rule. Each is recorded with the condition that would justify it:
+
+| Primitive | Why not | Build it when |
+|---|---|---|
+| `Skeleton` | No route has a loading state to put one in | `UI-STATES-1` introduces `loading.tsx` |
+| `Toast` | No async flow reports success or failure; the public surface is read-only and the calculators are synchronous | An action needs non-blocking confirmation |
+| `Dropdown` | Nothing in the product is a menu. `SidebarCollapsible` is a disclosure and `NativeSelect` covers choice | A real menu appears |
+| `Tooltip` | The few hints are native `title`, which is keyboard- and touch-reachable; a custom tooltip is usually worse | A hint must carry markup or must be reachable on touch |
+| `Radio` | No radio inputs exist | One does |
 
 Each item needed a test that can fail for the right reason. That is not a formality here: the
 `accent` defect survived an existing colour-token test that checked only that *defined* tokens

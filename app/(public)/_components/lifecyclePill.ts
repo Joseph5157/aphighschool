@@ -1,7 +1,7 @@
 import type { OrderState } from "@prisma/client";
 import { resolveLifecycle, type LifecycleInput } from "@/lib/posts/lifecycle";
 
-export type BadgeVariant = "success" | "turmeric" | "tamarind" | "kumkum" | "neutral";
+export type BadgeVariant = "tamarind" | "turmeric" | "tamarind" | "kumkum" | "neutral";
 
 // The R16 order-state mapping, stated once. OrderStateBadge (the full-width
 // detail-page block) and every card surface read it from here.
@@ -13,7 +13,7 @@ export type BadgeVariant = "success" | "turmeric" | "tamarind" | "kumkum" | "neu
 // order is materially harmed, so it earns the warning colour; `archived` stays
 // neutral because it is merely historical with no successor to redirect to.
 export const ORDER_STATE_VARIANT: Record<OrderState, BadgeVariant> = {
-  current: "success",
+  current: "tamarind",
   amended: "turmeric",
   superseded: "kumkum",
   archived: "neutral",

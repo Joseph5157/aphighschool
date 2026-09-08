@@ -28,10 +28,12 @@ interface PaginationLinkProps extends React.ComponentProps<typeof Link> {
   isActive?: boolean;
 }
 
+// 44px minimum touch target (DESIGN_SYSTEM.md §8.1). These were 32x32, which is
+// small for a control people tap repeatedly to page through a list.
 export const PaginationLink = ({ isActive, className = "", ...props }: PaginationLinkProps) => (
   <Link
     aria-current={isActive ? "page" : undefined}
-    className={`inline-flex items-center justify-center min-w-[32px] h-8 px-2.5 rounded-lg border font-bold text-xs transition-colors duration-150 ${
+    className={`inline-flex items-center justify-center min-w-[44px] min-h-[44px] px-2.5 rounded-lg border font-bold text-xs transition-colors duration-150 ${
       isActive
         ? "bg-ink border-ink text-paperRaised"
         : "bg-paperRaised border-hair text-ink hover:border-ink/40"
@@ -43,7 +45,7 @@ export const PaginationLink = ({ isActive, className = "", ...props }: Paginatio
 export const PaginationPrevious = ({ className = "", disabled, ...props }: React.ComponentProps<typeof PaginationLink> & { disabled?: boolean }) => {
   if (disabled) {
     return (
-      <span className={`inline-flex items-center justify-center h-8 px-3 rounded-lg border border-hair/50 bg-hair/20 text-inkSoft/50 font-bold text-xs cursor-not-allowed ${className}`}>
+      <span className={`inline-flex items-center justify-center min-h-[44px] px-3 rounded-lg border border-hair/50 bg-hair/20 text-inkSoft/50 font-bold text-xs cursor-not-allowed ${className}`}>
         ← Prev
       </span>
     );
@@ -58,7 +60,7 @@ export const PaginationPrevious = ({ className = "", disabled, ...props }: React
 export const PaginationNext = ({ className = "", disabled, ...props }: React.ComponentProps<typeof PaginationLink> & { disabled?: boolean }) => {
   if (disabled) {
     return (
-      <span className={`inline-flex items-center justify-center h-8 px-3 rounded-lg border border-hair/50 bg-hair/20 text-inkSoft/50 font-bold text-xs cursor-not-allowed ${className}`}>
+      <span className={`inline-flex items-center justify-center min-h-[44px] px-3 rounded-lg border border-hair/50 bg-hair/20 text-inkSoft/50 font-bold text-xs cursor-not-allowed ${className}`}>
         Next →
       </span>
     );

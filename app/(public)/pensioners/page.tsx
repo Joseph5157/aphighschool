@@ -64,7 +64,7 @@ export default function PensionersHubPage() {
           {/* Emerald Treasury Hero Header */}
           <div className="on-masthead bg-masthead text-mastheadText border border-mastheadText/40 rounded-2xl p-6 md:p-8 space-y-3 shadow-md relative overflow-hidden">
             <div className="flex items-center justify-between">
-              <Badge variant="success" size="sm" shape="pill" dot>
+              <Badge variant="tamarind" size="sm" shape="pill" dot>
                 Emerald Treasury Care Suite
               </Badge>
               <span className="font-mono text-[10px] text-turmeric font-semibold">
@@ -175,7 +175,7 @@ export default function PensionersHubPage() {
                   titleEn: "When do pensioners receive additional quantum of pension?",
                   titleTe: "పెన్షనర్లకు అదనపు పింఛను (Additional Quantum) ఎప్పుడు అందుతుంది?",
                   badge: "Age Slabs",
-                  badgeVariant: "success",
+                  badgeVariant: "tamarind",
                   content: (
                     <p>
                       Additional quantum of pension is automatically granted upon reaching age milestones:

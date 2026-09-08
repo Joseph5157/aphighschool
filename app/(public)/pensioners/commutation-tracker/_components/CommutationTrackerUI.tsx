@@ -148,7 +148,7 @@ export default function CommutationTrackerUI() {
             <Card className="p-5 space-y-4 bg-ink text-paper border border-turmeric/30">
               <CardHeader className="p-0">
                 <div className="flex items-center justify-between">
-                  <Badge variant={tracker.isRestored ? "success" : "turmeric"} size="sm">
+                  <Badge variant={tracker.isRestored ? "tamarind" : "turmeric"} size="sm">
                     {tracker.isRestored ? "Restoration Completed" : "Recovery Active"}
                   </Badge>
                   <span className="font-mono text-xs text-turmeric font-bold">

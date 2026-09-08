@@ -2,7 +2,7 @@
 
 ## Active gate
 
-`UI-SYSTEM-1`
+`UI-SYSTEM-2`
 
 ## Status
 
@@ -10,67 +10,57 @@ CLOSED
 
 ## Purpose
 
-Implement the approved design-system foundations from `docs/ui/DESIGN_SYSTEM.md`: the
-regression guard for non-compiling utilities, removal of the invalid utilities themselves,
-retirement of `accent`, a working focus-visible system, normalised trust-bearing state
-colours, and the foundation token rules.
+Standardise the reusable UI primitives the application actually uses, on the foundations
+`UI-SYSTEM-1` established, and close the primitive-level defects carried forward from it.
 
 ## Change boundary
 
-This gate is FOUNDATIONS ONLY. In scope:
+In scope: shared primitives in `app/(public)/_components`, and the call sites that had to
+change to adopt them. Out of scope and untouched: page redesign, information architecture,
+responsive-layout repair (`UI-RESPONSIVE-1`), and the sidebar drawer's own behaviour
+(`UI-MOBILE-NAV-1`).
 
-- `tailwind.config.js`, `app/globals.css`, `lib/breakpoints.ts`
-- shared primitives in `app/(public)/_components`
-- mechanical removal of non-compiling utilities wherever they appeared
-- new guard tests
-
-Out of scope and deliberately untouched: page redesign, information architecture, component
-API changes, full component migration (`UI-SYSTEM-2`), responsive repair
-(`UI-RESPONSIVE-1`), and navigation behaviour — Escape, focus trap, scroll lock, closed-state
-inertness — which remain `UI-MOBILE-NAV-1`.
+New primitives were created only where a real consumer already existed. Five were
+deliberately not built; `docs/ui/DESIGN_SYSTEM.md` §15 records each with the condition that
+would justify it.
 
 ## Required closure evidence
 
 - Starting worktree clean on `ui-system-production-readiness` at
-  `177d631c2e118ba1d1265b0a8f12e36aff63c00e`, local and live remote in agreement.
-- The dead-class guard was written and run **before** any fix, and failed naming all seven
-  non-compiling utility families and all three `accent` sites with file and line.
-- Every guard added in this gate was mutation-tested: the defect it covers was deliberately
-  reintroduced and the guard failed with an on-topic message, then the code was restored.
-- Full Vitest suite passes: 44 files, 288 tests, including the DB-backed trust suites
-  (`goir-provenance`, `freshness-trust`, `freshness-rendered`, `seed-integrity`) and
+  `4e1881a41367db2c31b6ce4fb2fbc9117e41c2ee`, local and live remote in agreement.
+- Every carried-forward item from `UI-SYSTEM-1` is closed or explicitly re-carried with a
+  named owning gate.
+- New behaviour is mutation-tested: removing Escape handling, removing the focus trap, and
+  reverting `Field`'s cloning each fail their guard with an on-topic message.
+- Full Vitest suite passes: 46 files, 318 tests, including the DB-backed trust suites and
   `dark-mode`.
-- `npx tsc --noEmit` passes and `git diff --check` is clean.
-- Tailwind class validation passes: every utility used in `app/**` compiles, every
-  project-defined class exists, and no `accent` utility remains in source or output.
+- `npx tsc --noEmit` passes, Tailwind utility validation passes, `git diff --check` clean.
 - Committed, pushed, and local branch HEAD matches the live remote branch SHA.
 
 ## Closure notes
 
-The guard found a hole in itself. After the main fixes went in, a mutation that reinserted
-`shadow-2xs` into `Card.tsx` **passed** — the scanner read source line by line, and a class
-string written as a multi-line template literal has only one backtick on its opening line, so
-it was never scanned at all. Card, Sidebar and every other component that builds a conditional
-`className` that way were invisible to the guard. Scanning whole files and deriving line
-numbers from offsets closed it; the shared scanner now lives in `test/class-source.ts` and
-both style guards use it.
+**The integration test earned its place.** A unit test proving `Field` associates its parts
+passed while five inputs in `TaxCalculatorUI` were still unlabelled — they bypass `Field`
+entirely. Rendering the real screen and asserting that *every* input has an accessible name
+found them: four in the quarterly TDS grid, whose only labels were a sibling header row of
+`<div>`s, and one label/control pair with nothing linking them. Testing the mechanism is not
+the same as testing the screen.
 
-Two spec corrections were made from implementation, and both are recorded in place in
-`DESIGN_SYSTEM.md`:
+**A superseded guard was removed, not left to rot.** `test/a11y.test.ts`'s file-level
+focus-outline check failed on `Textarea.tsx` — for a *comment explaining the defect*. It was
+already strictly weaker than `test/focus-visible.test.ts` (per-file rather than per-element,
+and blind to the bare `outline-none` that caused the original P0). Keeping a guard that
+cries wolf teaches people to ignore guards, so it was deleted with the reasoning recorded in
+place.
 
-- **§7.1 radius.** The specified `sm 4 / md 8 / lg 12 / xl 16` scale would have redefined
-  Tailwind's own token names under 163 existing usages — every `rounded-lg` shifting 8px →
-  12px and `rounded-2xl` disappearing. That is a breaking rename, not a token definition.
-  Tailwind's default scale is kept and the rule is now expressed in its names.
-- **§6 focus.** Moving the rule out of `@layer base` and onto element selectors is necessary
-  but not sufficient: `focus:outline-none` compiles to `(0,2,0)` and still outranks it. The
-  three sites using that form were audited individually; the one with only a border-colour
-  fallback was fixed.
+**`Sheet.tsx` left a real gap.** Its deletion in `UI-SYSTEM-1` was correct — zero imports,
+`<div onClick>` trigger, no dialog semantics — but the product still had one hand-rolled
+modal in the admin form with the same failings. `Dialog` was written to §8.5 rather than
+restored from the component that had already failed those rules.
 
-`Sheet.tsx` was deleted rather than repaired. It had zero imports, zero test references, three
-dead animation classes, a `<div onClick>` trigger and no dialog semantics; `UI-AUDIT-1`
-classified it DELETE.
+**21st.dev was not available** in this environment, so the external-component rule was never
+exercised. No external component was imported, and no second visual language was introduced.
 
 ## Next gate after closure
 
-`UI-SYSTEM-2`
+`UI-RESPONSIVE-1`

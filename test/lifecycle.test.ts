@@ -219,9 +219,9 @@ describe("the Open/Closed filter agrees with the pill beside it", () => {
     },
     variants: {
       notification: "turmeric",
-      apply_link: "success",
+      apply_link: "tamarind",
       hall_ticket: "turmeric",
-      results: "success",
+      results: "tamarind",
       expired: "neutral",
     },
     fallbackVariant: "neutral",

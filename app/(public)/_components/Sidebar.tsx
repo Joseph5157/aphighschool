@@ -4,6 +4,7 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { NAV_BREAKPOINT } from "@/lib/breakpoints";
+import IconButton from "./IconButton";
 
 // ---------------------------------------------------------------------------
 // Sidebar Context & Provider
@@ -411,20 +412,28 @@ SidebarMenuSubButton.displayName = "SidebarMenuSubButton";
 
 export const SidebarTrigger = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement>>(
   ({ className = "", ...props }, ref) => {
-    const { toggleSidebar, open } = useSidebar();
+    const { toggleSidebar, open, openMobile, isMobile } = useSidebar();
+    const expanded = isMobile ? openMobile : open;
+
+    // Was a bare <button> with a `title` and no aria-label, so it announced as
+    // "button" with no state. aria-expanded is what tells a screen-reader user
+    // whether the menu they are about to toggle is already open.
     return (
-      <button
+      <IconButton
         ref={ref}
-        type="button"
+        variant="outline"
         onClick={toggleSidebar}
-        title={`Toggle Sidebar (${open ? "Collapse" : "Expand"})`}
-        className={`p-2 rounded-lg border border-hair bg-paperRaised text-ink hover:bg-hair/30 transition-all ${className}`}
+        label={expanded ? "Close navigation menu" : "Open navigation menu"}
+        showTitle
+        aria-expanded={expanded}
+        className={className}
+        icon={
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        }
         {...props}
-      >
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-      </button>
+      />
     );
   }
 );

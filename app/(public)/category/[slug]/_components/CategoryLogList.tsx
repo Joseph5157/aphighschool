@@ -24,9 +24,9 @@ const RECRUITMENT: RecruitmentPill = {
   },
   variants: {
     notification: "turmeric",
-    apply_link: "success",
+    apply_link: "tamarind",
     hall_ticket: "turmeric",
-    results: "success",
+    results: "tamarind",
     expired: "neutral",
   },
   fallbackVariant: "neutral",
@@ -209,7 +209,7 @@ export default function CategoryLogList({ posts }: CategoryLogListProps) {
                         {pill.label}
                       </Badge>
                       {post.verifiedAgainstGoir && (
-                        <Badge variant="success" size="sm" shape="pill" dot>
+                        <Badge variant="tamarind" size="sm" shape="pill" dot>
                           GOIR Verified
                         </Badge>
                       )}

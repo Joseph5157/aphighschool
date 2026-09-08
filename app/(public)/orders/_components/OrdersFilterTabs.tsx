@@ -113,7 +113,7 @@ export default function OrdersFilterTabs({ categories }: { categories: CategoryD
                                 {post.titleEn}
                               </span>
                               {post.verifiedAgainstGoir && (
-                                <Badge variant="success" size="sm" shape="pill" dot>
+                                <Badge variant="tamarind" size="sm" shape="pill" dot>
                                   GOIR Verified
                                 </Badge>
                               )}

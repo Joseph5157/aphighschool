@@ -79,20 +79,48 @@ export const Field = React.forwardRef<HTMLDivElement, FieldProps>(
     },
     ref
   ) => {
+    const generatedId = React.useId();
+    const controlId = htmlFor ?? generatedId;
+    const messageId = errorMessage
+      ? `${controlId}-error`
+      : helperText
+        ? `${controlId}-description`
+        : undefined;
+
+    // The message was rendered but never linked, so assistive technology was
+    // told neither that a field was invalid nor why. Cloning is what lets the
+    // wiring live in one place instead of asking all 35 call sites to repeat
+    // `id`, `aria-describedby` and `aria-invalid` by hand — and to keep getting
+    // it right. A child that sets any of these itself keeps its own value.
+    const control = React.isValidElement(children)
+      ? React.cloneElement(children as React.ReactElement<Record<string, unknown>>, {
+          id: (children.props as { id?: string }).id ?? controlId,
+          "aria-describedby":
+            (children.props as { "aria-describedby"?: string })["aria-describedby"] ??
+            messageId,
+          "aria-invalid":
+            (children.props as { "aria-invalid"?: boolean })["aria-invalid"] ??
+            (errorMessage ? true : undefined),
+          "aria-required":
+            (children.props as { "aria-required"?: boolean })["aria-required"] ??
+            (required || undefined),
+        })
+      : children;
+
     return (
       <FieldGroup ref={ref} className={className} {...props}>
         {label && (
-          <FieldLabel htmlFor={htmlFor} required={required} labelTe={labelTe}>
+          <FieldLabel htmlFor={controlId} required={required} labelTe={labelTe}>
             {label}
           </FieldLabel>
         )}
 
-        {children}
+        {control}
 
         {errorMessage ? (
-          <FieldError>{errorMessage}</FieldError>
+          <FieldError id={messageId}>{errorMessage}</FieldError>
         ) : helperText ? (
-          <FieldDescription>{helperText}</FieldDescription>
+          <FieldDescription id={messageId}>{helperText}</FieldDescription>
         ) : null}
       </FieldGroup>
     );

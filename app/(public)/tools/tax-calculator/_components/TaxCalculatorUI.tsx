@@ -515,7 +515,7 @@ export default function TaxCalculatorUI() {
                     <label className="block text-xs text-inkSoft font-semibold mb-0.5 tracking-wide">
                       Monthly Basic Pay (₹)
                     </label>
-                    <input
+                    <input aria-label="Monthly Basic Pay (₹)"
                       type="number"
                       value={basic}
                       onChange={(e) => setBasic(e.target.value)}
@@ -526,7 +526,7 @@ export default function TaxCalculatorUI() {
                     <label className="block text-xs text-inkSoft font-semibold mb-0.5 tracking-wide">
                       DA Rate %
                     </label>
-                    <select
+                    <select aria-label="DA Rate %"
                       value={daSelect}
                       onChange={(e) => setDaSelect(parseFloat(e.target.value))}
                       className="w-full bg-paperRaised border border-hair rounded px-2 py-1.5 text-sm text-ink"
@@ -542,7 +542,7 @@ export default function TaxCalculatorUI() {
                     <label className="block text-xs text-inkSoft font-semibold mb-0.5 tracking-wide">
                       HRA Rate %
                     </label>
-                    <select
+                    <select aria-label="HRA Rate %"
                       value={hraSelect}
                       onChange={(e) => setHraSelect(parseFloat(e.target.value))}
                       className="w-full bg-paperRaised border border-hair rounded px-2 py-1.5 text-sm text-ink"
@@ -575,7 +575,7 @@ export default function TaxCalculatorUI() {
                     <label className="block text-xs text-inkSoft font-semibold mb-0.5 tracking-wide">
                       House Status
                     </label>
-                    <select
+                    <select aria-label="House Status"
                       value={houseStatus}
                       onChange={(e) => setHouseStatus(e.target.value as "Rented" | "Own")}
                       className="w-full bg-paperRaised border border-hair rounded px-2 py-1.5 text-sm text-ink"
@@ -659,24 +659,28 @@ export default function TaxCalculatorUI() {
                       type="number"
                       value={paid}
                       onChange={(e) => setPaid(e.target.value)}
+                      aria-label={`Amount paid for ${q}`}
                       className="bg-paperRaised border border-hair rounded px-2 py-1.5 text-sm tabular-nums"
                     />
                     <input
                       type="number"
                       value={ded}
                       onChange={(e) => setDed(e.target.value)}
+                      aria-label={`Tax deducted for ${q}`}
                       className="bg-paperRaised border border-hair rounded px-2 py-1.5 text-sm tabular-nums"
                     />
                     <input
                       type="number"
                       value={dep}
                       onChange={(e) => setDep(e.target.value)}
+                      aria-label={`Tax deposited for ${q}`}
                       className="bg-paperRaised border border-hair rounded px-2 py-1.5 text-sm tabular-nums"
                     />
                     <input
                       type="text"
                       value={rec}
                       onChange={(e) => setRec(e.target.value)}
+                      aria-label={`Receipt number 24Q for ${q}`}
                       className="bg-paperRaised border border-hair rounded px-2 py-1.5 text-sm"
                     />
                   </div>
@@ -708,7 +712,7 @@ export default function TaxCalculatorUI() {
                     <label className="block text-xs text-inkSoft font-semibold mb-0.5 tracking-wide">
                       Lender Type
                     </label>
-                    <select
+                    <select aria-label="Lender Type"
                       value={lenderType}
                       onChange={(e) => setLenderType(e.target.value)}
                       className="w-full bg-paperRaised border border-hair rounded px-2 py-1.5 text-sm text-ink"

@@ -12,13 +12,13 @@
 
 ## Current UI program state
 
-- Current phase: Phase 3
-- Active gate: `UI-SYSTEM-1` (CLOSED)
-- Scope in this gate: design-system foundations only
+- Current phase: Phase 4
+- Active gate: `UI-SYSTEM-2` (CLOSED)
+- Scope in this gate: reusable UI primitives only
 - UI redesign performed: no
 - Application behaviour changed: yes — foundation tokens, focus system, active-navigation
   treatment, state colours. Information architecture, routes and page composition unchanged.
-- Next planned gate: `UI-SYSTEM-2`
+- Next planned gate: `UI-RESPONSIVE-1`
 
 ### Gate history
 
@@ -28,6 +28,7 @@
 | `UI-AUDIT-1` | CLOSED | `docs/ui/UI_AUDIT.md` created; 36 findings, all components classified. |
 | `UI-DESIGN-1` | CLOSED | `PRODUCT.md`, `DESIGN.md`, `docs/ui/DESIGN_SYSTEM.md` created; P0s specified for `UI-SYSTEM-1`. |
 | `UI-SYSTEM-1` | CLOSED | Foundations implemented; audit P0s F2/F3/F4 fixed and guarded. 288 tests pass. |
+| `UI-SYSTEM-2` | CLOSED | Primitives standardised; carried-forward defects closed; Dialog/IconButton/Textarea/Checkbox added. 318 tests pass. |
 
 ## Repository observations
 
@@ -311,6 +312,55 @@ All were mutation-tested. One had to be rewritten: reinserting `shadow-2xs` into
 as a multi-line template literal has only one backtick on its opening line. Whole-file scanning
 closed it.
 
+## `UI-SYSTEM-2` outcome summary
+
+### Carried-forward items closed
+
+- **Touch targets.** `Button` (`md` 44px / `lg` 48px; `sm` keeps its 36px painted box and
+  reaches 44px through a transparent `::after` overlay, so density is unchanged), pagination
+  links, and the form controls.
+- **`Field` association.** `Field` generates an id and clones its child to thread `id`,
+  `aria-describedby`, `aria-invalid` and `aria-required` — fixing `TaxCalculatorUI`'s `NumF`
+  wrapper at all 33 sites without editing any of them.
+- **Sub-12px type in shared primitives.** None remains.
+- **Duplicate primitives.** `Accordion` now reuses `Badge`'s own variant union instead of a
+  hand-copied one that had drifted into duplicate members.
+- **The gap `Sheet` left.** `Dialog` replaces the admin form's hand-rolled modal.
+
+### Primitives added — each with an existing consumer
+
+| Primitive | Consumer it was built for |
+|---|---|
+| `Dialog` | The admin JSON-paste modal: no role, name, Escape, focus trap, focus return or scroll lock |
+| `IconButton` | Five icon-only controls that each solved name, target and focus differently or not at all |
+| `Textarea` | Three raw `<textarea>` elements inheriting none of the form-control rules |
+| `Checkbox` | Two raw checkboxes, one of them the `verifiedAgainstGoir` trust flag |
+
+Five more were deliberately **not** built (`Skeleton`, `Toast`, `Dropdown`, `Tooltip`,
+`Radio`); `DESIGN_SYSTEM.md` §15 records the condition that would justify each.
+
+### Trust semantics
+
+`verifiedAgainstGoir` is now set through a labelled `Checkbox` with its warning text linked
+by `aria-describedby`, rather than an unstyled raw input. Conditional GOIR presentation,
+`dateLabel()` freshness and the lifecycle mapping are unchanged; `goir-provenance`,
+`freshness-trust`, `freshness-rendered` and `dark-mode` all pass.
+
+### Badge variants
+
+`success` and `warning` were removed after their 14 call sites moved to `tamarind` and
+`turmeric`; `dark` became `ink`. Variants now name the token, not a judgement — "GOIR
+Verified" is provenance, not a quality rating. TypeScript found every stale call site.
+
+### Guards added
+
+`test/primitives.test.tsx` (22) and `test/dialog.test.tsx` (9). Mutation-tested: removing
+Escape, removing the focus trap, and reverting `Field`'s cloning each fail on-topic.
+
+`test/a11y.test.ts`'s file-level focus-outline check was **removed**, not merely superseded:
+it was already weaker than `test/focus-visible.test.ts` and its last act was to fail on
+`Textarea.tsx` for a comment explaining the defect.
+
 ## Known limitations
 
 - Browser acceptance tooling is not currently runnable in this environment.
@@ -340,9 +390,18 @@ closed it.
   12px, shared-primitive type 10/11px → 12px, form controls 12px → 16px on mobile with a 44px
   minimum height, the active-navigation rule replacing coloured fills, and the removal of
   shadows that never rendered. `UI-ACCEPTANCE-1` owns confirming these.
-- Carried forward from this gate (see `DESIGN_SYSTEM.md` §15): ~100 sub-12px sizes in
-  route-local components, `Button`/pagination touch targets, `Field` `aria-describedby`
-  wiring and `TaxCalculatorUI`'s `NumF` ids, and all overlay behaviour.
+- **No visual verification was possible for `UI-SYSTEM-2` either.** Changes with a visible
+  effect and no browser check: `Button` `md`/`lg` and pagination controls are taller, the
+  theme toggle is now an inline SVG rather than emoji, the search clear control is a 44px
+  button, and the admin modal is rebuilt on `Dialog`. `UI-ACCEPTANCE-1` owns confirming these.
+- Still carried forward (see `DESIGN_SYSTEM.md` §15): ~100 sub-12px sizes in route-local
+  components, emoji used as iconography outside `ThemeToggle`, and the recurring
+  tinted-callout pattern awaiting the semantic decision `UI-PATTERNS-1` owns.
+- The sidebar drawer's own behaviour — Escape, focus trap, scroll lock, closed-state
+  inertness — is unchanged and remains `UI-MOBILE-NAV-1`. `Dialog` now demonstrates the
+  contract that gate has to meet.
+- **21st.dev was not available**, so the external-component rule was never exercised. No
+  external component was imported and no second visual language was introduced.
 
 ## Validation evidence
 
@@ -352,6 +411,7 @@ closed it.
 | `UI-AUDIT-1` | pass (`npx tsc --noEmit`, exit 0) | clean | not required (docs only) | unavailable |
 | `UI-DESIGN-1` | pass (`npx tsc --noEmit`, exit 0) | clean | not required (docs only) | unavailable |
 | `UI-SYSTEM-1` | pass (`npx tsc --noEmit`, exit 0) | clean | **44 files, 288 tests pass** (incl. DB-backed trust + dark-mode suites) | unavailable |
+| `UI-SYSTEM-2` | pass (`npx tsc --noEmit`, exit 0) | clean | **46 files, 318 tests pass**; Tailwind utility validation passes | unavailable |
 
 ## Gate transition rule
 
@@ -359,13 +419,20 @@ Update `UI_ACTIVE_GATE.md` only when work on the next gate actually begins. Each
 gate's evidence remains recoverable from this document, from `docs/ui/UI_AUDIT.md`, and from
 Git history.
 
-`UI-SYSTEM-2` is next per the master plan: standardising reusable UI primitives on the
-foundations now in place. `DESIGN_SYSTEM.md` §15 lists what `UI-SYSTEM-1` carried forward into
-it — touch targets on `Button` and pagination, the remaining sub-12px type in route-local
-components, and `Field`'s error association.
+`UI-RESPONSIVE-1` is next per the master plan: removing accidental horizontal scrolling and
+repairing responsive structure at 320–1440px. Its largest single item is audit finding **F1**,
+the two `fixed bottom-0 z-50` bars that stack on post detail pages below `lg` — untouched so
+far, because it is a layout defect rather than a primitive one.
 
-The guards added in this gate are the constraint that keeps later gates honest, and they are
-only worth what their failure modes are worth. Every one was run against a deliberate
-reintroduction of the bug it covers; the one that passed that check on the first attempt was
-rewritten until it failed correctly. Continue that practice — this project's history is
-defects that survived a green suite, not defects that broke one.
+Two practices are worth carrying into it.
+
+**Mutate every new guard.** This project's history is defects that survived a green suite, not
+defects that broke one. Every guard added in the last two gates was run against a deliberate
+reintroduction of the bug it covers, and in both gates one guard failed that check and had to
+be rewritten.
+
+**Test the screen, not only the mechanism.** In this gate a unit test proving `Field`
+associates its parts passed while five inputs in `TaxCalculatorUI` were still unlabelled —
+they bypass `Field` entirely. Only rendering the real component and asserting that *every*
+input has an accessible name found them. `UI-RESPONSIVE-1` has the same shape of risk: a
+primitive that behaves correctly in isolation says nothing about the page it sits on.

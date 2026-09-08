@@ -16,9 +16,9 @@ const RECRUITMENT: RecruitmentPill = {
   },
   variants: {
     notification: "turmeric",
-    apply_link: "success",
+    apply_link: "tamarind",
     hall_ticket: "turmeric",
-    results: "success",
+    results: "tamarind",
     expired: "neutral",
   },
   fallbackVariant: "turmeric",
@@ -90,7 +90,7 @@ export default function HeroCard({ post }: HeroPostProps) {
           )}
 
           {post.verifiedAgainstGoir && (
-            <Badge variant="success" size="sm" shape="pill" dot>
+            <Badge variant="tamarind" size="sm" shape="pill" dot>
               GOIR Verified
             </Badge>
           )}

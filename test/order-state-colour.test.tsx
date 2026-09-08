@@ -71,9 +71,7 @@ describe("badge palette", () => {
     "turmeric",
     "kumkum",
     "neutral",
-    "success",
-    "warning",
-    "dark",
+    "ink",
   ] as const;
 
   it("uses project tokens, never Tailwind's default palette", () => {

@@ -51,7 +51,7 @@ export default function AdminNav() {
       </div>
 
       <div className="border-t border-hair pt-4 space-y-3">
-        <Badge variant="success" size="sm" shape="pill" dot>
+        <Badge variant="tamarind" size="sm" shape="pill" dot>
           Admin Authenticated
         </Badge>
         <Button

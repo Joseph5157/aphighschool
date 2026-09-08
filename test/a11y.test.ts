@@ -29,16 +29,17 @@ describe("accessibility guards", () => {
     expect(offenders).toEqual([]);
   });
 
-  it("never strips a focus outline without a focus-visible replacement", () => {
-    const offenders: string[] = [];
-    for (const file of FILES) {
-      const source = read(file);
-      if (/focus:outline-none/.test(source) && !/focus-visible:ring|focus-visible:outline/.test(source)) {
-        offenders.push(file);
-      }
-    }
-    expect(offenders).toEqual([]);
-  });
+  // The focus-outline check that used to live here was removed in UI-SYSTEM-2.
+  // test/focus-visible.test.ts replaces it and is strictly stronger:
+  //
+  //  - it matches per ELEMENT, not per file, so a file that strips the outline
+  //    on one control and restores it on a different one no longer passes;
+  //  - it catches the bare `outline-none` that Input and NativeSelect actually
+  //    used, which this pattern's `focus:` prefix never matched — the reason
+  //    the P0 focus defect survived it;
+  //  - it strips comments first. This check's last act was to fail on
+  //    Textarea.tsx for a comment *explaining* the defect, which is the kind of
+  //    false positive that teaches people to ignore a guard.
 
   it("has no button nested inside a link", () => {
     const offenders: string[] = [];

@@ -18,7 +18,7 @@ const RECRUITMENT: RecruitmentPill = {
     notification: "tamarind",
     apply_link: "turmeric",
     hall_ticket: "turmeric",
-    results: "success",
+    results: "tamarind",
     expired: "neutral",
   },
   fallbackVariant: "tamarind",
@@ -89,7 +89,7 @@ export default function PostCard({ post }: PostCardProps) {
           )}
 
           {post.verifiedAgainstGoir && (
-            <Badge variant="success" size="sm" shape="pill" dot>
+            <Badge variant="tamarind" size="sm" shape="pill" dot>
               GOIR Verified
             </Badge>
           )}

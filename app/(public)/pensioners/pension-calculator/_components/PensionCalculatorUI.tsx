@@ -47,7 +47,7 @@ export default function PensionCalculatorUI() {
     <div className="space-y-6 font-sans">
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div className="flex items-center gap-2">
-          <Badge variant="success" size="sm" shape="pill" dot>
+          <Badge variant="tamarind" size="sm" shape="pill" dot>
             AP Treasury Pension Standard
           </Badge>
           <span className="font-mono text-xs text-inkSoft">Service Pension & Gratuity Calculator</span>

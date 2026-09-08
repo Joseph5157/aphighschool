@@ -33,26 +33,41 @@ export default function ThemeToggle() {
     }
   };
 
+  // Before mount the stored preference is unknown, so nothing is rendered
+  // rather than an invisible placeholder. The old one was `opacity-0` but still
+  // focusable and unlabelled, so keyboard users hit a button they could not see
+  // and screen readers announced an anonymous control.
   if (!mounted) {
-    return (
-      <button type="button" className="w-8 h-8 rounded-lg bg-hair/40 border border-hair text-xs flex items-center justify-center opacity-0">
-        🌙
-      </button>
-    );
+    return <div className="h-[44px] w-[44px]" aria-hidden="true" />;
   }
+
+  const isDark = theme === "dark";
 
   return (
     <button
       type="button"
       onClick={toggleTheme}
-      className="px-2.5 py-1.5 rounded-lg border border-hair/80 bg-paperRaised/80 hover:bg-paper text-ink text-xs font-mono font-semibold flex items-center gap-1.5 transition-all"
-      aria-label="Toggle visual theme mode"
-      title={theme === "light" ? "Switch to Night Mode (Digital Secretariat)" : "Switch to Day Mode (Imperial Gazette)"}
+      // aria-pressed conveys that this is a toggle with a state, which
+      // aria-label alone does not. The label names the action; the state says
+      // where it currently is.
+      aria-pressed={isDark}
+      aria-label="Dark theme"
+      title={isDark ? "Switch to day mode" : "Switch to night mode"}
+      className="inline-flex min-h-[44px] items-center gap-1.5 rounded-lg border border-hair/80 bg-paperRaised/80 px-3 font-mono text-xs font-semibold text-ink transition-colors duration-150 hover:bg-paper"
     >
-      <span>{theme === "light" ? "🌙" : "☀️"}</span>
-      <span className="hidden sm:inline">
-        {theme === "light" ? "Night Mode" : "Day Mode"}
+      <span aria-hidden="true">
+        {isDark ? (
+          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="4" strokeWidth={2} />
+            <path strokeLinecap="round" strokeWidth={2} d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4l1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
+          </svg>
+        ) : (
+          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
+          </svg>
+        )}
       </span>
+      <span className="hidden sm:inline">{isDark ? "Day mode" : "Night mode"}</span>
     </button>
   );
 }

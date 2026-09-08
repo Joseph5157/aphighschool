@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 import Input from "@/app/(public)/_components/Input";
 import Badge from "@/app/(public)/_components/Badge";
+import IconButton from "@/app/(public)/_components/IconButton";
 import { Card } from "@/app/(public)/_components/Card";
 import { dateLabel, formatDate, officialDate } from "@/lib/dates";
 import type { RecentDocument, SearchResult } from "@/lib/posts/query";
@@ -140,18 +141,22 @@ export default function SearchUI({
           value={value}
           onChange={(e) => setValue(e.target.value)}
           placeholder="Search GO number, Telugu phrase, or topic..."
-          className="py-3 pr-10"
+          className="py-3 pr-12"
           autoFocus
         />
         {value && (
-          <button
-            type="button"
+          // Was a bare ✕ glyph roughly 16px square. IconButton gives it the
+          // 44px target the rest of the controls now meet.
+          <IconButton
+            label="Clear search"
             onClick={() => setValue("")}
-            className="absolute right-3.5 top-3.5 text-xs font-mono text-inkSoft hover:text-ink"
-            aria-label="Clear search"
-          >
-            ✕
-          </button>
+            className="absolute right-1 top-1/2 -translate-y-1/2"
+            icon={
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            }
+          />
         )}
       </form>
 
@@ -162,7 +167,7 @@ export default function SearchUI({
           aria-current={activeType === null ? "true" : undefined}
         >
           <Badge
-            variant={activeType === null ? "dark" : "neutral"}
+            variant={activeType === null ? "ink" : "neutral"}
             size="sm"
             shape="pill"
             className="cursor-pointer hover:border-ink/40"
@@ -177,7 +182,7 @@ export default function SearchUI({
             aria-current={activeType === filter.value ? "true" : undefined}
           >
             <Badge
-              variant={activeType === filter.value ? "dark" : "neutral"}
+              variant={activeType === filter.value ? "ink" : "neutral"}
               size="sm"
               shape="pill"
               className="cursor-pointer hover:border-ink/40"
@@ -235,7 +240,7 @@ export default function SearchUI({
                         </Badge>
                       )}
                       {post.verifiedAgainstGoir && (
-                        <Badge variant="success" size="sm" shape="pill" dot>
+                        <Badge variant="tamarind" size="sm" shape="pill" dot>
                           GOIR Verified
                         </Badge>
                       )}

@@ -45,7 +45,7 @@ export default function UpcomingActionDates({ posts }: UpcomingActionDatesProps)
                     Action date · {formatDate(post.actionDeadline)}
                   </time>
                   {post.verifiedAgainstGoir && (
-                    <Badge variant="success" size="sm" shape="pill" dot>
+                    <Badge variant="tamarind" size="sm" shape="pill" dot>
                       GOIR Verified
                     </Badge>
                   )}
