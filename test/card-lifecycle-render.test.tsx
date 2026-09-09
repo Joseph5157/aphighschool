@@ -10,7 +10,6 @@ import { describe, it, expect } from "vitest";
 import { render } from "@testing-library/react";
 import type { DocType, OrderState } from "@prisma/client";
 import PostCard from "@/app/(public)/_components/PostCard";
-import HeroCard from "@/app/(public)/_components/HeroCard";
 import CategoryLogList from "@/app/(public)/category/[slug]/_components/CategoryLogList";
 
 type CardPost = {
@@ -58,7 +57,11 @@ function makePost(overrides: Partial<CardPost> = {}): CardPost {
   };
 }
 
-// Three surfaces, three renderers, one table of expectations. CategoryLogList
+// SLOP-DENSITY-1 removed the third surface, HeroCard, with the homepage's
+// automatic featured card (AI_SLOP_AUDIT.md A01) — the two that remain are the
+// two the product still renders.
+//
+// Two surfaces, two renderers, one table of expectations. CategoryLogList
 // uses Title Case ("Hall Ticket") where the other two use sentence case
 // ("Hall ticket"), so the recruitment label is per-surface.
 const SURFACES = [
@@ -66,11 +69,6 @@ const SURFACES = [
     name: "PostCard",
     hallTicketLabel: "Hall ticket",
     html: (post: CardPost) => render(<PostCard post={post} />).container.innerHTML,
-  },
-  {
-    name: "HeroCard",
-    hallTicketLabel: "Hall ticket",
-    html: (post: CardPost) => render(<HeroCard post={post} />).container.innerHTML,
   },
   {
     name: "CategoryLogList",

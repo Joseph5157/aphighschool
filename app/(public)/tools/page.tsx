@@ -2,7 +2,6 @@ import React from "react";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { Card } from "../_components/Card";
-import Badge from "../_components/Badge";
 import { buttonClassName } from "../_components/Button";
 import Breadcrumb from "../_components/Breadcrumb";
 import Accordion from "../_components/Accordion";
@@ -14,6 +13,20 @@ export const metadata: Metadata = {
   alternates: { canonical: "/tools" },
 };
 
+/**
+ * SLOP-DENSITY-1 (AI_SLOP_AUDIT.md A14). Each entry used to carry a badge, a
+ * separate status line, and two or three numbered "Fill Details →
+ * Auto-Calculate → Export PDF" chips. The chips mimicked an onboarding stepper
+ * that does not exist and repeated the same sequence on five of six cards,
+ * and every badge and status repeated a word already in the title or the
+ * description ("FY 2025-26" under "Income Tax Calculator (FY 2025-26)";
+ * "Surrender Calculator" above a description about surrender).
+ *
+ * `exportsStatement` is the one qualifier that survived, because it is the one
+ * that differs between tools and cannot be read off the title. It stays
+ * verified against the implementation, exactly as the step chips were: a claim
+ * that a tool exports anything must be true of that tool's own component.
+ */
 const TOOLS = [
   {
     href: "/tools/tax-calculator",
@@ -21,10 +34,8 @@ const TOOLS = [
     titleTe: "ఆదాయ పన్ను అంచనా సాధనం (ఆయవ్యయ సంవత్సరం 2025-26)",
     desc: "Compare New Tax Regime vs Old Tax Regime with HRA, 80C, 80D deductions and instant Annexure-I tax statement export.",
     icon: "🧮",
-    badge: "FY 2025-26",
-    status: "Updated Slabs",
     // Verified against TaxCalculatorUI.tsx: window.print() drives a real export.
-    steps: ["Fill Details", "Auto-Calculate", "Export PDF"],
+    exportsStatement: true,
   },
   {
     href: "/tools/leave-encashment",
@@ -32,10 +43,8 @@ const TOOLS = [
     titleTe: "ఆర్జిత సెలవుల (EL) ఎన్‌క్యాష్‌మెంట్ బిల్లు లెక్కింపు",
     desc: "Calculate cash equivalent of Earned Leave surrender (15/30 days) and Half Pay Leave retirement encashment.",
     icon: "🏖️",
-    badge: "EL / HPL",
-    status: "Surrender Calculator",
     // LeaveEncashmentUI.tsx has no print/export path.
-    steps: ["Fill Details", "Auto-Calculate"],
+    exportsStatement: false,
   },
   {
     href: "/tools/gpf-apgli",
@@ -43,10 +52,8 @@ const TOOLS = [
     titleTe: "జిపిఎఫ్ మరియు ఎపిజిఎల్ఐ నిధుల అంచనా సాధనం",
     desc: "Project General Provident Fund 7.1% interest growth and APGLI maturity sum assured with loan eligibility bounds.",
     icon: "💰",
-    badge: "7.1% Interest",
-    status: "Part-Final Loan",
     // GpfApgliUI.tsx has no print/export path.
-    steps: ["Fill Details", "Auto-Calculate"],
+    exportsStatement: false,
   },
   {
     href: "/tools/cfms-checker",
@@ -54,10 +61,8 @@ const TOOLS = [
     titleTe: "సిఎఫ్‌ఎమ్‌ఎస్ బిల్లు స్థితి మరియు పేస్లిప్ మార్గదర్శి",
     desc: "Direct verification portal for DDO bill submission status, EHS medical reimbursement, and monthly payslip downloads.",
     icon: "📑",
-    badge: "Payslip Portal",
-    status: "Direct Status",
     // CfmsCheckerUI.tsx is a links directory — no form, no calculation, no export.
-    steps: [],
+    exportsStatement: false,
   },
   {
     href: "/tools/prc-calculator",
@@ -65,10 +70,8 @@ const TOOLS = [
     titleTe: "పీఆర్‌సి పే ఫిక్సేషన్ మరియు బకాయిల లెక్కింపు సాధనం",
     desc: "Calculate revised Basic Pay under AP RPS 2022 Master Scale, fitment percentage, gross benefit, and CPS/GPF arrears allocation.",
     icon: "📊",
-    badge: "RPS 2022",
-    status: "Pay Fixation",
     // Verified against PrcCalculatorUI.tsx: isPrintMode drives a real export.
-    steps: ["Fill Details", "Auto-Calculate", "Export PDF"],
+    exportsStatement: true,
   },
   {
     href: "/tools/da-arrears",
@@ -76,10 +79,8 @@ const TOOLS = [
     titleTe: "డిఏ బకాయిల లెక్కింపు సాధనం",
     desc: "Calculate Dearness Allowance arrears owed for a given Basic Pay, old/new DA percentage, and revision period, with a month-by-month breakdown.",
     icon: "📈",
-    badge: "DA Revision",
-    status: "Month-by-Month",
     // DaArrearsUI.tsx has no print/export path.
-    steps: ["Fill Details", "Auto-Calculate"],
+    exportsStatement: false,
   },
 ];
 
@@ -89,7 +90,6 @@ export default function ToolsIndexPage() {
       <Breadcrumb items={[{ label: "Utility Tools" }]} />
 
       <div className="space-y-6">
-        <div className="space-y-6">
           {/*
             SLOP-REMOVE-1 (AI_SLOP_AUDIT.md A12): the client-side privacy fact is
             stated once, plainly, above the calculators. It previously appeared
@@ -117,56 +117,36 @@ export default function ToolsIndexPage() {
           </div>
 
           {/* Option C Card Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
             {TOOLS.map((tool) => (
               <Card key={tool.href} hoverable className="p-5 space-y-3 bg-paperRaised border-hair flex flex-col justify-between">
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between flex-wrap gap-2 text-xs font-mono">
-                    <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-lg bg-ink text-turmeric flex items-center justify-center text-lg shrink-0">
-                        {tool.icon}
-                      </div>
-                      <Badge variant="neutral" size="sm" shape="pill">
-                        {tool.badge}
-                      </Badge>
-                    </div>
-                    <span className="text-inkSoft font-semibold">{tool.status}</span>
+                <div className="space-y-2">
+                  <h3 className="text-card-title text-ink">
+                    <span aria-hidden="true" className="mr-1.5">{tool.icon}</span>
+                    <span>{tool.title}</span>
+                  </h3>
+                  <div className="text-telugu-body text-inkSoft">
+                    {tool.titleTe}
                   </div>
 
-                  <div>
-                    <h3 className="text-card-title text-ink">
-                      {tool.title}
-                    </h3>
-                    <div className="text-telugu-body text-inkSoft mt-1">
-                      {tool.titleTe}
-                    </div>
-                  </div>
-
-                  <p className="text-body text-inkSoft pt-2 border-t border-hair/50">
+                  <p className="text-body text-inkSoft">
                     {tool.desc}
                   </p>
 
-                  {/* Step flow chips — steps genuinely implemented by this tool only */}
-                  {tool.steps.length > 0 && (
-                    <div className="flex items-center gap-1.5 flex-wrap pt-1">
-                      {tool.steps.map((step, i) => (
-                        <span key={i} className="inline-flex items-center gap-1 font-mono text-[9px] bg-ink/5 text-ink border border-ink/15 px-2 py-0.5 rounded">
-                          <span className="font-bold">{i + 1}</span>
-                          <span className="text-inkSoft/80">·</span>
-                          {step}
-                        </span>
-                      ))}
-                    </div>
+                  {tool.exportsStatement && (
+                    <p className="text-meta font-mono text-inkSoft/90">
+                      Exports a printable statement
+                    </p>
                   )}
                 </div>
 
-                <div className="pt-2 flex justify-end">
+                <div className="pt-3 flex justify-end">
                   <Link
                     href={tool.href}
                     className={buttonClassName({ variant: "tamarind", size: "sm" })}
                   >
                     <span>Open Calculator</span>
-                    <span>→</span>
+                    <span aria-hidden="true">→</span>
                   </Link>
                 </div>
               </Card>
@@ -233,7 +213,6 @@ export default function ToolsIndexPage() {
             ]} />
           </div>
         </div>
-      </div>
     </div>
   );
 }

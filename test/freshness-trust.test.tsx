@@ -7,7 +7,6 @@ import { dateLabel, officialDate } from "@/lib/dates";
 const read = (file: string) => fs.readFileSync(path.join(process.cwd(), file), "utf8");
 
 const ordersPage = read("app/(public)/orders/page.tsx");
-const ordersSidebar = read("app/(public)/orders/_components/OrdersSidebar.tsx");
 const categoryPage = read("app/(public)/category/[slug]/page.tsx");
 const homePage = read("app/(public)/page.tsx");
 const searchUi = read("app/(public)/search/_components/SearchUI.tsx");
@@ -26,9 +25,12 @@ describe("FRESHNESS-1 public trust language", () => {
   });
 
   it("removes unsupported static GOIR repository statistics and keeps the external resource copy narrow", () => {
-    expect(ordersSidebar).not.toMatch(/STATUS_BREAKDOWN|GOIR Repository Stats|Official Document Classification/i);
-    expect(ordersSidebar).toContain("GOIR (goir.ap.gov.in) is a government-orders resource.");
-    expect(ordersSidebar).toContain("Documents marked &ldquo;GOIR Verified&rdquo; have a recorded verification in AP Teacher Desk.");
+    // SLOP-DENSITY-1 (AI_SLOP_AUDIT.md A06) deleted OrdersSidebar and moved this
+    // copy, unchanged, into the orders page itself as quiet help text. The
+    // wording is the trust boundary, so it is asserted wherever it now lives.
+    expect(ordersPage).not.toMatch(/STATUS_BREAKDOWN|GOIR Repository Stats|Official Document Classification/i);
+    expect(ordersPage).toContain("GOIR (goir.ap.gov.in) is a government-orders resource.");
+    expect(ordersPage).toContain("Documents marked &ldquo;GOIR Verified&rdquo; have a recorded verification in AP Teacher Desk.");
   });
 
   it("does not describe a category or homepage feed as collection-wide verified", () => {
@@ -62,7 +64,7 @@ describe("FRESHNESS-1 public trust language", () => {
 
   it("does not make metadata or updatedAt into an official or freshness claim", () => {
     expect(postPage).not.toContain("Official AP School Education government order summary.");
-    for (const source of [ordersPage, ordersSidebar, categoryPage, homePage, searchUi, documentTemplate, postPage, thumbZoneBar]) {
+    for (const source of [ordersPage, categoryPage, homePage, searchUi, documentTemplate, postPage, thumbZoneBar]) {
       expect(source).not.toMatch(/Last verified|updatedAt/i);
     }
   });

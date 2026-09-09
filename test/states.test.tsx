@@ -14,21 +14,23 @@ import fs from "node:fs";
 import path from "node:path";
 import Skeleton from "@/app/(public)/_components/Skeleton";
 import EmptyState from "@/app/(public)/_components/EmptyState";
-import OrdersFilterTabs from "@/app/(public)/orders/_components/OrdersFilterTabs";
 import CategoryLogList from "@/app/(public)/category/[slug]/_components/CategoryLogList";
 
 // Mirrors test/today-attention.test.tsx's mocking shape for the same async
 // Server Component: mock prisma directly and render the real page function,
 // rather than source-scanning for `<EmptyState`, so a reverted ternary fails
 // on an actual missing/present empty state rather than on missing text.
-const prismaMocks = vi.hoisted(() => ({ findMany: vi.fn() }));
+const prismaMocks = vi.hoisted(() => ({ findMany: vi.fn(), categoryFindMany: vi.fn() }));
 vi.mock("@/lib/prisma", () => ({
-  prisma: { post: { findMany: prismaMocks.findMany } },
+  prisma: {
+    post: { findMany: prismaMocks.findMany },
+    category: { findMany: prismaMocks.categoryFindMany },
+  },
 }));
 vi.mock("@/app/(public)/_components/DesktopLeftNav", () => ({ default: () => null }));
-vi.mock("@/app/(public)/_components/DesktopSidebar", () => ({ default: () => null }));
 
 const HomePage = (await import("@/app/(public)/page")).default;
+const OrdersPage = (await import("@/app/(public)/orders/page")).default;
 
 afterEach(cleanup);
 
@@ -109,56 +111,39 @@ describe("loading.tsx coverage for DB-backed public routes", () => {
   });
 });
 
-describe("OrdersFilterTabs empty states", () => {
-  it("shows a compact empty state inside a category with no published documents", () => {
-    render(
-      <OrdersFilterTabs
-        categories={[
-          {
-            id: "cat-1",
-            nameEn: "Circulars",
-            nameTe: "సర్క్యులర్లు",
-            slug: "circulars",
-            icon: null,
-            _count: { posts: 0 },
-            posts: [],
-          },
-        ]}
-      />
-    );
-    expect(screen.getByText("No documents yet.")).toBeInTheDocument();
+// SLOP-DENSITY-1 (AI_SLOP_AUDIT.md A06) replaced OrdersFilterTabs — six
+// document-type tabs over a grid of category cards, each card holding three
+// mini document rows — with one category index and one document list. Those
+// two structures owned two empty states each; these are the two the page has
+// now. A18 protects the restraint of these states, so they are still asserted
+// rather than allowed to quietly disappear with the widgets that held them.
+describe("orders index empty states", () => {
+  it("shows an empty state when no category exists", async () => {
+    prismaMocks.categoryFindMany.mockResolvedValue([]);
+    prismaMocks.findMany.mockResolvedValue([]);
+
+    const html = renderToStaticMarkup(await OrdersPage());
+    expect(html).toContain("No categories available.");
   });
 
-  it("shows an empty state for a document-type tab with no matching categories", () => {
-    render(
-      <OrdersFilterTabs
-        categories={[
-          {
-            id: "cat-1",
-            nameEn: "Circulars",
-            nameTe: "సర్క్యులర్లు",
-            slug: "circulars",
-            icon: null,
-            _count: { posts: 1 },
-            posts: [
-              {
-                id: "p1",
-                slug: "p1",
-                titleEn: "A circular",
-                goReference: null,
-                verifiedAgainstGoir: false,
-                createdAt: new Date("2026-01-01"),
-              },
-            ],
-          },
-        ]}
-      />
-    );
+  it("shows an empty state for the document list while still listing categories", async () => {
+    prismaMocks.categoryFindMany.mockResolvedValue([
+      {
+        id: "cat-1",
+        nameEn: "Circulars",
+        nameTe: "సర్క్యులర్లు",
+        slug: "circulars",
+        color: null,
+        icon: null,
+        _count: { posts: 0 },
+      },
+    ]);
+    prismaMocks.findMany.mockResolvedValue([]);
 
-    // "govt-orders" is the only slug the "go" tab matches; a Circulars-only
-    // category list has nothing to show there.
-    fireEvent.click(screen.getByRole("tab", { name: /G\.O\.s/i }));
-    expect(screen.getByText("No categories found for this document type.")).toBeInTheDocument();
+    const html = renderToStaticMarkup(await OrdersPage());
+    expect(html).toContain("No published documents yet.");
+    expect(html).toContain("Circulars");
+    expect(html).not.toContain("No categories available.");
   });
 });
 

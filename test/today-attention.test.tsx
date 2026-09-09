@@ -8,7 +8,6 @@ vi.mock("@/lib/prisma", () => ({
   prisma: { post: { findMany: prismaMocks.findMany } },
 }));
 vi.mock("@/app/(public)/_components/DesktopLeftNav", () => ({ default: () => null }));
-vi.mock("@/app/(public)/_components/DesktopSidebar", () => ({ default: () => null }));
 
 const HomePage = (await import("@/app/(public)/page")).default;
 

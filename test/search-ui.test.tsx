@@ -92,11 +92,14 @@ describe("SearchUI", () => {
 
   it("keeps the topic bar in the page and does not duplicate its heading in SearchUI", () => {
     const pageSource = fs.readFileSync(path.join(process.cwd(), "app/(public)/search/page.tsx"), "utf8");
-    const ordersSource = fs.readFileSync(path.join(process.cwd(), "app/(public)/orders/page.tsx"), "utf8");
     const componentSource = fs.readFileSync(path.join(process.cwd(), "app/(public)/search/_components/SearchUI.tsx"), "utf8");
     const topicBarSource = fs.readFileSync(path.join(process.cwd(), "app/(public)/_components/TopicTagBar.tsx"), "utf8");
     expect(pageSource).toMatch(/<TopicTagBar baseUrl="\/search" availableTags=\{[^}]+\} \/>/);
-    expect(ordersSource).toMatch(/<TopicTagBar baseUrl="\/search" availableTags=\{[^}]+\} \/>/);
+    // /orders rendered the same bar until SLOP-DENSITY-1 (AI_SLOP_AUDIT.md A06):
+    // it was one of three doors to /search on a page that also carried a search
+    // button, quick-search chips, type tabs and a category grid. /search owns
+    // topic browsing now, and this guard's actual subject — the bar belongs to
+    // the page, not duplicated inside SearchUI — is unchanged.
     expect(componentSource).not.toContain("Popular Teacher Topics");
     expect(topicBarSource).toContain('href="/topics"');
   });

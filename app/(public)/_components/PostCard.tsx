@@ -3,6 +3,7 @@ import type { DocType, OrderState } from "@prisma/client";
 import Card from "./Card";
 import Badge from "./Badge";
 import GoirBadge from "./GoirBadge";
+import DocumentDate from "./DocumentDate";
 import { resolveLifecyclePill, type RecruitmentPill } from "./lifecyclePill";
 
 // Only reached for documents that actually have an application lifecycle —
@@ -50,6 +51,10 @@ type PostCardProps = {
     sourceDept?: string | null;
     verifiedAgainstGoir: boolean;
     createdAt: Date;
+    /** Required, not optional: `lib/dates.ts` decides Issued vs Added to portal
+     * from its presence, and an absent field would silently read as null and
+     * relabel a departmental issue date (DESIGN_SYSTEM.md §3.4). */
+    documentDate: Date | null;
     category?: { nameEn: string; slug: string; color?: string | null; icon?: string | null } | null;
   };
 };
@@ -78,18 +83,28 @@ export default function PostCard({ post }: PostCardProps) {
 
       {/* Main Details */}
       <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+        {/*
+          The date joined this row in SLOP-DENSITY-1. The homepage promoted its
+          newest document to a HeroCard, and that card was the only place a date
+          appeared on an index row — so removing the hero (AI_SLOP_AUDIT.md A01)
+          would have taken "when was this issued" off the index entirely. It is
+          one of the four questions PRODUCT.md says the product exists to answer,
+          so it belongs on the row, not on a promoted card.
+        */}
+        <div className="flex items-center gap-x-2 gap-y-1 mb-1.5 flex-wrap text-meta text-inkSoft">
           <Badge variant={pill.variant} size="sm" shape="pill">
             {pill.label}
           </Badge>
 
           {(post.category || post.goReference) && (
-            <span className="font-mono text-xs text-inkSoft tracking-wide break-words">
+            <span className="font-mono tracking-wide break-words">
               {[post.category?.nameEn, post.goReference].filter(Boolean).join(" · ")}
             </span>
           )}
 
           <GoirBadge verified={post.verifiedAgainstGoir} />
+
+          <DocumentDate post={post} className="font-mono text-inkSoft/90" />
         </div>
 
         <Link href={`/posts/${post.slug}`} className="group block">
@@ -100,6 +115,7 @@ export default function PostCard({ post }: PostCardProps) {
             {post.titleTe}
           </div>
         </Link>
+
       </div>
     </Card>
   );

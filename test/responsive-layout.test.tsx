@@ -16,8 +16,8 @@ vi.mock("next/navigation", () => ({ usePathname: () => "/posts/some-order" }));
 
 import BottomNav from "@/app/(public)/_components/BottomNav";
 import ThumbZoneBar from "@/app/(public)/posts/[slug]/_components/ThumbZoneBar";
+import PostCard from "@/app/(public)/_components/PostCard";
 import { BottomBarProvider } from "@/app/(public)/_components/BottomBarSlot";
-import HeroCard from "@/app/(public)/_components/HeroCard";
 
 const ROOT = process.cwd();
 
@@ -187,7 +187,6 @@ describe("the 768–1023px band uses one navigation breakpoint", () => {
       "app/(public)/_components/BottomNav.tsx",
       "app/(public)/_components/DesktopNav.tsx",
       "app/(public)/_components/DesktopLeftNav.tsx",
-      "app/(public)/_components/DesktopSidebar.tsx",
     ];
 
     for (const file of navFiles) {
@@ -220,33 +219,40 @@ describe("the 768–1023px band uses one navigation breakpoint", () => {
   });
 });
 
-describe("HeroCard date/CTA footer wraps instead of overflowing", () => {
-  // UI-ACCEPTANCE-1: found via a real 320px browser render — the date label
-  // and "Read Summary" link don't both fit on one line at that width, and
-  // with only `justify-between` (no wrap, no shrink) the link overflowed its
-  // own row by 9px. jsdom can't measure that directly, but it can prove the
-  // structural precondition a wrap needs: flex-wrap actually present.
-  it("lets the footer row wrap onto a second line", () => {
+describe("the document row's metadata line wraps instead of overflowing", () => {
+  // UI-ACCEPTANCE-1 found this on HeroCard at a real 320px render: the date
+  // label and the link beside it don't both fit on one line, and with only
+  // `justify-between` (no wrap, no shrink) the second item overflowed its own
+  // row by 9px. SLOP-DENSITY-1 deleted HeroCard (AI_SLOP_AUDIT.md A01) and
+  // moved the date onto PostCard, which now carries a four-item metadata line
+  // — state pill, category/reference, GOIR marker, date — so the same rule
+  // has to hold there. jsdom can't measure the overflow, but it can prove the
+  // structural precondition a wrap needs.
+  it("lets the metadata row wrap onto a second line", () => {
     const { container } = render(
-      <HeroCard
+      <PostCard
         post={{
           id: "p1",
           slug: "test-post",
           titleEn: "Title",
           titleTe: "శీర్షిక",
-          summaryTe: [],
           statusBadge: "current",
           documentType: null,
           orderState: "current",
-          verifiedAgainstGoir: false,
+          goReference: "G.O.Ms.No.129",
+          sourceDept: null,
+          verifiedAgainstGoir: true,
           createdAt: new Date("2026-01-01"),
           documentDate: null,
+          category: { nameEn: "Government Orders", slug: "govt-orders" },
         }}
       />,
     );
 
-    const link = [...container.querySelectorAll("a")].find((a) => a.textContent?.includes("Read Summary"));
-    const row = link?.parentElement;
+    const date = [...container.querySelectorAll("span")].find((s) =>
+      s.textContent?.startsWith("Added to portal"),
+    );
+    const row = date?.parentElement;
     expect(row?.getAttribute("class")).toMatch(/(^|\s)flex-wrap(\s|$)/);
   });
 });
