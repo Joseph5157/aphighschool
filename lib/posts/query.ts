@@ -129,3 +129,37 @@ export async function recentPublishedDocuments(take = 5): Promise<RecentDocument
     take: Math.min(Math.max(take, 1), 6),
   });
 }
+
+/**
+ * Filters a curated candidate list down to the ones that would actually
+ * return a result right now, using the exact same matching `searchPosts`
+ * itself does. A quick-search suggestion that leads to "no matching
+ * documents" is an unsupported claim — UI_AUDIT.md F30 — so candidates are
+ * verified against real content rather than kept on the strength of being a
+ * plausible teacher search term.
+ */
+export async function quickSearchChips(candidates: string[]): Promise<string[]> {
+  const checks = await Promise.all(
+    candidates.map(async (chip) => ({
+      chip,
+      hasResults: (await searchPosts({ q: chip })).length > 0,
+    }))
+  );
+  return checks.filter((c) => c.hasResults).map((c) => c.chip);
+}
+
+/**
+ * Filters a curated topic-tag candidate list down to tags that at least one
+ * published post actually carries. Same "no unsupported claim" reasoning as
+ * `quickSearchChips`, applied to the `?tag=` filter chips instead of the
+ * free-text search chips.
+ */
+export async function tagsWithPublishedContent(candidates: string[]): Promise<string[]> {
+  if (candidates.length === 0) return [];
+  const rows = await prisma.post.findMany({
+    where: { isDraft: false, tags: { hasSome: candidates } },
+    select: { tags: true },
+  });
+  const present = new Set(rows.flatMap((row) => row.tags));
+  return candidates.filter((tag) => present.has(tag));
+}

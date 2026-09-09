@@ -57,7 +57,7 @@ export default function PrcCalculatorUI() {
 
   const fitmentVal = fitmentPreset === "-1" ? parseFloat(customFitment) || 0 : parseFloat(fitmentPreset) || 0;
   const daVal = daPreset === "-1" ? parseFloat(customDa) || 0 : parseFloat(daPreset) || 0;
-  const hraVal = hraPreset === "-1" ? parseFloat(customHra) || 0 : parseFloat(customHra) || 0;
+  const hraVal = hraPreset === "-1" ? parseFloat(customHra) || 0 : parseFloat(hraPreset) || 0;
   const basicNum = parseFloat(existingBasic) || 0;
   const monthsNum = parseInt(monthsArrears, 10) || 0;
 

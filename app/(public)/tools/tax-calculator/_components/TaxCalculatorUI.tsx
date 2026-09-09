@@ -854,7 +854,7 @@ export default function TaxCalculatorUI() {
                       <ol className="list-decimal pl-4 space-y-1">
                         <li>Actual HRA received from government payroll.</li>
                         <li>Actual rent paid minus 10% of (Basic Pay + DA).</li>
-                        <li>40% of (Basic Pay + DA) for non-metro towns/districts in AP & TS.</li>
+                        <li>40% of (Basic Pay + DA) for non-metro towns/districts.</li>
                       </ol>
                     </div>
                   ),

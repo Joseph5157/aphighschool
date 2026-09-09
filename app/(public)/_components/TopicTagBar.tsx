@@ -4,7 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
-const FEATURED_TOPICS = [
+export const FEATURED_TOPICS = [
   { tag: "Transfers", label: " బదిలీలు (Transfers)", icon: "🔄" },
   { tag: "TET", label: "టెట్ (TET 2026)", icon: "📝" },
   { tag: "DSC", label: "డీఎస్సీ (DSC Recruitment)", icon: "🎓" },
@@ -17,11 +17,21 @@ const FEATURED_TOPICS = [
 
 interface TopicTagBarProps {
   baseUrl?: string;
+  /**
+   * Tags a published post actually carries right now (lib/posts/query.ts's
+   * tagsWithPublishedContent). A curated topic whose tag isn't in this list is
+   * a "1-Click Filter" that would land on "no matching documents" — UI_AUDIT.md
+   * F30 — so it's dropped rather than shown as a dead end.
+   */
+  availableTags: string[];
 }
 
-export default function TopicTagBar({ baseUrl = "/search" }: TopicTagBarProps) {
+export default function TopicTagBar({ baseUrl = "/search", availableTags }: TopicTagBarProps) {
   const searchParams = useSearchParams();
   const currentTag = searchParams?.get("tag");
+  const topics = FEATURED_TOPICS.filter((topic) => availableTags.includes(topic.tag));
+
+  if (topics.length === 0) return null;
 
   return (
     <div className="space-y-2 font-sans">
@@ -36,7 +46,7 @@ export default function TopicTagBar({ baseUrl = "/search" }: TopicTagBarProps) {
       </div>
 
       <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
-        {FEATURED_TOPICS.map((topic) => {
+        {topics.map((topic) => {
           const isActive = currentTag?.toLowerCase() === topic.tag.toLowerCase();
           return (
             <Link

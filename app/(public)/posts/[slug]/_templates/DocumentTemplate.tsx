@@ -6,7 +6,6 @@ import GoirBadge from "@/app/(public)/_components/GoirBadge";
 import DocumentDate from "@/app/(public)/_components/DocumentDate";
 import LifecycleStepper from "../_components/LifecycleStepper";
 import ThumbZoneBar from "../_components/ThumbZoneBar";
-import WhatsAppBanner from "../_components/WhatsAppBanner";
 import PostNavCards from "../_components/PostNavCards";
 import CategoryStacksGrid from "../_components/CategoryStacksGrid";
 import TableOfContents from "../_components/TableOfContents";
@@ -142,7 +141,6 @@ export default function DocumentTemplate({
         </div>
       </div>
 
-      <WhatsAppBanner />
       <ActionSummary post={post} />
 
       <div className="lg:grid lg:grid-cols-12 lg:gap-8 xl:gap-10 space-y-8 lg:space-y-0 items-start">

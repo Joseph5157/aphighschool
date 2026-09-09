@@ -1,12 +1,25 @@
 import {
   recentPublishedDocuments,
   searchPosts,
+  quickSearchChips,
+  tagsWithPublishedContent,
   type SearchParams,
 } from "@/lib/posts/query";
 import { optionalQuery, safeQuery } from "@/lib/db-safe";
 import SearchUI from "./_components/SearchUI";
-import TopicTagBar from "@/app/(public)/_components/TopicTagBar";
+import TopicTagBar, { FEATURED_TOPICS } from "@/app/(public)/_components/TopicTagBar";
 import type { Metadata } from "next";
+
+// Curated candidates for the discovery view's "Quick Searches" chips — only
+// the ones verified against real content (quickSearchChips) are ever shown.
+const QUICK_SEARCH_CANDIDATES = [
+  "TET 2026",
+  "DA Arrears",
+  "Mega DSC",
+  "PRC arrears",
+  "Transfers",
+  "Form 16",
+];
 
 export const metadata: Metadata = {
   title: "Search AP Teacher Orders — AP Teacher Desk",
@@ -31,6 +44,14 @@ export default async function SearchPage({
   const recentDocuments = isDiscovery
     ? await optionalQuery("search-recent-documents", () => recentPublishedDocuments(5), [])
     : [];
+  const availableTopicTags = await optionalQuery(
+    "search-topic-tags",
+    () => tagsWithPublishedContent(FEATURED_TOPICS.map((topic) => topic.tag)),
+    []
+  );
+  const chips = isDiscovery
+    ? await optionalQuery("search-quick-chips", () => quickSearchChips(QUICK_SEARCH_CANDIDATES), [])
+    : [];
 
   return (
     <div className="max-w-4xl mx-auto space-y-6 font-sans">
@@ -42,7 +63,7 @@ export default async function SearchPage({
         </p>
       </div>
 
-      <TopicTagBar baseUrl="/search" />
+      <TopicTagBar baseUrl="/search" availableTags={availableTopicTags} />
 
       <SearchUI
         results={results}
@@ -50,6 +71,7 @@ export default async function SearchPage({
         activeType={searchParams.type ?? null}
         isDiscovery={isDiscovery}
         recentDocuments={recentDocuments}
+        quickSearchChips={chips}
       />
     </div>
   );

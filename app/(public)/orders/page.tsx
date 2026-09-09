@@ -5,9 +5,10 @@ import Breadcrumb from "@/app/(public)/_components/Breadcrumb";
 import { buttonClassName } from "@/app/(public)/_components/Button";
 import OrdersFilterTabs from "./_components/OrdersFilterTabs";
 import OrdersSidebar from "./_components/OrdersSidebar";
-import TopicTagBar from "@/app/(public)/_components/TopicTagBar";
+import TopicTagBar, { FEATURED_TOPICS } from "@/app/(public)/_components/TopicTagBar";
 import { ORDER_BY_OFFICIAL_DATE, officialDate, dateLabel, formatDate } from "@/lib/dates";
-import { safeQuery } from "@/lib/db-safe";
+import { tagsWithPublishedContent } from "@/lib/posts/query";
+import { safeQuery, optionalQuery } from "@/lib/db-safe";
 import DocumentDate from "@/app/(public)/_components/DocumentDate";
 import EmptyState from "@/app/(public)/_components/EmptyState";
 
@@ -63,6 +64,12 @@ export default async function OrdersPage() {
   const totalOrders = categories.reduce(
     (sum, cat) => sum + (cat._count?.posts || 0),
     0
+  );
+
+  const availableTopicTags = await optionalQuery(
+    "orders-topic-tags",
+    () => tagsWithPublishedContent(FEATURED_TOPICS.map((topic) => topic.tag)),
+    []
   );
 
   return (
@@ -124,7 +131,7 @@ export default async function OrdersPage() {
           </div>
 
           {/* ── Topic Tag Bar ────────────────────────────────────────── */}
-          <TopicTagBar baseUrl="/search" />
+          <TopicTagBar baseUrl="/search" availableTags={availableTopicTags} />
 
           {/* ── Recent documents strip ─────────────────────────────────────────── */}
           <div className="space-y-2">

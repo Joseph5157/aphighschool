@@ -23,6 +23,8 @@ const TOOLS = [
     icon: "🧮",
     badge: "FY 2025-26",
     status: "Updated Slabs",
+    // Verified against TaxCalculatorUI.tsx: window.print() drives a real export.
+    steps: ["Fill Details", "Auto-Calculate", "Export PDF"],
   },
   {
     href: "/tools/leave-encashment",
@@ -32,6 +34,8 @@ const TOOLS = [
     icon: "🏖️",
     badge: "EL / HPL",
     status: "Surrender Calculator",
+    // LeaveEncashmentUI.tsx has no print/export path.
+    steps: ["Fill Details", "Auto-Calculate"],
   },
   {
     href: "/tools/gpf-apgli",
@@ -41,6 +45,8 @@ const TOOLS = [
     icon: "💰",
     badge: "7.1% Interest",
     status: "Part-Final Loan",
+    // GpfApgliUI.tsx has no print/export path.
+    steps: ["Fill Details", "Auto-Calculate"],
   },
   {
     href: "/tools/cfms-checker",
@@ -50,6 +56,8 @@ const TOOLS = [
     icon: "📑",
     badge: "Payslip Portal",
     status: "Direct Status",
+    // CfmsCheckerUI.tsx is a links directory — no form, no calculation, no export.
+    steps: [],
   },
   {
     href: "/tools/prc-calculator",
@@ -59,6 +67,8 @@ const TOOLS = [
     icon: "📊",
     badge: "RPS 2022",
     status: "Pay Fixation",
+    // Verified against PrcCalculatorUI.tsx: isPrintMode drives a real export.
+    steps: ["Fill Details", "Auto-Calculate", "Export PDF"],
   },
   {
     href: "/tools/da-arrears",
@@ -68,6 +78,8 @@ const TOOLS = [
     icon: "📈",
     badge: "DA Revision",
     status: "Month-by-Month",
+    // DaArrearsUI.tsx has no print/export path.
+    steps: ["Fill Details", "Auto-Calculate"],
   },
 ];
 
@@ -143,16 +155,18 @@ export default function ToolsIndexPage() {
                     {tool.desc}
                   </p>
 
-                  {/* Step flow chips */}
-                  <div className="flex items-center gap-1.5 flex-wrap pt-1">
-                    {["Fill Details", "Auto-Calculate", "Export PDF"].map((step, i) => (
-                      <span key={i} className="inline-flex items-center gap-1 font-mono text-[9px] bg-ink/5 text-ink border border-ink/15 px-2 py-0.5 rounded">
-                        <span className="font-bold">{i + 1}</span>
-                        <span className="text-inkSoft/60">·</span>
-                        {step}
-                      </span>
-                    ))}
-                  </div>
+                  {/* Step flow chips — steps genuinely implemented by this tool only */}
+                  {tool.steps.length > 0 && (
+                    <div className="flex items-center gap-1.5 flex-wrap pt-1">
+                      {tool.steps.map((step, i) => (
+                        <span key={i} className="inline-flex items-center gap-1 font-mono text-[9px] bg-ink/5 text-ink border border-ink/15 px-2 py-0.5 rounded">
+                          <span className="font-bold">{i + 1}</span>
+                          <span className="text-inkSoft/60">·</span>
+                          {step}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
                 <div className="pt-2 flex justify-end">

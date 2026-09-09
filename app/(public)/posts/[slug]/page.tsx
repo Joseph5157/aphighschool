@@ -5,7 +5,6 @@ import type { Metadata } from "next";
 import Breadcrumb from "@/app/(public)/_components/Breadcrumb";
 import LifecycleStepper from "./_components/LifecycleStepper";
 import ThumbZoneBar from "./_components/ThumbZoneBar";
-import WhatsAppBanner from "./_components/WhatsAppBanner";
 import PostNavCards from "./_components/PostNavCards";
 import CategoryStacksGrid from "./_components/CategoryStacksGrid";
 import Badge from "@/app/(public)/_components/Badge";

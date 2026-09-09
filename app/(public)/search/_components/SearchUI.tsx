@@ -20,16 +20,13 @@ type SearchUIProps = {
   activeType: string | null;
   isDiscovery: boolean;
   recentDocuments: RecentDocument[];
+  /**
+   * Candidates already verified server-side (lib/posts/query.ts's
+   * quickSearchChips) to return at least one result right now. Never a
+   * hardcoded guess — see UI_AUDIT.md F30.
+   */
+  quickSearchChips: string[];
 };
-
-const QUICK_SEARCH_CHIPS = [
-  "TET 2026",
-  "DA Arrears",
-  "Mega DSC",
-  "PRC arrears",
-  "Transfers",
-  "Form 16",
-];
 
 const TYPE_FILTERS: { value: string; label: string }[] = [
   { value: "go", label: "GO" },
@@ -104,6 +101,7 @@ export default function SearchUI({
   activeType,
   isDiscovery,
   recentDocuments,
+  quickSearchChips,
 }: SearchUIProps) {
   const router = useRouter();
   const params = useSearchParams();
@@ -219,24 +217,26 @@ export default function SearchUI({
 
       {isDiscovery && (
         <div className="space-y-6 pt-2">
-          <section className="space-y-2.5" aria-labelledby="quick-searches-heading">
-            <h2 id="quick-searches-heading" className="font-mono text-[9.5px] uppercase tracking-wider text-inkSoft font-semibold">
-              Quick Searches
-            </h2>
-            <div className="flex items-center gap-2 flex-wrap">
-              {QUICK_SEARCH_CHIPS.map((chip) => (
-                <button
-                  key={chip}
-                  onClick={() => setValue(chip)}
-                  className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-tamarind rounded-full"
-                >
-                  <Badge variant="neutral" size="sm" shape="pill" className="cursor-pointer hover:border-ink/40">
-                    🔍 {chip}
-                  </Badge>
-                </button>
-              ))}
-            </div>
-          </section>
+          {quickSearchChips.length > 0 && (
+            <section className="space-y-2.5" aria-labelledby="quick-searches-heading">
+              <h2 id="quick-searches-heading" className="font-mono text-[9.5px] uppercase tracking-wider text-inkSoft font-semibold">
+                Quick Searches
+              </h2>
+              <div className="flex items-center gap-2 flex-wrap">
+                {quickSearchChips.map((chip) => (
+                  <button
+                    key={chip}
+                    onClick={() => setValue(chip)}
+                    className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-tamarind rounded-full"
+                  >
+                    <Badge variant="neutral" size="sm" shape="pill" className="cursor-pointer hover:border-ink/40">
+                      🔍 {chip}
+                    </Badge>
+                  </button>
+                ))}
+              </div>
+            </section>
+          )}
 
           <section className="space-y-3" aria-labelledby="recent-documents-heading">
             <div className="flex items-center justify-between gap-3 border-b border-hair pb-2">

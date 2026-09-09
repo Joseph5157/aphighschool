@@ -82,7 +82,7 @@ export default function PensionersHubPage() {
             </div>
 
             <p className="text-body text-mastheadText/70">
-              Dedicated guidance for retired teachers and government employees in AP & TS — clear pension math, commutation restoration countdowns, and office clearance workflows.
+              Dedicated guidance for retired AP teachers and government employees — clear pension math, commutation restoration countdowns, and office clearance workflows.
             </p>
           </div>
 

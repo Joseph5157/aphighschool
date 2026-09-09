@@ -12,14 +12,17 @@
 
 ## Current UI program state
 
-- Current phase: Phase 8
-- Active gate: `UI-STATES-1` (CLOSED)
-- Scope in this gate: loading/empty/error/success states on `app/(public)` only
+- Current phase: Phase 9
+- Active gate: `UI-CONTENT-1` (CLOSED)
+- Scope in this gate: placeholder/demo text, fake counters/statistics, unsupported claims,
+  stale copy, and dead UI on `app/(public)` only
 - UI redesign performed: no
-- Application behaviour changed: yes — five new `loading.tsx` routes, standardised empty-state
-  markup, a debounce-safe search pending affordance. Information architecture, routes and page
-  composition unchanged.
-- Next planned gate: `UI-CONTENT-1`
+- Application behaviour changed: yes — WhatsApp banner deleted; five copy fixes for the
+  AP-only scope lock; quick-search chips and topic-tag chips now derived from verified real
+  content instead of a hardcoded guess list; tools-index step claims now per-tool instead of
+  identical across all six cards; one calculation bug fixed (PRC HRA preset). Information
+  architecture, routes and page composition unchanged.
+- Next planned gate: `UI-SEO-1`
 
 ### Gate history
 
@@ -34,6 +37,7 @@
 | `UI-MOBILE-NAV-1` | CLOSED | Audit F5 and F28 closed; drawer given the full modal contract. 347 tests pass. |
 | `UI-PATTERNS-1` | CLOSED | Templates merged; GOIR/date/callout patterns standardised; a lifecycle bug fixed. 365 tests pass. |
 | `UI-STATES-1` | CLOSED | Five `loading.tsx` routes added with `Skeleton`; seven ad hoc empty-state divs standardised onto `EmptyState`; search's debounce pending gap closed. 389 tests pass. |
+| `UI-CONTENT-1` | CLOSED | WhatsApp banner (F16) deleted; AP-only scope lock (F25) fixed in five places behind a new repo-wide guard; quick-search/topic chips (F30) made self-verifying against real content; tools-index step claims and a PRC HRA calculation bug fixed. 402 tests pass. |
 
 ## Repository observations
 
@@ -646,6 +650,67 @@ indicator's appear/clear cycle. Eight mutations run — **all eight caught, zero
 | `UI-MOBILE-NAV-1` | pass (`npx tsc --noEmit`, exit 0) | clean | **48 files, 347 tests pass**; Tailwind utility validation passes | unavailable |
 | `UI-PATTERNS-1` | pass (`npx tsc --noEmit`, exit 0) | clean | **49 files, 365 tests pass**; Tailwind utility validation passes | unavailable |
 | `UI-STATES-1` | pass (`npx tsc --noEmit`, exit 0) | clean | **50 files, 389 tests pass**; Tailwind utility validation passes | unavailable |
+| `UI-CONTENT-1` | pass (`npx tsc --noEmit`, exit 0) | clean (CRLF notices only) | **55 files, 402 tests pass** (DB-backed suite run against a native-Postgres stand-in; see Environment note above) | unavailable |
+
+## `UI-CONTENT-1` outcome summary
+
+Full findings-to-disposition detail lives in `docs/context/UI_ACTIVE_GATE.md`, which stays
+the recoverable record for this gate; this is the summary.
+
+### Closed
+
+- **F16 — WhatsApp banner.** Deleted (`WhatsAppBanner.tsx` and its two usages). `PRODUCT.md`
+  named removal as the default outcome; `AGENTS.md`'s hard rules already banned the channel.
+- **F25 — AP-only scope lock violated by copy.** Fixed in five places, two more than the
+  audit named. A repo-wide guard (`test/scope-lock.test.ts`) now scans all of `app/(public)`
+  for the phrase pattern instead of relying on the next grep to catch the next instance.
+- **F30 — hardcoded, unverified quick-search and topic-tag chips.** Both are now filtered
+  server-side against real content before render (`lib/posts/query.ts`'s `quickSearchChips`
+  and `tagsWithPublishedContent`), so a chip can no longer promise a search that returns
+  nothing. Self-correcting as content is published or archived — no future manual
+  re-verification needed.
+- **Tools-index step-flow chips** (found this gate, not in the original audit) — all six tool
+  cards claimed an identical "Fill Details → Auto-Calculate → Export PDF" flow; only two
+  tools actually implement export, and one tool (CFMS) is a links directory with none of the
+  three steps. Each tool's claimed steps now come from its own `steps` array, checked against
+  that tool's actual component.
+- **`PrcCalculatorUI.tsx` HRA preset bug** (found this gate) — selecting any HRA preset other
+  than the default silently had no effect on the fixation result. One-line fix; not a copy
+  defect, but left in scope because it directly made the field's own label false.
+
+### Checked and found accurate
+
+Every other tools/pensioners page's descriptive copy was checked against that same file's
+own logic (GPF/APGLI rates, EL limits, the 180-month commutation figure, the office-pipeline
+step count) and found internally consistent — see `UI_ACTIVE_GATE.md` for the full list.
+
+### Left alone, deliberately
+
+- **Emoji iconography** (`🕐 Recent Documents`, `📜`, etc.) — this is `UI_AUDIT.md` F21, a
+  visual-consistency question (two parallel icon systems), not a content-accuracy one. Left
+  for whichever visual gate (`UI-IMPECCABLE-1` or `UI-21DEV-1`) owns icon-system decisions.
+- **FY 2025-26 tax-year branding** — reads as calendar-stale against today's date, but
+  correcting it would mean fabricating a not-yet-verified future Union Budget's tax slabs,
+  which `AGENTS.md` forbids outright. Recorded as a known limitation, not fixed with guessed
+  numbers.
+- **`[DEMO]`-titled seed posts** in the local database — intentional fixtures guarded by
+  `test/seed-integrity.test.ts`, not production content.
+
+### Guards added
+
+`test/scope-lock.test.ts`, `test/no-fabricated-channel.test.ts`, `test/tools-index.test.tsx`
+(3), `test/prc-calculator-ui.test.tsx`, `test/topic-tag-bar.test.tsx` (3), plus 4 tests added
+to `test/search-query.test.ts`. Every one mutation-tested against the defect it exists to
+catch — zero survivors.
+
+### Environment note
+
+Docker Desktop's engine was not running this gate, so the Postgres container the DB-backed
+suite normally targets (`localhost:5433`) was unreachable. Verified instead against an
+equivalent schema on the machine's separately-running native PostgreSQL service; `.env.test`
+itself was not changed. A future session should not assume Docker is required to run this
+suite in every environment, but should confirm which database is actually reachable before
+trusting a "tests pass" claim.
 
 ## Gate transition rule
 
@@ -653,20 +718,10 @@ Update `UI_ACTIVE_GATE.md` only when work on the next gate actually begins. Each
 gate's evidence remains recoverable from this document, from `docs/ui/UI_AUDIT.md`, and from
 Git history.
 
-`UI-CONTENT-1` is next per the master plan: remove placeholder/demo text, fake
-counters/statistics, unsupported claims, stale copy, and dead UI.
+`UI-SEO-1` is next per the master plan: fix page titles, meta descriptions, favicon, and
+appropriate metadata, canonical, and social metadata where justified.
 
-Groundwork already in place from `UI-STATES-1`. The five DB-backed public routes now have
-`loading.tsx`; `EmptyState` and `Skeleton` exist as shared primitives with real consumers.
-`UI-STATES-1` did **not** touch copy accuracy — it standardised the *presentation* of "nothing
-here," not whether any given piece of static copy on the page is still true. That is squarely
-`UI-CONTENT-1`'s job. Two things this gate noticed in passing but deliberately left alone,
-because they are content-accuracy questions rather than state-presentation ones: `PostCard`'s
-and other surfaces' "🕐 Recent Documents" / "📜" emoji iconography (already carried forward from
-`UI-SYSTEM-2`'s backlog), and whether the tools/pensioners pages' descriptive copy still matches
-current product behaviour.
-
-Five practices are worth carrying forward.
+Six practices are worth carrying forward.
 
 **Mutate every new guard.** In five of the last six gates a guard passed its first mutation and
 had to be rewritten or, this gate, needed a genuinely new test to exist at all —
@@ -691,3 +746,9 @@ not a `useState` set by one effect and cleared by another — the two-effect ver
 an unstable `useSearchParams()` reference in the test mock and, worse, would have raced for the
 same underlying reason against real Next.js re-renders. A derived value has no completion
 signal to get out of sync with, because it never depended on one.
+
+**A hardcoded claim about content availability rots; a verified-at-request-time one doesn't.**
+`UI-CONTENT-1`'s quick-search and topic-tag chips could have been "fixed" by hand-checking six
+strings against today's database — a fix that starts going stale the next time a post is
+published or archived. Filtering the candidate list against real content on every render
+instead means no future gate has to re-verify it.

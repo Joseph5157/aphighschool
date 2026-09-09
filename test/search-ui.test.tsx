@@ -46,6 +46,7 @@ function renderSearchUI(overrides: Partial<React.ComponentProps<typeof SearchUI>
       activeType={null}
       isDiscovery
       recentDocuments={[RECENT_DOCUMENT]}
+      quickSearchChips={["DA Arrears"]}
       {...overrides}
     />
   );
@@ -94,8 +95,8 @@ describe("SearchUI", () => {
     const ordersSource = fs.readFileSync(path.join(process.cwd(), "app/(public)/orders/page.tsx"), "utf8");
     const componentSource = fs.readFileSync(path.join(process.cwd(), "app/(public)/search/_components/SearchUI.tsx"), "utf8");
     const topicBarSource = fs.readFileSync(path.join(process.cwd(), "app/(public)/_components/TopicTagBar.tsx"), "utf8");
-    expect(pageSource).toContain("<TopicTagBar baseUrl=\"/search\" />");
-    expect(ordersSource).toContain("<TopicTagBar baseUrl=\"/search\" />");
+    expect(pageSource).toMatch(/<TopicTagBar baseUrl="\/search" availableTags=\{[^}]+\} \/>/);
+    expect(ordersSource).toMatch(/<TopicTagBar baseUrl="\/search" availableTags=\{[^}]+\} \/>/);
     expect(componentSource).not.toContain("Popular Teacher Topics");
     expect(topicBarSource).toContain('href="/topics"');
   });
@@ -105,7 +106,7 @@ describe("SearchUI", () => {
     expect(screen.queryByRole("heading", { name: "Recent Documents" })).not.toBeInTheDocument();
 
     rerender(
-      <SearchUI results={[RESULT]} query="" activeType="go" isDiscovery={false} recentDocuments={[RECENT_DOCUMENT]} />
+      <SearchUI results={[RESULT]} query="" activeType="go" isDiscovery={false} recentDocuments={[RECENT_DOCUMENT]} quickSearchChips={["DA Arrears"]} />
     );
     expect(screen.queryByRole("heading", { name: "Find by Task" })).not.toBeInTheDocument();
   });
@@ -153,7 +154,7 @@ describe("SearchUI", () => {
     expect(screen.getByText(/Searching…/i)).toBeInTheDocument();
 
     rerender(
-      <SearchUI results={[RESULT]} query="arrears 2" activeType={null} isDiscovery={false} recentDocuments={[]} />
+      <SearchUI results={[RESULT]} query="arrears 2" activeType={null} isDiscovery={false} recentDocuments={[]} quickSearchChips={["DA Arrears"]} />
     );
     expect(screen.queryByText(/Searching…/i)).not.toBeInTheDocument();
   });
