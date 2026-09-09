@@ -7,9 +7,10 @@ import { buttonClassName } from "@/app/(public)/_components/Button";
 import Callout from "@/app/(public)/_components/Callout";
 
 export const metadata: Metadata = {
-  title: "Teacher Service Desk — AP Teacher Desk",
+  title: "Teacher Service Desk",
   description:
-    "Find AP teacher pay, leave, CFMS, GPF, pension, and official-order guidance in one place.",
+    "AP teacher pay, leave, CFMS, GPF, pension, and official-order guidance in one place.",
+  alternates: { canonical: "/service-desk" },
 };
 
 const TASKS = [

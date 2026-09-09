@@ -2,7 +2,7 @@
 
 ## Active gate
 
-`UI-CONTENT-1`
+`UI-SEO-1`
 
 ## Status
 
@@ -10,94 +10,103 @@ CLOSED
 
 ## Purpose
 
-Remove placeholder/demo text, fake counters/statistics, unsupported claims, stale copy, and
-dead UI from the public application, per `UI_SYSTEM_MASTER_PLAN.md` Phase 9.
+Fix page titles, meta descriptions, favicon, and appropriate metadata, canonical, and social
+metadata where justified, per `UI_SYSTEM_MASTER_PLAN.md` Phase 10.
 
 ## Scope boundary
 
-`app/(public)` only, consistent with every prior gate's scope note. `app/admin` was not
-touched. Verification-only findings that would have required fabricating real-world facts
-(tax law, pension rules) this gate cannot authoritatively check were left unfixed and
-recorded below rather than guessed at.
+`app/(public)` only, plus the root-level special files (`app/icon.svg`, `app/robots.ts`,
+`app/sitemap.ts`) that are inherently site-wide concerns and were entirely absent. `app/admin`
+was not given its own metadata; it is kept out of search results via `robots.ts`'s
+`Disallow: /admin` instead, which needed no admin-route changes.
+
+## Product constraint for this gate
+
+The founder set an explicit rule before work started: **titles and descriptions must describe
+the page factually — never write promotional "sell" copy.** Applied throughout: evaluative
+words removed from descriptions (`"Comprehensive guidance"` → `"Guidance"`, `"100% client-side
+privacy-first"` → `"100% client-side"`, `"Interactive AP RPS 2022..."` → `"AP RPS 2022..."`,
+`"Browse AP School Education documents..."` → `"AP School Education documents..."`), while
+factual attributes that happen to be positive (free, 100% client-side, verified against GOIR)
+were kept because they are true and load-bearing, not because they sell.
 
 ## Findings closed
 
 | Finding | Disposition | Evidence |
 |---|---|---|
-| `UI_AUDIT.md` F16 — WhatsApp banner claiming a channel that doesn't exist, linking to `https://whatsapp.com` | **DELETED** — `WhatsAppBanner.tsx` removed and its two import/usage sites (`DocumentTemplate.tsx`, `posts/[slug]/page.tsx`) cleaned up. `PRODUCT.md` named removal as the default; `AGENTS.md` hard rule #3 and its own non-goals section call any UI implying a WhatsApp channel a defect. | New guard `test/no-fabricated-channel.test.ts` scans all of `app/(public)` for any mention of WhatsApp. |
-| `UI_AUDIT.md` F25 — "AP and TS" / "Telangana" scope-lock violations in copy | **FIXED**, five instances (three more than the audit's original three): `tools/da-arrears/page.tsx`, `tools/gpf-apgli/page.tsx`, `tools/prc-calculator/page.tsx` metadata descriptions; `tools/tax-calculator/_components/TaxCalculatorUI.tsx`'s HRA-rule FAQ copy; `pensioners/page.tsx`'s hero copy. `AGENTS.md`'s Scope Lock is AP-only; the calculators are built on AP-specific rules (AP RPS 2022, AP GPF/APGLI), so claiming TS coverage was also a correctness defect, not only a scope one. | New repo-wide guard `test/scope-lock.test.ts` scans all of `app/(public)` for "Telangana", "AP and TS", "AP & TS" — closes the whole defect class instead of the next single file a grep happens to catch. |
-| `UI_AUDIT.md` F30 — hardcoded "Quick Searches" chips and `TopicTagBar`'s featured-topic chips could lead to "no matching documents" | **FIXED, structurally** — both now render only candidates verified server-side against real content. New `lib/posts/query.ts` functions: `quickSearchChips(candidates)` (runs each candidate through the same `searchPosts` matching a click would trigger) and `tagsWithPublishedContent(candidates)` (checks a tag is actually carried by a published post). `SearchUI` hides the "Quick Searches" section entirely if nothing survives; `TopicTagBar` takes a required `availableTags` prop and renders `null` if no curated topic survives filtering. Both wired through `optionalQuery` (decorative-surface degrade-silently contract) in `search/page.tsx` and `orders/page.tsx`. | `test/search-query.test.ts` (4 new DB-backed tests), `test/topic-tag-bar.test.tsx` (3 tests) — mutation-checked: reverting the topic-bar filter to the unfiltered list, and reverting the chip source to the old hardcoded array, both fail the guards. |
-| Tools index (`tools/page.tsx`) claimed identical "Fill Details → Auto-Calculate → Export PDF" steps on all six tool cards | **FIXED** — found by the tools/pensioners copy-vs-logic audit (below), not the original audit. Only `TaxCalculatorUI` (`window.print`) and `PrcCalculatorUI` (`isPrintMode`) implement export; `CfmsCheckerUI` is a links directory with no fill/calculate/export step at all. Each tool's `steps` array now reflects what that tool's own component actually does; the step-chip block renders nothing when `steps` is empty. | New `test/tools-index.test.tsx` (3 tests), mutation-checked — reverting all six tools to the shared array fails 2 of 3 assertions. |
-| `PrcCalculatorUI.tsx:60` — selecting any HRA preset other than the default silently had no effect (`hraVal` read `customHra` in both branches of its ternary) | **FIXED** — one-line correction to read `hraPreset` in the non-custom branch, matching the identical pattern already used for `fitmentVal`/`daVal` two lines above. Found as a byproduct of auditing the HRA rule's copy; it is a calculation bug, not a copy defect, but left the field's own label ("Applicable HRA rate for your working location") false for 3 of its 4 preset options, so it was fixed in this gate rather than deferred. | New `test/prc-calculator-ui.test.tsx`, mutation-checked — reverting the fix makes the fixation summary identical across HRA presets, and the test catches it. |
+| `UI_AUDIT.md` F23 — title template is inert (`template: "%s"` does nothing; all 18 routes hand-appended `— AP Teacher Desk` themselves) | **FIXED** — `app/(public)/layout.tsx`'s template is now `"%s — AP Teacher Desk"`; every route's own title is bare. **Exception, found this gate:** a `page.tsx` in the *same segment folder* as the `layout.tsx` that defines the template — i.e. only the home page — does not receive the template (documented Next.js behaviour: a template formats descendant routes, not its own segment's page), so the home page alone still spells out the full title explicitly. | Verified by an actual `next build` + `next start` + `curl`, not just source reading — see Verification below. |
+| `UI_AUDIT.md` F24 — three titles exceeded ~60 chars even bare (`/tools/cfms-checker` 75→52, `/tools/leave-encashment` 73→59, `/pensioners/office-pipeline` 69→59, all totals with the template suffix) | **FIXED** — shortened to fit, reusing phrasing already established elsewhere in the app (e.g. `tools/page.tsx`'s own card title for CFMS) rather than inventing new copy. | Manual length check across all 18 routes; `curl`-verified rendered `<title>`. |
+| Three meta descriptions also exceeded ~160 chars (not named by the audit, found applying the same standard the title-length finding used) — `/pensioners/office-pipeline` 181, `/pensioners` 189, `/tools/da-arrears` 177 | **FIXED** — trimmed while keeping every fact; no content removed, only redundant phrasing. | Manual length check. |
+| Home page missing its own description (checklist item 2 — "mostly done... home route omits its own description") | **FIXED** — added, plus a canonical. | `curl` of rendered `<meta name="description">`. |
+| `UI_AUDIT.md` F9 — `NEXT_PUBLIC_SITE_URL` fell back to `localhost:3000` silently in two independent places (`app/(public)/layout.tsx`, `Breadcrumb.tsx`'s JSON-LD) | **FIXED** — both now call one `lib/site.ts` `getSiteUrl()`, which still falls back locally (correct for dev) but `console.error`s if the fallback fires in `NODE_ENV=production`, so a missing env var in a real deploy is loud instead of silently publishing localhost URLs into SEO metadata and structured data. | Code review; not a blocking build gate, per `AGENTS.md`'s standing rule against turning checks into hard blockers. |
+| Checklist item 3 — no favicon anywhere | **FIXED** — `app/icon.svg`, a static hand-written SVG reusing the exact existing masthead-navy (`#1B2A4A`) / turmeric (`#E8A33D`) "AP" monogram already used for the site header's badge. No new branding invented. | `curl`-verified `<link rel="icon">` and a direct fetch (200, `image/svg+xml`). **Note:** a `next/og`-based `ImageResponse` route was tried first and abandoned — it hit a Windows-specific `fileURLToPath`/`Invalid URL` crash in `@vercel/og`'s default font loader during `next build`'s static-export prerender step, caught only because this gate actually ran a production build rather than trusting `tsc`. |
+| No canonical anywhere | **FIXED** — `alternates.canonical` added to all 18 routes. `/search` canonicalizes to the bare `/search` (every `?q=`/`?type=`/`?tag=` variant is the same page). | `curl`-verified `<link rel="canonical">` on static, dynamic, and query-bearing routes. |
+| No OpenGraph/Twitter metadata anywhere | **FIXED, minimally** — `type`, `siteName`, `locale` (OG) and `card: "summary"` (Twitter, no image exists to justify `summary_large_image`) set once at the layout. **Deliberately no `openGraph.title`/`description` there** — an early version set them explicitly and every route's social preview showed the same site-wide default instead of its own title, because a plain per-route `title` string does not "fall through" into an `openGraph` object once an ancestor has defined one. Leaving `openGraph`/`twitter` without their own title/description is what lets Next's built-in fallback (uses the resolved page title/description) work per-route. | `curl`-verified `og:title`/`twitter:title` differ per route and match that route's own `<title>`. |
+| No robots/sitemap | **FIXED** — `app/robots.ts` (allows all, disallows `/admin` and `/api`), `app/sitemap.ts` (static routes + live categories + live published posts, degrades to static-only on a DB failure rather than 500ing). | `curl`-verified `/robots.txt` and `/sitemap.xml` render real content against the live dev database. |
 
-## Checked and found accurate — not touched
+## Two defects found and fixed outside the original audit
 
-A dedicated audit pass (copy in every `tools/` and `pensioners/` page/component, checked
-against that same file's own logic/data) found no other genuine mismatch:
-GPF 7.1% interest, APGLI slabs, EL 15/30-day limits, the 300-day EL cap, the 180-month
-commutation figure (matches the 15-year Telugu copy), the additional-quantum age bands, and
-the office-pipeline's "6 offices" claim (matches the 6-item `OFFICES` array exactly) are all
-internally consistent with their own component's constants and FAQ text. FY 2025-26
-references are consistent among themselves with no in-code default contradicting them — a
-domain/legal fact this gate cannot authoritatively verify, so it was not treated as a
-finding either way (see Known limitations in `UI_CURRENT_STATE.md`).
+- **"Offline Ready" was an unsupported claim.** Appeared in the sidebar footer and
+  `DesktopSidebar`'s calculator widget with no service worker, manifest, or cache strategy
+  anywhere in the repository to back it — the identical "nothing may be invented" defect
+  shape as `UI-CONTENT-1`'s WhatsApp banner (F16), just missed by that gate's audit. Fixed to
+  state only what's true (calculators run client-side; the site itself is not offline-capable).
+  New repo-wide guard: `test/no-offline-claim.test.ts`.
+- **`DesktopSidebar`'s "Quick Searches" widget had the exact F30 shape `UI-CONTENT-1` fixed
+  elsewhere**, missed because it lives in a component that gate's audit didn't inspect: five
+  hardcoded `/search?q=` chips (one, `#PRC2024`, carrying a stale year no longer accurate) that
+  could lead nowhere, alongside three accurate static tool-page links. Fixed the same way as
+  `UI-CONTENT-1`'s `SearchUI`/`TopicTagBar` chips — verified server-side against real content
+  (reusing `lib/posts/query.ts`'s `quickSearchChips`) before render, with the static tool links
+  (always accurate, not content-availability claims) left untouched. New tests:
+  `test/desktop-sidebar.test.tsx`.
+- **`/category/[slug]`'s title doubled "Orders"** for the "Government Orders" category
+  specifically (`${category.nameEn} Orders` → "Government Orders Orders"), found by actually
+  curling a real category page rather than trusting the source. Fixed to skip the append when
+  the category name already ends with "Orders". New test: `test/category-metadata.test.ts`.
+- **Two `generateMetadata` catch-block fallbacks hand-duplicated `"AP Teacher Desk"`** as a
+  literal string a third time in the same file that also had it in the not-found branch and the
+  file's normal-path title. Both (`posts/[slug]`, `category/[slug]`) now return `{}` on error,
+  correctly inheriting the layout's own default title/description instead.
 
-The `[DEMO]`-titled posts visible in the local database are intentional seed fixtures
-(`prisma/seed.ts`, guarded by `test/seed-integrity.test.ts`), not production content — left
-alone as out of scope for a UI gate.
+## Verification
+
+Reading source was not enough to trust this gate — F9/F23's original audit note says so
+explicitly, and this gate confirmed why: the OpenGraph/title-template interactions above are
+not deducible from Next.js's public docs skimmed casually, and the favicon approach that looked
+right in source (`next/og`) silently crashed only at actual build time. This gate ran:
+
+```
+npx prisma generate && npx next build   # confirms every route, including /icon.svg,
+                                          # /robots.txt, /sitemap.xml, actually compiles
+                                          # and prerenders
+npx next start -p <port>                 # then curl'd rendered <title>, <meta description>,
+                                          # <link rel=canonical>, og:*, twitter:*, robots meta,
+                                          # and the favicon link/content-type across the home
+                                          # page, several static routes, a dynamic post, and a
+                                          # dynamic category — not just one representative route
+```
+
+This is what caught the `next/og` Windows crash, the home-page template-adjacency gap, the
+OpenGraph per-route fallback regression from an earlier iteration of this gate's own change, and
+the stale server process serving a pre-rebuild `.next` output that made the first two rounds of
+`curl` verification silently lie. All four were invisible to `tsc`/`vitest`.
 
 ## Required closure evidence
 
-- Starting worktree clean at `81c27e5` (`UI-STATES-1` closure SHA), local and remote in
+- Starting worktree clean at `5e8a18a` (`UI-CONTENT-1` closure SHA), local and remote in
   agreement.
-- Full Vitest suite: 55 files, 402 tests pass (up from 389 — 13 new tests: 4 in
-  `test/search-query.test.ts`, 3 in `test/tools-index.test.tsx`, 3 in
-  `test/topic-tag-bar.test.tsx`, 1 in `test/scope-lock.test.ts`, 1 in
-  `test/no-fabricated-channel.test.ts`, 1 in `test/prc-calculator-ui.test.tsx`). `npx tsc
-  --noEmit` passes. `git diff --check` clean (CRLF-normalization notices only, no actual
-  whitespace errors).
-- The local Postgres 16 container this program has relied on for DB-backed tests was not
-  reachable this gate (Docker Desktop's engine was not running). DB-backed tests were run
-  against an equivalent database on the machine's separately-running native PostgreSQL
-  service instead (schema pushed via `prisma db push`, confirmed already in sync) —
-  `.env.test` itself was not changed. Recorded so a future session does not assume Docker
-  is required.
-- Every new/changed guard was mutation-tested against the defect it exists to catch:
-  reverting the PRC HRA fix, reverting the six tools to a shared step array, reverting the
-  topic-bar/chip filtering, and reintroducing "AP & TS" copy all fail their respective new
-  test — **zero survivors**.
-
-## Closure notes
-
-**The audit's own F25 list was incomplete, and the gap was found by extending its method,
-not by re-running it.** F25 named three tool-metadata descriptions; a plain grep for
-"Telangana" / "AP and TS" / "AP & TS" across `app/(public)` this gate found two more
-instances the audit missed (a tax-calculator FAQ answer, the pensioners hub hero copy) —
-including one already fixed once before, silently, in `leave-encashment` (a pre-existing
-guard, `test/leave-encashment-ui.test.tsx`, proves it). Five fixes across four gates'-worth
-of audits sharing one defect shape is exactly the whack-a-mole a repo-wide guard is for, so
-`test/scope-lock.test.ts` closes the class instead of the next instance.
-
-**Two genuine defects surfaced from a task this gate delegated rather than one it went
-looking for.** A background audit comparing every `tools/`/`pensioners/` page's copy against
-its own component's logic (asked to find provable mismatches only, not opinions) returned
-three findings: the tools-index step-chip claim, the PRC HRA calculation bug, and the
-pensioners-hub "AP & TS" line. The first two were not in `UI_AUDIT.md` at all. This is the
-same lesson `UI-PATTERNS-1` drew from merging duplicate templates — a targeted, adversarial
-check surfaces defects that reading code start-to-finish does not.
-
-**A hardcoded content-availability claim is only fixable by removing the hardcoding.** F30
-could have been "closed" by manually verifying six strings against the current database and
-either keeping or swapping them — but that fix rots the moment new posts are published or
-old ones are archived. `quickSearchChips`/`tagsWithPublishedContent` make the claim
-self-correcting: a topic gains a working chip the moment real content exists for it, and
-loses it the moment nothing does, with no future gate needed to re-verify a fixed list.
-
-**Not every stale-sounding thing is a defect.** FY 2025-26 branding, read against today's
-date, looks calendar-stale — but changing it would mean inventing what a not-yet-verified
-future Union Budget's tax slabs are, which is exactly the kind of fabrication `AGENTS.md`
-forbids. Recorded as a known limitation rather than "fixed" with guessed numbers.
+- Full Vitest suite: 58 files, 410 tests pass (up from 402 — 8 new tests: `test/no-offline-
+  claim.test.ts` (1), `test/desktop-sidebar.test.tsx` (3), `test/category-metadata.test.ts`
+  (4)). `npx tsc --noEmit` passes. `git diff --check` clean (CRLF-normalization notices only).
+- A full `next build` succeeds (see Verification) — the first time a UI-program gate has
+  exercised the actual production build rather than `tsc`/`vitest` alone, and it caught a real
+  defect neither of those could have.
+- Every new/changed guard mutation-tested: reverting the PRC-preserving... (carried from
+  `UI-CONTENT-1`, not repeated here) — this gate's own mutations: the `DesktopSidebar` "Quick
+  Searches" conditional, and the category-title double-"Orders" fix. Both caught, zero
+  survivors.
 
 ## Next gate after closure
 
-`UI-SEO-1`
+`UI-LINKS-1`

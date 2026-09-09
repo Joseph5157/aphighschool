@@ -126,7 +126,9 @@ describe("generateMetadata behaviour", () => {
       params: { slug: "secret-draft-order" },
     });
 
-    expect(metadata.title).toBe("Order Not Found — AP Teacher Desk");
+    // The root layout's title.template appends "— AP Teacher Desk" at render
+    // time; this unit call gets the route's own bare title back (UI_AUDIT.md F23).
+    expect(metadata.title).toBe("Order Not Found");
     expect(metadata.title).not.toContain("Secret Draft Order Title");
     expect(JSON.stringify(metadata)).not.toContain("రహస్య");
   });

@@ -9,9 +9,10 @@ import Accordion from "../_components/Accordion";
 import PensionersSidebar from "./_components/PensionersSidebar";
 
 export const metadata: Metadata = {
-  title: "Pensioners & Retired Employee Care Hub — AP Teacher Desk",
+  title: "Pensioners & Retired Employee Care Hub",
   description:
-    "Comprehensive guidance for retired AP teachers: Service Pension & DCRG Gratuity calculators, 180-month Commutation restoration trackers, EHS health guides, and 6-office clearance pipelines.",
+    "Guidance for retired AP teachers: Service Pension & DCRG Gratuity calculators, the 180-month Commutation tracker, and the 6-office retirement clearance guide.",
+  alternates: { canonical: "/pensioners" },
 };
 
 const PENSIONER_TOOLS = [

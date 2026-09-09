@@ -6,9 +6,10 @@ import { Card } from "@/app/(public)/_components/Card";
 import { buttonClassName } from "@/app/(public)/_components/Button";
 
 export const metadata: Metadata = {
-  title: "Teacher Topics — AP Teacher Desk",
+  title: "Teacher Topics",
   description:
-    "Browse AP School Education documents and practical teacher service guides by topic.",
+    "AP School Education documents and teacher service guides organized by topic.",
+  alternates: { canonical: "/topics" },
 };
 
 const DOCUMENT_TOPICS = [

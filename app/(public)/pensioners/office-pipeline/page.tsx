@@ -6,9 +6,10 @@ import { Card } from "@/app/(public)/_components/Card";
 import Badge from "@/app/(public)/_components/Badge";
 
 export const metadata: Metadata = {
-  title: "AP Teacher Retirement 6-Office File Clearance Guide — AP Teacher Desk",
+  title: "6-Office Retirement File Clearance Guide",
   description:
-    "Step-by-step roadmap detailing the 6 offices AP teachers must clear for pension authorization: HM/DDO, MEO/DEO, State Audit, AG AP Vijayawada, STO Treasury, and Pension Bank Branch.",
+    "Step-by-step guide to the 6 offices AP teachers clear for pension authorization: HM/DDO, MEO/DEO, State Audit, AG AP Vijayawada, STO Treasury, and Pension Bank.",
+  alternates: { canonical: "/pensioners/office-pipeline" },
 };
 
 const OFFICES = [

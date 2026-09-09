@@ -11,18 +11,18 @@ const QUICK_TOOLS = [
   { href: "/tools/cfms-checker", label: "CFMS Bill Status", icon: "📑", badge: "Payslip", desc: "Direct Status Checker" },
 ];
 
-const QUICK_SEARCHES = [
-  { label: "#DAArrears", href: "/search?q=DA+Arrears" },
-  { label: "#MegaDSC2026", href: "/search?q=Mega+DSC" },
-  { label: "#APTET", href: "/search?q=TET" },
-  { label: "#TransferRules", href: "/search?q=Transfers" },
-  { label: "#Form16Tax", href: "/tools/tax-calculator" },
-  { label: "#PRC2024", href: "/search?q=PRC" },
-  { label: "#GPFInterest", href: "/tools/gpf-apgli" },
-  { label: "#EHSMedical", href: "/tools/cfms-checker" },
-];
+interface DesktopSidebarProps {
+  /**
+   * Verified server-side (see `QUICK_SEARCH_CANDIDATES` in `app/(public)/page.tsx`)
+   * against real published content before this component ever sees them — never a
+   * hardcoded guess. Optional and defaults to empty so `loading.tsx` (which renders
+   * this component with no data fetch of its own) can render the rest of the sidebar
+   * immediately and simply omit the widget rather than show unverified chips.
+   */
+  quickSearchTags?: { label: string; href: string }[];
+}
 
-export default function DesktopSidebar() {
+export default function DesktopSidebar({ quickSearchTags = [] }: DesktopSidebarProps) {
   return (
     <aside className="space-y-6 sticky top-20 hidden lg:block font-sans">
       {/* 1. Quick Tools Widget */}
@@ -34,7 +34,7 @@ export default function DesktopSidebar() {
                 <span>⚡</span> Teacher Calculators
               </CardTitle>
               <p className="text-xs font-mono text-inkSoft/70 mt-0.5">
-                Client-Side & Offline Ready
+                Calculators run entirely on your device
               </p>
             </div>
             <Badge variant="tamarind" size="sm" shape="pill" dot>
@@ -79,30 +79,32 @@ export default function DesktopSidebar() {
         </CardContent>
       </Card>
 
-      {/* 2. Quick Searches Widget */}
-      <Card className="border-hair">
-        <CardHeader className="pb-3 border-b border-hair/50">
-          <CardTitle className="text-xs font-mono font-bold uppercase tracking-wider text-ink flex items-center gap-1.5">
-            Quick Searches
-          </CardTitle>
-          <p className="text-xs font-mono text-inkSoft/70 mt-0.5">
-            Jump to a topic
-          </p>
-        </CardHeader>
-        <CardContent className="pt-3">
-          <div className="flex flex-wrap gap-2 font-mono text-xs">
-            {QUICK_SEARCHES.map((tag) => (
-              <Link
-                key={tag.label}
-                href={tag.href}
-                className="px-3 py-1 rounded-full border border-hair bg-paper/40 hover:bg-ink hover:text-paper text-inkSoft font-semibold transition-all"
-              >
-                {tag.label}
-              </Link>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+      {/* 2. Quick Searches Widget — omitted entirely when nothing survived verification */}
+      {quickSearchTags.length > 0 && (
+        <Card className="border-hair">
+          <CardHeader className="pb-3 border-b border-hair/50">
+            <CardTitle className="text-xs font-mono font-bold uppercase tracking-wider text-ink flex items-center gap-1.5">
+              Quick Searches
+            </CardTitle>
+            <p className="text-xs font-mono text-inkSoft/70 mt-0.5">
+              Jump to a topic
+            </p>
+          </CardHeader>
+          <CardContent className="pt-3">
+            <div className="flex flex-wrap gap-2 font-mono text-xs">
+              {quickSearchTags.map((tag) => (
+                <Link
+                  key={tag.label}
+                  href={tag.href}
+                  className="px-3 py-1 rounded-full border border-hair bg-paper/40 hover:bg-ink hover:text-paper text-inkSoft font-semibold transition-all"
+                >
+                  {tag.label}
+                </Link>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </aside>
   );
 }

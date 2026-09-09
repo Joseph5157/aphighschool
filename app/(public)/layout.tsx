@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata, Viewport } from "next";
+import { getSiteUrl, SITE_NAME } from "@/lib/site";
 import BottomNav from "@/app/(public)/_components/BottomNav";
 import { BottomBarProvider } from "@/app/(public)/_components/BottomBarSlot";
 import { buttonClassName } from "@/app/(public)/_components/Button";
@@ -23,16 +24,35 @@ import {
   SidebarMenuSubButton,
 } from "@/app/(public)/_components/Sidebar";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+const siteUrl = getSiteUrl();
+const siteDescription =
+  "Telugu-first summaries of AP School Education government orders, circulars, and teacher notifications, with lifecycle status and provenance shown for each. Independent and unofficial.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
     default: "AP Teacher Desk — AP School Education Orders & Circulars",
-    template: "%s",
+    // Every route below supplies its own bare title; this is what actually
+    // appends the site name once instead of each route hand-writing it
+    // (UI_AUDIT.md F23 — the previous "%s" template did nothing).
+    template: "%s — AP Teacher Desk",
   },
-  description:
-    "Accurate, Telugu-first summaries of AP School Education Government Orders, circulars, and teacher notifications. Independent and unofficial.",
+  description: siteDescription,
+  robots: { index: true, follow: true },
+  // No openGraph.title/description or twitter.title/description here:
+  // Next.js falls back to each route's own resolved title/description for
+  // og:title/og:description/twitter:title/twitter:description as long as
+  // openGraph/twitter don't specify their own — set them here and every
+  // route's social preview would show this same site-wide default instead
+  // of what the page is actually about.
+  openGraph: {
+    type: "website",
+    siteName: SITE_NAME,
+    locale: "en_IN",
+  },
+  twitter: {
+    card: "summary",
+  },
 };
 
 export const viewport: Viewport = {
@@ -127,7 +147,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
 
         <SidebarFooter>
           <div className="text-[10px] font-mono text-inkSoft/70">
-            AP Teacher Desk — Offline Ready
+            AP Teacher Desk — Independent &amp; Unofficial
           </div>
         </SidebarFooter>
       </Sidebar>

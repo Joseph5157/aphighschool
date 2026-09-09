@@ -30,7 +30,7 @@ export async function generateMetadata({
 
     if (!post) {
       return {
-        title: "Order Not Found — AP Teacher Desk",
+        title: "Order Not Found",
       };
     }
 
@@ -40,13 +40,14 @@ export async function generateMetadata({
         : post.titleTe;
 
     return {
-      title: `${post.titleEn} — AP Teacher Desk`,
+      title: post.titleEn,
       description: `${description} AP School Education government order summary.`,
+      alternates: { canonical: `/posts/${params.slug}` },
     };
   } catch (e) {
-    return {
-      title: "AP Teacher Desk",
-    };
+    // Falls through to the layout's own default title/description rather
+    // than hand-duplicating "AP Teacher Desk" a third time in this file.
+    return {};
   }
 }
 

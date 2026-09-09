@@ -13,9 +13,10 @@ import DocumentDate from "@/app/(public)/_components/DocumentDate";
 import EmptyState from "@/app/(public)/_components/EmptyState";
 
 export const metadata: Metadata = {
-  title: "Orders & Circulars — AP Teacher Desk",
+  title: "Orders & Circulars",
   description:
     "Browse AP School Education government orders, memos, proceedings, and notifications.",
+  alternates: { canonical: "/orders" },
 };
 
 export const dynamic = 'force-dynamic';

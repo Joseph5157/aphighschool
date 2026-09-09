@@ -9,9 +9,10 @@ import Accordion from "../_components/Accordion";
 import ToolsSidebar from "./_components/ToolsSidebar";
 
 export const metadata: Metadata = {
-  title: "Teacher Utility Calculators — AP Teacher Desk",
+  title: "Teacher Utility Calculators",
   description:
-    "100% client-side privacy-first salary calculators, Income Tax FY 2025-26 estimators, Leave Encashment tools, and CFMS bill checkers for AP teachers.",
+    "100% client-side salary, income tax (FY 2025-26), leave encashment, GPF/APGLI, PRC and CFMS bill-status calculators for AP teachers.",
+  alternates: { canonical: "/tools" },
 };
 
 const TOOLS = [

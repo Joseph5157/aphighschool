@@ -19,14 +19,23 @@ export async function generateMetadata({
       select: { nameEn: true, nameTe: true },
     });
 
-    if (!category) return { title: "Category Not Found — AP Teacher Desk" };
+    if (!category) return { title: "Category Not Found" };
+
+    // Avoids "Government Orders Orders" — only append "Orders" when the
+    // category name doesn't already end with it.
+    const title = category.nameEn.endsWith("Orders")
+      ? category.nameEn
+      : `${category.nameEn} Orders`;
 
     return {
-      title: `${category.nameEn} Orders — AP Teacher Desk`,
-      description: `Browse all AP School Education ${category.nameEn} government orders and circulars. ${category.nameTe || ""}`,
+      title,
+      description: `AP School Education ${category.nameEn} government orders and circulars. ${category.nameTe || ""}`.trim(),
+      alternates: { canonical: `/category/${params.slug}` },
     };
   } catch (e) {
-    return { title: "AP Teacher Desk" };
+    // Falls through to the layout's own default title/description rather
+    // than hand-duplicating "AP Teacher Desk" a third time in this file.
+    return {};
   }
 }
 

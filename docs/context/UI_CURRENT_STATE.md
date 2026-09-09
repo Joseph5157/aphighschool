@@ -12,17 +12,19 @@
 
 ## Current UI program state
 
-- Current phase: Phase 9
-- Active gate: `UI-CONTENT-1` (CLOSED)
-- Scope in this gate: placeholder/demo text, fake counters/statistics, unsupported claims,
-  stale copy, and dead UI on `app/(public)` only
+- Current phase: Phase 10
+- Active gate: `UI-SEO-1` (CLOSED)
+- Scope in this gate: page titles, meta descriptions, favicon, canonical, and social metadata
+  on `app/(public)` plus the root-level `icon.svg`/`robots.ts`/`sitemap.ts` special files
 - UI redesign performed: no
-- Application behaviour changed: yes — WhatsApp banner deleted; five copy fixes for the
-  AP-only scope lock; quick-search chips and topic-tag chips now derived from verified real
-  content instead of a hardcoded guess list; tools-index step claims now per-tool instead of
-  identical across all six cards; one calculation bug fixed (PRC HRA preset). Information
-  architecture, routes and page composition unchanged.
-- Next planned gate: `UI-SEO-1`
+- Application behaviour changed: yes — real title template (was inert); canonical links,
+  OpenGraph/Twitter defaults, favicon, robots.txt and sitemap.xml added where none existed;
+  three over-length titles and three over-length descriptions shortened; `NEXT_PUBLIC_SITE_URL`
+  localhost-fallback deduplicated behind one helper with a production warning; an unsupported
+  "Offline Ready" claim and a second hardcoded-quick-search-chips instance (`DesktopSidebar`,
+  missed by `UI-CONTENT-1`'s audit) fixed; a category-page title bug ("Government Orders
+  Orders") fixed. Information architecture, routes and page composition unchanged.
+- Next planned gate: `UI-LINKS-1`
 
 ### Gate history
 
@@ -38,6 +40,7 @@
 | `UI-PATTERNS-1` | CLOSED | Templates merged; GOIR/date/callout patterns standardised; a lifecycle bug fixed. 365 tests pass. |
 | `UI-STATES-1` | CLOSED | Five `loading.tsx` routes added with `Skeleton`; seven ad hoc empty-state divs standardised onto `EmptyState`; search's debounce pending gap closed. 389 tests pass. |
 | `UI-CONTENT-1` | CLOSED | WhatsApp banner (F16) deleted; AP-only scope lock (F25) fixed in five places behind a new repo-wide guard; quick-search/topic chips (F30) made self-verifying against real content; tools-index step claims and a PRC HRA calculation bug fixed. 402 tests pass. |
+| `UI-SEO-1` | CLOSED | Real title template; canonical, OpenGraph/Twitter, favicon, robots.txt, sitemap.xml added; three over-length titles/descriptions shortened; F9's localhost-fallback deduplicated with a production warning; a second F30-shaped chip defect and an "Offline Ready" unsupported claim found and fixed outside the original audit. Verified with an actual `next build` + `curl`, not source reading alone. 410 tests pass. |
 
 ## Repository observations
 
@@ -651,6 +654,7 @@ indicator's appear/clear cycle. Eight mutations run — **all eight caught, zero
 | `UI-PATTERNS-1` | pass (`npx tsc --noEmit`, exit 0) | clean | **49 files, 365 tests pass**; Tailwind utility validation passes | unavailable |
 | `UI-STATES-1` | pass (`npx tsc --noEmit`, exit 0) | clean | **50 files, 389 tests pass**; Tailwind utility validation passes | unavailable |
 | `UI-CONTENT-1` | pass (`npx tsc --noEmit`, exit 0) | clean (CRLF notices only) | **55 files, 402 tests pass** (DB-backed suite run against a native-Postgres stand-in; see Environment note above) | unavailable |
+| `UI-SEO-1` | pass (`npx tsc --noEmit`, exit 0) | clean (CRLF notices only) | **58 files, 410 tests pass** | not a full browser check, but `next build` + `next start` + `curl` verified real rendered `<head>` output (title/description/canonical/OG/Twitter/robots/favicon) across static, dynamic, and query-bearing routes — see gate notes |
 
 ## `UI-CONTENT-1` outcome summary
 
@@ -712,16 +716,77 @@ itself was not changed. A future session should not assume Docker is required to
 suite in every environment, but should confirm which database is actually reachable before
 trusting a "tests pass" claim.
 
+## `UI-SEO-1` outcome summary
+
+Full findings-to-disposition detail lives in `docs/context/UI_ACTIVE_GATE.md`, which stays
+the recoverable record for this gate; this is the summary.
+
+### Product constraint
+
+The founder set a rule before this gate started: titles/descriptions must be factual, never
+promotional "sell" copy. Applied by removing evaluative words from several descriptions
+while keeping true, load-bearing facts (free, 100% client-side, GOIR-verified) — see
+`UI_ACTIVE_GATE.md` for the specific before/after wording.
+
+### Closed
+
+- **F23 — inert title template.** Real template now (`"%s — AP Teacher Desk"`); every route's
+  own title is bare, except the home page, which sits in the same segment folder as the
+  layout defining the template and — per Next.js's actual (undocumented-in-the-obvious-place)
+  behaviour — a layout's `title.template` does not reach a `page.tsx` in its own segment, only
+  descendants. Only found by building and curling the real output.
+- **F24 — three over-length titles**, plus three over-length descriptions found applying the
+  same standard. Shortened, reusing existing phrasing rather than inventing new copy.
+- **F9 — duplicated localhost-fallback.** One `lib/site.ts` helper now; still falls back
+  locally (correct), `console.error`s if the fallback fires in production.
+- **Favicon, canonical, OpenGraph/Twitter, robots.txt, sitemap.xml** — all absent, all added.
+  The favicon is a static hand-written SVG reusing the site's own existing masthead-navy /
+  turmeric "AP" monogram, not new branding. `sitemap.ts` queries live categories and published
+  posts and degrades to static routes only on a DB failure rather than 500ing.
+
+### Found and fixed outside the original audit
+
+- **"Offline Ready"** — an unsupported claim (no service worker/manifest/cache strategy
+  anywhere) in two places, same defect shape as `UI-CONTENT-1`'s WhatsApp banner (F16), missed
+  by that gate's audit because it lives in `DesktopSidebar`/the layout's own sidebar footer.
+- **`DesktopSidebar`'s "Quick Searches" widget** — the exact F30 shape (hardcoded, unverified
+  `/search?q=` chips, one carrying a stale year) `UI-CONTENT-1` fixed in `SearchUI`/
+  `TopicTagBar` but missed here because this component wasn't in that gate's audit. Fixed the
+  identical way: verified server-side against real content before render.
+- **`/category/[slug]` title doubling "Orders"** for the "Government Orders" category
+  specifically — found by curling a real category page, not visible from source alone.
+- **Two `generateMetadata` catch blocks hand-duplicating `"AP Teacher Desk"`** a third time in
+  the same file — now return `{}` and correctly inherit the layout default instead.
+
+### Why this gate ran an actual build
+
+Reading source was insufficient — the OpenGraph/title-template segment-adjacency behaviour
+above is not something `tsc` or a component-render test can catch, and the favicon approach
+that looked correct in source (`next/og`'s `ImageResponse`) crashed only during `next build`'s
+static-export prerender step, on a Windows-specific font-loading bug in `@vercel/og`. This
+gate ran `next build` + `next start` + `curl` across the home page, several static routes, a
+dynamic post, and a dynamic category — not just one representative route — which is also what
+caught a stale server process silently serving pre-rebuild output during verification (a
+second, unrelated way source-level confidence would have been wrong). Recorded as a practice
+worth carrying forward below.
+
+### Guards added
+
+`test/no-offline-claim.test.ts`, `test/desktop-sidebar.test.tsx` (3), `test/category-
+metadata.test.ts` (4). Both behavioural fixes (the sidebar conditional, the category title)
+were mutation-tested — zero survivors.
+
 ## Gate transition rule
 
 Update `UI_ACTIVE_GATE.md` only when work on the next gate actually begins. Each closed
 gate's evidence remains recoverable from this document, from `docs/ui/UI_AUDIT.md`, and from
 Git history.
 
-`UI-SEO-1` is next per the master plan: fix page titles, meta descriptions, favicon, and
-appropriate metadata, canonical, and social metadata where justified.
+`UI-LINKS-1` is next per the master plan: audit and fix internal, external, and document
+links; implement `mailto:`/`tel:` where genuine contact information exists (it currently does
+not, per `PRODUCT.md`'s open contact/legal-surface question).
 
-Six practices are worth carrying forward.
+Seven practices are worth carrying forward.
 
 **Mutate every new guard.** In five of the last six gates a guard passed its first mutation and
 had to be rewritten or, this gate, needed a genuinely new test to exist at all —
@@ -752,3 +817,12 @@ signal to get out of sync with, because it never depended on one.
 strings against today's database — a fix that starts going stale the next time a post is
 published or archived. Filtering the candidate list against real content on every render
 instead means no future gate has to re-verify it.
+
+**For metadata/build-config gates specifically, run the actual build.** `UI-SEO-1` is the
+first gate in this program to run `next build` rather than stopping at `tsc --noEmit` and
+`vitest`, and it found two defects neither of those could reach: a Next.js segment-adjacency
+rule (a layout's `title.template` doesn't format its own segment's `page.tsx`) that only shows
+up in rendered `<head>` output, and a Windows-specific crash in `next/og`'s `ImageResponse`
+that only fires during the static-export prerender step. `tsc` and component-render tests
+check that code runs; they do not check that Next's own metadata resolution or build pipeline
+produces what the source implies it will.

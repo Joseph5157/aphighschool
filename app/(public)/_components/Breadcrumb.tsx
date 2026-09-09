@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import { getSiteUrl } from "@/lib/site";
 
 export type BreadcrumbItemData = {
   label: string;
@@ -83,7 +84,7 @@ export function Breadcrumb({ items, className = "" }: BreadcrumbProps) {
   const fullItems: BreadcrumbItemData[] = [{ label: "Home", href: "/" }, ...items];
 
   // Generate Google Search BreadcrumbList JSON-LD Schema
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+  const siteUrl = getSiteUrl();
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",

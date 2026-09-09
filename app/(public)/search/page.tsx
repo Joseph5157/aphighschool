@@ -22,9 +22,11 @@ const QUICK_SEARCH_CANDIDATES = [
 ];
 
 export const metadata: Metadata = {
-  title: "Search AP Teacher Orders — AP Teacher Desk",
+  title: "Search AP Teacher Orders",
   description:
     "Search AP School Education government orders, circulars, and notifications.",
+  // Every ?q=/?type=/?tag= variant is the same page; canonicalize to the bare route.
+  alternates: { canonical: "/search" },
 };
 
 // Results depend on the query string, so this route cannot be statically cached.
