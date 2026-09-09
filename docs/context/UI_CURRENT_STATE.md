@@ -12,19 +12,18 @@
 
 ## Current UI program state
 
-- Current phase: Phase 18
-- Active gate: `UI-DEVICE-1` (**BLOCKED**)
-- Scope in this gate: real-device mobile acceptance, per Phase 18, specifically framed by the
-  user as distinct from `UI-ACCEPTANCE-1` — catching touch behavior, real mobile browser
-  chrome, virtual keyboard behavior, real safe-area/scrolling experience, and perceived
-  usability, none of which desktop emulation can prove
+- Current phase: Phase 19
+- Active gate: `UI-REGRESSION-1` (CLOSED)
+- Scope in this gate: complete full regression verification, per Phase 19 — confirm the
+  cumulative state of all closed gates still holds, not new exploratory work
 - UI redesign performed: no
-- Application behaviour changed: no — no real device access exists in this environment
-  (`claude-in-chrome` has zero paired browsers; no device-lab MCP configured; no `adb`; no
-  `xcrun`, impossible on Windows anyway), so nothing could be tested against the gate's actual
-  purpose. Asked the user how to proceed rather than substituting source-level or emulated
-  work for what the gate specifically exists to catch; the user chose to close it BLOCKED.
-- Next planned gate: `UI-REGRESSION-1`
+- Application behaviour changed: no — this gate found zero regressions and made zero code
+  changes. Fresh `tsc`/full Vitest (441/441, matching `UI-ACCEPTANCE-1`'s count exactly)/
+  build all clean; a targeted browser pass re-confirmed all four `UI-ACCEPTANCE-1` fixes
+  still hold, including a combination not explicitly tested before (dark mode +
+  `ThumbZoneBar` hidden on desktop simultaneously); the mobile drawer's full cycle and skip
+  link both re-confirmed working end to end.
+- Next planned gate: `UI-SYSTEM-CLOSE`
 
 ### Gate history
 
@@ -49,6 +48,7 @@
 | `UI-21DEV-1` | CLOSED | 21st.dev MCP found configured (`.mcp.json`, via `/plugin`) but not connected this session — checked via `ToolSearch`, not assumed; no component searched, compared, or imported, recorded rather than implied. Reviewed all nine named candidates (search, filters, empty states, dialogs, mobile nav, tables, callouts, 404, pagination) against current source; eight already adequate, pagination re-confirmed zero consumers (not reconsidered, per instruction). One real defect found inside "dialogs": `Dialog.tsx`'s title `h2` used `font-mono`, the same `DESIGN_SYSTEM.md` §1 violation `UI-IMPECCABLE-1` fixed on three route `h1`s — fixed the same way (dropped the mono face only). Deliberately did NOT widen the fix to ~12 other section-label headings still using `font-mono` elsewhere — those plausibly fall under `DESIGN.md`'s permitted "uppercase tracked labels," a larger, more ambiguous question than a selective-enhancement gate should decide blind. 438 tests pass. |
 | `UI-ACCEPTANCE-1` | CLOSED | First gate with real browser rendering (Playwright MCP, confirmed connected via an actual navigation, not just configured). Tested all 9 named routes across all 8 named viewports; measured (not assumed) 4 real defects and fixed all 4: `HeroCard`'s date/CTA footer overflowed its own row at 320px (measured 65px past its flex parent) — added `flex-wrap`; a real React hydration-mismatch console error for returning dark-mode visitors — `suppressHydrationWarning` on `<html>`; `text-inkSoft/50\|60\|70` measured as low as 2.41:1 against the required 4.5:1 body-text contrast — bumped to `/80` (verified safe in both themes) across ~26 real informational-text sites, decorative/disabled/graphical-icon usages correctly left alone; `ThumbZoneBar` had no desktop-hiding class unlike sibling `BottomNav` — added `lg:hidden`, confirmed redundant with `ActionSummary`'s always-present links first. Also verified working (not just present in source): drawer open/Escape/focus-return/route-close, single nav breakpoint at 1024px in both CSS and JS, `BottomBarSlot` yield behavior, `Table`'s `UI-A11Y-1` fixes live, the loading skeleton actually engaging, empty states, 404, skip link end-to-end, dark mode. Decided (not re-deferred reflexively): sticky `top-[76px]` gap KEEP (harmless, measured), masthead border-opacity split KEEP (real but imperceptible), mono section-labels KEEP (per `UI-21DEV-1`'s already-made call, reconfirmed rendered), emoji iconography DEFER (unchanged), sub-12px text DEFER (stronger evidence now — confirmed legible but a real `DESIGN.md` 11px-floor violation; full fix is its own gate-sized sweep). 441 tests pass. |
 | `UI-DEVICE-1` | **BLOCKED** | Explicitly framed by the user as distinct from `UI-ACCEPTANCE-1` — must catch touch behaviour, real mobile browser chrome, virtual keyboard behaviour, real safe-area/scrolling experience, and perceived usability, none of which desktop/emulated testing can prove. Checked thoroughly for real device access: `claude-in-chrome`'s `list_connected_browsers` returned empty (no paired Chrome anywhere, and mobile Chrome/Safari can't run extensions regardless); `.mcp.json` has only the `magic`/21st.dev server, no device-lab MCP; no `adb`; no `xcrun` (impossible on this Windows machine). Unlike `UI-IMPECCABLE-1`/`UI-21DEV-1`, no meaningful substitute existed — a source-level or emulated stand-in would have been exactly the kind of unverifiable claim this program refuses to make. Asked the user directly rather than guessing; the user chose to close it BLOCKED. No application code changed. |
+| `UI-REGRESSION-1` | CLOSED | Full regression pass, not new exploration: fresh `tsc`/full Vitest (441/441, exactly matching `UI-ACCEPTANCE-1`'s count)/`next build` all clean. Browser re-verification confirmed all four `UI-ACCEPTANCE-1` fixes still hold, including dark mode + `ThumbZoneBar`-hidden-on-desktop tested together for the first time; console-error-free across Home/Category/Search/tax-calculator in both themes; the mobile drawer's full cycle and skip link both re-confirmed with a real click. One apparent focus-return failure was investigated and resolved as a test-methodology artifact (a programmatic `.click()` doesn't shift real focus), not a product defect — recorded as a reusable lesson. Zero regressions found; zero code changes made. |
 
 ## Repository observations
 
@@ -743,6 +743,7 @@ indicator's appear/clear cycle. Eight mutations run — **all eight caught, zero
 | `UI-21DEV-1` | pass (`npx tsc --noEmit`, exit 0) | clean (an unrelated pre-existing `.gitignore` change from `/plugin` excluded, left for the user) | **64 files, 438 tests pass**; the new `Dialog` guard mutation-tested via a scoped `git stash push` of `Dialog.tsx` alone — failed against pre-fix source, restored passing | not a browser check; `next build` succeeded, bundle-size unchanged (one className edit); `Dialog` is conditionally client-rendered so no static HTML exists to `curl` — the RTL component test renders the real component with real props instead, the correct tool for this case |
 | `UI-ACCEPTANCE-1` | pass (`npx tsc --noEmit`, exit 0) | clean (same unrelated `.gitignore` change still excluded) | **64 files, 441 tests pass**; the 3 new structurally-tested guards mutation-tested via a scoped `git stash push` of the 3 relevant source files — all 3 failed against pre-fix source, restored passing | **first real browser check in this program** — Playwright MCP, confirmed connected via an actual navigation; all 9 named routes × all 8 named viewports tested; `next build` succeeded before and after fixes, bundle-size unchanged; a second `next build` + `next start` pass with real published test data confirmed correct status codes and no server errors across routes |
 | `UI-DEVICE-1` | not required — no application code changed | clean (same unrelated `.gitignore` change still excluded) | not required — no application code changed | **BLOCKED**: no real device access exists (see gate history row / outcome summary below for the full check) |
+| `UI-REGRESSION-1` | pass (`npx tsc --noEmit`, exit 0), re-run fresh | clean (same unrelated `.gitignore` change still excluded) | **64 files, 441 tests pass** — exactly matching `UI-ACCEPTANCE-1`'s count, confirming no drift | full re-verification, not new exploration — Playwright confirmed all four `UI-ACCEPTANCE-1` fixes still hold (including a new combination: dark mode + `ThumbZoneBar` hidden together), zero console errors across four routes in both themes, drawer + skip link re-confirmed with a real click; `next build` succeeded with an identical bundle-size report |
 
 ## `UI-CONTENT-1` outcome summary
 
@@ -1263,18 +1264,58 @@ Asked the user directly which of four paths to take (close BLOCKED; the user tes
 and reports back; the user has a device-cloud account to configure; something else). The
 user chose: close as BLOCKED. No application code was touched.
 
+## `UI-REGRESSION-1` outcome summary
+
+Full record lives in `docs/context/UI_ACTIVE_GATE.md`, which stays the recoverable record for
+this gate; this is the summary.
+
+### Static verification, fresh
+
+`npx tsc --noEmit` clean. Full Vitest suite: 64 files, 441 tests pass — exactly matching the
+count at `UI-ACCEPTANCE-1`'s closure, confirming zero drift across the intervening
+`UI-21DEV-1` (`Dialog.tsx` only) and `UI-DEVICE-1` (docs-only) commits. A clean
+`rm -rf .next && next build` succeeded with an identical bundle-size report.
+
+### Browser re-verification, targeted not exploratory
+
+Re-published representative test data and, using the same Playwright tooling confirmed
+working in `UI-ACCEPTANCE-1`, re-confirmed all four of that gate's fixes still hold:
+`HeroCard`'s `flex-wrap`, the dark-mode `suppressHydrationWarning` fix (tested with the exact
+returning-visitor scenario the original defect needed — `theme: dark` already in
+`localStorage` before navigating), `text-inkSoft/80`'s continued presence, and
+`ThumbZoneBar`'s `lg:hidden`. One combination not explicitly tested before — dark mode and
+`ThumbZoneBar`-hidden-on-desktop simultaneously — was checked and found conflict-free.
+Console errors: zero across four representative routes in both themes. The mobile drawer's
+full cycle and the skip link were both re-confirmed working end to end.
+
+### A test-methodology lesson, not a product defect
+
+An initial check appeared to show the drawer's focus-return breaking (focus landed on the
+skip link instead of the trigger after Escape). Investigated rather than reported as-is: the
+cause was that a programmatic `element.click()` via `browser_evaluate` doesn't move real
+browser focus the way an actual click does, so the drawer correctly captured the
+still-genuinely-focused skip link as its return target — accurate behavior given that input,
+not a bug. Re-tested with a real `browser_click` and focus returned to the trigger correctly.
+Worth carrying forward: use a real click, not a programmatic one, whenever the thing under
+test is focus state itself.
+
+### Result
+
+Zero regressions found. Zero code changes made.
+
 ## Gate transition rule
 
 Update `UI_ACTIVE_GATE.md` only when work on the next gate actually begins. Each closed
 gate's evidence remains recoverable from this document, from `docs/ui/UI_AUDIT.md`, and from
 Git history.
 
-`UI-REGRESSION-1` is next, the master plan's own sequential next step (Phase 19): complete
-full regression verification. `UI-DEVICE-1` remains BLOCKED, not closed with device-verified
-evidence — it stays open for whenever real device access becomes available, rather than being
-implicitly satisfied by any later gate's work.
+`UI-SYSTEM-CLOSE` is next, the master plan's own final step (Phase 20): record final state,
+tests, acceptance evidence, known limitations, and remote verification. `UI-DEVICE-1` remains
+BLOCKED, not closed with device-verified evidence — it stays open for whenever real device
+access becomes available, rather than being implicitly satisfied by `UI-REGRESSION-1` or any
+other gate's work.
 
-Fifteen practices are worth carrying forward.
+Sixteen practices are worth carrying forward.
 
 **Mutate every new guard.** In five of the last six gates a guard passed its first mutation and
 had to be rewritten or, this gate, needed a genuinely new test to exist at all —
@@ -1427,3 +1468,22 @@ user's own framing before any checking started ("the goal is not to repeat Playw
 acceptance"), which pre-ruled-out the fallback that would otherwise have felt natural to
 reach for. Checking tooling honestly, finding nothing, and asking rather than quietly
 downgrading the gate's scope to fit what was available is what kept the record trustworthy.
+
+**A regression pass earns its keep by testing combinations, not by re-running what a single
+gate already covered in isolation.** `UI-REGRESSION-1` didn't re-do `UI-ACCEPTANCE-1`'s
+9-route × 8-viewport sweep — that would have been expensive and low-yield, since nothing had
+changed in between. What it found worth doing instead was checking states that no single
+gate had reason to combine: dark mode active *at the same time as* the desktop-hidden
+`ThumbZoneBar` fix, a fresh navigation with `theme: dark` already sitting in `localStorage`
+(the exact returning-visitor shape the hydration bug needed, not just "toggle it and see").
+Each gate in this program tested its own slice well; a regression pass's distinct job is the
+seams between slices, which is a different question than "does each piece still work
+alone" and needs deliberately constructing states individual gates wouldn't have reason to.
+
+**When a test result contradicts what should be true, check the test before recording a
+defect.** `UI-REGRESSION-1`'s apparent focus-return failure was investigated rather than
+written up as a regression, and the cause turned out to be the test harness (a programmatic
+`.click()` never moved real focus in the first place), not the product. Recording it as a
+defect would have been a false report; silently discarding it without understanding why
+would have thrown away the actual lesson (real clicks for focus-state tests). Both the
+investigation and its correct, narrow conclusion belonged in the record.

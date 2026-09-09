@@ -2,72 +2,84 @@
 
 ## Active gate
 
-`UI-DEVICE-1`
+`UI-REGRESSION-1`
 
 ## Status
 
-**BLOCKED** — closed without device-verified evidence, per explicit user instruction after
-confirming no real device access exists. Not silently skipped: what was checked and why it's
-blocked are both recorded below.
+CLOSED
 
 ## Purpose
 
-Real-device mobile acceptance where environment and device access permit, per
-`UI_SYSTEM_MASTER_PLAN.md` Phase 18. The user's own framing for this gate, given before work
-started: **not** a repeat of `UI-ACCEPTANCE-1`'s Playwright/desktop-emulation pass — this gate
-exists specifically to catch what desktop browser emulation structurally cannot prove: touch
-behavior, real mobile browser chrome, virtual keyboard behavior, safe-area behavior as
-experienced on real hardware, real (not synthetic) scrolling, and perceived usability.
+Complete full regression verification, per `UI_SYSTEM_MASTER_PLAN.md` Phase 19 — confirm the
+cumulative state of all seventeen closed gates (plus `UI-DEVICE-1`, BLOCKED) still holds
+together, rather than finding new defects or doing new exploratory work. This gate found no
+regressions and made no code changes.
 
-## Why this is BLOCKED, not closed with substitute work
+## Scope and method
 
-Every other tool-unavailability this program has hit so far (`UI-DESIGN-1`/`UI-IMPECCABLE-1`'s
-Impeccable, `UI-21DEV-1`'s 21st.dev) had a meaningful fallback: do the same structured review
-manually against the design system, which is still real, valuable work. This gate is
-different in kind. The specific things it exists to catch — touch behavior, real mobile
-browser chrome, a real virtual keyboard, safe areas and scrolling as actually experienced on
-hardware, perceived usability — are not things source reading or Playwright's desktop
-viewport-resize emulation can produce evidence for, by construction. Proceeding with a
-source-level or emulated substitute and presenting it as this gate's output would have been
-exactly the kind of unverifiable claim this program's own discipline (established across
-`UI-SEO-1`, `UI-404-1`, `UI-IMPECCABLE-1`, `UI-ACCEPTANCE-1`) has consistently refused to make.
-Per explicit instruction, this was escalated to the user rather than guessed at, and the
-user confirmed: close as BLOCKED.
+Two passes: a full static-verification re-run from a clean state (typecheck, full test
+suite, a fresh production build), and a targeted browser re-verification pass using the
+Playwright tooling confirmed working in `UI-ACCEPTANCE-1` — not a repeat of that gate's
+exhaustive 9-route × 8-viewport exploration, but a focused confirmation that (a) the four
+defects `UI-ACCEPTANCE-1` found and fixed are still fixed, including in combinations not
+explicitly tested together before (dark mode + `ThumbZoneBar` hidden on desktop
+simultaneously), and (b) the core cross-cutting interaction mechanisms (drawer, skip link)
+still work correctly end to end.
 
-## What was checked before concluding no device access exists
+## Static verification
 
-- **`claude-in-chrome`'s `list_connected_browsers`** — returned an empty list. No Chrome
-  browser instance (extension) is paired to this account at all, on any device. (Chrome
-  extensions also do not run on mobile Chrome or mobile Safari by design, so even a paired
-  instance could never have been a genuine mobile browser — this path was structurally
-  incapable of reaching a real phone regardless.)
-- **`.mcp.json`** — only the `magic` (21st.dev) server is configured; no BrowserStack, Sauce
-  Labs, LambdaTest, or other device-lab MCP server exists.
-- **`adb`** (Android device/emulator bridge) — not present on `PATH`.
-- **`xcrun`** (iOS simulator tooling) — not present, and could not be: this environment is
-  Windows, and Xcode/iOS tooling is macOS-only.
-- No new device-lab tooling, browser stack, or credentials were installed or requested,
-  matching the standing "do not install unrelated substitutes" rule this program has applied
-  to every prior tool-unavailability finding.
+- `npx tsc --noEmit`: clean.
+- Full Vitest suite: **64 files, 441 tests pass** — exactly matching the count at
+  `UI-ACCEPTANCE-1`'s closure, confirming no drift across the intervening `UI-21DEV-1`
+  (`Dialog.tsx` only) and `UI-DEVICE-1` (docs-only, no code) commits.
+- `rm -rf .next && next build`: succeeds; bundle-size report identical to `UI-ACCEPTANCE-1`'s
+  (First Load JS shared 87.3 kB, no route changed size) — expected, since no application code
+  has changed since that gate closed.
 
-## Decision, from the user directly
+## Browser regression pass
 
-Asked which of four paths to take (close as BLOCKED; the user tests manually on a real phone
-and reports findings for me to act on; the user has a device-cloud account to configure; or
-something else). The user chose: **close as BLOCKED.**
+Re-published representative test data (4 posts, varied lifecycle states, one with a
+`pdfUrl`) against a fresh `next build` + `next start`, then, with real browser tooling:
+
+- **`HeroCard`'s footer wrap** (the 320px overflow fix): confirmed the row still carries
+  `flex-wrap` and the "Read Summary" link no longer overflows its container.
+- **The dark-mode hydration fix**: toggled dark mode, then did a fresh navigation with
+  `theme: dark` already in `localStorage` (the exact returning-visitor scenario the original
+  defect required) — zero console errors, `suppressHydrationWarning` still present and
+  working.
+- **The `inkSoft` contrast fix**: `text-inkSoft/80` confirmed still present and applied
+  (spot-checked on `Sidebar`'s `SidebarGroupLabel`).
+- **`ThumbZoneBar`'s `lg:hidden`**: confirmed still hidden (`display: none`) at 1440px on a
+  post with a `pdfUrl` — tested this time *combined* with dark mode active simultaneously, a
+  combination not explicitly exercised in `UI-ACCEPTANCE-1`. No visual or console-level
+  conflict between the two fixes.
+- **Console errors**: zero across Home, Category, Search (with a query), and
+  `/tools/tax-calculator`, both in light and dark mode.
+- **The mobile drawer's full cycle** (open, `role="dialog"`/`aria-modal`, scroll lock,
+  Escape, `inert` restore, focus return) and **the skip link** (first Tab stop, correct
+  `href`): both re-confirmed working with a real (not programmatic) click.
+
+### A methodology note, not a product defect
+
+An initial focus-return check appeared to fail (focus landed back on the skip link instead of
+the drawer trigger after Escape). Investigated before concluding anything: the cause was the
+test's own setup — a programmatic `element.click()` via `browser_evaluate` doesn't shift
+real browser focus the way an actual click does, so the drawer's own "remember where focus
+came from" logic correctly captured the skip link (still genuinely focused at that moment)
+as the return target — which is exactly correct behavior given that input. Re-tested with a
+real `browser_click`, and focus returned to the trigger correctly. Recorded here because it's
+a reusable lesson for future browser-testing gates: use a real click, not a programmatic one,
+whenever the thing being tested is focus state itself.
 
 ## Verification
 
-No application code was changed — there is nothing to verify beyond confirming the tree is
-exactly as `UI-ACCEPTANCE-1` left it. `git diff --check` on the working tree (aside from the
-pre-existing, unrelated `.gitignore` change from the user's own `/plugin` session activity,
-already noted and left alone across the last several gates) shows no unintended changes.
-`npx tsc --noEmit` and the full Vitest suite were not re-run for this reason — no application
-code changed, matching the precedent `UI-BASELINE-0`/`UI-AUDIT-1` set for docs-only gates.
+No application code changed this gate — nothing to fix, matching the finding that no
+regression exists. `git diff --check` clean (the same pre-existing, unrelated `.gitignore`
+change from the user's `/plugin` session activity remains excluded, as it has across every
+gate since it appeared).
 
 ## Next gate after closure
 
-`UI-REGRESSION-1` (Phase 19, the master plan's own sequential next step — complete full
-regression verification. No explicit instruction has named a different next gate for after
-this one; confirm with the user before assuming this is still correct if a gap in time or
-context has passed).
+`UI-SYSTEM-CLOSE` (Phase 20, the master plan's own final step — record final state, tests,
+acceptance evidence, known limitations, and remote verification). `UI-DEVICE-1` remains
+BLOCKED and is not implicitly resolved by this gate; it stays open per its own record.
