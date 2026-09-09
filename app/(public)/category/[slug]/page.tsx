@@ -60,6 +60,27 @@ export default async function CategoryDetailPage({
         posts: {
           where: { isDraft: false },
           orderBy: ORDER_BY_OFFICIAL_DATE,
+          // Scoped to exactly what CategoryLogList's PostItem reads. Unselected,
+          // this fetched every Post column — including `content` (full document
+          // body/tables) — for every published post in the category, on every
+          // view, with no upper bound as the category grows.
+          select: {
+            id: true,
+            slug: true,
+            titleEn: true,
+            titleTe: true,
+            summaryTe: true,
+            englishAbstract: true,
+            statusBadge: true,
+            documentType: true,
+            orderState: true,
+            verifiedAgainstGoir: true,
+            goReference: true,
+            actionDeadline: true,
+            createdAt: true,
+            documentDate: true,
+            tags: true,
+          },
         },
         _count: { select: { posts: { where: { isDraft: false } } } },
       },

@@ -50,19 +50,22 @@ describe("draft leak guards", () => {
     expect(block).toMatch(/where:\s*\{\s*isDraft:\s*false\s*\}/);
   });
 
-  it("the homepage only includes approved related orders", () => {
-    const block = home.slice(home.indexOf("relatedFrom"), home.indexOf("relatedFrom") + 400);
-    expect(block).toMatch(/approved\s*:\s*true/);
+  it("the homepage does not fetch relatedFrom at all (nothing to leak, UI-PERF-1)", () => {
+    // HeroCard/PostCard never rendered relatedFrom — the homepage query used to
+    // fetch it anyway (full related-post rows, unfiltered by this file's own
+    // approved/isDraft guard reasoning below). UI-PERF-1 removed the fetch
+    // rather than filter it, since nothing on this page renders it. If a
+    // relatedFrom fetch is ever reintroduced here, it must carry the same
+    // approved:true / relatedPost:{isDraft:false} guard the detail page uses.
+    expect(home).not.toMatch(/relatedFrom\s*:/);
   });
 
-  it("both pages exclude drafts from the related post itself", () => {
-    for (const source of [detail, home]) {
-      const block = source.slice(
-        source.indexOf("relatedFrom"),
-        source.indexOf("relatedFrom") + 400
-      );
-      expect(block).toMatch(/relatedPost\s*:\s*\{\s*isDraft\s*:\s*false\s*\}/);
-    }
+  it("the detail page excludes drafts from the related post itself", () => {
+    const block = detail.slice(
+      detail.indexOf("relatedFrom"),
+      detail.indexOf("relatedFrom") + 400
+    );
+    expect(block).toMatch(/relatedPost\s*:\s*\{\s*isDraft\s*:\s*false\s*\}/);
   });
 });
 

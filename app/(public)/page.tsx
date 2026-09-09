@@ -49,12 +49,26 @@ export default async function HomePage() {
         where: { isDraft: false },
         orderBy: ORDER_BY_OFFICIAL_DATE,
         take: 6,
-        include: {
-          category: true,
-          relatedFrom: {
-            where: { approved: true, relatedPost: { isDraft: false } },
-            include: { relatedPost: true },
-          },
+        // Scoped to exactly what HeroCard/PostCard render — neither reads
+        // relatedFrom, so it's dropped rather than fetched and discarded
+        // (it previously pulled each related post's full row, content
+        // field included, for every one of these 6 posts on every load).
+        select: {
+          id: true,
+          slug: true,
+          titleEn: true,
+          titleTe: true,
+          summaryTe: true,
+          englishAbstract: true,
+          statusBadge: true,
+          documentType: true,
+          orderState: true,
+          goReference: true,
+          sourceDept: true,
+          verifiedAgainstGoir: true,
+          createdAt: true,
+          documentDate: true,
+          category: { select: { nameEn: true, slug: true, color: true, icon: true } },
         },
       })
     ),

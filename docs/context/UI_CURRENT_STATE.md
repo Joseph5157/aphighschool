@@ -12,18 +12,18 @@
 
 ## Current UI program state
 
-- Current phase: Phase 12
-- Active gate: `UI-404-1` (CLOSED)
-- Scope in this gate: a useful custom not-found/unavailable experience with recovery paths,
-  on `app/(public)` plus the root-level `app/not-found.tsx` special file
+- Current phase: Phase 13
+- Active gate: `UI-PERF-1` (CLOSED)
+- Scope in this gate: frontend performance only, per Phase 13 — size, dimensions, responsive
+  delivery, lazy loading, layout shift, unused assets, unnecessary frontend weight
 - UI redesign performed: no
-- Application behaviour changed: yes — `app/(public)/not-found.tsx` and `app/not-found.tsx`
-  added (previously nonexistent; `notFound()` fell through to the unstyled Next.js default).
-  A pre-existing defect was found and precisely diagnosed (not fixed, per explicit
-  instruction): `posts/[slug]`/`category/[slug]` return HTTP 200 instead of 404 for an
-  unknown slug, a framework/streaming limitation, not an application bug — see Known
-  limitations below. `next` stays pinned at `14.2.35`; not changed this gate.
-- Next planned gate: `UI-PERF-1`
+- Application behaviour changed: yes, but data-shape only, no visible/behavioral change —
+  `category/[slug]/page.tsx`'s posts query and `app/(public)/page.tsx`'s homepage-feed query
+  both narrowed to `select` only the fields their consuming components actually render, and
+  the homepage's entirely-unrendered `relatedFrom` fetch was removed. Every field either page
+  displays is still fetched, in full; only unconsumed columns (chiefly `content`, the full
+  document body) and one fully-dead nested relation stopped being fetched.
+- Next planned gate: `UI-A11Y-1`
 
 ### Gate history
 
@@ -42,6 +42,7 @@
 | `UI-SEO-1` | CLOSED | Real title template; canonical, OpenGraph/Twitter, favicon, robots.txt, sitemap.xml added; three over-length titles/descriptions shortened; F9's localhost-fallback deduplicated with a production warning; a second F30-shaped chip defect and an "Offline Ready" unsupported claim found and fixed outside the original audit. Verified with an actual `next build` + `curl`, not source reading alone. 410 tests pass. |
 | `UI-LINKS-1` | CLOSED | Three dead external government-portal domains found by live fetch (two fixed, one removed — no guessable replacement existed); post-detail "Category Stacks" widget's fabricated category links, duplicate-data bug, and positional "NEW" badge all fixed; a third, previously-missed instance of the hardcoded-chips defect (`OrdersSidebar`) fixed. `link-crawl.test.ts`'s literal-string-only coverage gap identified and documented (not widened — manual audit is the right tool for dynamic hrefs). 420 tests pass. |
 | `UI-404-1` | CLOSED | Custom `app/(public)/not-found.tsx` and root `app/not-found.tsx` added with real recovery links. Pre-existing dynamic-route soft-404 (200 instead of 404) found, root-cause-eliminated down to "correlates with real route-group scale, no single file responsible" — left undone and precisely documented per explicit instruction (no Next.js upgrade, no unexplained workaround). 424 tests pass. |
+| `UI-PERF-1` | CLOSED | No images anywhere in the app — the checklist's image items re-confirmed not applicable, not re-litigated. Found and fixed the real "frontend weight" work instead: `category/[slug]`'s posts query was unbounded *and* unselected (fetching every post's full `content` field for an entire category, on every view); the homepage's query fetched a `relatedFrom` relation neither `HeroCard` nor `PostCard` renders at all. Both narrowed to exactly the fields their consumers read. Unused-but-zero-cost `Pagination.tsx` recorded, not deleted (already tree-shaken, out of this gate's scope). 426 tests pass. |
 
 ## Repository observations
 
@@ -670,6 +671,7 @@ indicator's appear/clear cycle. Eight mutations run — **all eight caught, zero
 | `UI-SEO-1` | pass (`npx tsc --noEmit`, exit 0) | clean (CRLF notices only) | **58 files, 410 tests pass** | not a full browser check, but `next build` + `next start` + `curl` verified real rendered `<head>` output (title/description/canonical/OG/Twitter/robots/favicon) across static, dynamic, and query-bearing routes — see gate notes |
 | `UI-LINKS-1` | pass (`npx tsc --noEmit`, exit 0) | clean (CRLF notices only) | **61 files, 420 tests pass** | not a full browser check; every hardcoded external URL verified live via `WebFetch`+`curl` (DNS/HTTP status, not source reading); `next build` + `next start` + `curl` confirmed real destinations render on `/pensioners`, `/tools/cfms-checker`, and a post-detail page — see gate notes on why raw body-text `curl` checks are unreliable for element order/count |
 | `UI-404-1` | pass (`npx tsc --noEmit`, exit 0) | clean | **62 files, 424 tests pass** | not a full browser check; `next build` + `next start` + `curl -D -` (status + headers) verified all three representative cases (unmatched URL, invalid post slug, invalid category slug) for status code, not-found content, `robots` meta, and recovery links — table in `UI_ACTIVE_GATE.md`; `next` version unchanged (`14.2.35`) |
+| `UI-PERF-1` | pass (`npx tsc --noEmit`, exit 0) | clean | **63 files, 426 tests pass**; both new/changed guards mutation-tested via `git stash` against the pre-fix source (both failed as expected, then passed clean after restore) | not a full browser check; `next build` succeeded with an unchanged bundle-size report (expected — server-side `select` changes don't affect client JS size); `next start` + `curl` smoke-tested `/`, `/orders`, and an invalid category slug for absence of 500s/error-boundary text |
 
 ## `UI-CONTENT-1` outcome summary
 
@@ -876,17 +878,66 @@ covering all three representative cases with status code, not-found content, `ro
 metadata, and recovery links each explicitly recorded — table in `UI_ACTIVE_GATE.md`. No
 claim of a 404 status is made anywhere for the two known-soft-404 cases.
 
+## `UI-PERF-1` outcome summary
+
+Full findings-to-disposition detail lives in `docs/context/UI_ACTIVE_GATE.md`, which stays
+the recoverable record for this gate; this is the summary.
+
+### Images, dimensions, layout shift, lazy loading
+
+Re-confirmed not applicable, not re-decided: no `<img>`, `next/image`, or `<Image>` usage
+exists anywhere under `app/`; `public/` holds only `.gitkeep`. `UI_AUDIT.md` rows 5 and 20
+already closed this at `UI-AUDIT-1` — this gate re-verified by grep rather than trusting a
+seven-gate-old finding unchecked.
+
+### Unnecessary frontend weight — the gate's real work
+
+Two Prisma queries were over-fetching data their consuming components never render:
+
+- **`category/[slug]/page.tsx`.** No `select` on the posts relation meant every published
+  post in a category — unbounded, growing for the life of the product — had its full row
+  fetched, `content` (the full document body/tables) included, even though `CategoryLogList`
+  reads 14 named fields and none of the rest. Fixed with an explicit `select` matching
+  exactly what the component consumes.
+- **`app/(public)/page.tsx` (home page).** The `homepage-feed` query fetched
+  `relatedFrom: { include: { relatedPost: true } }` for its 6 posts — a fully unrendered
+  relation (`HeroCard`'s prop type declares it but never uses it in JSX; `PostCard` doesn't
+  declare it at all), which also over-fetched each related post's own full row. Removed
+  entirely, and the top-level fields narrowed to what `HeroCard`/`PostCard` actually read.
+
+Everything else checked — `orders/page.tsx`, the rest of `posts/[slug]/page.tsx`'s
+supplementary queries, `lib/posts/query.ts`'s search/recent-document queries, the font
+loading strategy, the compiled Tailwind output size, `next-auth`'s bundle scoping, and every
+route's First Load JS — was already correctly bounded/selected/scoped, confirmed via a real
+`next build`'s own size report rather than assumed from source.
+
+### Unused assets
+
+`Pagination.tsx` has zero consumers (already noted at `UI-PATTERNS-1`: "Still zero consumers.
+No usage invented.") but contributes zero bytes to any bundle since nothing imports it —
+recorded as this checklist item's answer, not deleted, since removing a working, tested,
+zero-cost primitive is a product call this performance-scoped gate doesn't license on its
+own.
+
+### Guards added
+
+`test/query-weight.test.ts` (2, new) — source-guards that both queries stay field-selected
+and never regain `content`/`relatedFrom`. `test/draft-leaks.test.ts`'s homepage-`relatedFrom`
+guard was rewritten (not deleted) to assert the relation is absent entirely, since there is no
+longer anything there to leak a draft through. Both mutation-tested via `git stash` against
+the pre-fix source — confirmed failing, then restored and passing.
+
 ## Gate transition rule
 
 Update `UI_ACTIVE_GATE.md` only when work on the next gate actually begins. Each closed
 gate's evidence remains recoverable from this document, from `docs/ui/UI_AUDIT.md`, and from
 Git history.
 
-`UI-PERF-1` is next, per explicit instruction at `UI-404-1`'s closure (the master plan's own
-sequential next step, Phase 13): optimize images and frontend performance — size, dimensions,
-responsive delivery, lazy loading, layout shift, unused assets, unnecessary frontend weight.
+`UI-A11Y-1` is next, the master plan's own sequential next step (Phase 14): an accessibility
+pass covering keyboard navigation, focus, semantics, labels, alt text, form errors, contrast,
+dialogs, menus, touch targets, and reduced motion.
 
-Nine practices are worth carrying forward.
+Ten practices are worth carrying forward.
 
 **Mutate every new guard.** In five of the last six gates a guard passed its first mutation and
 had to be rewritten or, this gate, needed a genuinely new test to exist at all —
@@ -949,3 +1000,16 @@ found the boundary of what's worth chasing: once individual elimination showed t
 correlates with route-group scale rather than any single file, further guessing stopped being
 productive, and the honest move was reporting the elimination trail back rather than trying a
 fourth unverified theory.
+
+**An unselected Prisma `include` is invisible to `tsc` and easy to miss by reading a
+component's render output — check what the query actually returns, not just what the JSX
+uses.** `UI-PERF-1`'s two defects (`category/[slug]`'s unbounded `content` fetch, the
+homepage's entirely-dead `relatedFrom`) both type-checked cleanly and rendered correctly
+before the fix — TypeScript's structural typing doesn't complain about extra fetched fields a
+component's prop type simply doesn't mention, and a passing render tells you nothing about
+what else silently rode along in the RSC payload. The check that actually finds this class of
+defect is comparing a query's `select`/`include` shape against the full read-surface of every
+component it feeds — not just the one obviously "main" consumer, since a related-data include
+can be dead in one consumer and load-bearing in a sibling that looks superficially identical
+(`posts/[slug]/page.tsx`'s own `relatedFrom` fetch was already correct, right next to the
+homepage's dead one).
