@@ -12,22 +12,19 @@
 
 ## Current UI program state
 
-- Current phase: Phase 17
-- Active gate: `UI-ACCEPTANCE-1` (CLOSED)
-- Scope in this gate: browser and responsive acceptance across representative routes and
-  desktop/tablet/mobile widths, per Phase 17 — the first gate with real browser rendering
-  available in this program
+- Current phase: Phase 18
+- Active gate: `UI-DEVICE-1` (**BLOCKED**)
+- Scope in this gate: real-device mobile acceptance, per Phase 18, specifically framed by the
+  user as distinct from `UI-ACCEPTANCE-1` — catching touch behavior, real mobile browser
+  chrome, virtual keyboard behavior, real safe-area/scrolling experience, and perceived
+  usability, none of which desktop emulation can prove
 - UI redesign performed: no
-- Application behaviour changed: yes, four real browser-rendered defects fixed —
-  `HeroCard`'s footer row gained `flex-wrap` (measured overflow at 320px), `app/layout.tsx`'s
-  `<html>` gained `suppressHydrationWarning` (a real console error for returning dark-mode
-  visitors), `text-inkSoft/50`/`/60`/`/70` bumped to `/80` across ~26 real informational-text
-  sites (measured WCAG contrast failures, as low as 2.41:1 against the required 4.5:1), and
-  `ThumbZoneBar` gained `lg:hidden` (a mobile action bar was floating on desktop layouts,
-  confirmed redundant with `ActionSummary`'s always-present inline links). All four re-tested
-  live after fixing. Several other items were measured and explicitly decided KEEP or DEFER
-  rather than changed — see this gate's outcome summary.
-- Next planned gate: `UI-DEVICE-1`
+- Application behaviour changed: no — no real device access exists in this environment
+  (`claude-in-chrome` has zero paired browsers; no device-lab MCP configured; no `adb`; no
+  `xcrun`, impossible on Windows anyway), so nothing could be tested against the gate's actual
+  purpose. Asked the user how to proceed rather than substituting source-level or emulated
+  work for what the gate specifically exists to catch; the user chose to close it BLOCKED.
+- Next planned gate: `UI-REGRESSION-1`
 
 ### Gate history
 
@@ -51,6 +48,7 @@
 | `UI-IMPECCABLE-1` | CLOSED | Impeccable confirmed unavailable (checked, not assumed); manual structured review against `DESIGN_SYSTEM.md` instead, no browser tooling so no visual-acceptance claims made. Revisited `UI-PATTERNS-1`'s deferred `PageHeader` decision: preserved the four masthead variants (they carry real differences in page purpose), fixed only two unexplained token-drift cases — category/orders' `h1` switched from a raw size to the shared `.text-display` token. Fixed three calculator routes' `h1` styled with `font-mono` (`DESIGN_SYSTEM.md` §1: "Mono is not for... headings") onto `.text-card-title`. Deliberately left emoji iconography and ~100 sub-12px sizes untouched — both real, both explicitly owned by later gates that can actually render. 437 tests pass. |
 | `UI-21DEV-1` | CLOSED | 21st.dev MCP found configured (`.mcp.json`, via `/plugin`) but not connected this session — checked via `ToolSearch`, not assumed; no component searched, compared, or imported, recorded rather than implied. Reviewed all nine named candidates (search, filters, empty states, dialogs, mobile nav, tables, callouts, 404, pagination) against current source; eight already adequate, pagination re-confirmed zero consumers (not reconsidered, per instruction). One real defect found inside "dialogs": `Dialog.tsx`'s title `h2` used `font-mono`, the same `DESIGN_SYSTEM.md` §1 violation `UI-IMPECCABLE-1` fixed on three route `h1`s — fixed the same way (dropped the mono face only). Deliberately did NOT widen the fix to ~12 other section-label headings still using `font-mono` elsewhere — those plausibly fall under `DESIGN.md`'s permitted "uppercase tracked labels," a larger, more ambiguous question than a selective-enhancement gate should decide blind. 438 tests pass. |
 | `UI-ACCEPTANCE-1` | CLOSED | First gate with real browser rendering (Playwright MCP, confirmed connected via an actual navigation, not just configured). Tested all 9 named routes across all 8 named viewports; measured (not assumed) 4 real defects and fixed all 4: `HeroCard`'s date/CTA footer overflowed its own row at 320px (measured 65px past its flex parent) — added `flex-wrap`; a real React hydration-mismatch console error for returning dark-mode visitors — `suppressHydrationWarning` on `<html>`; `text-inkSoft/50\|60\|70` measured as low as 2.41:1 against the required 4.5:1 body-text contrast — bumped to `/80` (verified safe in both themes) across ~26 real informational-text sites, decorative/disabled/graphical-icon usages correctly left alone; `ThumbZoneBar` had no desktop-hiding class unlike sibling `BottomNav` — added `lg:hidden`, confirmed redundant with `ActionSummary`'s always-present links first. Also verified working (not just present in source): drawer open/Escape/focus-return/route-close, single nav breakpoint at 1024px in both CSS and JS, `BottomBarSlot` yield behavior, `Table`'s `UI-A11Y-1` fixes live, the loading skeleton actually engaging, empty states, 404, skip link end-to-end, dark mode. Decided (not re-deferred reflexively): sticky `top-[76px]` gap KEEP (harmless, measured), masthead border-opacity split KEEP (real but imperceptible), mono section-labels KEEP (per `UI-21DEV-1`'s already-made call, reconfirmed rendered), emoji iconography DEFER (unchanged), sub-12px text DEFER (stronger evidence now — confirmed legible but a real `DESIGN.md` 11px-floor violation; full fix is its own gate-sized sweep). 441 tests pass. |
+| `UI-DEVICE-1` | **BLOCKED** | Explicitly framed by the user as distinct from `UI-ACCEPTANCE-1` — must catch touch behaviour, real mobile browser chrome, virtual keyboard behaviour, real safe-area/scrolling experience, and perceived usability, none of which desktop/emulated testing can prove. Checked thoroughly for real device access: `claude-in-chrome`'s `list_connected_browsers` returned empty (no paired Chrome anywhere, and mobile Chrome/Safari can't run extensions regardless); `.mcp.json` has only the `magic`/21st.dev server, no device-lab MCP; no `adb`; no `xcrun` (impossible on this Windows machine). Unlike `UI-IMPECCABLE-1`/`UI-21DEV-1`, no meaningful substitute existed — a source-level or emulated stand-in would have been exactly the kind of unverifiable claim this program refuses to make. Asked the user directly rather than guessing; the user chose to close it BLOCKED. No application code changed. |
 
 ## Repository observations
 
@@ -711,6 +709,16 @@ indicator's appear/clear cycle. Eight mutations run — **all eight caught, zero
   unexplained application-code workaround, per direct instruction. Owned by a dedicated
   future investigation or an explicitly-approved Next.js upgrade — not implicitly any later
   gate's job merely because it touches `app/(public)`.
+- **`UI-DEVICE-1` is BLOCKED, not skipped or silently deferred.** No real device access
+  exists in this environment (checked, not assumed — see the gate's own record in
+  `UI_ACTIVE_GATE.md` and the gate-history table above for the full list of what was
+  checked). Everything the master plan assigned this gate — touch behaviour, real mobile
+  browser chrome, virtual keyboard behaviour, safe-area/scrolling as actually experienced on
+  hardware, perceived usability — remains unverified by any real device. `UI-ACCEPTANCE-1`'s
+  desktop-emulated viewport testing is not a substitute and was not treated as one. This
+  stays open until either real device access becomes available in a future session (a
+  physical device, a device-lab account, or similar) or the user explicitly decides
+  otherwise; it is not implicitly satisfied by any other gate's work.
 
 ## Validation evidence
 
@@ -734,6 +742,7 @@ indicator's appear/clear cycle. Eight mutations run — **all eight caught, zero
 | `UI-IMPECCABLE-1` | pass (`npx tsc --noEmit`, exit 0) | clean | **64 files, 437 tests pass** (incl. `test/tailwind-classes.test.ts`'s compiled-CSS validation); the new `font-mono`-heading guard mutation-tested via a scoped `git stash push` — failed against pre-fix source (all three offending routes listed), restored passing | not a full browser check, no visual-acceptance claim made (explicit constraint — no rendering tool exists); `next build` succeeded, bundle-size unchanged; `next start` + `curl` against `/tools/prc-calculator` and `/orders` confirmed the fixed classes in real rendered HTML and in the compiled, non-purged CSS |
 | `UI-21DEV-1` | pass (`npx tsc --noEmit`, exit 0) | clean (an unrelated pre-existing `.gitignore` change from `/plugin` excluded, left for the user) | **64 files, 438 tests pass**; the new `Dialog` guard mutation-tested via a scoped `git stash push` of `Dialog.tsx` alone — failed against pre-fix source, restored passing | not a browser check; `next build` succeeded, bundle-size unchanged (one className edit); `Dialog` is conditionally client-rendered so no static HTML exists to `curl` — the RTL component test renders the real component with real props instead, the correct tool for this case |
 | `UI-ACCEPTANCE-1` | pass (`npx tsc --noEmit`, exit 0) | clean (same unrelated `.gitignore` change still excluded) | **64 files, 441 tests pass**; the 3 new structurally-tested guards mutation-tested via a scoped `git stash push` of the 3 relevant source files — all 3 failed against pre-fix source, restored passing | **first real browser check in this program** — Playwright MCP, confirmed connected via an actual navigation; all 9 named routes × all 8 named viewports tested; `next build` succeeded before and after fixes, bundle-size unchanged; a second `next build` + `next start` pass with real published test data confirmed correct status codes and no server errors across routes |
+| `UI-DEVICE-1` | not required — no application code changed | clean (same unrelated `.gitignore` change still excluded) | not required — no application code changed | **BLOCKED**: no real device access exists (see gate history row / outcome summary below for the full check) |
 
 ## `UI-CONTENT-1` outcome summary
 
@@ -1223,22 +1232,49 @@ Three new tests: `HeroCard`'s footer-wrap structural precondition and `ThumbZone
 restored passing. The contrast fix has no separate automated guard; its correctness is the
 reproducible browser measurement recorded in `UI_ACTIVE_GATE.md`, re-checkable the same way.
 
+## `UI-DEVICE-1` outcome summary — BLOCKED
+
+Full record lives in `docs/context/UI_ACTIVE_GATE.md`, which stays the recoverable record for
+this gate; this is the summary.
+
+### The gate's purpose ruled out its own obvious fallback
+
+Given before any checking began: this gate is not a repeat of `UI-ACCEPTANCE-1` — it exists
+specifically to catch touch behaviour, real mobile browser chrome, virtual keyboard
+behaviour, safe-area/scrolling as actually experienced on hardware, and perceived usability.
+Unlike `UI-IMPECCABLE-1`/`UI-21DEV-1`, where "do the same review manually" was a real
+fallback when a named tool turned out unavailable, none of what this gate is *for* can be
+produced by source reading or Playwright's desktop viewport emulation — that distinction was
+the user's own framing, and it correctly ruled out substituting emulated work and presenting
+it as this gate's output.
+
+### What was checked
+
+`claude-in-chrome`'s `list_connected_browsers` returned an empty list — no Chrome instance is
+paired to this account on any device (and mobile Chrome/Safari can't run extensions at all,
+so this path was structurally incapable of reaching a real phone even paired). `.mcp.json`
+has only the `magic`/21st.dev server; no device-lab MCP (BrowserStack, Sauce Labs, etc.)
+exists. No `adb`. No `xcrun` (impossible on this Windows environment regardless). No new
+tooling was installed to work around the gap.
+
+### Decision
+
+Asked the user directly which of four paths to take (close BLOCKED; the user tests manually
+and reports back; the user has a device-cloud account to configure; something else). The
+user chose: close as BLOCKED. No application code was touched.
+
 ## Gate transition rule
 
 Update `UI_ACTIVE_GATE.md` only when work on the next gate actually begins. Each closed
 gate's evidence remains recoverable from this document, from `docs/ui/UI_AUDIT.md`, and from
 Git history.
 
-`UI-DEVICE-1` is next, per explicit instruction (also the master plan's own sequential next
-step, Phase 18): real-device mobile acceptance where environment and device access permit.
-`UI-ACCEPTANCE-1` resolved the masthead border-opacity item (KEEP) using the browser tooling
-that turned out to be available; sub-12px sizes and emoji iconography remain open, now with
-stronger, rendering-backed evidence than before — see that gate's outcome summary. If
-`UI-DEVICE-1` also lacks real device access, the correct move (per this program's now
-well-established pattern) is the same: check first, don't assume, record precisely, don't
-block the gate, and do whatever the fallback instruction says instead of guessing.
+`UI-REGRESSION-1` is next, the master plan's own sequential next step (Phase 19): complete
+full regression verification. `UI-DEVICE-1` remains BLOCKED, not closed with device-verified
+evidence — it stays open for whenever real device access becomes available, rather than being
+implicitly satisfied by any later gate's work.
 
-Fourteen practices are worth carrying forward.
+Fifteen practices are worth carrying forward.
 
 **Mutate every new guard.** In five of the last six gates a guard passed its first mutation and
 had to be rewritten or, this gate, needed a genuinely new test to exist at all —
@@ -1376,3 +1412,18 @@ gates already tagged "needs rendering"). The lesson isn't "browser testing matte
 abstract — it's that once you have it, reach for `evaluate`-driven measurement over visual
 inspection wherever a number actually exists to check, the same way earlier gates learned to
 compile Tailwind and diff emitted classes instead of reading class names and assuming.
+
+**Not every tool gap has a substitute worth doing — recognize when the honest answer is
+BLOCKED, not a downgraded version of the work.** Every prior tool-unavailability in this
+program (Impeccable, 21st.dev) had a real fallback: the manual review was still genuine,
+useful work product, just without the named tool's assist. `UI-DEVICE-1` was different
+because the user defined its purpose specifically as *the things a fallback can't reach* —
+touch behaviour, real mobile chrome, a real virtual keyboard, real safe-area/scrolling feel,
+perceived usability. Reaching for the usual move (re-read the source, run Playwright again
+with a phone-sized viewport, call it close enough) would have produced something that looked
+like gate output but proved nothing the gate exists to prove — the exact shape of an
+unverifiable claim this program has refused to make at every other gate. The tell was in the
+user's own framing before any checking started ("the goal is not to repeat Playwright
+acceptance"), which pre-ruled-out the fallback that would otherwise have felt natural to
+reach for. Checking tooling honestly, finding nothing, and asking rather than quietly
+downgrading the gate's scope to fit what was available is what kept the record trustworthy.
