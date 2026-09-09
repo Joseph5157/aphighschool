@@ -50,7 +50,9 @@ export default function PensionCalculatorUI() {
           <Badge variant="tamarind" size="sm" shape="pill" dot>
             AP Treasury Pension Standard
           </Badge>
-          <span className="font-mono text-xs text-inkSoft">Service Pension & Gratuity Calculator</span>
+          {/* This route's only heading (UI_AUDIT.md F12) — same visual treatment as
+              before, now the page's h1 instead of an unheaded span. */}
+          <h1 className="font-mono text-xs text-inkSoft font-normal">Service Pension & Gratuity Calculator</h1>
         </div>
         <Button
           variant={isPrintMode ? "tamarind" : "outline"}

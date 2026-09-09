@@ -52,4 +52,11 @@ describe("accessibility guards", () => {
     }
     expect(offenders).toEqual([]);
   });
+
+  // UI-A11Y-1, UI_AUDIT.md F17 / DESIGN_SYSTEM.md §14.
+  it("the public layout has a skip-to-content link targeting the main region", () => {
+    const layout = read("app/(public)/layout.tsx");
+    expect(layout).toMatch(/<a\s+href="#main-content"/);
+    expect(layout).toMatch(/id="main-content"/);
+  });
 });

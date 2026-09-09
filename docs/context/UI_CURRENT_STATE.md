@@ -12,18 +12,19 @@
 
 ## Current UI program state
 
-- Current phase: Phase 13
-- Active gate: `UI-PERF-1` (CLOSED)
-- Scope in this gate: frontend performance only, per Phase 13 — size, dimensions, responsive
-  delivery, lazy loading, layout shift, unused assets, unnecessary frontend weight
+- Current phase: Phase 14
+- Active gate: `UI-A11Y-1` (CLOSED)
+- Scope in this gate: an accessibility pass, per Phase 14 — keyboard navigation, focus,
+  semantics, labels, alt text, form errors, contrast, dialogs, menus, touch targets, reduced
+  motion
 - UI redesign performed: no
-- Application behaviour changed: yes, but data-shape only, no visible/behavioral change —
-  `category/[slug]/page.tsx`'s posts query and `app/(public)/page.tsx`'s homepage-feed query
-  both narrowed to `select` only the fields their consuming components actually render, and
-  the homepage's entirely-unrendered `relatedFrom` fetch was removed. Every field either page
-  displays is still fetched, in full; only unconsumed columns (chiefly `content`, the full
-  document body) and one fully-dead nested relation stopped being fetched.
-- Next planned gate: `UI-A11Y-1`
+- Application behaviour changed: yes, semantic/markup-level — three routes gained their
+  missing `h1` (a label `<span>` promoted to `<h1>` in place, same class, same position), a
+  fourth route's duplicate `h1` demoted to `h2`, a skip-to-content link was added to the
+  public layout, `TableHead` now defaults to `scope="col"`, and `Breadcrumb`'s current-page
+  marker lost an incorrect `role="link" aria-disabled="true"` pair and gained a `title`
+  attribute for its truncated text. No visual redesign; every change is additive/semantic.
+- Next planned gate: `UI-IMPECCABLE-1`
 
 ### Gate history
 
@@ -43,6 +44,7 @@
 | `UI-LINKS-1` | CLOSED | Three dead external government-portal domains found by live fetch (two fixed, one removed — no guessable replacement existed); post-detail "Category Stacks" widget's fabricated category links, duplicate-data bug, and positional "NEW" badge all fixed; a third, previously-missed instance of the hardcoded-chips defect (`OrdersSidebar`) fixed. `link-crawl.test.ts`'s literal-string-only coverage gap identified and documented (not widened — manual audit is the right tool for dynamic hrefs). 420 tests pass. |
 | `UI-404-1` | CLOSED | Custom `app/(public)/not-found.tsx` and root `app/not-found.tsx` added with real recovery links. Pre-existing dynamic-route soft-404 (200 instead of 404) found, root-cause-eliminated down to "correlates with real route-group scale, no single file responsible" — left undone and precisely documented per explicit instruction (no Next.js upgrade, no unexplained workaround). 424 tests pass. |
 | `UI-PERF-1` | CLOSED | No images anywhere in the app — the checklist's image items re-confirmed not applicable, not re-litigated. Found and fixed the real "frontend weight" work instead: `category/[slug]`'s posts query was unbounded *and* unselected (fetching every post's full `content` field for an entire category, on every view); the homepage's query fetched a `relatedFrom` relation neither `HeroCard` nor `PostCard` renders at all. Both narrowed to exactly the fields their consumers read. Unused-but-zero-cost `Pagination.tsx` recorded, not deleted (already tree-shaken, out of this gate's scope). 426 tests pass. |
+| `UI-A11Y-1` | CLOSED | Re-audited all 17 accessibility-tagged audit items against current source rather than trusting old gate-history claims; 13 were already fixed by earlier gates (confirmed, not re-fixed). Fixed the 4 that were still genuinely open: three routes with no `h1` (a label span promoted in place) plus a fourth's duplicate `h1` demoted to `h2`; a missing skip-to-content link; `TableHead`'s missing `scope="col"` default; `Breadcrumb`'s current-page marker announcing a fake disabled link instead of just `aria-current`, plus a missing `title` for its truncated text. Contrast recorded as target-specified-but-unmeasured (no tooling), same disposition as every prior browser-dependent claim in this program. 436 tests pass. |
 
 ## Repository observations
 
@@ -609,9 +611,14 @@ indicator's appear/clear cycle. Eight mutations run — **all eight caught, zero
   for `UI-DESIGN-1`. The critique recorded in `DESIGN.md` is self-applied against the audit
   findings and the product constraints. `UI-IMPECCABLE-1` remains the gate that would use it,
   and `DESIGN.md` is what it should critique against.
-- **No colour-contrast ratios have been measured.** `DESIGN_SYSTEM.md` specifies token pairings
-  and roles, but the 4.5:1 / 3:1 requirements are unverified in both themes. `UI-A11Y-1` owns
-  verification and may adjust values; the roles should survive any such adjustment.
+- **No colour-contrast ratios have been measured, still.** `DESIGN_SYSTEM.md` §14 specifies
+  the target (4.5:1 body text, 3:1 large text/UI boundaries, both themes) and named
+  `UI-A11Y-1` as the owner of verification — that gate closed without measuring it, for the
+  same reason every prior gate recorded browser-dependent claims as unavailable: no browser
+  or contrast-measurement tool exists in this environment. The target is specified and
+  unchanged; ownership of actually measuring it now belongs to whichever gate first has
+  working browser/device tooling (`UI-ACCEPTANCE-1` or `UI-DEVICE-1`), not a re-assignment
+  back to a closed gate.
 - `DESIGN_SYSTEM.md` is a specification. `UI-SYSTEM-1` implemented its foundation sections;
   §15 records exactly what is done and what is carried forward. Where the rest of it and the
   code still disagree, the code is the defect and `UI_AUDIT.md` records it.
@@ -672,6 +679,7 @@ indicator's appear/clear cycle. Eight mutations run — **all eight caught, zero
 | `UI-LINKS-1` | pass (`npx tsc --noEmit`, exit 0) | clean (CRLF notices only) | **61 files, 420 tests pass** | not a full browser check; every hardcoded external URL verified live via `WebFetch`+`curl` (DNS/HTTP status, not source reading); `next build` + `next start` + `curl` confirmed real destinations render on `/pensioners`, `/tools/cfms-checker`, and a post-detail page — see gate notes on why raw body-text `curl` checks are unreliable for element order/count |
 | `UI-404-1` | pass (`npx tsc --noEmit`, exit 0) | clean | **62 files, 424 tests pass** | not a full browser check; `next build` + `next start` + `curl -D -` (status + headers) verified all three representative cases (unmatched URL, invalid post slug, invalid category slug) for status code, not-found content, `robots` meta, and recovery links — table in `UI_ACTIVE_GATE.md`; `next` version unchanged (`14.2.35`) |
 | `UI-PERF-1` | pass (`npx tsc --noEmit`, exit 0) | clean | **63 files, 426 tests pass**; both new/changed guards mutation-tested via `git stash` against the pre-fix source (both failed as expected, then passed clean after restore) | not a full browser check; `next build` succeeded with an unchanged bundle-size report (expected — server-side `select` changes don't affect client JS size); `next start` + `curl` smoke-tested `/`, `/orders`, and an invalid category slug for absence of 500s/error-boundary text |
+| `UI-A11Y-1` | pass (`npx tsc --noEmit`, exit 0) | clean | **64 files, 436 tests pass**; all 4 new/changed guards mutation-tested (two `git stash` passes, since the heading-structure guards live in an untracked file a single stash doesn't move) — all failed against pre-fix source, all pass restored | not a full browser check (contrast unmeasured, recorded as a known limitation); `next build` succeeded, bundle-size unchanged; `next start` + `curl` against the three previously-headless routes confirmed exactly one real server-rendered `<h1>` on each, and confirmed the skip link + its target both appear in real rendered HTML |
 
 ## `UI-CONTENT-1` outcome summary
 
@@ -927,17 +935,78 @@ guard was rewritten (not deleted) to assert the relation is absent entirely, sin
 longer anything there to leak a draft through. Both mutation-tested via `git stash` against
 the pre-fix source — confirmed failing, then restored and passing.
 
+## `UI-A11Y-1` outcome summary
+
+Full findings-to-disposition detail lives in `docs/context/UI_ACTIVE_GATE.md`, which stays
+the recoverable record for this gate; this is the summary.
+
+### Re-audited before fixing anything
+
+17 accessibility-tagged items from `UI-AUDIT-1` (F4, F6, F7, F12, F13, F14, F15, F17, F26,
+F27, F28, F31, F32, plus alt text, contrast, reduced motion, and other dialog/menu widgets)
+were re-checked against **current source**, not against what earlier gate-history entries in
+this document claimed. 13 were genuinely already fixed by `UI-SYSTEM-1`, `UI-SYSTEM-2`, and
+`UI-MOBILE-NAV-1` — confirmed directly in the relevant files rather than trusted secondhand.
+4 were still open.
+
+### Closed
+
+- **F12 — heading structure.** `CommutationTrackerUI`, `PensionCalculatorUI`,
+  `PrcCalculatorUI` had no `h1` at all (a `Badge` + unheaded `<span>` was each route's only
+  "header"); promoted that span to `h1` in place, no visual change. `TaxCalculatorUI` had two
+  `h1`s across mutually-exclusive tab states (never simultaneously in the DOM, but still an
+  inconsistent per-route heading identity); its printable-receipt section's heading demoted
+  to `h2`, matching every sibling calculator's own print-view convention.
+- **F17 (remainder) — skip-to-content link.** Added as the first element in
+  `app/(public)/layout.tsx`, before the drawer/header/nav, targeting a new
+  `id="main-content"` on the existing `<main>`.
+- **F26 (remainder) — `<th>` scope.** `TableHead` now defaults to `scope="col"`
+  (overridable), closing the one piece of the audit's table-semantics finding
+  `UI-RESPONSIVE-1` didn't already cover.
+- **F27 — breadcrumb semantics.** `BreadcrumbPage` no longer claims `role="link"
+  aria-disabled="true"` (announcing a broken link) alongside its correct `aria-current="page"`;
+  the truncated current-page text now carries a `title` with the full label.
+
+### Re-confirmed, not re-fixed
+
+F4 (focus indicator), F6 (iOS zoom), F7 (touch targets), F13 (field/error association), F14
+(`Sheet` deleted, `Dialog` carries the full modal contract), F15 (accordion uses `hidden`),
+F17's `aria-current`/`aria-label` half, F28 (shortcut guard), F31 (12px label floor), F32
+(`ThemeToggle` details), alt text (none needed — no images anywhere), reduced motion
+(substantive `prefers-reduced-motion` handling), and `Tabs.tsx` (already a correct WAI-ARIA
+pattern) were all verified directly in source and left untouched.
+
+### Contrast — specified, still not measured
+
+`DESIGN_SYSTEM.md` §14 already states the target (4.5:1 body, 3:1 large text/UI boundaries,
+both themes). This gate could not measure actual ratios — no browser or contrast tool exists
+in this environment, the same limitation every browser-dependent claim in this program has
+recorded. Not silently dropped: recorded as a carried-forward known limitation, owned by
+whichever gate first has working browser/device tooling.
+
+### Guards added
+
+`test/heading-structure.test.tsx` (5, new file) — one real `h1` per fixed route, and the
+tax-calculator's receipt tab confirmed not to introduce a second one. `test/
+primitives.test.tsx` (+4) — `TableHead`'s scope default and override, `BreadcrumbPage`'s
+`aria-current`/absence of the fake-link pair, and its `title` attribute. `test/a11y.test.ts`
+(+1) — the skip-link source guard. All four mutation-tested in two `git stash` passes (a
+second pass was needed because the heading-structure guards live in a file `git stash` alone
+doesn't move until it's tracked) — all failed against pre-fix source, all restored passing.
+
 ## Gate transition rule
 
 Update `UI_ACTIVE_GATE.md` only when work on the next gate actually begins. Each closed
 gate's evidence remains recoverable from this document, from `docs/ui/UI_AUDIT.md`, and from
 Git history.
 
-`UI-A11Y-1` is next, the master plan's own sequential next step (Phase 14): an accessibility
-pass covering keyboard navigation, focus, semantics, labels, alt text, form errors, contrast,
-dialogs, menus, touch targets, and reduced motion.
+`UI-IMPECCABLE-1` is next, the master plan's own sequential next step (Phase 15): use
+Impeccable for controlled visual critique against the established design rules, preserving
+functionality and information architecture. (Impeccable was not available in this environment
+as of `UI-DESIGN-1`; that gate's self-applied critique in `DESIGN.md` may be what this one has
+to work from again — confirm tool availability before assuming otherwise.)
 
-Ten practices are worth carrying forward.
+Eleven practices are worth carrying forward.
 
 **Mutate every new guard.** In five of the last six gates a guard passed its first mutation and
 had to be rewritten or, this gate, needed a genuinely new test to exist at all —
@@ -994,7 +1063,9 @@ know when to stop.** `UI-404-1`'s first theory (ISR/`revalidate`) and second the
 (`usePathname()` without a Suspense boundary) were both plausible, both matched real
 published Next.js issue reports, and both were empirically wrong for this codebase — each
 only found wrong by actually testing the specific fix, not by re-reasoning from the same
-symptom. A minimal, isolated reproduction (copy the suspect files into a throwaway route,
+symptom.
+
+A minimal, isolated reproduction (copy the suspect files into a throwaway route,
 strip everything else out) settled definitively what broader speculation could not, and also
 found the boundary of what's worth chasing: once individual elimination showed the cause
 correlates with route-group scale rather than any single file, further guessing stopped being
@@ -1013,3 +1084,16 @@ component it feeds — not just the one obviously "main" consumer, since a relat
 can be dead in one consumer and load-bearing in a sibling that looks superficially identical
 (`posts/[slug]/page.tsx`'s own `relatedFrom` fetch was already correct, right next to the
 homepage's dead one).
+
+**A gate-history claim that a finding is "closed" is a claim about the state of the repo when
+that entry was written — re-verify against current source before either re-fixing it or
+trusting it's still true.** `UI-A11Y-1` opened with 17 accessibility-tagged findings and
+found 13 already fixed by earlier gates whose own summaries never mentioned them by F-number
+(they were incidental to what those gates were actually working on) — re-fixing any of those
+13 would have been wasted, contradictory work. The remaining 4 were genuinely open despite
+`UI_AUDIT.md`'s original disposition column pointing at this gate for all of them, which by
+itself gave no signal about which four. The only reliable method was reading the actual
+current file at the actual current line for every single item before deciding what this
+gate's real scope was — a fork was used for exactly this read-heavy, decision-light pass, so
+the 26-tool-call investigation didn't have to sit in the coordinating context before the
+scoping decision that mattered.

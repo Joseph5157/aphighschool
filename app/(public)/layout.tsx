@@ -66,6 +66,17 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
   return (
     <BottomBarProvider>
       <SidebarProvider defaultOpen={false}>
+      {/* Skip link (UI_AUDIT.md F17 / DESIGN_SYSTEM.md §14) — first focusable
+          element in the document; invisible until keyboard-focused, so a
+          keyboard/screen-reader user isn't forced through the drawer trigger,
+          logo link, and full desktop nav before reaching the page content. */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[70] focus:rounded-lg focus:bg-ink focus:text-paper focus:px-4 focus:py-2 focus:text-sm focus:font-semibold"
+      >
+        Skip to main content
+      </a>
+
       {/* Sliding Sidebar Drawer for Public Navigation & Tools */}
       <Sidebar side="left" collapsible="offcanvas">
         <SidebarHeader>
@@ -193,7 +204,10 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
             width, including `lg` and above where no bottom bar is mounted at
             all, leaving dead space under every desktop page. Below `lg` it
             clears the bar plus the iOS home indicator. */}
-        <main className="flex-1 w-full max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 py-8 pb-[calc(76px+env(safe-area-inset-bottom))] lg:pb-8 print:p-0 print:m-0 print:max-w-none print:w-full">
+        <main
+          id="main-content"
+          className="flex-1 w-full max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 py-8 pb-[calc(76px+env(safe-area-inset-bottom))] lg:pb-8 print:p-0 print:m-0 print:max-w-none print:w-full"
+        >
           {children}
         </main>
 

@@ -16,6 +16,8 @@ import Checkbox from "@/app/(public)/_components/Checkbox";
 import NativeSelect from "@/app/(public)/_components/NativeSelect";
 import Field from "@/app/(public)/_components/Field";
 import { PaginationLink } from "@/app/(public)/_components/Pagination";
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/app/(public)/_components/Table";
+import Breadcrumb from "@/app/(public)/_components/Breadcrumb";
 
 const icon = <svg viewBox="0 0 24 24" />;
 
@@ -261,5 +263,54 @@ describe("typography floor in shared primitives", () => {
     }
 
     expect(offenders).toEqual([]);
+  });
+});
+
+describe("Table semantics (UI-A11Y-1, UI_AUDIT.md F26)", () => {
+  it("gives TableHead a column scope by default", () => {
+    render(
+      <Table label="Test table">
+        <TableHeader>
+          <TableRow>
+            <TableHead>Name</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow>
+            <TableCell>Row</TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    );
+    expect(screen.getByRole("columnheader", { name: "Name" })).toHaveAttribute("scope", "col");
+  });
+
+  it("lets a caller override scope explicitly", () => {
+    render(
+      <table>
+        <tbody>
+          <tr>
+            <TableHead scope="row">Row header</TableHead>
+          </tr>
+        </tbody>
+      </table>
+    );
+    expect(screen.getByRole("rowheader", { name: "Row header" })).toHaveAttribute("scope", "row");
+  });
+});
+
+describe("Breadcrumb current-page semantics (UI-A11Y-1, UI_AUDIT.md F27)", () => {
+  it("marks the current page with aria-current, not a fake disabled link", () => {
+    render(<Breadcrumb items={[{ label: "Orders", href: "/orders" }, { label: "A Very Long Government Order Reference That Would Truncate" }]} />);
+    const current = screen.getByText("A Very Long Government Order Reference That Would Truncate");
+    expect(current).toHaveAttribute("aria-current", "page");
+    expect(current).not.toHaveAttribute("role", "link");
+    expect(current).not.toHaveAttribute("aria-disabled");
+  });
+
+  it("exposes the full label via title when the current page truncates", () => {
+    render(<Breadcrumb items={[{ label: "A Very Long Government Order Reference That Would Truncate" }]} />);
+    const current = screen.getByText("A Very Long Government Order Reference That Would Truncate");
+    expect(current).toHaveAttribute("title", "A Very Long Government Order Reference That Would Truncate");
   });
 });

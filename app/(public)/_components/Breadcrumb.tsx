@@ -49,10 +49,11 @@ BreadcrumbLink.displayName = "BreadcrumbLink";
 
 export const BreadcrumbPage = React.forwardRef<HTMLSpanElement, React.ComponentPropsWithoutRef<"span">>(
   ({ className = "", ...props }, ref) => (
+    // UI_AUDIT.md F27: role="link"/aria-disabled announced an unusable link on
+    // a non-focusable element; aria-current="page" alone is the correct
+    // pattern for the trail's current, non-navigable step.
     <span
       ref={ref}
-      role="link"
-      aria-disabled="true"
       aria-current="page"
       className={`text-ink font-semibold max-w-[200px] truncate ${className}`}
       {...props}
@@ -119,7 +120,9 @@ export function Breadcrumb({ items, className = "" }: BreadcrumbProps) {
                       {item.label}
                     </BreadcrumbLink>
                   ) : (
-                    <BreadcrumbPage>
+                    // title recovers the full label when max-w-[200px] truncates it
+                    // (UI_AUDIT.md F27) — a long G.O. reference was otherwise lost.
+                    <BreadcrumbPage title={item.label}>
                       {item.label}
                     </BreadcrumbPage>
                   )}

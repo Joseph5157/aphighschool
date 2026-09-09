@@ -58,7 +58,10 @@ export function TableRow({ children, className = "", ...props }: React.HTMLAttri
 
 export function TableHead({ children, className = "", ...props }: React.ThHTMLAttributes<HTMLTableCellElement>) {
   return (
-    <th className={`p-3 font-semibold text-ink font-mono ${className}`} {...props}>
+    // Defaults to a column header (UI_AUDIT.md F26) — every current call site
+    // is a column heading; a caller with a genuine row header can still pass
+    // scope="row" explicitly, which overrides this since it spreads after.
+    <th scope="col" className={`p-3 font-semibold text-ink font-mono ${className}`} {...props}>
       {children}
     </th>
   );

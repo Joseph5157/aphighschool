@@ -1801,7 +1801,10 @@ export default function TaxCalculatorUI() {
       {(activeTab === "rentReceipt" || activeTab === "printAll") && (
         <div className="bg-white border-2 border-black p-8 font-['Arial','Segoe_UI',Calibri,sans-serif] text-black space-y-6 max-w-2xl mx-auto print:border-none print:p-0 print:max-w-none print:w-full print-page-break text-xs leading-relaxed antialiased">
           <div className="text-center border-b-2 border-black pb-3">
-            <h1 className="text-xl font-bold uppercase tracking-wider">RECEIPT OF HOUSE RENT</h1>
+            {/* This tab's own printable-document title, not the page's heading — the
+                page's one h1 is the tool title above (UI_AUDIT.md F12: this was a
+                second h1 on the route). */}
+            <h2 className="text-xl font-bold uppercase tracking-wider">RECEIPT OF HOUSE RENT</h2>
             <div className="text-xs font-semibold text-black/70">(Under Section 10(13-A) of Income Tax Act, 1961)</div>
           </div>
           <div className="space-y-4 text-xs">

@@ -77,7 +77,9 @@ export default function PrcCalculatorUI() {
           <Badge variant="turmeric" size="sm" shape="pill" dot>
             RPS 2022 / Master Scale
           </Badge>
-          <span className="font-mono text-xs text-inkSoft">PRC Pay Fixation Calculator</span>
+          {/* This route's only heading (UI_AUDIT.md F12) — same visual treatment as
+              before, now the page's h1 instead of an unheaded span. */}
+          <h1 className="font-mono text-xs text-inkSoft font-normal">PRC Pay Fixation Calculator</h1>
         </div>
         <div className="flex items-center gap-2">
           <Button
