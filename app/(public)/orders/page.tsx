@@ -7,7 +7,7 @@ import OrdersFilterTabs from "./_components/OrdersFilterTabs";
 import OrdersSidebar from "./_components/OrdersSidebar";
 import TopicTagBar, { FEATURED_TOPICS } from "@/app/(public)/_components/TopicTagBar";
 import { ORDER_BY_OFFICIAL_DATE, officialDate, dateLabel, formatDate } from "@/lib/dates";
-import { tagsWithPublishedContent } from "@/lib/posts/query";
+import { tagsWithPublishedContent, quickSearchChips } from "@/lib/posts/query";
 import { safeQuery, optionalQuery } from "@/lib/db-safe";
 import DocumentDate from "@/app/(public)/_components/DocumentDate";
 import EmptyState from "@/app/(public)/_components/EmptyState";
@@ -18,6 +18,16 @@ export const metadata: Metadata = {
     "Browse AP School Education government orders, memos, proceedings, and notifications.",
   alternates: { canonical: "/orders" },
 };
+
+// Verified against real content before render (lib/posts/query.ts's
+// quickSearchChips) — see OrdersSidebar's verifiedSearchTags prop.
+const QUICK_SEARCH_QUERY_CANDIDATES = [
+  { label: "#DAArrears", query: "DA Arrears" },
+  { label: "#MegaDSC2026", query: "Mega DSC" },
+  { label: "#APTET", query: "TET" },
+  { label: "#TransferRules", query: "Transfers" },
+  { label: "#PRC", query: "PRC" },
+];
 
 export const dynamic = 'force-dynamic';
 
@@ -72,6 +82,15 @@ export default async function OrdersPage() {
     () => tagsWithPublishedContent(FEATURED_TOPICS.map((topic) => topic.tag)),
     []
   );
+
+  const verifiedQueries = await optionalQuery(
+    "orders-quick-search-chips",
+    () => quickSearchChips(QUICK_SEARCH_QUERY_CANDIDATES.map((c) => c.query)),
+    []
+  );
+  const verifiedSearchTags = QUICK_SEARCH_QUERY_CANDIDATES.filter((c) =>
+    verifiedQueries.includes(c.query)
+  ).map((c) => ({ label: c.label, href: `/search?q=${encodeURIComponent(c.query)}` }));
 
   return (
     <div className="space-y-8 pb-24 font-sans">
@@ -170,7 +189,7 @@ export default async function OrdersPage() {
 
         {/* Sidebar Column (4 cols on Desktop) */}
         <div className="lg:col-span-4">
-          <OrdersSidebar />
+          <OrdersSidebar verifiedSearchTags={verifiedSearchTags} />
         </div>
       </div>
 

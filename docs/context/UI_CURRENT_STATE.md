@@ -12,19 +12,21 @@
 
 ## Current UI program state
 
-- Current phase: Phase 10
-- Active gate: `UI-SEO-1` (CLOSED)
-- Scope in this gate: page titles, meta descriptions, favicon, canonical, and social metadata
-  on `app/(public)` plus the root-level `icon.svg`/`robots.ts`/`sitemap.ts` special files
+- Current phase: Phase 11
+- Active gate: `UI-LINKS-1` (CLOSED)
+- Scope in this gate: internal, external, and document link audit on `app/(public)`;
+  `mailto:`/`tel:` where genuine contact info exists (still none — recorded, not invented)
 - UI redesign performed: no
-- Application behaviour changed: yes — real title template (was inert); canonical links,
-  OpenGraph/Twitter defaults, favicon, robots.txt and sitemap.xml added where none existed;
-  three over-length titles and three over-length descriptions shortened; `NEXT_PUBLIC_SITE_URL`
-  localhost-fallback deduplicated behind one helper with a production warning; an unsupported
-  "Offline Ready" claim and a second hardcoded-quick-search-chips instance (`DesktopSidebar`,
-  missed by `UI-CONTENT-1`'s audit) fixed; a category-page title bug ("Government Orders
-  Orders") fixed. Information architecture, routes and page composition unchanged.
-- Next planned gate: `UI-LINKS-1`
+- Application behaviour changed: yes — three dead external government-portal domains fixed
+  (two repointed to a verified live replacement, one removed with no guessable substitute);
+  two `http://` EHS links upgraded to `https`; every post-detail page's "Category Stacks"
+  widget fixed (it 404'd on "View More" via two invented category slugs, showed the same six
+  posts twice reversed instead of a real per-category query, and marked items "NEW" by array
+  position rather than any real date — the badge was removed rather than given an invented
+  threshold); a third instance of the recurring hardcoded/unverified quick-search-chips defect
+  (`OrdersSidebar`, missed by both prior gates' audits) fixed the same way as the other three.
+  Information architecture, routes and page composition unchanged.
+- Next planned gate: `UI-404-1`
 
 ### Gate history
 
@@ -41,6 +43,7 @@
 | `UI-STATES-1` | CLOSED | Five `loading.tsx` routes added with `Skeleton`; seven ad hoc empty-state divs standardised onto `EmptyState`; search's debounce pending gap closed. 389 tests pass. |
 | `UI-CONTENT-1` | CLOSED | WhatsApp banner (F16) deleted; AP-only scope lock (F25) fixed in five places behind a new repo-wide guard; quick-search/topic chips (F30) made self-verifying against real content; tools-index step claims and a PRC HRA calculation bug fixed. 402 tests pass. |
 | `UI-SEO-1` | CLOSED | Real title template; canonical, OpenGraph/Twitter, favicon, robots.txt, sitemap.xml added; three over-length titles/descriptions shortened; F9's localhost-fallback deduplicated with a production warning; a second F30-shaped chip defect and an "Offline Ready" unsupported claim found and fixed outside the original audit. Verified with an actual `next build` + `curl`, not source reading alone. 410 tests pass. |
+| `UI-LINKS-1` | CLOSED | Three dead external government-portal domains found by live fetch (two fixed, one removed — no guessable replacement existed); post-detail "Category Stacks" widget's fabricated category links, duplicate-data bug, and positional "NEW" badge all fixed; a third, previously-missed instance of the hardcoded-chips defect (`OrdersSidebar`) fixed. `link-crawl.test.ts`'s literal-string-only coverage gap identified and documented (not widened — manual audit is the right tool for dynamic hrefs). 420 tests pass. |
 
 ## Repository observations
 
@@ -655,6 +658,7 @@ indicator's appear/clear cycle. Eight mutations run — **all eight caught, zero
 | `UI-STATES-1` | pass (`npx tsc --noEmit`, exit 0) | clean | **50 files, 389 tests pass**; Tailwind utility validation passes | unavailable |
 | `UI-CONTENT-1` | pass (`npx tsc --noEmit`, exit 0) | clean (CRLF notices only) | **55 files, 402 tests pass** (DB-backed suite run against a native-Postgres stand-in; see Environment note above) | unavailable |
 | `UI-SEO-1` | pass (`npx tsc --noEmit`, exit 0) | clean (CRLF notices only) | **58 files, 410 tests pass** | not a full browser check, but `next build` + `next start` + `curl` verified real rendered `<head>` output (title/description/canonical/OG/Twitter/robots/favicon) across static, dynamic, and query-bearing routes — see gate notes |
+| `UI-LINKS-1` | pass (`npx tsc --noEmit`, exit 0) | clean (CRLF notices only) | **61 files, 420 tests pass** | not a full browser check; every hardcoded external URL verified live via `WebFetch`+`curl` (DNS/HTTP status, not source reading); `next build` + `next start` + `curl` confirmed real destinations render on `/pensioners`, `/tools/cfms-checker`, and a post-detail page — see gate notes on why raw body-text `curl` checks are unreliable for element order/count |
 
 ## `UI-CONTENT-1` outcome summary
 
@@ -776,17 +780,65 @@ worth carrying forward below.
 metadata.test.ts` (4). Both behavioural fixes (the sidebar conditional, the category title)
 were mutation-tested — zero survivors.
 
+## `UI-LINKS-1` outcome summary
+
+Full findings-to-disposition detail lives in `docs/context/UI_ACTIVE_GATE.md`, which stays
+the recoverable record for this gate; this is the summary.
+
+### `mailto:`/`tel:`
+
+No genuine contact information exists anywhere in the public UI. Re-confirmed, not
+re-invented. Recorded as not-applicable, same as `UI-AUDIT-1`'s original disposition.
+
+### Closed
+
+- **Three dead external government-portal domains**, found by live `WebFetch`/`curl`, not
+  source reading — `agap.cas.nic.in` and `agap.ap.nic.in` (AG AP's office; both migrated to
+  the verified-live `agaeap.cag.gov.in`) and `esr.ap.gov.in` (e-SR; no working replacement
+  found despite a real, recent relaunch — GO 57, 2026-07-20 — so removed rather than guessed).
+  Two `http://www.ehs.ap.gov.in` links upgraded to `https` (the only variant that resolves).
+- **Post-detail "Category Stacks" widget** — three compounding defects in one small
+  component, all found by actually curling a real post page: "View More" 404'd on two
+  invented category slugs; the second stack silently reused the first stack's posts reversed
+  instead of a real per-category query; a "NEW" badge was assigned by array position, not any
+  real date. Fixed: the second stack now queries the real `tools` category and hides itself
+  when empty; the first links to `/orders` (its real scope — site-wide, not a category); the
+  fabricated "NEW" badge is gone (not replaced with an invented freshness threshold).
+- **A third instance of the recurring hardcoded/unverified quick-search-chips defect**
+  (`OrdersSidebar`, missed by both `UI-CONTENT-1` and `UI-SEO-1`'s audits) — fixed by reusing
+  the same `lib/posts/query.ts` verification functions built once, not reimplemented.
+
+### A real, documented gap in the existing link-crawl guard
+
+`test/link-crawl.test.ts` only matches literal `href="/path"` JSX attributes. Two of this
+gate's three internal-link defects were sitting in its exact blind spot (a template-literal
+href built from a hardcoded string, and an object-literal `href:` property). Widening the
+regex to resolve arbitrary dynamic expressions was considered and rejected — it would need
+real expression evaluation, not a smarter regex — so this stays a known limitation the next
+audit-shaped gate should manually re-check for, not something automated away here.
+
+### A verification-method lesson, not a code defect
+
+A raw `curl`+`grep` scan of a Next.js App Router response's *body* text over-counts and can
+appear to show elements in the wrong order, because the RSC hydration payload embeds the same
+rendered content again as escaped JSON inside `<script>` tags. This never affected `UI-SEO-1`
+(which only ever checked `<head>` tags, not duplicated by RSC streaming) but cost real time
+this gate chasing a phantom ordering bug in `<body>` content. The reliable check for body
+content is a component-level React Testing Library render — exactly what this gate's new
+tests do — not a raw HTTP text scan. `curl` remains right for `<head>` metadata and for
+confirming a string/URL is or isn't present anywhere in a response at all.
+
 ## Gate transition rule
 
 Update `UI_ACTIVE_GATE.md` only when work on the next gate actually begins. Each closed
 gate's evidence remains recoverable from this document, from `docs/ui/UI_AUDIT.md`, and from
 Git history.
 
-`UI-LINKS-1` is next per the master plan: audit and fix internal, external, and document
-links; implement `mailto:`/`tel:` where genuine contact information exists (it currently does
-not, per `PRODUCT.md`'s open contact/legal-surface question).
+`UI-404-1` is next per the master plan: add a useful custom not-found/unavailable experience
+with recovery paths (`app/not-found.tsx` doesn't exist yet — `notFound()` calls currently fall
+through to the unstyled Next.js default, per `UI_AUDIT.md` F10).
 
-Seven practices are worth carrying forward.
+Eight practices are worth carrying forward.
 
 **Mutate every new guard.** In five of the last six gates a guard passed its first mutation and
 had to be rewritten or, this gate, needed a genuinely new test to exist at all —
@@ -826,3 +878,14 @@ up in rendered `<head>` output, and a Windows-specific crash in `next/og`'s `Ima
 that only fires during the static-export prerender step. `tsc` and component-render tests
 check that code runs; they do not check that Next's own metadata resolution or build pipeline
 produces what the source implies it will.
+
+**A regex-based guard has a coverage shape, not just a pass/fail — know what it can't see.**
+`test/link-crawl.test.ts` only matches literal `href="/path"` JSX attributes; `UI-LINKS-1`
+found two real defects living entirely in that gap (a template-literal href built from a
+hardcoded string, an object-literal `href:` property). The fix wasn't to make the regex
+smarter — that needs real expression evaluation — it was to know the boundary exists and
+manually audit the shapes the automated guard structurally cannot reach. The same applies to
+`curl`-based body-content checks this same gate: RSC hydration payloads duplicate rendered
+text inside `<script>` tags, so a raw text scan over-counts and can misreport order; a
+component-level render (React Testing Library) is the reliable tool for body content, `curl`
+for `<head>` metadata and presence/absence checks.

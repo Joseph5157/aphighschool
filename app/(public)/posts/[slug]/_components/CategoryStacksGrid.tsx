@@ -7,12 +7,13 @@ interface StackItem {
   id: string;
   slug: string;
   titleEn: string;
-  isNew?: boolean;
 }
 
 interface CategoryStack {
   title: string;
-  categorySlug: string;
+  /** Resolved destination for "View More" — not always a category (e.g. the
+   * site-wide "latest updates" stack links to /orders, not a category page). */
+  href: string;
   icon: string;
   items: StackItem[];
 }
@@ -41,7 +42,7 @@ export default function CategoryStacksGrid({ stacks }: CategoryStacksGridProps) 
                 <h3 className="font-bold text-sm text-ink tracking-tight">{stack.title}</h3>
               </div>
               <Link
-                href={`/category/${stack.categorySlug}`}
+                href={stack.href}
                 className="font-mono text-xs font-bold text-tamarind hover:underline flex items-center gap-1"
               >
                 <span>View More</span>
@@ -60,11 +61,6 @@ export default function CategoryStacksGrid({ stacks }: CategoryStacksGridProps) 
                   >
                     {item.titleEn}
                   </Link>
-                  {iIdx < 3 && (
-                    <span className="text-[10px] font-mono font-bold bg-kumkum/15 text-kumkum px-1.5 py-0.5 rounded shrink-0">
-                      NEW
-                    </span>
-                  )}
                 </li>
               ))}
             </ul>

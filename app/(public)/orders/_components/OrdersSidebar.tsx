@@ -2,18 +2,24 @@ import React from "react";
 import Link from "next/link";
 import Badge from "../../_components/Badge";
 
-const POPULAR_GO_TAGS = [
-  { label: "#DAArrears", href: "/search?q=DA+Arrears" },
-  { label: "#MegaDSC2026", href: "/search?q=Mega+DSC" },
-  { label: "#APTET", href: "/search?q=TET" },
-  { label: "#TransferRules", href: "/search?q=Transfers" },
-  { label: "#PRC2024", href: "/search?q=PRC" },
+// These point at static tool pages, not a search — always real, no verification needed.
+const STATIC_GO_TAGS = [
   { label: "#Form16Tax", href: "/tools/tax-calculator" },
   { label: "#GPFInterest", href: "/tools/gpf-apgli" },
   { label: "#EHSMedical", href: "/tools/cfms-checker" },
 ];
 
-export default function OrdersSidebar() {
+interface OrdersSidebarProps {
+  /**
+   * Search-query chips verified server-side (see `QUICK_SEARCH_QUERY_CANDIDATES`
+   * in `app/(public)/orders/page.tsx`) against real published content before
+   * this component ever sees them. Optional and defaults to empty.
+   */
+  verifiedSearchTags?: { label: string; href: string }[];
+}
+
+export default function OrdersSidebar({ verifiedSearchTags = [] }: OrdersSidebarProps) {
+  const tags = [...verifiedSearchTags, ...STATIC_GO_TAGS];
   return (
     <aside className="space-y-6 font-sans">
       {/* 1. Quick Searches Widget */}
@@ -26,7 +32,7 @@ export default function OrdersSidebar() {
         </div>
 
         <div className="flex flex-wrap gap-2 font-mono text-xs">
-          {POPULAR_GO_TAGS.map((tag) => (
+          {tags.map((tag) => (
             <Link
               key={tag.label}
               href={tag.href}

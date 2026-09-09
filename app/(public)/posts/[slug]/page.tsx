@@ -160,19 +160,39 @@ export default async function PostDetailPage({
     []
   );
 
+  // A real Category, unlike the two invented slugs this replaced
+  // ("ap-teachers-latest-news", "teachers-softwares") that matched no row in
+  // the Category table and made "View More" 404 on every post page.
+  const toolsCategoryItems = await optionalQuery(
+    "tools-category-stack",
+    () =>
+      prisma.post.findMany({
+        where: { id: { not: post.id }, isDraft: false, category: { slug: "tools" } },
+        orderBy: { createdAt: "desc" },
+        take: 6,
+        select: { id: true, slug: true, titleEn: true },
+      }),
+    []
+  );
+
   const categoryStacks = [
     {
       title: "AP Teachers Latest Updates",
-      categorySlug: "ap-teachers-latest-news",
+      // Site-wide, not category-scoped — links to the real "browse everything" hub.
+      href: "/orders",
       icon: "🔔",
       items: latestNewsItems,
     },
-    {
-      title: "School Apps & Teacher Utilities",
-      categorySlug: "teachers-softwares",
-      icon: "📱",
-      items: [...latestNewsItems].reverse(),
-    },
+    ...(toolsCategoryItems.length > 0
+      ? [
+          {
+            title: "School Apps & Teacher Utilities",
+            href: "/category/tools",
+            icon: "📱",
+            items: toolsCategoryItems,
+          },
+        ]
+      : []),
   ];
 
   // One shell for every document. The branch that used to live here picked

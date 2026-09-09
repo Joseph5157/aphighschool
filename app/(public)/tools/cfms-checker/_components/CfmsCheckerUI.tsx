@@ -23,7 +23,7 @@ const GOVT_LINKS = [
     titleEn: "Medical Reimbursement Status Tracker",
     titleTe: "మెడికల్ రీయింబర్స్‌మెంట్ దరఖాస్తు స్టేటస్",
     category: "Health & Welfare",
-    url: "http://www.ehs.ap.gov.in/",
+    url: "https://www.ehs.ap.gov.in/",
     steps: [
       "Log into AP EHS / Medical Trust Portal (ehs.ap.gov.in)",
       "Select Employee Login with Employee ID & Password",
@@ -37,7 +37,7 @@ const GOVT_LINKS = [
     titleEn: "EHS Health Card Download & Status",
     titleTe: "ఈహెచ్ఎస్ హెల్త్ కార్డ్ డౌన్‌లోడ్",
     category: "Health & Welfare",
-    url: "http://www.ehs.ap.gov.in/",
+    url: "https://www.ehs.ap.gov.in/",
     steps: [
       "Open EHS AP Employee Portal",
       "Log in using Employee ID / CFMS Code",
@@ -47,25 +47,11 @@ const GOVT_LINKS = [
     badge: "Card Download",
   },
   {
-    id: "esr-verification",
-    titleEn: "e-SR (Electronic Service Register) Verification",
-    titleTe: "ఈ-ఎస్ఆర్ (ఇ-సర్వీస్ రిజిస్టర్) సమాచారం",
-    category: "Service Rules",
-    url: "https://esr.ap.gov.in/",
-    steps: [
-      "Access AP e-SR Portal (esr.ap.gov.in)",
-      "Log in with DDO / Individual Teacher Credentials",
-      "Check Service Verification entries, Leaves, Scale Fixations, & Increment Orders",
-      "Request DDO approval for any pending module entries",
-    ],
-    badge: "Service Record",
-  },
-  {
     id: "gpf-statement",
     titleEn: "AP GPF Annual Slip & Balance Download",
     titleTe: "జీపీఎఫ్ వార్షిక అకౌంట్ స్లిప్ డౌన్‌లోడ్",
     category: "Provident Fund",
-    url: "https://agap.ap.nic.in/gpf.aspx",
+    url: "https://agaeap.cag.gov.in/gpf/",
     steps: [
       "Visit Principal Accountant General (A&E) AP Portal",
       "Select GPF Account Slip",

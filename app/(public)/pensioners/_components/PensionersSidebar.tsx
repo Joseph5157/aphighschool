@@ -6,7 +6,7 @@ import Badge from "@/app/(public)/_components/Badge";
 const HELPFUL_PORTALS = [
   {
     title: "AG AP Pension Portal",
-    url: "https://agap.cas.nic.in",
+    url: "https://agaeap.cag.gov.in/Pension/Home",
     desc: "Track PPO / GPO / CPO status at Accountant General Office (Vijayawada)",
   },
   {
