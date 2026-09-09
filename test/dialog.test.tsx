@@ -137,4 +137,13 @@ describe("Dialog behaviour", () => {
 
     expect(document.body.style.overflow).not.toBe("hidden");
   });
+
+  // UI-21DEV-1, DESIGN_SYSTEM.md §1: "Mono is not for body copy, headings, or
+  // navigation labels." The title is this dialog's one heading and its
+  // accessible name (aria-labelledby) — the same role a page h1 plays, which
+  // UI-IMPECCABLE-1 already fixed this rule for on three routes.
+  it("does not style its title heading with font-mono", () => {
+    render(<Harness />);
+    expect(screen.getByRole("heading", { name: "Paste JSON Draft" }).className).not.toMatch(/font-mono/);
+  });
 });

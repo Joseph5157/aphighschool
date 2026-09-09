@@ -12,18 +12,19 @@
 
 ## Current UI program state
 
-- Current phase: Phase 15
-- Active gate: `UI-IMPECCABLE-1` (CLOSED)
-- Scope in this gate: controlled visual critique against `DESIGN_SYSTEM.md`, per Phase 15 —
-  polish/consistency only, no redesign, no information-architecture change
+- Current phase: Phase 16
+- Active gate: `UI-21DEV-1` (CLOSED)
+- Scope in this gate: a selective 21st.dev enhancement pass, per Phase 16 — weak components
+  only, "search -> compare -> choose -> import -> normalize -> test -> own"
 - UI redesign performed: no
-- Application behaviour changed: yes, styling-only — three calculator routes' `<h1>` dropped
-  `font-mono` (a `DESIGN_SYSTEM.md` §1 violation) for `.text-card-title`; category/orders'
-  `<h1>` switched from a raw `text-2xl md:text-3xl` size to the shared `.text-display` token
-  five sibling page headers already use. The deferred `UI-PATTERNS-1` `PageHeader` decision
-  was revisited and resolved: preserve the variation (it reflects real differences in what
-  each page is), fix only the two unexplained token-drift cases above.
-- Next planned gate: `UI-21DEV-1`
+- Application behaviour changed: yes, one property — `Dialog.tsx`'s title `<h2>` dropped
+  `font-mono` (the same `DESIGN_SYSTEM.md` §1 violation `UI-IMPECCABLE-1` fixed on three
+  route `<h1>`s one gate ago), found while reviewing "dialogs" as a named candidate. No
+  21st.dev component was searched for, compared, or imported — the tool wasn't connected this
+  session (configured via `/plugin` but requires a restart to load); every other reviewed
+  candidate (search, filters, empty states, mobile nav, tables, callouts, 404, pagination) was
+  already adequate, making the tool's unavailability moot for those.
+- Next planned gate: `UI-ACCEPTANCE-1`
 
 ### Gate history
 
@@ -45,6 +46,7 @@
 | `UI-PERF-1` | CLOSED | No images anywhere in the app — the checklist's image items re-confirmed not applicable, not re-litigated. Found and fixed the real "frontend weight" work instead: `category/[slug]`'s posts query was unbounded *and* unselected (fetching every post's full `content` field for an entire category, on every view); the homepage's query fetched a `relatedFrom` relation neither `HeroCard` nor `PostCard` renders at all. Both narrowed to exactly the fields their consumers read. Unused-but-zero-cost `Pagination.tsx` recorded, not deleted (already tree-shaken, out of this gate's scope). 426 tests pass. |
 | `UI-A11Y-1` | CLOSED | Re-audited all 17 accessibility-tagged audit items against current source rather than trusting old gate-history claims; 13 were already fixed by earlier gates (confirmed, not re-fixed). Fixed the 4 that were still genuinely open: three routes with no `h1` (a label span promoted in place) plus a fourth's duplicate `h1` demoted to `h2`; a missing skip-to-content link; `TableHead`'s missing `scope="col"` default; `Breadcrumb`'s current-page marker announcing a fake disabled link instead of just `aria-current`, plus a missing `title` for its truncated text. Contrast recorded as target-specified-but-unmeasured (no tooling), same disposition as every prior browser-dependent claim in this program. 436 tests pass. |
 | `UI-IMPECCABLE-1` | CLOSED | Impeccable confirmed unavailable (checked, not assumed); manual structured review against `DESIGN_SYSTEM.md` instead, no browser tooling so no visual-acceptance claims made. Revisited `UI-PATTERNS-1`'s deferred `PageHeader` decision: preserved the four masthead variants (they carry real differences in page purpose), fixed only two unexplained token-drift cases — category/orders' `h1` switched from a raw size to the shared `.text-display` token. Fixed three calculator routes' `h1` styled with `font-mono` (`DESIGN_SYSTEM.md` §1: "Mono is not for... headings") onto `.text-card-title`. Deliberately left emoji iconography and ~100 sub-12px sizes untouched — both real, both explicitly owned by later gates that can actually render. 437 tests pass. |
+| `UI-21DEV-1` | CLOSED | 21st.dev MCP found configured (`.mcp.json`, via `/plugin`) but not connected this session — checked via `ToolSearch`, not assumed; no component searched, compared, or imported, recorded rather than implied. Reviewed all nine named candidates (search, filters, empty states, dialogs, mobile nav, tables, callouts, 404, pagination) against current source; eight already adequate, pagination re-confirmed zero consumers (not reconsidered, per instruction). One real defect found inside "dialogs": `Dialog.tsx`'s title `h2` used `font-mono`, the same `DESIGN_SYSTEM.md` §1 violation `UI-IMPECCABLE-1` fixed on three route `h1`s — fixed the same way (dropped the mono face only). Deliberately did NOT widen the fix to ~12 other section-label headings still using `font-mono` elsewhere — those plausibly fall under `DESIGN.md`'s permitted "uppercase tracked labels," a larger, more ambiguous question than a selective-enhancement gate should decide blind. 438 tests pass. |
 
 ## Repository observations
 
@@ -613,6 +615,26 @@ indicator's appear/clear cycle. Eight mutations run — **all eight caught, zero
   installing substitute tooling. A future gate that wants an actual Impeccable-run critique
   should re-check availability rather than assume either prior "unavailable" result is still
   current — the environment may change.
+- **21st.dev MCP is configured but not connected.** `.mcp.json` gained a `magic`
+  (`@21st-dev/magic`) server entry via `/plugin` partway through this program, but
+  `UI-21DEV-1` found it not actually loaded in that session (`ToolSearch` empty; a newly
+  added MCP server needs a session restart to load, which didn't happen mid-gate). No
+  component was searched, compared, or imported as a result — every reviewed candidate
+  happened to already be adequate anyway, so this was moot for `UI-21DEV-1` specifically, but
+  a future gate wanting an actual tool-assisted external-component pass (for the still-open
+  emoji-iconography item, in particular) should start a fresh session and confirm via
+  `ToolSearch` first, rather than assume either this or the Impeccable result still holds.
+- **~12 existing `h2`/`h3` "section label" headings still use `font-mono`** (e.g. "Recent
+  Documents," "Teacher Calculators," sidebar subsection titles — found incidentally in
+  `UI-21DEV-1` while reviewing `Dialog.tsx`'s own mono-heading defect). Deliberately left
+  unflagged as a defect: `DESIGN.md`'s "constrain, do not ban" section permits "uppercase
+  tracked labels... legitimate for genuine section labels," and every one of these dozen
+  reads as exactly that, not a page/dialog-identity heading like the four already-fixed
+  cases (three route `h1`s in `UI-A11Y-1`/`UI-IMPECCABLE-1`, `Dialog`'s title in
+  `UI-21DEV-1`). Whether any of the dozen should also lose `font-mono` is a real but
+  materially bigger and more ambiguous design question than a selective-enhancement gate
+  should decide without rendering — recorded for whichever future gate wants to take it on,
+  not silently fixed and not silently ignored.
 - **No colour-contrast ratios have been measured, still.** `DESIGN_SYSTEM.md` §14 specifies
   the target (4.5:1 body text, 3:1 large text/UI boundaries, both themes) and named
   `UI-A11Y-1` as the owner of verification — that gate closed without measuring it, for the
@@ -693,6 +715,7 @@ indicator's appear/clear cycle. Eight mutations run — **all eight caught, zero
 | `UI-PERF-1` | pass (`npx tsc --noEmit`, exit 0) | clean | **63 files, 426 tests pass**; both new/changed guards mutation-tested via `git stash` against the pre-fix source (both failed as expected, then passed clean after restore) | not a full browser check; `next build` succeeded with an unchanged bundle-size report (expected — server-side `select` changes don't affect client JS size); `next start` + `curl` smoke-tested `/`, `/orders`, and an invalid category slug for absence of 500s/error-boundary text |
 | `UI-A11Y-1` | pass (`npx tsc --noEmit`, exit 0) | clean | **64 files, 436 tests pass**; all 4 new/changed guards mutation-tested (two `git stash` passes, since the heading-structure guards live in an untracked file a single stash doesn't move) — all failed against pre-fix source, all pass restored | not a full browser check (contrast unmeasured, recorded as a known limitation); `next build` succeeded, bundle-size unchanged; `next start` + `curl` against the three previously-headless routes confirmed exactly one real server-rendered `<h1>` on each, and confirmed the skip link + its target both appear in real rendered HTML |
 | `UI-IMPECCABLE-1` | pass (`npx tsc --noEmit`, exit 0) | clean | **64 files, 437 tests pass** (incl. `test/tailwind-classes.test.ts`'s compiled-CSS validation); the new `font-mono`-heading guard mutation-tested via a scoped `git stash push` — failed against pre-fix source (all three offending routes listed), restored passing | not a full browser check, no visual-acceptance claim made (explicit constraint — no rendering tool exists); `next build` succeeded, bundle-size unchanged; `next start` + `curl` against `/tools/prc-calculator` and `/orders` confirmed the fixed classes in real rendered HTML and in the compiled, non-purged CSS |
+| `UI-21DEV-1` | pass (`npx tsc --noEmit`, exit 0) | clean (an unrelated pre-existing `.gitignore` change from `/plugin` excluded, left for the user) | **64 files, 438 tests pass**; the new `Dialog` guard mutation-tested via a scoped `git stash push` of `Dialog.tsx` alone — failed against pre-fix source, restored passing | not a browser check; `next build` succeeded, bundle-size unchanged (one className edit); `Dialog` is conditionally client-rendered so no static HTML exists to `curl` — the RTL component test renders the real component with real props instead, the correct tool for this case |
 
 ## `UI-CONTENT-1` outcome summary
 
@@ -1058,19 +1081,73 @@ One test added to `test/typography.test.ts`: a repo-wide scan that no `<h1>` in
 three fixes — failed against pre-fix source (all three offending files listed), restored
 passing.
 
+## `UI-21DEV-1` outcome summary
+
+Full findings-to-disposition detail lives in `docs/context/UI_ACTIVE_GATE.md`, which stays
+the recoverable record for this gate; this is the summary.
+
+### 21st.dev checked, found configured but not connected
+
+`.mcp.json` has a `magic` (`@21st-dev/magic`) entry from `/plugin` earlier this session, but
+`ToolSearch` found no matching tool — a newly added MCP server needs a session restart to
+load, which didn't happen mid-gate. Per instruction, this didn't block the gate: no
+substitute tooling installed, no component searched/compared/imported, and that fact is
+recorded rather than glossed over.
+
+### All nine named candidates reviewed against current source
+
+Search, filters, empty states, dialogs, mobile navigation, tables, callouts, 404, and
+pagination — eight were already adequate for the product's actual audience (a teacher on a
+mid-range phone, density-first), making 21st.dev's unavailability moot for those regardless.
+Pagination's zero-consumer status was re-confirmed, not reconsidered, per the gate's own
+instruction to only revisit it if it now has a genuine consumer.
+
+### Fixed
+
+`Dialog.tsx`'s title `h2` (the dialog's accessible name) used `font-mono` — the identical
+`DESIGN_SYSTEM.md` §1 violation `UI-IMPECCABLE-1` fixed on three route `h1`s one gate ago.
+Found by reading the file directly while reviewing "dialogs," not by trusting the "full
+contract, untouched" summary at face value for every detail. Fixed the same way: dropped
+`font-mono` only, no size change, since it's an in-context title rather than a page heading.
+
+### Deliberately not widened
+
+A tree-wide check found ~12 other `h2`/`h3` "section label" headings ("Recent Documents,"
+"Teacher Calculators," sidebar subsection titles) still using `font-mono`. Unlike the four
+already-fixed cases (a route's sole `h1`, a dialog's sole title), these plausibly fall under
+`DESIGN.md`'s explicitly *permitted* "uppercase tracked labels... legitimate for genuine
+section labels" — a real but much larger, more ambiguous design question than this gate
+should decide without rendering to check the effect on density and hierarchy. Recorded in
+Known limitations above, not fixed and not silently dropped.
+
+### Deferred items re-checked, none resolvable here
+
+Emoji iconography, ~100 sub-12px sizes, and the masthead border-opacity split all still need
+rendering to fix responsibly — none resolved this gate, consistent with the instruction to
+only revisit deferred items if they can be resolved *without* browser guessing.
+
+### Guards added
+
+One test added to `test/dialog.test.tsx`: the title heading never carries `font-mono`.
+Mutation-tested via a scoped `git stash push` of `Dialog.tsx` alone — failed against pre-fix
+source, restored passing.
+
 ## Gate transition rule
 
 Update `UI_ACTIVE_GATE.md` only when work on the next gate actually begins. Each closed
 gate's evidence remains recoverable from this document, from `docs/ui/UI_AUDIT.md`, and from
 Git history.
 
-`UI-21DEV-1` is next, per explicit instruction (also the master plan's own sequential next
-step, Phase 16): a selective 21st.dev enhancement pass for weak components only, following
-"search -> compare -> choose -> import -> normalize -> test -> own." 21st.dev is a selective
-reference source, not the design system — imported components must be normalized into the
-repository's own visual language, not introduce a second one.
+`UI-ACCEPTANCE-1` is next, per explicit instruction (also the master plan's own sequential
+next step, Phase 17): browser and responsive acceptance across representative routes and
+desktop/tablet/mobile widths. This is the first gate in the program positioned to actually
+resolve the growing list of "needs rendering" deferred items — masthead border opacity,
+~100 sub-12px sizes, and (if browser tooling extends to visual comparison) emoji iconography
+— if browser tooling is actually available by then. Confirm availability first; several
+gates in a row have now recorded a tool as configured/expected but not actually usable in the
+running session.
 
-Twelve practices are worth carrying forward.
+Thirteen practices are worth carrying forward.
 
 **Mutate every new guard.** In five of the last six gates a guard passed its first mutation and
 had to be rewritten or, this gate, needed a genuinely new test to exist at all —
@@ -1175,3 +1252,18 @@ headers used a hand-picked font size instead of the shared token every sibling a
 Separating "this variation is meaningful, leave it" from "this specific detail drifted with
 no reason, fix it" is the whole value the five-question test adds over either reflexively
 unifying everything or reflexively leaving everything alone.
+
+**A found-and-fixed defect's exact boundary is itself a decision — fix what's verified, name
+what isn't, and don't silently expand or silently drop the difference.** `UI-21DEV-1` found
+`Dialog.tsx`'s title heading violating the same mono-heading rule `UI-IMPECCABLE-1` had just
+fixed on three route `h1`s, and fixed it the same way. A tree-wide grep for the same pattern
+then surfaced roughly a dozen more instances — and the easy paths were either fixing all of
+them (silently expanding a one-line incidental finding into a repo-wide sweep this gate never
+scoped or verified rendered) or fixing only the one found and staying quiet about the rest
+(silently dropping a real, now-known pattern instead of recording it for whoever decides it
+next). Neither was taken: the dozen were read closely enough to notice they plausibly fall
+under a different, explicitly *permitted* rule (`DESIGN.md`'s "uppercase tracked labels...
+legitimate for genuine section labels") rather than the banned one, which is itself a
+judgment call worth stating rather than assuming — and that judgment, plus the exact count
+and shape of what was left alone, went into `UI_CURRENT_STATE.md`'s Known limitations rather
+than either the diff or silence.

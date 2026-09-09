@@ -139,7 +139,13 @@ export function Dialog({
         className={`relative w-full max-w-lg overflow-hidden rounded-xl border border-hair bg-paperRaised shadow-md ${className}`}
       >
         <div className="flex items-center justify-between gap-3 border-b border-hair px-5 py-3">
-          <h2 id={titleId} className="font-mono text-sm font-semibold uppercase text-ink">
+          {/* UI-21DEV-1: found while reviewing dialogs as a review candidate —
+              DESIGN_SYSTEM.md §1 bans mono for headings, same rule
+              UI-IMPECCABLE-1 fixed on three page h1s. Only the face changes
+              (falls back to the body's sans default); size/case/weight kept
+              exactly as-is, since this is an in-context title, not a page
+              heading, and there's no rendering available to verify a resize. */}
+          <h2 id={titleId} className="text-sm font-semibold uppercase text-ink">
             {title}
           </h2>
           <IconButton
