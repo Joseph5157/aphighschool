@@ -41,7 +41,7 @@ export default function TopicTagBar({ baseUrl = "/search", availableTags }: Topi
           <Link href="/topics" className="text-xs text-tamarind hover:text-tamarindDark transition-colors">
             All topics <span aria-hidden="true">→</span>
           </Link>
-          <span className="text-xs text-inkSoft/70">1-Click Filter</span>
+          <span className="text-xs text-inkSoft/80">1-Click Filter</span>
         </div>
       </div>
 

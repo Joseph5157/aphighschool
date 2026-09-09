@@ -34,7 +34,7 @@ export default function LifecycleStepper({ stages, currentStage, isExpired }: St
                     ? "bg-turmeric text-masthead shadow-sm"
                     : isCurrent
                     ? "bg-ink text-paper border-2 border-paper shadow-md"
-                    : "bg-paperRaised border-2 border-hair text-inkSoft/60"
+                    : "bg-paperRaised border-2 border-hair text-inkSoft/80"
                 }`}
               >
                 {isDone ? "✓" : id}
@@ -45,7 +45,7 @@ export default function LifecycleStepper({ stages, currentStage, isExpired }: St
                     ? "text-ink font-bold"
                     : isDone
                     ? "text-turmericDeep"
-                    : "text-inkSoft/60"
+                    : "text-inkSoft/80"
                 }`}
               >
                 {label}

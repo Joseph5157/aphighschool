@@ -162,7 +162,7 @@ export default function ToolsIndexPage() {
                       {tool.steps.map((step, i) => (
                         <span key={i} className="inline-flex items-center gap-1 font-mono text-[9px] bg-ink/5 text-ink border border-ink/15 px-2 py-0.5 rounded">
                           <span className="font-bold">{i + 1}</span>
-                          <span className="text-inkSoft/60">·</span>
+                          <span className="text-inkSoft/80">·</span>
                           {step}
                         </span>
                       ))}

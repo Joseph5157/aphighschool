@@ -154,7 +154,7 @@ export default async function CategoryDetailPage({
       <CategoryLogList posts={category.posts} />
 
       {/* ── Gazette Footer ───────────────────────────────────────────────── */}
-      <div className="border-t border-hair pt-4 font-mono text-[10px] text-inkSoft/60 text-center tracking-wide">
+      <div className="border-t border-hair pt-4 font-mono text-[10px] text-inkSoft/80 text-center tracking-wide">
         GOIR status is shown per document where recorded.
       </div>
     </div>

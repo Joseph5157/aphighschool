@@ -116,8 +116,12 @@ export default function HeroCard({ post }: HeroPostProps) {
           </div>
         )}
 
-        {/* Date & Meta Footer */}
-        <div className="mt-6 pt-4 border-t border-mastheadText/20 flex items-center justify-between text-xs font-mono text-mastheadText/60">
+        {/* Date & Meta Footer. flex-wrap (UI-ACCEPTANCE-1): at 320px the date
+            label and "Read Summary" link don't both fit on one line and
+            neither shrinks nor wraps text on its own, so without this the
+            link overflows its own row — measured via a real browser, not
+            visual inspection. */}
+        <div className="mt-6 pt-4 border-t border-mastheadText/20 flex items-center justify-between flex-wrap gap-x-3 gap-y-1 text-xs font-mono text-mastheadText/60">
           <span>
             <DocumentDate post={post} />
           </span>

@@ -27,7 +27,7 @@ export default async function DesktopLeftNav() {
               <CardTitle className="text-xs font-mono font-bold uppercase tracking-wider text-ink flex items-center gap-1.5">
                 <span>🏛️</span> Document Categories
               </CardTitle>
-              <p className="text-xs font-mono text-inkSoft/70 mt-0.5">
+              <p className="text-xs font-mono text-inkSoft/80 mt-0.5">
                 AP School Education
               </p>
             </div>
@@ -66,7 +66,7 @@ export default async function DesktopLeftNav() {
           ))}
 
           {categories.length === 0 && (
-            <p className="text-xs font-mono text-inkSoft/70 px-1 py-2">
+            <p className="text-xs font-mono text-inkSoft/80 px-1 py-2">
               No categories available.
             </p>
           )}

@@ -176,7 +176,7 @@ export default async function OrdersPage() {
                       <span className="font-mono text-[10px] text-inkSoft max-w-[160px] truncate group-hover:text-tamarind transition-colors">
                         {post.titleEn}
                       </span>
-                      <span className="font-mono text-[9px] text-inkSoft/50 shrink-0">
+                      <span className="font-mono text-[9px] text-inkSoft/80 shrink-0">
                         <DocumentDate post={post} />
                       </span>
                     </div>
@@ -199,7 +199,7 @@ export default async function OrdersPage() {
       </div>
 
       {/* ── Gazette Footer Note ─────────────────────────────────────────── */}
-      <div className="border-t border-hair pt-4 font-mono text-[10px] text-inkSoft/60 text-center tracking-wide">
+      <div className="border-t border-hair pt-4 font-mono text-[10px] text-inkSoft/80 text-center tracking-wide">
         GOIR status is shown per document where recorded.
       </div>
     </div>

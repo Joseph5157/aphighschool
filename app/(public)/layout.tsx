@@ -157,7 +157,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
         </SidebarContent>
 
         <SidebarFooter>
-          <div className="text-[10px] font-mono text-inkSoft/70">
+          <div className="text-[10px] font-mono text-inkSoft/80">
             AP Teacher Desk — Independent &amp; Unofficial
           </div>
         </SidebarFooter>

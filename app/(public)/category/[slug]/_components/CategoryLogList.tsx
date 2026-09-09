@@ -182,12 +182,12 @@ export default function CategoryLogList({ posts }: CategoryLogListProps) {
 
       <div id="category-log-tabpanel" role="tabpanel" aria-labelledby={filterTabId(activeFilter)} className="space-y-6">
       {/* ── Results count ────────────────────────────────────────────────── */}
-      <div className="flex items-center justify-between text-meta text-inkSoft/70">
+      <div className="flex items-center justify-between text-meta text-inkSoft/80">
         <span>
           {filteredPosts.length} {filteredPosts.length === 1 ? "document" : "documents"}
           {activeFilter !== "All" && ` — filtered: ${activeFilter}`}
         </span>
-        <span className="font-mono text-[10px] text-inkSoft/50">Newest first</span>
+        <span className="font-mono text-[10px] text-inkSoft/80">Newest first</span>
       </div>
 
       {/* ── Document Log Entries ─────────────────────────────────────────── */}
@@ -214,7 +214,7 @@ export default function CategoryLogList({ posts }: CategoryLogListProps) {
                         </span>
                       )}
                     </div>
-                    <span className="font-mono text-[10px] text-inkSoft/70 shrink-0">
+                    <span className="font-mono text-[10px] text-inkSoft/80 shrink-0">
                       <DocumentDate post={normalizedDates(post)} />
                     </span>
                   </div>
@@ -239,7 +239,7 @@ export default function CategoryLogList({ posts }: CategoryLogListProps) {
                   {post.summaryTe && post.summaryTe.length > 0 && (
                     <p
                       lang="te"
-                      className="text-xs text-inkSoft/70 line-clamp-1 pt-1.5 border-t border-hair/40"
+                      className="text-xs text-inkSoft/80 line-clamp-1 pt-1.5 border-t border-hair/40"
                       style={{ fontFamily: "var(--font-noto-telugu), sans-serif", lineHeight: "1.6" }}
                     >
                       {post.summaryTe[0]}

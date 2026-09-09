@@ -29,7 +29,7 @@ export default function CategoryStacksGrid({ stacks }: CategoryStacksGridProps) 
     <div className="space-y-4 pt-4 border-t border-hair">
       <div className="font-mono font-bold text-xs tracking-wider text-inkSoft uppercase flex items-center justify-between">
         <span>🔔 తాజా అప్‌డేట్‌లు — Latest Updates & Softwares</span>
-        <span className="text-[10px] text-inkSoft/70">Category Stacks</span>
+        <span className="text-[10px] text-inkSoft/80">Category Stacks</span>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

@@ -29,6 +29,17 @@ describe("dark mode strategy", () => {
     expect(css()).toContain("--color-paper");
     expect(css()).toContain("--color-ink");
   });
+
+  // UI-ACCEPTANCE-1: found via a real browser console-error check, not
+  // visible in source alone. The inline script in app/layout.tsx adds
+  // `dark` to <html> before React hydrates, so a returning dark-mode
+  // visitor's server-rendered className never matches the client's first
+  // paint — an expected, intentional mismatch React needs to be told about.
+  it("suppresses hydration warnings on <html>, where the theme script writes before hydration", () => {
+    const layout = read("app/layout.tsx");
+    const htmlTag = layout.slice(layout.indexOf("<html"), layout.indexOf(">", layout.indexOf("<html")) + 1);
+    expect(htmlTag).toMatch(/suppressHydrationWarning/);
+  });
 });
 
 describe("colour token discipline", () => {

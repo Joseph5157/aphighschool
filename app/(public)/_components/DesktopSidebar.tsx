@@ -33,7 +33,7 @@ export default function DesktopSidebar({ quickSearchTags = [] }: DesktopSidebarP
               <CardTitle className="text-xs font-mono font-bold uppercase tracking-wider text-ink flex items-center gap-1.5">
                 <span>⚡</span> Teacher Calculators
               </CardTitle>
-              <p className="text-xs font-mono text-inkSoft/70 mt-0.5">
+              <p className="text-xs font-mono text-inkSoft/80 mt-0.5">
                 Calculators run entirely on your device
               </p>
             </div>
@@ -57,7 +57,7 @@ export default function DesktopSidebar({ quickSearchTags = [] }: DesktopSidebarP
                   <div className="font-bold text-xs text-ink group-hover:text-tamarind transition-colors">
                     {tool.label}
                   </div>
-                  <div className="text-xs font-mono text-inkSoft/70">
+                  <div className="text-xs font-mono text-inkSoft/80">
                     {tool.desc}
                   </div>
                 </div>
@@ -86,7 +86,7 @@ export default function DesktopSidebar({ quickSearchTags = [] }: DesktopSidebarP
             <CardTitle className="text-xs font-mono font-bold uppercase tracking-wider text-ink flex items-center gap-1.5">
               Quick Searches
             </CardTitle>
-            <p className="text-xs font-mono text-inkSoft/70 mt-0.5">
+            <p className="text-xs font-mono text-inkSoft/80 mt-0.5">
               Jump to a topic
             </p>
           </CardHeader>

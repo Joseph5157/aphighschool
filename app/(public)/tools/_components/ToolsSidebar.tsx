@@ -25,7 +25,7 @@ export default function ToolsSidebar() {
             <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-ink flex items-center gap-1.5">
               <span>📊</span> Financial Rates Summary
             </h3>
-            <p className="text-[10px] font-mono text-inkSoft/70 mt-0.5">
+            <p className="text-[10px] font-mono text-inkSoft/80 mt-0.5">
               AP Treasury Approved Standards
             </p>
           </div>
@@ -77,7 +77,7 @@ export default function ToolsSidebar() {
                   <div className="font-bold text-xs text-ink group-hover:text-inkSoft transition-colors">
                     {item.title}
                   </div>
-                  <div className="text-[11px] font-sans leading-snug text-inkSoft/70">
+                  <div className="text-[11px] font-sans leading-snug text-inkSoft/80">
                     {item.desc}
                   </div>
                 </div>

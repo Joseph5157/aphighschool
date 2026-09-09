@@ -152,7 +152,7 @@ export default function DocumentTemplate({
             >
               <div className="font-mono font-bold text-xs tracking-wider text-inkSoft border-b border-hair pb-3 flex items-center justify-between gap-2">
                 <span>{labels.content}</span>
-                <span className="text-xs text-inkSoft/70">Structured Document</span>
+                <span className="text-xs text-inkSoft/80">Structured Document</span>
               </div>
               <div className="prose-gazette" dangerouslySetInnerHTML={{ __html: post.content }} />
             </section>
@@ -195,7 +195,7 @@ export default function DocumentTemplate({
       <PostNavCards prevPost={prevPost} nextPost={nextPost} />
       <CategoryStacksGrid stacks={categoryStacks} />
 
-      <footer className="border-t border-hair pt-4 text-center text-xs text-inkSoft/70 font-sans leading-relaxed">
+      <footer className="border-t border-hair pt-4 text-center text-xs text-inkSoft/80 font-sans leading-relaxed">
         <p>
           AP Teacher Desk is an independent information service. GOIR verification is shown
           only where recorded for a document.

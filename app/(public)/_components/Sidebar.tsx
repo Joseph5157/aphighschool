@@ -374,7 +374,7 @@ export const SidebarGroupLabel = React.forwardRef<HTMLDivElement, React.HTMLAttr
     return (
       <div
         ref={ref}
-        className={`px-2.5 py-1 font-mono text-xs uppercase font-bold text-inkSoft/70 tracking-wider ${className}`}
+        className={`px-2.5 py-1 font-mono text-xs uppercase font-bold text-inkSoft/80 tracking-wider ${className}`}
         {...props}
       >
         {children}

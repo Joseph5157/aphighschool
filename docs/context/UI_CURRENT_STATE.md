@@ -12,19 +12,22 @@
 
 ## Current UI program state
 
-- Current phase: Phase 16
-- Active gate: `UI-21DEV-1` (CLOSED)
-- Scope in this gate: a selective 21st.dev enhancement pass, per Phase 16 — weak components
-  only, "search -> compare -> choose -> import -> normalize -> test -> own"
+- Current phase: Phase 17
+- Active gate: `UI-ACCEPTANCE-1` (CLOSED)
+- Scope in this gate: browser and responsive acceptance across representative routes and
+  desktop/tablet/mobile widths, per Phase 17 — the first gate with real browser rendering
+  available in this program
 - UI redesign performed: no
-- Application behaviour changed: yes, one property — `Dialog.tsx`'s title `<h2>` dropped
-  `font-mono` (the same `DESIGN_SYSTEM.md` §1 violation `UI-IMPECCABLE-1` fixed on three
-  route `<h1>`s one gate ago), found while reviewing "dialogs" as a named candidate. No
-  21st.dev component was searched for, compared, or imported — the tool wasn't connected this
-  session (configured via `/plugin` but requires a restart to load); every other reviewed
-  candidate (search, filters, empty states, mobile nav, tables, callouts, 404, pagination) was
-  already adequate, making the tool's unavailability moot for those.
-- Next planned gate: `UI-ACCEPTANCE-1`
+- Application behaviour changed: yes, four real browser-rendered defects fixed —
+  `HeroCard`'s footer row gained `flex-wrap` (measured overflow at 320px), `app/layout.tsx`'s
+  `<html>` gained `suppressHydrationWarning` (a real console error for returning dark-mode
+  visitors), `text-inkSoft/50`/`/60`/`/70` bumped to `/80` across ~26 real informational-text
+  sites (measured WCAG contrast failures, as low as 2.41:1 against the required 4.5:1), and
+  `ThumbZoneBar` gained `lg:hidden` (a mobile action bar was floating on desktop layouts,
+  confirmed redundant with `ActionSummary`'s always-present inline links). All four re-tested
+  live after fixing. Several other items were measured and explicitly decided KEEP or DEFER
+  rather than changed — see this gate's outcome summary.
+- Next planned gate: `UI-DEVICE-1`
 
 ### Gate history
 
@@ -47,6 +50,7 @@
 | `UI-A11Y-1` | CLOSED | Re-audited all 17 accessibility-tagged audit items against current source rather than trusting old gate-history claims; 13 were already fixed by earlier gates (confirmed, not re-fixed). Fixed the 4 that were still genuinely open: three routes with no `h1` (a label span promoted in place) plus a fourth's duplicate `h1` demoted to `h2`; a missing skip-to-content link; `TableHead`'s missing `scope="col"` default; `Breadcrumb`'s current-page marker announcing a fake disabled link instead of just `aria-current`, plus a missing `title` for its truncated text. Contrast recorded as target-specified-but-unmeasured (no tooling), same disposition as every prior browser-dependent claim in this program. 436 tests pass. |
 | `UI-IMPECCABLE-1` | CLOSED | Impeccable confirmed unavailable (checked, not assumed); manual structured review against `DESIGN_SYSTEM.md` instead, no browser tooling so no visual-acceptance claims made. Revisited `UI-PATTERNS-1`'s deferred `PageHeader` decision: preserved the four masthead variants (they carry real differences in page purpose), fixed only two unexplained token-drift cases — category/orders' `h1` switched from a raw size to the shared `.text-display` token. Fixed three calculator routes' `h1` styled with `font-mono` (`DESIGN_SYSTEM.md` §1: "Mono is not for... headings") onto `.text-card-title`. Deliberately left emoji iconography and ~100 sub-12px sizes untouched — both real, both explicitly owned by later gates that can actually render. 437 tests pass. |
 | `UI-21DEV-1` | CLOSED | 21st.dev MCP found configured (`.mcp.json`, via `/plugin`) but not connected this session — checked via `ToolSearch`, not assumed; no component searched, compared, or imported, recorded rather than implied. Reviewed all nine named candidates (search, filters, empty states, dialogs, mobile nav, tables, callouts, 404, pagination) against current source; eight already adequate, pagination re-confirmed zero consumers (not reconsidered, per instruction). One real defect found inside "dialogs": `Dialog.tsx`'s title `h2` used `font-mono`, the same `DESIGN_SYSTEM.md` §1 violation `UI-IMPECCABLE-1` fixed on three route `h1`s — fixed the same way (dropped the mono face only). Deliberately did NOT widen the fix to ~12 other section-label headings still using `font-mono` elsewhere — those plausibly fall under `DESIGN.md`'s permitted "uppercase tracked labels," a larger, more ambiguous question than a selective-enhancement gate should decide blind. 438 tests pass. |
+| `UI-ACCEPTANCE-1` | CLOSED | First gate with real browser rendering (Playwright MCP, confirmed connected via an actual navigation, not just configured). Tested all 9 named routes across all 8 named viewports; measured (not assumed) 4 real defects and fixed all 4: `HeroCard`'s date/CTA footer overflowed its own row at 320px (measured 65px past its flex parent) — added `flex-wrap`; a real React hydration-mismatch console error for returning dark-mode visitors — `suppressHydrationWarning` on `<html>`; `text-inkSoft/50\|60\|70` measured as low as 2.41:1 against the required 4.5:1 body-text contrast — bumped to `/80` (verified safe in both themes) across ~26 real informational-text sites, decorative/disabled/graphical-icon usages correctly left alone; `ThumbZoneBar` had no desktop-hiding class unlike sibling `BottomNav` — added `lg:hidden`, confirmed redundant with `ActionSummary`'s always-present links first. Also verified working (not just present in source): drawer open/Escape/focus-return/route-close, single nav breakpoint at 1024px in both CSS and JS, `BottomBarSlot` yield behavior, `Table`'s `UI-A11Y-1` fixes live, the loading skeleton actually engaging, empty states, 404, skip link end-to-end, dark mode. Decided (not re-deferred reflexively): sticky `top-[76px]` gap KEEP (harmless, measured), masthead border-opacity split KEEP (real but imperceptible), mono section-labels KEEP (per `UI-21DEV-1`'s already-made call, reconfirmed rendered), emoji iconography DEFER (unchanged), sub-12px text DEFER (stronger evidence now — confirmed legible but a real `DESIGN.md` 11px-floor violation; full fix is its own gate-sized sweep). 441 tests pass. |
 
 ## Repository observations
 
@@ -635,14 +639,18 @@ indicator's appear/clear cycle. Eight mutations run — **all eight caught, zero
   materially bigger and more ambiguous design question than a selective-enhancement gate
   should decide without rendering — recorded for whichever future gate wants to take it on,
   not silently fixed and not silently ignored.
-- **No colour-contrast ratios have been measured, still.** `DESIGN_SYSTEM.md` §14 specifies
-  the target (4.5:1 body text, 3:1 large text/UI boundaries, both themes) and named
-  `UI-A11Y-1` as the owner of verification — that gate closed without measuring it, for the
-  same reason every prior gate recorded browser-dependent claims as unavailable: no browser
-  or contrast-measurement tool exists in this environment. The target is specified and
-  unchanged; ownership of actually measuring it now belongs to whichever gate first has
-  working browser/device tooling (`UI-ACCEPTANCE-1` or `UI-DEVICE-1`), not a re-assignment
-  back to a closed gate.
+- **Colour contrast: measured and fixed where it mattered most, not exhaustively swept.**
+  `UI-ACCEPTANCE-1` got real browser tooling and used it to measure the `inkSoft` family
+  (`DESIGN_SYSTEM.md` §14's own named highest-risk item) directly from computed styles in
+  both themes: full-opacity `inkSoft` on `paper`/dark-`paper` comfortably passes (7.79:1 /
+  8.32:1), but `inkSoft` at 50/60/70% opacity failed the 4.5:1 body-text requirement (as low
+  as 2.41:1) across roughly 26 real informational-text sites — fixed by raising all of them
+  to `/80` (verified to clear 4.5:1 in both themes from every starting opacity), leaving
+  decorative/`aria-hidden`/disabled-state/graphical-icon usages alone since WCAG doesn't
+  require it there. Not measured: every other token pairing in the app — this was a targeted
+  fix of the one item `DESIGN_SYSTEM.md` named as highest-risk, not a full contrast audit of
+  the whole palette. A future gate wanting full coverage should treat this as a start, not a
+  finish.
 - `DESIGN_SYSTEM.md` is a specification. `UI-SYSTEM-1` implemented its foundation sections;
   §15 records exactly what is done and what is carried forward. Where the rest of it and the
   code still disagree, the code is the defect and `UI_AUDIT.md` records it.
@@ -677,6 +685,15 @@ indicator's appear/clear cycle. Eight mutations run — **all eight caught, zero
   `border-mastheadText/40` (`pensioners`, `tools`, `office-pipeline`) and `/35`
   (`service-desk`, `topics`) with no stated reason — a 5-percentage-point opacity difference
   too small to judge from source alone, deferred to `UI-ACCEPTANCE-1` rather than guessed at.
+  **Resolved (KEEP) in `UI-ACCEPTANCE-1`:** measured both values directly from computed
+  styles (`rgba(...,0.4)` vs `rgba(...,0.35)`) and screenshotted both — a real, numeric
+  difference that is visually imperceptible in an actual render. Not changed, per that gate's
+  instruction not to alter something that "merely differs stylistically" absent a
+  demonstrated problem. Sub-12px sizes and emoji iconography were both re-checked in
+  `UI-ACCEPTANCE-1` too and remain open — see that gate's outcome summary below for the
+  updated, rendering-backed evidence (sub-12px text is now confirmed legible but a real
+  `DESIGN.md` 11px-floor violation at some sites; a full fix is judged its own gate-sized
+  sweep, not something to fold in here).
 - The sidebar drawer's own behaviour — Escape, focus trap, scroll lock, closed-state
   inertness — is unchanged and remains `UI-MOBILE-NAV-1`. `Dialog` now demonstrates the
   contract that gate has to meet.
@@ -716,6 +733,7 @@ indicator's appear/clear cycle. Eight mutations run — **all eight caught, zero
 | `UI-A11Y-1` | pass (`npx tsc --noEmit`, exit 0) | clean | **64 files, 436 tests pass**; all 4 new/changed guards mutation-tested (two `git stash` passes, since the heading-structure guards live in an untracked file a single stash doesn't move) — all failed against pre-fix source, all pass restored | not a full browser check (contrast unmeasured, recorded as a known limitation); `next build` succeeded, bundle-size unchanged; `next start` + `curl` against the three previously-headless routes confirmed exactly one real server-rendered `<h1>` on each, and confirmed the skip link + its target both appear in real rendered HTML |
 | `UI-IMPECCABLE-1` | pass (`npx tsc --noEmit`, exit 0) | clean | **64 files, 437 tests pass** (incl. `test/tailwind-classes.test.ts`'s compiled-CSS validation); the new `font-mono`-heading guard mutation-tested via a scoped `git stash push` — failed against pre-fix source (all three offending routes listed), restored passing | not a full browser check, no visual-acceptance claim made (explicit constraint — no rendering tool exists); `next build` succeeded, bundle-size unchanged; `next start` + `curl` against `/tools/prc-calculator` and `/orders` confirmed the fixed classes in real rendered HTML and in the compiled, non-purged CSS |
 | `UI-21DEV-1` | pass (`npx tsc --noEmit`, exit 0) | clean (an unrelated pre-existing `.gitignore` change from `/plugin` excluded, left for the user) | **64 files, 438 tests pass**; the new `Dialog` guard mutation-tested via a scoped `git stash push` of `Dialog.tsx` alone — failed against pre-fix source, restored passing | not a browser check; `next build` succeeded, bundle-size unchanged (one className edit); `Dialog` is conditionally client-rendered so no static HTML exists to `curl` — the RTL component test renders the real component with real props instead, the correct tool for this case |
+| `UI-ACCEPTANCE-1` | pass (`npx tsc --noEmit`, exit 0) | clean (same unrelated `.gitignore` change still excluded) | **64 files, 441 tests pass**; the 3 new structurally-tested guards mutation-tested via a scoped `git stash push` of the 3 relevant source files — all 3 failed against pre-fix source, restored passing | **first real browser check in this program** — Playwright MCP, confirmed connected via an actual navigation; all 9 named routes × all 8 named viewports tested; `next build` succeeded before and after fixes, bundle-size unchanged; a second `next build` + `next start` pass with real published test data confirmed correct status codes and no server errors across routes |
 
 ## `UI-CONTENT-1` outcome summary
 
@@ -1132,22 +1150,95 @@ One test added to `test/dialog.test.tsx`: the title heading never carries `font-
 Mutation-tested via a scoped `git stash push` of `Dialog.tsx` alone — failed against pre-fix
 source, restored passing.
 
+## `UI-ACCEPTANCE-1` outcome summary
+
+Full findings-to-disposition detail lives in `docs/context/UI_ACTIVE_GATE.md`, which stays
+the recoverable record for this gate; this is the summary.
+
+### Browser tooling confirmed connected, not just configured
+
+Following the stated preference order, Playwright's MCP tools loaded via `ToolSearch` and — critically,
+learning from `UI-IMPECCABLE-1` and `UI-21DEV-1` both finding a configured-but-disconnected
+tool — an actual `browser_navigate` call confirmed a real Chromium instance responds. This
+was the first gate in the program with genuine rendered evidence rather than source-level
+inference for anything.
+
+### Four real, measured defects found and fixed
+
+- **`HeroCard`'s date/CTA footer**, `flex items-center justify-between` with no wrap,
+  overflowed its own row by 65px at 320px (measured via `getBoundingClientRect`, not
+  estimated) — fixed with `flex-wrap gap-x-3 gap-y-1`, the same pattern already used
+  elsewhere in the codebase.
+- **A real hydration-mismatch console error** for any returning visitor with dark mode
+  already saved: the inline theme script sets `dark` on `<html>` before React hydrates,
+  which the server-rendered markup can't know about. `suppressHydrationWarning` on `<html>`
+  — React's own documented pattern for exactly this case.
+- **`text-inkSoft` at 50/60/70% opacity failed 4.5:1 body-text contrast** — measured directly
+  from computed styles at as low as 2.41:1. `DESIGN_SYSTEM.md` §14 had named this the
+  highest-risk unmeasured item for two prior gates; computed the minimum opacity (80%) that
+  clears 4.5:1 from every starting point in both themes, and applied it across ~26 real
+  informational-text sites, deliberately leaving `aria-hidden` decorative glyphs, disabled
+  controls, and one graphical (non-text) icon usage untouched since WCAG doesn't require it
+  there.
+- **`ThumbZoneBar` had no desktop-hiding class**, unlike its sibling `BottomNav` — a mobile
+  action-bar pattern floated at the bottom of full-width desktop layouts. Confirmed
+  `ActionSummary` already renders the identical links inline in the page body at every width
+  before hiding it, so nothing was lost; added `lg:hidden`, matching `BottomNav`'s own
+  convention exactly.
+
+All four re-tested live after fixing, not just assumed fixed from the diff.
+
+### Extensive verification of already-built mechanisms, not just new fixes
+
+Confirmed working in a real browser, not just present in source: the mobile drawer's full
+open/focus-trap/Escape/focus-return/route-close cycle; the single 1024px navigation
+breakpoint in both CSS and the JS-driven sidebar; `BottomBarSlot`'s yield behavior; `Table`'s
+`role="region"`/`scope="col"` fixes from `UI-A11Y-1`; the loading skeleton actually engaging
+mid-transition (not just existing as a file); empty states; 404 (both the real case and the
+unchanged known-limitation soft-404 case); the skip link's full keyboard path, including
+actually landing on `#main-content`; dark mode's toggle mechanics and the masthead correctly
+not inverting.
+
+### Deferred items — decided, not reflexively re-deferred
+
+Sticky `top-[76px]` gap: **KEEP** (harmless ~7px gap, confirmed via screenshot, not a
+collision). Masthead border-opacity split: **KEEP** (real, measured, but visually
+imperceptible — not changed for a stylistic-only difference with no demonstrated problem).
+Mono section-labels: **KEEP** (per `UI-21DEV-1`'s already-made call; visually reconfirmed
+legible and appropriately de-emphasized). Sub-12px route-local text: **DEFER**, with
+materially stronger evidence than any prior gate could offer — spot-checked instances are
+legible and don't break layout, but genuinely violate `DESIGN.md`'s explicit "never below
+11px" floor for uppercase labels (found instances at 9px and 10px); the full ~100-instance/
+42-file fix needs per-site wrapping verification that is itself gate-sized work, not
+something to fold into an already-large acceptance pass. Emoji iconography: **DEFER**,
+unchanged — confirmed still present in a real drawer screenshot, still needs actual icon
+design work this gate isn't positioned to originate.
+
+### Guards added
+
+Three new tests: `HeroCard`'s footer-wrap structural precondition and `ThumbZoneBar`'s
+`lg:hidden` (both in `test/responsive-layout.test.tsx`), and `<html>`'s
+`suppressHydrationWarning` (`test/dark-mode.test.ts`). All three mutation-tested via a scoped
+`git stash push` of the three relevant source files — all failed against pre-fix source,
+restored passing. The contrast fix has no separate automated guard; its correctness is the
+reproducible browser measurement recorded in `UI_ACTIVE_GATE.md`, re-checkable the same way.
+
 ## Gate transition rule
 
 Update `UI_ACTIVE_GATE.md` only when work on the next gate actually begins. Each closed
 gate's evidence remains recoverable from this document, from `docs/ui/UI_AUDIT.md`, and from
 Git history.
 
-`UI-ACCEPTANCE-1` is next, per explicit instruction (also the master plan's own sequential
-next step, Phase 17): browser and responsive acceptance across representative routes and
-desktop/tablet/mobile widths. This is the first gate in the program positioned to actually
-resolve the growing list of "needs rendering" deferred items — masthead border opacity,
-~100 sub-12px sizes, and (if browser tooling extends to visual comparison) emoji iconography
-— if browser tooling is actually available by then. Confirm availability first; several
-gates in a row have now recorded a tool as configured/expected but not actually usable in the
-running session.
+`UI-DEVICE-1` is next, per explicit instruction (also the master plan's own sequential next
+step, Phase 18): real-device mobile acceptance where environment and device access permit.
+`UI-ACCEPTANCE-1` resolved the masthead border-opacity item (KEEP) using the browser tooling
+that turned out to be available; sub-12px sizes and emoji iconography remain open, now with
+stronger, rendering-backed evidence than before — see that gate's outcome summary. If
+`UI-DEVICE-1` also lacks real device access, the correct move (per this program's now
+well-established pattern) is the same: check first, don't assume, record precisely, don't
+block the gate, and do whatever the fallback instruction says instead of guessing.
 
-Thirteen practices are worth carrying forward.
+Fourteen practices are worth carrying forward.
 
 **Mutate every new guard.** In five of the last six gates a guard passed its first mutation and
 had to be rewritten or, this gate, needed a genuinely new test to exist at all —
@@ -1267,3 +1358,21 @@ legitimate for genuine section labels") rather than the banned one, which is its
 judgment call worth stating rather than assuming — and that judgment, plus the exact count
 and shape of what was left alone, went into `UI_CURRENT_STATE.md`'s Known limitations rather
 than either the diff or silence.
+
+**Structural/source-level confidence and rendered confidence catch genuinely different bugs
+— neither substitutes for the other, and the gap runs both ways.** `UI-ACCEPTANCE-1`'s four
+real defects were all invisible to everything this program had run before: `tsc`, the full
+Vitest suite (jsdom doesn't lay out, so nothing there proves an element does or doesn't
+overflow its row), and a design-system source read all passed clean on `HeroCard`'s footer,
+the theme script, `inkSoft`'s opacity values, and `ThumbZoneBar`'s missing breakpoint class —
+because each was a fact about *rendering*, not about the code's shape. But the reverse also
+held: this gate's actual measurements (`getBoundingClientRect`, computed contrast ratios, a
+caught-mid-transition loading skeleton) are things no amount of careful source reading could
+have produced with real numbers instead of a guess. Once real rendering became available, the
+newly-possible check was to *measure*, not to *look* — a screenshot alone would have missed
+the 65px `HeroCard` overflow (it read as basically fine looking at it) and the 2.41:1 contrast
+failure (subtle enough that eyeballing a screenshot is exactly how it survived several prior
+gates already tagged "needs rendering"). The lesson isn't "browser testing matters" in the
+abstract — it's that once you have it, reach for `evaluate`-driven measurement over visual
+inspection wherever a number actually exists to check, the same way earlier gates learned to
+compile Tailwind and diff emitted classes instead of reading class names and assuming.

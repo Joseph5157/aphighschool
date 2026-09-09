@@ -36,7 +36,7 @@ export function EmptyState({
     >
       <p className={`font-mono ${compact ? "text-xs" : "text-sm"} text-inkSoft`}>{title}</p>
       {description && (
-        <p className="mt-1.5 text-xs leading-relaxed text-inkSoft/70">{description}</p>
+        <p className="mt-1.5 text-xs leading-relaxed text-inkSoft/80">{description}</p>
       )}
       {action && <div className="mt-3">{action}</div>}
     </div>

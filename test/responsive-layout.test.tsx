@@ -17,6 +17,7 @@ vi.mock("next/navigation", () => ({ usePathname: () => "/posts/some-order" }));
 import BottomNav from "@/app/(public)/_components/BottomNav";
 import ThumbZoneBar from "@/app/(public)/posts/[slug]/_components/ThumbZoneBar";
 import { BottomBarProvider } from "@/app/(public)/_components/BottomBarSlot";
+import HeroCard from "@/app/(public)/_components/HeroCard";
 
 const ROOT = process.cwd();
 
@@ -37,9 +38,10 @@ function fixedBottomBars(container: HTMLElement): Element[] {
 }
 
 describe("audit F1 — stacked bottom bars", () => {
-  // Post detail pages mounted BOTH `ThumbZoneBar` (fixed bottom-0, no
-  // responsive hiding) and `BottomNav` (fixed bottom-0 lg:hidden), so below
-  // 1024px they occupied the same strip at the same stacking level.
+  // Post detail pages mounted BOTH `ThumbZoneBar` (fixed bottom-0; lacked
+  // responsive hiding until UI-ACCEPTANCE-1) and `BottomNav` (fixed bottom-0
+  // lg:hidden), so below 1024px they occupied the same strip at the same
+  // stacking level.
   it("mounts one fixed bottom bar when a page claims the slot", () => {
     const { container } = render(
       <BottomBarProvider>
@@ -105,6 +107,21 @@ describe("audit F1 — stacked bottom bars", () => {
       const { container } = render(<BottomBarProvider>{element}</BottomBarProvider>);
       const bar = fixedBottomBars(container)[0];
       expect(bar.getAttribute("class")).toContain("safe-area-inset-bottom");
+    }
+  });
+
+  // UI-ACCEPTANCE-1: found via real rendering at 1440px — ThumbZoneBar had no
+  // desktop-hiding class, so it floated as a redundant strip on wide desktop
+  // layouts (ActionSummary already renders the same pdfUrl/sourceUrl links
+  // inline in the page body at every width). BottomNav already got this right.
+  it("hides ThumbZoneBar at lg, matching BottomNav's own desktop-hiding convention", () => {
+    for (const element of [
+      <ThumbZoneBar key="t" pdfUrl="https://example.test/o.pdf" sourceUrl={null} />,
+      <BottomNav key="n" />,
+    ]) {
+      const { container } = render(<BottomBarProvider>{element}</BottomBarProvider>);
+      const bar = fixedBottomBars(container)[0];
+      expect(bar.getAttribute("class")).toMatch(/(^|\s)lg:hidden(\s|$)/);
     }
   });
 });
@@ -200,6 +217,37 @@ describe("the 768–1023px band uses one navigation breakpoint", () => {
     }
 
     expect(offenders).toEqual([]);
+  });
+});
+
+describe("HeroCard date/CTA footer wraps instead of overflowing", () => {
+  // UI-ACCEPTANCE-1: found via a real 320px browser render — the date label
+  // and "Read Summary" link don't both fit on one line at that width, and
+  // with only `justify-between` (no wrap, no shrink) the link overflowed its
+  // own row by 9px. jsdom can't measure that directly, but it can prove the
+  // structural precondition a wrap needs: flex-wrap actually present.
+  it("lets the footer row wrap onto a second line", () => {
+    const { container } = render(
+      <HeroCard
+        post={{
+          id: "p1",
+          slug: "test-post",
+          titleEn: "Title",
+          titleTe: "శీర్షిక",
+          summaryTe: [],
+          statusBadge: "current",
+          documentType: null,
+          orderState: "current",
+          verifiedAgainstGoir: false,
+          createdAt: new Date("2026-01-01"),
+          documentDate: null,
+        }}
+      />,
+    );
+
+    const link = [...container.querySelectorAll("a")].find((a) => a.textContent?.includes("Read Summary"));
+    const row = link?.parentElement;
+    expect(row?.getAttribute("class")).toMatch(/(^|\s)flex-wrap(\s|$)/);
   });
 });
 

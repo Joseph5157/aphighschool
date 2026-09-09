@@ -33,6 +33,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html
       lang="en"
       className={`${spaceGrotesk.variable} ${notoTelugu.variable} ${plexMono.variable}`}
+      // The inline script below adds `dark` to this element before React
+      // hydrates, so a returning dark-mode visitor's server HTML (which has
+      // no localStorage access) never matches the client's first paint. That
+      // mismatch is intentional and expected here — this is React's own
+      // documented pattern for a theme-flash-prevention script (UI-ACCEPTANCE-1,
+      // found via a real console-error check, not visible in source alone).
+      suppressHydrationWarning
     >
       <head>
         <script

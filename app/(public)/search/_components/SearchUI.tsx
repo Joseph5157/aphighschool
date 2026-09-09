@@ -177,7 +177,7 @@ export default function SearchUI({
       {/* Pending affordance for the debounced navigation — announced, not just
           visual, since the results below update with no other cue. */}
       {isSearching && (
-        <p role="status" aria-live="polite" className="font-mono text-xs text-inkSoft/70">
+        <p role="status" aria-live="polite" className="font-mono text-xs text-inkSoft/80">
           Searching…
         </p>
       )}
@@ -243,7 +243,7 @@ export default function SearchUI({
               <h2 id="recent-documents-heading" className="font-mono text-[10px] uppercase tracking-widest text-inkSoft font-semibold">
                 Recent Documents
               </h2>
-              <span className="text-meta font-mono text-inkSoft/70">Published documents</span>
+              <span className="text-meta font-mono text-inkSoft/80">Published documents</span>
             </div>
             {recentDocuments.length > 0 ? (
               <div className="space-y-2">
@@ -338,7 +338,7 @@ export default function SearchUI({
                     </div>
                     {/* flex-wrap + min-w-0: label, date and a long GO reference
                         on one unwrapping row pushed past the card at 320px. */}
-                    <div className="text-meta text-inkSoft/70 uppercase tracking-wider pt-1 border-t border-hair/30 flex flex-wrap items-center gap-x-2 gap-y-1 min-w-0 font-mono">
+                    <div className="text-meta text-inkSoft/80 uppercase tracking-wider pt-1 border-t border-hair/30 flex flex-wrap items-center gap-x-2 gap-y-1 min-w-0 font-mono">
                       <DocumentDate post={post} />
                       {post.goReference && (
                         <>
@@ -365,7 +365,7 @@ export default function SearchUI({
                     </div>
                   )}
                   {relatedTitles && relatedTitles.length > 0 && (
-                    <p className="text-meta text-inkSoft/70 font-mono pt-2">
+                    <p className="text-meta text-inkSoft/80 font-mono pt-2">
                       Related: {relatedTitles.join(", ")}
                     </p>
                   )}

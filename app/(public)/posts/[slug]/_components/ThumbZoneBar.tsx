@@ -25,8 +25,13 @@ export default function ThumbZoneBar({ pdfUrl, sourceUrl }: ThumbZoneProps) {
     <aside
       aria-label="Document actions"
       // z-45 is the bottom-bar layer, below the drawer scrim at 50 — this was
-      // z-50 and sat above the overlay meant to disable it.
-      className="fixed bottom-0 left-0 right-0 z-45 bg-paperRaised/95 backdrop-blur border-t border-hair p-3 sm:p-4 pb-[calc(0.75rem+env(safe-area-inset-bottom))] flex items-center justify-center gap-3 shadow-md"
+      // z-50 and sat above the overlay meant to disable it. lg:hidden
+      // (UI-ACCEPTANCE-1, found via real rendering at 1440px): this is a
+      // mobile thumb-zone pattern, and unlike its sibling BottomNav it had no
+      // desktop-hiding class, so it floated as a redundant strip on wide
+      // layouts — ActionSummary already renders the same pdfUrl/sourceUrl
+      // links inline in the page body at every width, so nothing is lost.
+      className="fixed bottom-0 left-0 right-0 z-45 bg-paperRaised/95 backdrop-blur border-t border-hair p-3 sm:p-4 pb-[calc(0.75rem+env(safe-area-inset-bottom))] flex items-center justify-center gap-3 shadow-md lg:hidden"
     >
       <div className="max-w-xl w-full mx-auto flex items-center justify-between gap-3">
         {/* Primary Action Button */}
