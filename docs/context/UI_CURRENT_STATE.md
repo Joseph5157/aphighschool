@@ -12,18 +12,26 @@
 
 ## Current UI program state
 
-- Current phase: Phase 19
-- Active gate: `UI-REGRESSION-1` (CLOSED)
-- Scope in this gate: complete full regression verification, per Phase 19 — confirm the
-  cumulative state of all closed gates still holds, not new exploratory work
+- Current phase: Phase 20 — **program CLOSED**
+- Active gate: none. Last gate: `UI-SYSTEM-CLOSE` (CLOSED)
+- Scope in the final gate: program-closure per Phase 20 — gate accounting, original-checklist
+  disposition, delivered-outcomes summary, known-limitations preservation, Impeccable/21st.dev
+  disposition, fresh final verification, repository documentation update, and a
+  merge-readiness verdict. No new features, redesigns, or speculative cleanup.
 - UI redesign performed: no
-- Application behaviour changed: no — this gate found zero regressions and made zero code
-  changes. Fresh `tsc`/full Vitest (441/441, matching `UI-ACCEPTANCE-1`'s count exactly)/
-  build all clean; a targeted browser pass re-confirmed all four `UI-ACCEPTANCE-1` fixes
-  still hold, including a combination not explicitly tested before (dark mode +
-  `ThumbZoneBar` hidden on desktop simultaneously); the mobile drawer's full cycle and skip
-  link both re-confirmed working end to end.
-- Next planned gate: `UI-SYSTEM-CLOSE`
+- Application behaviour changed: no — `UI-SYSTEM-CLOSE` made no application code changes.
+  Fresh `tsc`/full Vitest (64 files, 441/441, matching every gate since `UI-ACCEPTANCE-1`)/
+  `next build` (87.3 kB shared bundle, unchanged) all clean; a Playwright browser pass
+  re-confirmed the mobile drawer's full cycle (with a real click), the skip link, zero
+  console errors across four routes including a dark-mode returning-visitor navigation, and
+  the unchanged dynamic-route soft-404 behavior. One pre-existing uncommitted `.gitignore`
+  change (protecting the untracked, never-committed local `.mcp.json`) was committed
+  separately and explicitly before closure work began.
+- Full closure record: `docs/context/UI_SYSTEM_CLOSURE.md`. Merge-readiness verdict:
+  **READY FOR MERGE** (assessment only — not merged into `main`, per the master plan's
+  standing boundary). `UI-DEVICE-1` remains BLOCKED, not converted to PASS.
+- Next planned gate: none. The program is closed; see `UI_SYSTEM_CLOSURE.md` §7 for
+  recommended follow-up work, none of which is a live gate.
 
 ### Gate history
 
@@ -49,6 +57,7 @@
 | `UI-ACCEPTANCE-1` | CLOSED | First gate with real browser rendering (Playwright MCP, confirmed connected via an actual navigation, not just configured). Tested all 9 named routes across all 8 named viewports; measured (not assumed) 4 real defects and fixed all 4: `HeroCard`'s date/CTA footer overflowed its own row at 320px (measured 65px past its flex parent) — added `flex-wrap`; a real React hydration-mismatch console error for returning dark-mode visitors — `suppressHydrationWarning` on `<html>`; `text-inkSoft/50\|60\|70` measured as low as 2.41:1 against the required 4.5:1 body-text contrast — bumped to `/80` (verified safe in both themes) across ~26 real informational-text sites, decorative/disabled/graphical-icon usages correctly left alone; `ThumbZoneBar` had no desktop-hiding class unlike sibling `BottomNav` — added `lg:hidden`, confirmed redundant with `ActionSummary`'s always-present links first. Also verified working (not just present in source): drawer open/Escape/focus-return/route-close, single nav breakpoint at 1024px in both CSS and JS, `BottomBarSlot` yield behavior, `Table`'s `UI-A11Y-1` fixes live, the loading skeleton actually engaging, empty states, 404, skip link end-to-end, dark mode. Decided (not re-deferred reflexively): sticky `top-[76px]` gap KEEP (harmless, measured), masthead border-opacity split KEEP (real but imperceptible), mono section-labels KEEP (per `UI-21DEV-1`'s already-made call, reconfirmed rendered), emoji iconography DEFER (unchanged), sub-12px text DEFER (stronger evidence now — confirmed legible but a real `DESIGN.md` 11px-floor violation; full fix is its own gate-sized sweep). 441 tests pass. |
 | `UI-DEVICE-1` | **BLOCKED** | Explicitly framed by the user as distinct from `UI-ACCEPTANCE-1` — must catch touch behaviour, real mobile browser chrome, virtual keyboard behaviour, real safe-area/scrolling experience, and perceived usability, none of which desktop/emulated testing can prove. Checked thoroughly for real device access: `claude-in-chrome`'s `list_connected_browsers` returned empty (no paired Chrome anywhere, and mobile Chrome/Safari can't run extensions regardless); `.mcp.json` has only the `magic`/21st.dev server, no device-lab MCP; no `adb`; no `xcrun` (impossible on this Windows machine). Unlike `UI-IMPECCABLE-1`/`UI-21DEV-1`, no meaningful substitute existed — a source-level or emulated stand-in would have been exactly the kind of unverifiable claim this program refuses to make. Asked the user directly rather than guessing; the user chose to close it BLOCKED. No application code changed. |
 | `UI-REGRESSION-1` | CLOSED | Full regression pass, not new exploration: fresh `tsc`/full Vitest (441/441, exactly matching `UI-ACCEPTANCE-1`'s count)/`next build` all clean. Browser re-verification confirmed all four `UI-ACCEPTANCE-1` fixes still hold, including dark mode + `ThumbZoneBar`-hidden-on-desktop tested together for the first time; console-error-free across Home/Category/Search/tax-calculator in both themes; the mobile drawer's full cycle and skip link both re-confirmed with a real click. One apparent focus-return failure was investigated and resolved as a test-methodology artifact (a programmatic `.click()` doesn't shift real focus), not a product defect — recorded as a reusable lesson. Zero regressions found; zero code changes made. |
+| `UI-SYSTEM-CLOSE` | **CLOSED — program closed** | Final program-closure gate. Verified all 21 gate dispositions (`UI-DEVICE-1` left BLOCKED, not converted); checked the original 17-item production-readiness checklist item by item against current source and live commands rather than trusted history. Fresh full verification: `tsc` clean; 64 files/441 tests pass with Docker Postgres confirmed healthy (DB-backed tests included, not skipped); Tailwind compiled clean; `next build` succeeded with an unchanged 87.3 kB shared bundle; a real Playwright pass re-confirmed the mobile drawer's full cycle (open → dialog/scroll-lock → Escape → inert/focus-return, with a real click), the skip link, zero console errors across `/`, a post detail page (dark mode + returning-visitor localStorage scenario), a category page, and search, plus the unchanged (neither newly broken nor silently fixed) dynamic-route soft-404 behavior via `curl`. Confirmed `main`/`origin/main` unchanged at the program's own starting SHA. Handled a pre-existing uncommitted `.gitignore` change (protecting the untracked, never-committed local `.mcp.json`) as its own separate, explicit commit before closure work, per direct instruction not to bury it. Also found, via a repository-wide grep, that two of `PRODUCT.md`'s "Open product questions" (the WhatsApp banner, Telangana-in-metadata) are already resolved in code but the document text wasn't updated — recorded as a documentation-lag limitation, not fixed (out of this gate's document-update scope). No application code changed. Full record: `docs/context/UI_SYSTEM_CLOSURE.md`. Verdict: READY FOR MERGE (not merged, per standing boundary). |
 
 ## Repository observations
 
@@ -744,6 +753,7 @@ indicator's appear/clear cycle. Eight mutations run — **all eight caught, zero
 | `UI-ACCEPTANCE-1` | pass (`npx tsc --noEmit`, exit 0) | clean (same unrelated `.gitignore` change still excluded) | **64 files, 441 tests pass**; the 3 new structurally-tested guards mutation-tested via a scoped `git stash push` of the 3 relevant source files — all 3 failed against pre-fix source, restored passing | **first real browser check in this program** — Playwright MCP, confirmed connected via an actual navigation; all 9 named routes × all 8 named viewports tested; `next build` succeeded before and after fixes, bundle-size unchanged; a second `next build` + `next start` pass with real published test data confirmed correct status codes and no server errors across routes |
 | `UI-DEVICE-1` | not required — no application code changed | clean (same unrelated `.gitignore` change still excluded) | not required — no application code changed | **BLOCKED**: no real device access exists (see gate history row / outcome summary below for the full check) |
 | `UI-REGRESSION-1` | pass (`npx tsc --noEmit`, exit 0), re-run fresh | clean (same unrelated `.gitignore` change still excluded) | **64 files, 441 tests pass** — exactly matching `UI-ACCEPTANCE-1`'s count, confirming no drift | full re-verification, not new exploration — Playwright confirmed all four `UI-ACCEPTANCE-1` fixes still hold (including a new combination: dark mode + `ThumbZoneBar` hidden together), zero console errors across four routes in both themes, drawer + skip link re-confirmed with a real click; `next build` succeeded with an identical bundle-size report |
+| `UI-SYSTEM-CLOSE` | pass (`npx tsc --noEmit`, exit 0), re-run fresh | clean — the `.gitignore` change was committed on its own (`77921ca`) before this gate's work began, then the tree stayed clean throughout | **64 files, 441 tests pass** — exactly matching every prior count since `UI-ACCEPTANCE-1`; Docker's `portal-cms-db-1` confirmed healthy on 5433 first, so DB-backed tests ran for real; Tailwind compile (`npx tailwindcss ... --minify`) also run directly, exit 0 | full re-verification — Playwright connection confirmed via a real navigation; drawer full cycle with a real click, skip link, zero console errors on `/`, a post detail page (dark mode + `theme` already in `localStorage` before navigating), a category page, and search; `next build` succeeded with an identical 87.3 kB shared-bundle report; `curl` re-confirmed the unchanged dynamic-route soft-404 behavior and the real root/unmatched-URL 404 |
 
 ## `UI-CONTENT-1` outcome summary
 
@@ -1303,17 +1313,24 @@ test is focus state itself.
 
 Zero regressions found. Zero code changes made.
 
-## Gate transition rule
+## Program closure
+
+`UI-SYSTEM-CLOSE` closed the program (Phase 20, the master plan's final step). There is no
+next gate. `docs/context/UI_ACTIVE_GATE.md` is now a closure pointer rather than a live phase
+tracker, and the full closure record — gate accounting, checklist disposition, delivered
+outcomes, known limitations, Impeccable/21st.dev disposition, final verification evidence, and
+the merge-readiness verdict — lives in `docs/context/UI_SYSTEM_CLOSURE.md`. `UI-DEVICE-1`
+remains BLOCKED, not closed with device-verified evidence — it stays open for whenever real
+device access becomes available, rather than being implicitly satisfied by `UI-REGRESSION-1`,
+`UI-SYSTEM-CLOSE`, or any other gate's work. A future session that wants to reopen this program
+(e.g. to act on `UI_SYSTEM_CLOSURE.md`'s recommended follow-up work) should treat that as a new,
+explicitly authorized phase rather than resuming Phase 19/20 in place.
+
+## Gate transition rule (historical — the program is closed)
 
 Update `UI_ACTIVE_GATE.md` only when work on the next gate actually begins. Each closed
 gate's evidence remains recoverable from this document, from `docs/ui/UI_AUDIT.md`, and from
 Git history.
-
-`UI-SYSTEM-CLOSE` is next, the master plan's own final step (Phase 20): record final state,
-tests, acceptance evidence, known limitations, and remote verification. `UI-DEVICE-1` remains
-BLOCKED, not closed with device-verified evidence — it stays open for whenever real device
-access becomes available, rather than being implicitly satisfied by `UI-REGRESSION-1` or any
-other gate's work.
 
 Sixteen practices are worth carrying forward.
 

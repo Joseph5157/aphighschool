@@ -1,8 +1,19 @@
 # UI Active Gate
 
-## Active gate
+## Program status
 
-`UI-REGRESSION-1`
+**CLOSED.** The UI System & Production Readiness program (`docs/context/UI_SYSTEM_MASTER_PLAN.md`,
+Phases 0–20) completed its final gate, `UI-SYSTEM-CLOSE`, on `ui-system-production-readiness`.
+There is no active gate — this document is now a closure pointer, not a live phase tracker.
+
+The full closure record — gate accounting, original-checklist disposition, delivered outcomes,
+known limitations, final verification evidence, and the merge-readiness verdict — lives in
+`docs/context/UI_SYSTEM_CLOSURE.md`. `docs/context/UI_CURRENT_STATE.md` remains the detailed
+gate-by-gate history underneath it.
+
+## Last gate
+
+`UI-SYSTEM-CLOSE`
 
 ## Status
 
@@ -10,76 +21,36 @@ CLOSED
 
 ## Purpose
 
-Complete full regression verification, per `UI_SYSTEM_MASTER_PLAN.md` Phase 19 — confirm the
-cumulative state of all seventeen closed gates (plus `UI-DEVICE-1`, BLOCKED) still holds
-together, rather than finding new defects or doing new exploratory work. This gate found no
-regressions and made no code changes.
+Program-closure gate, per `UI_SYSTEM_MASTER_PLAN.md` Phase 20: record final gate dispositions,
+verify the original production-readiness checklist item by item, summarize delivered outcomes,
+preserve known limitations, record the Impeccable/21st.dev disposition accurately, run full
+final verification fresh, update repository documentation, and return a merge-readiness
+verdict. No new features, redesigns, or speculative cleanup were introduced.
 
-## Scope and method
+## Outcome
 
-Two passes: a full static-verification re-run from a clean state (typecheck, full test
-suite, a fresh production build), and a targeted browser re-verification pass using the
-Playwright tooling confirmed working in `UI-ACCEPTANCE-1` — not a repeat of that gate's
-exhaustive 9-route × 8-viewport exploration, but a focused confirmation that (a) the four
-defects `UI-ACCEPTANCE-1` found and fixed are still fixed, including in combinations not
-explicitly tested together before (dark mode + `ThumbZoneBar` hidden on desktop
-simultaneously), and (b) the core cross-cutting interaction mechanisms (drawer, skip link)
-still work correctly end to end.
+- `UI-DEVICE-1` remains **BLOCKED** — not silently converted to PASS, not implicitly resolved
+  by this or any other gate.
+- Fresh full verification in this gate: `tsc --noEmit` clean; full Vitest suite 64 files / 441
+  tests pass (DB-backed tests included, against a confirmed-healthy Docker Postgres); Tailwind
+  compile clean; `next build` succeeds with an unchanged 87.3 kB First Load JS shared bundle;
+  a real Playwright browser pass re-confirmed the mobile drawer's full cycle, the skip link,
+  zero console errors across four representative routes (including a dark-mode returning-
+  visitor navigation), and the unchanged (not newly broken, not silently fixed) dynamic-route
+  soft-404 behavior.
+- One pre-existing uncommitted change (`.gitignore` gaining `/.mcp.json`, protecting an
+  untracked local file that contains API keys and was never committed) was handled
+  separately and explicitly, committed on its own before any closure-gate work, per direct
+  instruction not to bury it inside this gate's commit.
+- `main` verified unchanged at the program's own recorded starting SHA throughout.
+- Verdict: **UI SYSTEM & PRODUCTION READINESS — READY FOR MERGE** (readiness assessment only;
+  this program was not merged into `main`, per the master plan's standing boundary).
 
-## Static verification
+## Next step
 
-- `npx tsc --noEmit`: clean.
-- Full Vitest suite: **64 files, 441 tests pass** — exactly matching the count at
-  `UI-ACCEPTANCE-1`'s closure, confirming no drift across the intervening `UI-21DEV-1`
-  (`Dialog.tsx` only) and `UI-DEVICE-1` (docs-only, no code) commits.
-- `rm -rf .next && next build`: succeeds; bundle-size report identical to `UI-ACCEPTANCE-1`'s
-  (First Load JS shared 87.3 kB, no route changed size) — expected, since no application code
-  has changed since that gate closed.
-
-## Browser regression pass
-
-Re-published representative test data (4 posts, varied lifecycle states, one with a
-`pdfUrl`) against a fresh `next build` + `next start`, then, with real browser tooling:
-
-- **`HeroCard`'s footer wrap** (the 320px overflow fix): confirmed the row still carries
-  `flex-wrap` and the "Read Summary" link no longer overflows its container.
-- **The dark-mode hydration fix**: toggled dark mode, then did a fresh navigation with
-  `theme: dark` already in `localStorage` (the exact returning-visitor scenario the original
-  defect required) — zero console errors, `suppressHydrationWarning` still present and
-  working.
-- **The `inkSoft` contrast fix**: `text-inkSoft/80` confirmed still present and applied
-  (spot-checked on `Sidebar`'s `SidebarGroupLabel`).
-- **`ThumbZoneBar`'s `lg:hidden`**: confirmed still hidden (`display: none`) at 1440px on a
-  post with a `pdfUrl` — tested this time *combined* with dark mode active simultaneously, a
-  combination not explicitly exercised in `UI-ACCEPTANCE-1`. No visual or console-level
-  conflict between the two fixes.
-- **Console errors**: zero across Home, Category, Search (with a query), and
-  `/tools/tax-calculator`, both in light and dark mode.
-- **The mobile drawer's full cycle** (open, `role="dialog"`/`aria-modal`, scroll lock,
-  Escape, `inert` restore, focus return) and **the skip link** (first Tab stop, correct
-  `href`): both re-confirmed working with a real (not programmatic) click.
-
-### A methodology note, not a product defect
-
-An initial focus-return check appeared to fail (focus landed back on the skip link instead of
-the drawer trigger after Escape). Investigated before concluding anything: the cause was the
-test's own setup — a programmatic `element.click()` via `browser_evaluate` doesn't shift
-real browser focus the way an actual click does, so the drawer's own "remember where focus
-came from" logic correctly captured the skip link (still genuinely focused at that moment)
-as the return target — which is exactly correct behavior given that input. Re-tested with a
-real `browser_click`, and focus returned to the trigger correctly. Recorded here because it's
-a reusable lesson for future browser-testing gates: use a real click, not a programmatic one,
-whenever the thing being tested is focus state itself.
-
-## Verification
-
-No application code changed this gate — nothing to fix, matching the finding that no
-regression exists. `git diff --check` clean (the same pre-existing, unrelated `.gitignore`
-change from the user's `/plugin` session activity remains excluded, as it has across every
-gate since it appeared).
-
-## Next gate after closure
-
-`UI-SYSTEM-CLOSE` (Phase 20, the master plan's own final step — record final state, tests,
-acceptance evidence, known limitations, and remote verification). `UI-DEVICE-1` remains
-BLOCKED and is not implicitly resolved by this gate; it stays open per its own record.
+None owned by this program. See `UI_SYSTEM_CLOSURE.md` §7 for recommended follow-up work
+(a founder decision on the contact/legal surface, real-device acceptance whenever access
+becomes available, the dynamic-route soft-404 investigation, the sub-12px typography sweep,
+emoji-icon replacement, a full contrast sweep, and two small documentation-lag corrections in
+`PRODUCT.md`/`DESIGN_SYSTEM.md`) — none of it is a live gate, and no document should invent one
+without a new explicit instruction to reopen the program.
