@@ -12,21 +12,18 @@
 
 ## Current UI program state
 
-- Current phase: Phase 11
-- Active gate: `UI-LINKS-1` (CLOSED)
-- Scope in this gate: internal, external, and document link audit on `app/(public)`;
-  `mailto:`/`tel:` where genuine contact info exists (still none — recorded, not invented)
+- Current phase: Phase 12
+- Active gate: `UI-404-1` (CLOSED)
+- Scope in this gate: a useful custom not-found/unavailable experience with recovery paths,
+  on `app/(public)` plus the root-level `app/not-found.tsx` special file
 - UI redesign performed: no
-- Application behaviour changed: yes — three dead external government-portal domains fixed
-  (two repointed to a verified live replacement, one removed with no guessable substitute);
-  two `http://` EHS links upgraded to `https`; every post-detail page's "Category Stacks"
-  widget fixed (it 404'd on "View More" via two invented category slugs, showed the same six
-  posts twice reversed instead of a real per-category query, and marked items "NEW" by array
-  position rather than any real date — the badge was removed rather than given an invented
-  threshold); a third instance of the recurring hardcoded/unverified quick-search-chips defect
-  (`OrdersSidebar`, missed by both prior gates' audits) fixed the same way as the other three.
-  Information architecture, routes and page composition unchanged.
-- Next planned gate: `UI-404-1`
+- Application behaviour changed: yes — `app/(public)/not-found.tsx` and `app/not-found.tsx`
+  added (previously nonexistent; `notFound()` fell through to the unstyled Next.js default).
+  A pre-existing defect was found and precisely diagnosed (not fixed, per explicit
+  instruction): `posts/[slug]`/`category/[slug]` return HTTP 200 instead of 404 for an
+  unknown slug, a framework/streaming limitation, not an application bug — see Known
+  limitations below. `next` stays pinned at `14.2.35`; not changed this gate.
+- Next planned gate: `UI-PERF-1`
 
 ### Gate history
 
@@ -44,6 +41,7 @@
 | `UI-CONTENT-1` | CLOSED | WhatsApp banner (F16) deleted; AP-only scope lock (F25) fixed in five places behind a new repo-wide guard; quick-search/topic chips (F30) made self-verifying against real content; tools-index step claims and a PRC HRA calculation bug fixed. 402 tests pass. |
 | `UI-SEO-1` | CLOSED | Real title template; canonical, OpenGraph/Twitter, favicon, robots.txt, sitemap.xml added; three over-length titles/descriptions shortened; F9's localhost-fallback deduplicated with a production warning; a second F30-shaped chip defect and an "Offline Ready" unsupported claim found and fixed outside the original audit. Verified with an actual `next build` + `curl`, not source reading alone. 410 tests pass. |
 | `UI-LINKS-1` | CLOSED | Three dead external government-portal domains found by live fetch (two fixed, one removed — no guessable replacement existed); post-detail "Category Stacks" widget's fabricated category links, duplicate-data bug, and positional "NEW" badge all fixed; a third, previously-missed instance of the hardcoded-chips defect (`OrdersSidebar`) fixed. `link-crawl.test.ts`'s literal-string-only coverage gap identified and documented (not widened — manual audit is the right tool for dynamic hrefs). 420 tests pass. |
+| `UI-404-1` | CLOSED | Custom `app/(public)/not-found.tsx` and root `app/not-found.tsx` added with real recovery links. Pre-existing dynamic-route soft-404 (200 instead of 404) found, root-cause-eliminated down to "correlates with real route-group scale, no single file responsible" — left undone and precisely documented per explicit instruction (no Next.js upgrade, no unexplained workaround). 424 tests pass. |
 
 ## Repository observations
 
@@ -642,6 +640,18 @@ indicator's appear/clear cycle. Eight mutations run — **all eight caught, zero
   contract that gate has to meet.
 - **21st.dev was not available**, so the external-component rule was never exercised. No
   external component was imported and no second visual language was introduced.
+- **Dynamic-route soft 404, found and precisely diagnosed in `UI-404-1`, not fixed.**
+  `/posts/[slug]` and `/category/[slug]` return HTTP 200 (not 404) when `notFound()` fires
+  for an unknown slug, and the resulting page carries two conflicting `robots` meta tags
+  (`index, follow` and `noindex`). Isolated via `next build`/`next start`/`curl` testing to
+  "correlates with the real `app/(public)` route group's scale," with `revalidate`,
+  `generateStaticParams`, `loading.tsx`, `force-dynamic`, and the shared nav components each
+  individually ruled out as the sole cause — see `UI-404-1`'s closure record in
+  `docs/context/UI_ACTIVE_GATE.md` (or Git history at that gate's closure commit) for the
+  full elimination trail. Explicitly **not** fixed this gate: no Next.js version change, no
+  unexplained application-code workaround, per direct instruction. Owned by a dedicated
+  future investigation or an explicitly-approved Next.js upgrade — not implicitly any later
+  gate's job merely because it touches `app/(public)`.
 
 ## Validation evidence
 
@@ -659,6 +669,7 @@ indicator's appear/clear cycle. Eight mutations run — **all eight caught, zero
 | `UI-CONTENT-1` | pass (`npx tsc --noEmit`, exit 0) | clean (CRLF notices only) | **55 files, 402 tests pass** (DB-backed suite run against a native-Postgres stand-in; see Environment note above) | unavailable |
 | `UI-SEO-1` | pass (`npx tsc --noEmit`, exit 0) | clean (CRLF notices only) | **58 files, 410 tests pass** | not a full browser check, but `next build` + `next start` + `curl` verified real rendered `<head>` output (title/description/canonical/OG/Twitter/robots/favicon) across static, dynamic, and query-bearing routes — see gate notes |
 | `UI-LINKS-1` | pass (`npx tsc --noEmit`, exit 0) | clean (CRLF notices only) | **61 files, 420 tests pass** | not a full browser check; every hardcoded external URL verified live via `WebFetch`+`curl` (DNS/HTTP status, not source reading); `next build` + `next start` + `curl` confirmed real destinations render on `/pensioners`, `/tools/cfms-checker`, and a post-detail page — see gate notes on why raw body-text `curl` checks are unreliable for element order/count |
+| `UI-404-1` | pass (`npx tsc --noEmit`, exit 0) | clean | **62 files, 424 tests pass** | not a full browser check; `next build` + `next start` + `curl -D -` (status + headers) verified all three representative cases (unmatched URL, invalid post slug, invalid category slug) for status code, not-found content, `robots` meta, and recovery links — table in `UI_ACTIVE_GATE.md`; `next` version unchanged (`14.2.35`) |
 
 ## `UI-CONTENT-1` outcome summary
 
@@ -828,17 +839,54 @@ content is a component-level React Testing Library render — exactly what this 
 tests do — not a raw HTTP text scan. `curl` remains right for `<head>` metadata and for
 confirming a string/URL is or isn't present anywhere in a response at all.
 
+## `UI-404-1` outcome summary
+
+Full findings-to-disposition detail, including the complete elimination trail for the
+soft-404 diagnosis, lives in `docs/context/UI_ACTIVE_GATE.md`, which stays the recoverable
+record for this gate; this is the summary.
+
+### Built
+
+- `app/(public)/_components/NotFoundContent.tsx` — bilingual message plus three recovery
+  links (Home, Orders & Circulars, Search), written to assume nothing about its wrapper.
+- `app/(public)/not-found.tsx` — the common case (explicit `notFound()` for a removed/renamed
+  post or category); gets the full public shell automatically via the shared layout.
+- `app/not-found.tsx` (root) — a genuinely unmatched URL; ships its own minimal standalone
+  header since the public layout does not wrap this boundary.
+
+### Found, diagnosed, explicitly left unfixed per instruction
+
+`posts/[slug]`/`category/[slug]` return HTTP 200 instead of 404 on an unknown slug. Diagnosed
+via an isolated minimal reproduction (a byte-for-byte copy of the real layout/error/not-found
+files in a fresh route group correctly returns 404; the identical construct inside the real,
+18-route `app/(public)` group returns 200), with `revalidate`, `generateStaticParams`,
+`loading.tsx`, `force-dynamic`, and the shared nav components each individually tested and
+ruled out. The user explicitly directed: no Next.js version change in this gate, and no
+unexplained application-code workaround — document as a known framework/streaming limitation
+instead. Both followed exactly. Recorded as a dedicated, standing entry in Known limitations
+above (not folded into any later gate's implicit scope) and precisely detailed in
+`UI_ACTIVE_GATE.md`, including a compounding wrinkle found during closure verification: the
+soft-404 pages carry two conflicting `robots` meta tags (`index, follow` and `noindex`).
+
+### Closure verification, exactly as instructed
+
+A dedicated `next build` + `next start` + `curl -D -` pass against real dev data, run
+immediately before closing this gate (not reused from earlier development testing),
+covering all three representative cases with status code, not-found content, `robots` head
+metadata, and recovery links each explicitly recorded — table in `UI_ACTIVE_GATE.md`. No
+claim of a 404 status is made anywhere for the two known-soft-404 cases.
+
 ## Gate transition rule
 
 Update `UI_ACTIVE_GATE.md` only when work on the next gate actually begins. Each closed
 gate's evidence remains recoverable from this document, from `docs/ui/UI_AUDIT.md`, and from
 Git history.
 
-`UI-404-1` is next per the master plan: add a useful custom not-found/unavailable experience
-with recovery paths (`app/not-found.tsx` doesn't exist yet — `notFound()` calls currently fall
-through to the unstyled Next.js default, per `UI_AUDIT.md` F10).
+`UI-PERF-1` is next, per explicit instruction at `UI-404-1`'s closure (the master plan's own
+sequential next step, Phase 13): optimize images and frontend performance — size, dimensions,
+responsive delivery, lazy loading, layout shift, unused assets, unnecessary frontend weight.
 
-Eight practices are worth carrying forward.
+Nine practices are worth carrying forward.
 
 **Mutate every new guard.** In five of the last six gates a guard passed its first mutation and
 had to be rewritten or, this gate, needed a genuinely new test to exist at all —
@@ -889,3 +937,15 @@ manually audit the shapes the automated guard structurally cannot reach. The sam
 text inside `<script>` tags, so a raw text scan over-counts and can misreport order; a
 component-level render (React Testing Library) is the reliable tool for body content, `curl`
 for `<head>` metadata and presence/absence checks.
+
+**When a diagnosis's leading suspect turns out wrong, isolate before proposing again — and
+know when to stop.** `UI-404-1`'s first theory (ISR/`revalidate`) and second theory
+(`usePathname()` without a Suspense boundary) were both plausible, both matched real
+published Next.js issue reports, and both were empirically wrong for this codebase — each
+only found wrong by actually testing the specific fix, not by re-reasoning from the same
+symptom. A minimal, isolated reproduction (copy the suspect files into a throwaway route,
+strip everything else out) settled definitively what broader speculation could not, and also
+found the boundary of what's worth chasing: once individual elimination showed the cause
+correlates with route-group scale rather than any single file, further guessing stopped being
+productive, and the honest move was reporting the elimination trail back rather than trying a
+fourth unverified theory.
