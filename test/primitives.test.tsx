@@ -15,7 +15,6 @@ import Textarea from "@/app/(public)/_components/Textarea";
 import Checkbox from "@/app/(public)/_components/Checkbox";
 import NativeSelect from "@/app/(public)/_components/NativeSelect";
 import Field from "@/app/(public)/_components/Field";
-import { PaginationLink } from "@/app/(public)/_components/Pagination";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/app/(public)/_components/Table";
 import Breadcrumb from "@/app/(public)/_components/Breadcrumb";
 
@@ -58,13 +57,10 @@ describe("touch targets", () => {
     expect(minSize(className, "w")).toBeGreaterThanOrEqual(44);
   });
 
-  it("gives pagination links a 44px target", () => {
-    const { container } = render(<PaginationLink href="/x">2</PaginationLink>);
-    const className = container.querySelector("a")!.className;
-
-    expect(minSize(className, "h")).toBeGreaterThanOrEqual(44);
-    expect(minSize(className, "w")).toBeGreaterThanOrEqual(44);
-  });
+  // The pagination-link target test was deleted with `Pagination.tsx` itself in
+  // SLOP-REMOVE-1 (AI_SLOP_AUDIT.md A20): the component had zero consumers
+  // across two audits. If list pagination is ever adopted (UI_AUDIT.md F29), the
+  // component and this test come back together from git history.
 
   it("gives form controls a 44px minimum height", () => {
     const { container: input } = render(<Input />);

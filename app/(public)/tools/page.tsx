@@ -6,7 +6,6 @@ import Badge from "../_components/Badge";
 import { buttonClassName } from "../_components/Button";
 import Breadcrumb from "../_components/Breadcrumb";
 import Accordion from "../_components/Accordion";
-import ToolsSidebar from "./_components/ToolsSidebar";
 
 export const metadata: Metadata = {
   title: "Teacher Utility Calculators",
@@ -89,18 +88,18 @@ export default function ToolsIndexPage() {
     <div className="space-y-6 font-sans">
       <Breadcrumb items={[{ label: "Utility Tools" }]} />
 
-      <div className="lg:grid lg:grid-cols-12 lg:gap-6 xl:gap-8 space-y-8 lg:space-y-0">
-        {/* Main Feed Column (8 cols on Desktop) */}
-        <div className="lg:col-span-8 space-y-6">
-          {/* Option C Royal Indigo Hero Header */}
+      <div className="space-y-6">
+        <div className="space-y-6">
+          {/*
+            SLOP-REMOVE-1 (AI_SLOP_AUDIT.md A12): the client-side privacy fact is
+            stated once, plainly, above the calculators. It previously appeared
+            five times on this route — as a hero eyebrow, hero body sentence, a
+            bordered strip, a "Privacy First" pill, and again as a navy
+            "Client-Side Security Guarantee" card in the sidebar. Repeating one
+            implementation fact in five voices reads as marketing, not accuracy.
+            "Heritage Craft Utility Suite" was ornamental brand copy and is gone.
+          */}
           <div className="on-masthead bg-masthead text-mastheadText border border-mastheadText/40 rounded-2xl p-6 md:p-8 space-y-3 shadow-md relative overflow-hidden">
-            <div className="flex items-center justify-between">
-              <Badge variant="turmeric" size="sm" shape="pill" dot>
-                Heritage Craft Utility Suite
-              </Badge>
-              <span className="font-mono text-[10px] text-turmeric">100% Client-Side Privacy</span>
-            </div>
-
             <div>
               <h1 className="text-display text-mastheadText tracking-tight">
                 Teacher Utility Calculators
@@ -111,19 +110,10 @@ export default function ToolsIndexPage() {
             </div>
 
             <p className="text-body text-mastheadText/70">
-              All calculations execute strictly inside your browser. No financial data or personal pay details leave your device.
+              Income tax, DA arrears, leave encashment, GPF/APGLI and PRC pay fixation
+              calculations for AP teachers. Every calculation runs inside your browser —
+              no pay or personal detail you enter is sent to a server.
             </p>
-          </div>
-
-          {/* Privacy shield info strip */}
-          <div className="bg-paperRaised border border-turmeric/30 rounded-xl px-4 py-3 flex items-center justify-between gap-3 flex-wrap">
-            <div className="flex items-center gap-2 font-mono text-xs text-inkSoft">
-              <span className="text-turmericDeep text-base">🔒</span>
-              <span>100% Client-Side · No Server Calls · No Financial Data Stored</span>
-            </div>
-            <span className="font-mono text-[10px] font-semibold text-turmericDeep bg-turmeric/10 border border-turmeric/30 px-2.5 py-1 rounded-full">
-              Privacy First
-            </span>
           </div>
 
           {/* Option C Card Grid */}
@@ -242,11 +232,6 @@ export default function ToolsIndexPage() {
               },
             ]} />
           </div>
-        </div>
-
-        {/* Sidebar Column (4 cols on Desktop) */}
-        <div className="lg:col-span-4">
-          <ToolsSidebar />
         </div>
       </div>
     </div>

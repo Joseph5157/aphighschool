@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Breadcrumb from "@/app/(public)/_components/Breadcrumb";
-import ToolsSidebar from "@/app/(public)/tools/_components/ToolsSidebar";
 import PrcCalculatorUI from "./_components/PrcCalculatorUI";
 
 export const metadata: Metadata = {
@@ -20,14 +19,11 @@ export default function PrcCalculatorPage() {
         ]}
       />
 
-      <div className="lg:grid lg:grid-cols-12 lg:gap-6 xl:gap-8 space-y-8 lg:space-y-0">
-        <div className="lg:col-span-8">
-          <PrcCalculatorUI />
-        </div>
-        <div className="lg:col-span-4">
-          <ToolsSidebar />
-        </div>
-      </div>
+      {/*
+        The 8/4 split existed only to hold ToolsSidebar, removed by SLOP-REMOVE-1
+        (AI_SLOP_AUDIT.md A13). The calculator now owns the full width.
+      */}
+      <PrcCalculatorUI />
     </div>
   );
 }

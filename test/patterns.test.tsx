@@ -66,13 +66,7 @@ const RECRUITMENT_VIEW = {
 
 function renderDocument(post: ReturnType<typeof makePost>, lifecycleView: unknown) {
   return render(
-    <DocumentTemplate
-      post={post}
-      lifecycleView={lifecycleView}
-      prevPost={null}
-      nextPost={null}
-      categoryStacks={[]}
-    />,
+    <DocumentTemplate post={post} lifecycleView={lifecycleView} />,
   );
 }
 

@@ -11,6 +11,14 @@ known limitations, final verification evidence, and the merge-readiness verdict 
 `docs/context/UI_SYSTEM_CLOSURE.md`. `docs/context/UI_CURRENT_STATE.md` remains the detailed
 gate-by-gate history underneath it.
 
+## Separate, currently-active program
+
+A different program is live on branch `ai-slop-audit`: the AI slop remediation gates
+(`SLOP-AUDIT-1` → `SLOP-CLOSE`), tracked in `docs/context/SLOP_REMEDIATION_PLAN.md` against the
+audit at `docs/ui/AI_SLOP_AUDIT.md`. It does **not** reopen the UI System program, adopt its
+phase numbering, or change any of its dispositions below — including `UI-DEVICE-1`, which stays
+BLOCKED.
+
 ## Last gate
 
 `UI-SYSTEM-CLOSE`

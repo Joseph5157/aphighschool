@@ -30,6 +30,9 @@ export type PostOverrides = Partial<{
   verifiedAgainstGoir: boolean;
   sourceUrl: string | null;
   pdfUrl: string | null;
+  /** Explicit portal-added timestamp, for tests that depend on ordering rather
+   * than on the row happening to be inserted first. */
+  createdAt: Date;
 }>;
 
 let counter = 0;
@@ -57,6 +60,7 @@ export async function makePost(overrides: PostOverrides = {}) {
       }),
       ...(overrides.sourceUrl !== undefined && { sourceUrl: overrides.sourceUrl }),
       ...(overrides.pdfUrl !== undefined && { pdfUrl: overrides.pdfUrl }),
+      ...(overrides.createdAt !== undefined && { createdAt: overrides.createdAt }),
     },
   });
 }

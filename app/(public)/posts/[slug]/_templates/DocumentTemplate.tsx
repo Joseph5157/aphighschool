@@ -6,8 +6,6 @@ import GoirBadge from "@/app/(public)/_components/GoirBadge";
 import DocumentDate from "@/app/(public)/_components/DocumentDate";
 import LifecycleStepper from "../_components/LifecycleStepper";
 import ThumbZoneBar from "../_components/ThumbZoneBar";
-import PostNavCards from "../_components/PostNavCards";
-import CategoryStacksGrid from "../_components/CategoryStacksGrid";
 import TableOfContents from "../_components/TableOfContents";
 import ActionSummary from "../_components/ActionSummary";
 import Badge from "@/app/(public)/_components/Badge";
@@ -35,9 +33,6 @@ import { formatDate } from "@/lib/dates";
 interface DocumentTemplateProps {
   post: any;
   lifecycleView: any;
-  prevPost: any;
-  nextPost: any;
-  categoryStacks: any[];
 }
 
 /**
@@ -58,9 +53,6 @@ const SECTION_LABELS = {
 export default function DocumentTemplate({
   post,
   lifecycleView,
-  prevPost,
-  nextPost,
-  categoryStacks,
 }: DocumentTemplateProps) {
   const labels = SECTION_LABELS[lifecycleView.kind as keyof typeof SECTION_LABELS] ?? SECTION_LABELS.state;
 
@@ -192,8 +184,24 @@ export default function DocumentTemplate({
         </div>
       </div>
 
-      <PostNavCards prevPost={prevPost} nextPost={nextPost} />
-      <CategoryStacksGrid stacks={categoryStacks} />
+      {/*
+        One quiet way back to the index this document belongs to. It replaces
+        Previous/Next Post cards and the two "Latest Updates & Softwares"
+        Category Stacks (AI_SLOP_AUDIT.md A11): chronological adjacency and
+        site-wide recency are not relationships between documents, and they
+        competed for space with the Related Orders above, which are.
+      */}
+      <div className="border-t border-hair pt-4">
+        <Link
+          href={post.category ? `/category/${post.category.slug}` : "/orders"}
+          className="inline-flex items-center gap-2 min-h-[44px] text-sm font-semibold text-tamarind hover:underline"
+        >
+          <span aria-hidden="true">←</span>
+          <span>
+            {post.category ? `All ${post.category.nameEn}` : "All orders & documents"}
+          </span>
+        </Link>
+      </div>
 
       <footer className="border-t border-hair pt-4 text-center text-xs text-inkSoft/80 font-sans leading-relaxed">
         <p>
