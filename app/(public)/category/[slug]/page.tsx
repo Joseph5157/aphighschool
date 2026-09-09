@@ -19,14 +19,23 @@ export async function generateMetadata({
       select: { nameEn: true, nameTe: true },
     });
 
-    if (!category) return { title: "Category Not Found — AP Teacher Desk" };
+    if (!category) return { title: "Category Not Found" };
+
+    // Avoids "Government Orders Orders" — only append "Orders" when the
+    // category name doesn't already end with it.
+    const title = category.nameEn.endsWith("Orders")
+      ? category.nameEn
+      : `${category.nameEn} Orders`;
 
     return {
-      title: `${category.nameEn} Orders — AP Teacher Desk`,
-      description: `Browse all AP School Education ${category.nameEn} government orders and circulars. ${category.nameTe || ""}`,
+      title,
+      description: `AP School Education ${category.nameEn} government orders and circulars. ${category.nameTe || ""}`.trim(),
+      alternates: { canonical: `/category/${params.slug}` },
     };
   } catch (e) {
-    return { title: "AP Teacher Desk" };
+    // Falls through to the layout's own default title/description rather
+    // than hand-duplicating "AP Teacher Desk" a third time in this file.
+    return {};
   }
 }
 
@@ -51,6 +60,27 @@ export default async function CategoryDetailPage({
         posts: {
           where: { isDraft: false },
           orderBy: ORDER_BY_OFFICIAL_DATE,
+          // Scoped to exactly what CategoryLogList's PostItem reads. Unselected,
+          // this fetched every Post column — including `content` (full document
+          // body/tables) — for every published post in the category, on every
+          // view, with no upper bound as the category grows.
+          select: {
+            id: true,
+            slug: true,
+            titleEn: true,
+            titleTe: true,
+            summaryTe: true,
+            englishAbstract: true,
+            statusBadge: true,
+            documentType: true,
+            orderState: true,
+            verifiedAgainstGoir: true,
+            goReference: true,
+            actionDeadline: true,
+            createdAt: true,
+            documentDate: true,
+            tags: true,
+          },
         },
         _count: { select: { posts: { where: { isDraft: false } } } },
       },
@@ -73,7 +103,7 @@ export default async function CategoryDetailPage({
       />
 
       {/* ── Option A: Imperial Gazette Category Masthead ─────────────────── */}
-      <div className="bg-masthead text-mastheadText rounded-2xl overflow-hidden shadow-md">
+      <div className="on-masthead bg-masthead text-mastheadText rounded-2xl overflow-hidden shadow-md">
         {/* Top classification ribbon */}
         <div
           className="border-b border-mastheadText/20 px-6 py-2 flex items-center justify-between text-[10px] font-mono text-mastheadText/40 tracking-widest uppercase"
@@ -95,7 +125,12 @@ export default async function CategoryDetailPage({
           </div>
 
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-mastheadText tracking-tight leading-snug">
+            {/* UI-IMPECCABLE-1: was a raw text-2xl/md:text-3xl size, an unexplained
+                drift from .text-display — the token every other page-header h1
+                (pensioners, tools, service-desk, topics, office-pipeline) already
+                uses. Sizes are close (24→30px vs 22→28px); this just removes the
+                unjustified inconsistency. */}
+            <h1 className="text-display text-mastheadText tracking-tight">
               {category.nameEn}
             </h1>
             {category.nameTe && (
@@ -119,7 +154,7 @@ export default async function CategoryDetailPage({
       <CategoryLogList posts={category.posts} />
 
       {/* ── Gazette Footer ───────────────────────────────────────────────── */}
-      <div className="border-t border-hair pt-4 font-mono text-[10px] text-inkSoft/60 text-center tracking-wide">
+      <div className="border-t border-hair pt-4 font-mono text-[10px] text-inkSoft/80 text-center tracking-wide">
         GOIR status is shown per document where recorded.
       </div>
     </div>

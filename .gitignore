@@ -43,6 +43,9 @@ __pycache__/
 /.claude/worktrees/
 /.claude/settings.local.json
 
+# MCP server config (contains API keys)
+/.mcp.json
+
 # Playwright MCP generated browser artifacts
 /.playwright-mcp/
 

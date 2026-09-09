@@ -6,9 +6,10 @@ import { Card } from "@/app/(public)/_components/Card";
 import { buttonClassName } from "@/app/(public)/_components/Button";
 
 export const metadata: Metadata = {
-  title: "Teacher Topics — AP Teacher Desk",
+  title: "Teacher Topics",
   description:
-    "Browse AP School Education documents and practical teacher service guides by topic.",
+    "AP School Education documents and teacher service guides organized by topic.",
+  alternates: { canonical: "/topics" },
 };
 
 const DOCUMENT_TOPICS = [
@@ -92,7 +93,7 @@ export default function TopicsPage() {
     <div className="mx-auto max-w-5xl space-y-8 pb-12 font-sans">
       <Breadcrumb items={[{ label: "Teacher Topics" }]} />
 
-      <section className="relative overflow-hidden rounded-2xl border border-mastheadText/35 bg-masthead p-6 text-mastheadText shadow-md md:p-8">
+      <section className="relative overflow-hidden rounded-2xl border border-mastheadText/35 on-masthead bg-masthead p-6 text-mastheadText shadow-md md:p-8">
         <div className="absolute inset-y-0 right-0 w-1/3 bg-turmeric/10" aria-hidden="true" />
         <div className="relative max-w-3xl space-y-4">
           <Badge variant="turmeric" size="sm" shape="pill" dot>

@@ -3,6 +3,8 @@
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "../../_components/Tabs";
 import Link from "next/link";
 import Badge from "../../_components/Badge";
+import GoirBadge from "../../_components/GoirBadge";
+import EmptyState from "../../_components/EmptyState";
 
 // Maps category slug → display emoji icon
 const SLUG_ICON: Record<string, string> = {
@@ -112,11 +114,7 @@ export default function OrdersFilterTabs({ categories }: { categories: CategoryD
                               <span className="text-xs text-ink font-medium leading-snug line-clamp-1 group-hover/item:text-tamarind transition-colors flex-1 min-w-0">
                                 {post.titleEn}
                               </span>
-                              {post.verifiedAgainstGoir && (
-                                <Badge variant="success" size="sm" shape="pill" dot>
-                                  GOIR Verified
-                                </Badge>
-                              )}
+                              <GoirBadge verified={post.verifiedAgainstGoir} />
                               {post.goReference && (
                                 <span className="font-mono text-[10px] text-inkSoft shrink-0 bg-hair/50 px-1.5 py-0.5 rounded break-words">
                                   {post.goReference}
@@ -125,7 +123,7 @@ export default function OrdersFilterTabs({ categories }: { categories: CategoryD
                             </Link>
                           ))
                         ) : (
-                          <p className="text-xs font-mono text-inkSoft/60 pt-1">No documents yet.</p>
+                          <EmptyState compact title="No documents yet." />
                         )}
                       </div>
 
@@ -142,7 +140,11 @@ export default function OrdersFilterTabs({ categories }: { categories: CategoryD
                   );
                 })
               ) : (
-                <p className="text-xs font-mono text-inkSoft col-span-2 py-4 text-center">No categories found for this document type.</p>
+                <EmptyState
+                  compact
+                  title="No categories found for this document type."
+                  className="col-span-1 md:col-span-2"
+                />
               )}
             </div>
           </TabsContent>

@@ -1,14 +1,17 @@
 "use client";
 
 import React, { useState } from "react";
-import Badge from "./Badge";
+import Badge, { type BadgeVariant } from "./Badge";
 
 export type AccordionItemData = {
   id: string;
   titleEn: string;
   titleTe?: string;
   badge?: string;
-  badgeVariant?: "tamarind" | "turmeric" | "neutral" | "success" | "warning" | "dark";
+  // Reuses Badge's own union rather than restating it. The hand-written copy
+  // had drifted into duplicate members and had to be corrected separately every
+  // time a variant changed.
+  badgeVariant?: BadgeVariant;
   content: React.ReactNode;
   defaultOpen?: boolean;
 };
@@ -34,7 +37,7 @@ export const AccordionItemPrimitive = React.forwardRef<HTMLDivElement, React.HTM
   ({ className = "", ...props }, ref) => (
     <div
       ref={ref}
-      className={`bg-paperRaised border border-hair rounded-xl overflow-hidden transition-all duration-200 shadow-2xs hover:border-ink/20 ${className}`}
+      className={`bg-paperRaised border border-hair rounded-xl overflow-hidden transition-all duration-200 hover:border-ink/20 ${className}`}
       {...props}
     />
   )
@@ -82,7 +85,13 @@ export const AccordionContentPrimitive = React.forwardRef<HTMLDivElement, Accord
       } ${className}`}
       {...props}
     >
-      <div className="overflow-hidden">
+      {/* `hidden` on the inner wrapper, not just zero height. Collapsing with
+          grid-rows-[0fr] and opacity alone leaves the content in the DOM,
+          keyboard-focusable and readable by screen reader, so Tab walked into
+          panels the user had closed (DESIGN_SYSTEM.md §8.6). The open
+          transition still animates; closing snaps, which is the trade the
+          correctness is worth. */}
+      <div className="overflow-hidden" hidden={!isOpen}>
         <div className="p-4 pt-1 border-t border-hair/50 text-body text-inkSoft space-y-2 font-sans">
           {children}
         </div>

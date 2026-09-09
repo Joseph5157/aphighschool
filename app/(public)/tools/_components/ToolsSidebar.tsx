@@ -19,13 +19,13 @@ export default function ToolsSidebar() {
   return (
     <aside className="space-y-6 font-sans">
       {/* 1. Financial Rates & Constants Widget (Option C Heritage Craft) */}
-      <div className="bg-paperRaised border border-hair rounded-2xl p-5 space-y-4 shadow-2xs">
+      <div className="bg-paperRaised border border-hair rounded-2xl p-5 space-y-4">
         <div className="flex items-center justify-between border-b border-hair/60 pb-3">
           <div>
             <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-ink flex items-center gap-1.5">
               <span>📊</span> Financial Rates Summary
             </h3>
-            <p className="text-[10px] font-mono text-inkSoft/70 mt-0.5">
+            <p className="text-[10px] font-mono text-inkSoft/80 mt-0.5">
               AP Treasury Approved Standards
             </p>
           </div>
@@ -54,7 +54,7 @@ export default function ToolsSidebar() {
       </div>
 
       {/* 2. DDO Submission & Bill Checklist Widget */}
-      <div className="bg-paperRaised border border-hair rounded-2xl p-5 space-y-4 shadow-2xs">
+      <div className="bg-paperRaised border border-hair rounded-2xl p-5 space-y-4">
         <div className="flex items-center justify-between border-b border-hair/60 pb-3">
           <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-ink flex items-center gap-1.5">
             <span>📋</span> DDO Bill Submission Guide
@@ -67,7 +67,7 @@ export default function ToolsSidebar() {
             <Link
               key={item.title}
               href={item.href}
-              className="group flex items-center justify-between p-3 rounded-xl border border-hair/60 hover:border-ink/40 bg-paper/30 hover:bg-paperRaised transition-all shadow-2xs"
+              className="group flex items-center justify-between p-3 rounded-xl border border-hair/60 hover:border-ink/40 bg-paper/30 hover:bg-paperRaised transition-all"
             >
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-lg bg-ink/10 text-ink border border-ink/20 flex items-center justify-center text-base shrink-0">
@@ -77,7 +77,7 @@ export default function ToolsSidebar() {
                   <div className="font-bold text-xs text-ink group-hover:text-inkSoft transition-colors">
                     {item.title}
                   </div>
-                  <div className="text-[11px] font-sans leading-snug text-inkSoft/70">
+                  <div className="text-[11px] font-sans leading-snug text-inkSoft/80">
                     {item.desc}
                   </div>
                 </div>
@@ -89,7 +89,7 @@ export default function ToolsSidebar() {
       </div>
 
       {/* 3. Offline Privacy Guarantee Banner */}
-      <div className="bg-masthead text-mastheadText rounded-2xl p-5 space-y-3 shadow-md">
+      <div className="on-masthead bg-masthead text-mastheadText rounded-2xl p-5 space-y-3 shadow-md">
         <div className="flex items-center justify-between">
           <Badge variant="turmeric" size="sm" shape="pill" dot>
             100% Privacy First

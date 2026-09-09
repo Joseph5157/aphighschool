@@ -57,7 +57,7 @@ export default function PrcCalculatorUI() {
 
   const fitmentVal = fitmentPreset === "-1" ? parseFloat(customFitment) || 0 : parseFloat(fitmentPreset) || 0;
   const daVal = daPreset === "-1" ? parseFloat(customDa) || 0 : parseFloat(daPreset) || 0;
-  const hraVal = hraPreset === "-1" ? parseFloat(customHra) || 0 : parseFloat(customHra) || 0;
+  const hraVal = hraPreset === "-1" ? parseFloat(customHra) || 0 : parseFloat(hraPreset) || 0;
   const basicNum = parseFloat(existingBasic) || 0;
   const monthsNum = parseInt(monthsArrears, 10) || 0;
 
@@ -77,7 +77,11 @@ export default function PrcCalculatorUI() {
           <Badge variant="turmeric" size="sm" shape="pill" dot>
             RPS 2022 / Master Scale
           </Badge>
-          <span className="font-mono text-xs text-inkSoft">PRC Pay Fixation Calculator</span>
+          {/* This route's only heading (UI_AUDIT.md F12, promoted from a span in
+              UI-A11Y-1). UI-IMPECCABLE-1: dropped font-mono — DESIGN_SYSTEM.md §1
+              bans mono for headings — onto .text-card-title, the smallest defined
+              heading token, keeping this compact row's density. */}
+          <h1 className="text-card-title text-ink">PRC Pay Fixation Calculator</h1>
         </div>
         <div className="flex items-center gap-2">
           <Button

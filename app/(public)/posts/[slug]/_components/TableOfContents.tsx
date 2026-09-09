@@ -116,7 +116,7 @@ export default function TableOfContents({ contentSelector = ".prose-gazette" }: 
                   item.level === 3 ? "ml-3 text-[11px]" : ""
                 } ${
                   activeId === item.id
-                    ? "bg-tamarind text-white font-bold shadow-xs translate-x-0.5"
+                    ? "bg-tamarind text-white font-bold translate-x-0.5"
                     : "hover:bg-paperRaised hover:text-ink"
                 }`}
               >

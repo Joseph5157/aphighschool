@@ -2,20 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Typography Hierarchy System */
-:root {
-  --label-primary: 0.875rem;   /* 14px */
-  --label-secondary: 0.75rem;  /* 12px */
-  --label-helper: 0.6875rem;   /* 11px */
-}
-
-@media (min-width: 768px) {
-  :root {
-    --label-primary: 0.75rem;   /* 12px */
-    --label-secondary: 0.6875rem; /* 11px */
-    --label-helper: 0.625rem;   /* 10px */
-  }
-}
+/* The --label-primary / --label-secondary / --label-helper custom properties
+   were removed in UI-SYSTEM-1. They inverted (larger on mobile than desktop),
+   --label-helper was declared and never consumed, and TaxCalculatorUI applied
+   the responsive step a second time via `md:text-[var(--label-secondary)]`,
+   double-stepping form labels down to 11px on desktop. Labels now use the
+   single 12px `label` step in docs/ui/DESIGN_SYSTEM.md §1.1. */
 
 :root {
   --color-ink: #1B2A4A;
@@ -89,12 +81,49 @@ body {
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-@layer base {
-  :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
-    outline: 2px solid var(--color-tamarind);
-    outline-offset: 2px;
-    border-radius: 4px;
-  }
+/* Focus treatment — docs/ui/DESIGN_SYSTEM.md §6.
+
+   This rule previously lived in @layer base and used :where(), giving it
+   specificity (0,1,0). Tailwind's `.outline-none` utility has the SAME
+   specificity and is emitted later, so any control carrying `outline-none`
+   silently cancelled the outline. Input and NativeSelect did exactly that, and
+   their intended replacement — `focus:ring-tamarind/20` — set a ring COLOUR
+   with no ring WIDTH, leaving --tw-ring-shadow at its `0 0 #0000` initial
+   value. The result was no visible focus indicator on any form control in the
+   product.
+
+   Two things fix it and both are load-bearing: the rule moves out of @layer
+   base so it is not outranked by a utility, and it uses a real selector list
+   rather than :where() so it carries its own specificity. `outline-none` on a
+   control is now a defect, guarded by test/focus-visible.test.ts. */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+:root {
+  /* ink on cream. Turmeric would sit at roughly 2.4:1 here. */
+  --focus-ring: var(--color-ink);
+}
+
+html.dark {
+  /* ink inverts to near-white in dark mode, which disappears against
+     paperRaised panels; turmeric holds against the dark navy ground. */
+  --focus-ring: var(--color-turmeric);
+}
+
+/* Letterhead panels keep their navy ground in BOTH themes (see the masthead
+   note below), so anything focused on one needs the dark-ground ring
+   regardless of the active theme. */
+.on-masthead {
+  --focus-ring: var(--color-turmeric);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -110,6 +139,19 @@ body {
 
 /* Typography Utility Hierarchy */
 @layer utilities {
+  /* Used in seven places (breadcrumbs, tabs, topic tags, category filters,
+     sidebar) and never defined until UI-SYSTEM-1, so every one of those
+     intentional horizontal scroll strips showed a scrollbar the code meant to
+     hide. Scrolling itself is unaffected — this only hides the indicator, and
+     the strips remain keyboard- and touch-scrollable. */
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
   .text-display {
     font-size: 1.375rem; /* 22px mobile */
     line-height: 1.3;
@@ -182,28 +224,18 @@ body {
     }
   }
 
+  /* 12px at every width: DESIGN_SYSTEM.md §1.2 sets 12px as the absolute floor
+     for any text, and this step was 11px on mobile — the size at which it is
+     least readable and most used. */
   .text-meta {
     font-family: var(--font-plex-mono), monospace;
-    font-size: 0.6875rem; /* 11px mobile */
+    font-size: 0.75rem; /* 12px */
     line-height: 1.25;
     font-weight: 600;
   }
-  @media (min-width: 768px) {
-    .text-meta {
-      font-size: 0.75rem; /* 12px desktop */
-    }
-  }
 
-  .text-helper {
-    font-family: var(--font-plex-mono), monospace;
-    font-size: 0.625rem; /* 10px mobile */
-    line-height: 1.3;
-  }
-  @media (min-width: 768px) {
-    .text-helper {
-      font-size: 0.6875rem; /* 11px desktop */
-    }
-  }
+  /* .text-helper (10px mobile / 11px desktop) was removed in UI-SYSTEM-1: it
+     sat below the 12px floor and had zero usages. Use .text-meta instead. */
 }
 
 .font-telugu {
@@ -306,8 +338,17 @@ body {
   line-height: 1.75;
 }
 
+/* `display: block` + `overflow-x: auto` scopes horizontal scrolling to the
+   TABLE. Post content arrives through dangerouslySetInnerHTML, so a table
+   cannot be wrapped in a scroll container from JSX; the templates instead put
+   `overflow-x-auto` on the whole prose block, which made one wide table scroll
+   the entire article sideways. Scoping it here means the surrounding paragraphs
+   stay put and only the table moves. */
 .prose-gazette table {
+  display: block;
   width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
   border-collapse: collapse;
   margin: 2em 0;
   font-size: 0.9375rem;

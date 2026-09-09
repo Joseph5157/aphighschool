@@ -38,7 +38,7 @@ export function Tabs({ defaultValue, value, onValueChange, children, className =
 export function TabsList({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
     <div
-      className={`flex items-center gap-1.5 p-1 bg-paperRaised border border-hair rounded-xl overflow-x-auto no-scrollbar font-mono text-xs font-bold shadow-2xs ${className}`}
+      className={`flex items-center gap-1.5 p-1 bg-paperRaised border border-hair rounded-xl overflow-x-auto no-scrollbar font-mono text-xs font-bold ${className}`}
       role="tablist"
     >
       {children}
@@ -101,13 +101,13 @@ export function TabsTrigger({ value, children, badge, className = "" }: TabsTrig
       onKeyDown={handleKeyDown}
       className={`whitespace-nowrap px-3 py-1.5 rounded-lg transition-all cursor-pointer inline-flex items-center gap-1.5 ${
         isActive
-          ? "bg-ink text-paper shadow-2xs"
+          ? "bg-ink text-paper"
           : "text-inkSoft hover:text-ink hover:bg-hair/30"
       } ${className}`}
     >
       <span>{children}</span>
       {badge && (
-        <span className={`text-[9px] px-1.5 py-0.2 rounded font-semibold ${isActive ? "bg-paper/20 text-paper" : "bg-hair text-inkSoft"}`}>
+        <span className={`text-xs px-1.5 py-0.5 rounded font-semibold ${isActive ? "bg-paper/20 text-paper" : "bg-hair text-inkSoft"}`}>
           {badge}
         </span>
       )}

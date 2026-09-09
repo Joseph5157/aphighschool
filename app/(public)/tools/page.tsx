@@ -9,9 +9,10 @@ import Accordion from "../_components/Accordion";
 import ToolsSidebar from "./_components/ToolsSidebar";
 
 export const metadata: Metadata = {
-  title: "Teacher Utility Calculators — AP Teacher Desk",
+  title: "Teacher Utility Calculators",
   description:
-    "100% client-side privacy-first salary calculators, Income Tax FY 2025-26 estimators, Leave Encashment tools, and CFMS bill checkers for AP teachers.",
+    "100% client-side salary, income tax (FY 2025-26), leave encashment, GPF/APGLI, PRC and CFMS bill-status calculators for AP teachers.",
+  alternates: { canonical: "/tools" },
 };
 
 const TOOLS = [
@@ -23,6 +24,8 @@ const TOOLS = [
     icon: "🧮",
     badge: "FY 2025-26",
     status: "Updated Slabs",
+    // Verified against TaxCalculatorUI.tsx: window.print() drives a real export.
+    steps: ["Fill Details", "Auto-Calculate", "Export PDF"],
   },
   {
     href: "/tools/leave-encashment",
@@ -32,6 +35,8 @@ const TOOLS = [
     icon: "🏖️",
     badge: "EL / HPL",
     status: "Surrender Calculator",
+    // LeaveEncashmentUI.tsx has no print/export path.
+    steps: ["Fill Details", "Auto-Calculate"],
   },
   {
     href: "/tools/gpf-apgli",
@@ -41,6 +46,8 @@ const TOOLS = [
     icon: "💰",
     badge: "7.1% Interest",
     status: "Part-Final Loan",
+    // GpfApgliUI.tsx has no print/export path.
+    steps: ["Fill Details", "Auto-Calculate"],
   },
   {
     href: "/tools/cfms-checker",
@@ -50,6 +57,8 @@ const TOOLS = [
     icon: "📑",
     badge: "Payslip Portal",
     status: "Direct Status",
+    // CfmsCheckerUI.tsx is a links directory — no form, no calculation, no export.
+    steps: [],
   },
   {
     href: "/tools/prc-calculator",
@@ -59,6 +68,8 @@ const TOOLS = [
     icon: "📊",
     badge: "RPS 2022",
     status: "Pay Fixation",
+    // Verified against PrcCalculatorUI.tsx: isPrintMode drives a real export.
+    steps: ["Fill Details", "Auto-Calculate", "Export PDF"],
   },
   {
     href: "/tools/da-arrears",
@@ -68,6 +79,8 @@ const TOOLS = [
     icon: "📈",
     badge: "DA Revision",
     status: "Month-by-Month",
+    // DaArrearsUI.tsx has no print/export path.
+    steps: ["Fill Details", "Auto-Calculate"],
   },
 ];
 
@@ -80,7 +93,7 @@ export default function ToolsIndexPage() {
         {/* Main Feed Column (8 cols on Desktop) */}
         <div className="lg:col-span-8 space-y-6">
           {/* Option C Royal Indigo Hero Header */}
-          <div className="bg-masthead text-mastheadText border border-mastheadText/40 rounded-2xl p-6 md:p-8 space-y-3 shadow-md relative overflow-hidden">
+          <div className="on-masthead bg-masthead text-mastheadText border border-mastheadText/40 rounded-2xl p-6 md:p-8 space-y-3 shadow-md relative overflow-hidden">
             <div className="flex items-center justify-between">
               <Badge variant="turmeric" size="sm" shape="pill" dot>
                 Heritage Craft Utility Suite
@@ -143,16 +156,18 @@ export default function ToolsIndexPage() {
                     {tool.desc}
                   </p>
 
-                  {/* Step flow chips */}
-                  <div className="flex items-center gap-1.5 flex-wrap pt-1">
-                    {["Fill Details", "Auto-Calculate", "Export PDF"].map((step, i) => (
-                      <span key={i} className="inline-flex items-center gap-1 font-mono text-[9px] bg-ink/5 text-ink border border-ink/15 px-2 py-0.5 rounded">
-                        <span className="font-bold">{i + 1}</span>
-                        <span className="text-inkSoft/60">·</span>
-                        {step}
-                      </span>
-                    ))}
-                  </div>
+                  {/* Step flow chips — steps genuinely implemented by this tool only */}
+                  {tool.steps.length > 0 && (
+                    <div className="flex items-center gap-1.5 flex-wrap pt-1">
+                      {tool.steps.map((step, i) => (
+                        <span key={i} className="inline-flex items-center gap-1 font-mono text-[9px] bg-ink/5 text-ink border border-ink/15 px-2 py-0.5 rounded">
+                          <span className="font-bold">{i + 1}</span>
+                          <span className="text-inkSoft/80">·</span>
+                          {step}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
                 <div className="pt-2 flex justify-end">

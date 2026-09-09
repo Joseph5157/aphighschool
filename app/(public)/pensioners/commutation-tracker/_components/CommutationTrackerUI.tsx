@@ -31,7 +31,11 @@ export default function CommutationTrackerUI() {
           <Badge variant="turmeric" size="sm" shape="pill" dot>
             180-Month Rule
           </Badge>
-          <span className="font-mono text-xs text-inkSoft">Commutation Recovery & Restoration Tracker</span>
+          {/* This route's only heading (UI_AUDIT.md F12, promoted from a span in
+              UI-A11Y-1). UI-IMPECCABLE-1: dropped font-mono — DESIGN_SYSTEM.md §1
+              bans mono for headings — onto .text-card-title, the smallest defined
+              heading token, keeping this compact row's density. */}
+          <h1 className="text-card-title text-ink">Commutation Recovery & Restoration Tracker</h1>
         </div>
         <Button
           variant={isPrintApplication ? "tamarind" : "outline"}
@@ -148,7 +152,7 @@ export default function CommutationTrackerUI() {
             <Card className="p-5 space-y-4 bg-ink text-paper border border-turmeric/30">
               <CardHeader className="p-0">
                 <div className="flex items-center justify-between">
-                  <Badge variant={tracker.isRestored ? "success" : "turmeric"} size="sm">
+                  <Badge variant={tracker.isRestored ? "tamarind" : "turmeric"} size="sm">
                     {tracker.isRestored ? "Restoration Completed" : "Recovery Active"}
                   </Badge>
                   <span className="font-mono text-xs text-turmeric font-bold">

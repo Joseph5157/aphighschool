@@ -4,9 +4,10 @@ import ToolsSidebar from "@/app/(public)/tools/_components/ToolsSidebar";
 import PrcCalculatorUI from "./_components/PrcCalculatorUI";
 
 export const metadata: Metadata = {
-  title: "PRC Pay Fixation & Arrears Calculator — AP Teacher Desk",
+  title: "PRC Pay Fixation & Arrears Calculator",
   description:
-    "Interactive AP RPS 2022 Master Scale Pay Fixation & Arrears Calculator for government teachers and employees in Andhra Pradesh and Telangana.",
+    "AP RPS 2022 Master Scale pay fixation and arrears calculator for government teachers and employees in Andhra Pradesh.",
+  alternates: { canonical: "/tools/prc-calculator" },
 };
 
 export default function PrcCalculatorPage() {

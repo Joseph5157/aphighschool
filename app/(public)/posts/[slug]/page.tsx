@@ -5,7 +5,6 @@ import type { Metadata } from "next";
 import Breadcrumb from "@/app/(public)/_components/Breadcrumb";
 import LifecycleStepper from "./_components/LifecycleStepper";
 import ThumbZoneBar from "./_components/ThumbZoneBar";
-import WhatsAppBanner from "./_components/WhatsAppBanner";
 import PostNavCards from "./_components/PostNavCards";
 import CategoryStacksGrid from "./_components/CategoryStacksGrid";
 import Badge from "@/app/(public)/_components/Badge";
@@ -31,7 +30,7 @@ export async function generateMetadata({
 
     if (!post) {
       return {
-        title: "Order Not Found — AP Teacher Desk",
+        title: "Order Not Found",
       };
     }
 
@@ -41,13 +40,14 @@ export async function generateMetadata({
         : post.titleTe;
 
     return {
-      title: `${post.titleEn} — AP Teacher Desk`,
+      title: post.titleEn,
       description: `${description} AP School Education government order summary.`,
+      alternates: { canonical: `/posts/${params.slug}` },
     };
   } catch (e) {
-    return {
-      title: "AP Teacher Desk",
-    };
+    // Falls through to the layout's own default title/description rather
+    // than hand-duplicating "AP Teacher Desk" a third time in this file.
+    return {};
   }
 }
 
@@ -65,8 +65,7 @@ export async function generateStaticParams() {
   }
 }
 
-import NotificationTemplate from "./_templates/NotificationTemplate";
-import GoMemoTemplate from "./_templates/GoMemoTemplate";
+import DocumentTemplate from "./_templates/DocumentTemplate";
 
 export default async function PostDetailPage({
   params,
@@ -161,38 +160,51 @@ export default async function PostDetailPage({
     []
   );
 
+  // A real Category, unlike the two invented slugs this replaced
+  // ("ap-teachers-latest-news", "teachers-softwares") that matched no row in
+  // the Category table and made "View More" 404 on every post page.
+  const toolsCategoryItems = await optionalQuery(
+    "tools-category-stack",
+    () =>
+      prisma.post.findMany({
+        where: { id: { not: post.id }, isDraft: false, category: { slug: "tools" } },
+        orderBy: { createdAt: "desc" },
+        take: 6,
+        select: { id: true, slug: true, titleEn: true },
+      }),
+    []
+  );
+
   const categoryStacks = [
     {
       title: "AP Teachers Latest Updates",
-      categorySlug: "ap-teachers-latest-news",
+      // Site-wide, not category-scoped — links to the real "browse everything" hub.
+      href: "/orders",
       icon: "🔔",
       items: latestNewsItems,
     },
-    {
-      title: "School Apps & Teacher Utilities",
-      categorySlug: "teachers-softwares",
-      icon: "📱",
-      items: [...latestNewsItems].reverse(),
-    },
+    ...(toolsCategoryItems.length > 0
+      ? [
+          {
+            title: "School Apps & Teacher Utilities",
+            href: "/category/tools",
+            icon: "📱",
+            items: toolsCategoryItems,
+          },
+        ]
+      : []),
   ];
 
+  // One shell for every document. The branch that used to live here picked
+  // between two 95%-identical templates to express a distinction
+  // `resolveLifecycle()` had already made — and the second half of its
+  // condition (`|| post.documentType === "notification"`) was dead, because
+  // resolveLifecycle returns `kind: "recruitment"` for exactly that case.
+  // DocumentTemplate reads the view instead.
   const lifecycleView = resolveLifecycle(post);
 
-  if (lifecycleView.kind === "recruitment" || post.documentType === "notification") {
-    return (
-      <NotificationTemplate
-        post={post}
-        lifecycleView={lifecycleView}
-        prevPost={prevPost}
-        nextPost={nextPost}
-        categoryStacks={categoryStacks}
-        siblingPosts={siblingPosts}
-      />
-    );
-  }
-
   return (
-    <GoMemoTemplate
+    <DocumentTemplate
       post={post}
       lifecycleView={lifecycleView}
       prevPost={prevPost}

@@ -4,9 +4,10 @@ import PensionersSidebar from "@/app/(public)/pensioners/_components/PensionersS
 import PensionCalculatorUI from "./_components/PensionCalculatorUI";
 
 export const metadata: Metadata = {
-  title: "Service Pension & Gratuity Calculator — AP Teacher Desk",
+  title: "Service Pension & Gratuity Calculator",
   description:
     "Calculate Service Pension, 40% Commutation lump sum, DCRG Gratuity, and EL Encashment benefits under AP Revised Pension Rules.",
+  alternates: { canonical: "/pensioners/pension-calculator" },
 };
 
 export default function PensionCalculatorPage() {

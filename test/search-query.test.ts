@@ -1,6 +1,11 @@
 // @vitest-environment node
 import { describe, it, expect, beforeEach } from "vitest";
-import { recentPublishedDocuments, searchPosts } from "@/lib/posts/query";
+import {
+  recentPublishedDocuments,
+  searchPosts,
+  quickSearchChips,
+  tagsWithPublishedContent,
+} from "@/lib/posts/query";
 import { resetDb, seedCategory, testDb } from "./db";
 
 async function fixture() {
@@ -138,5 +143,46 @@ describe("searchPosts", () => {
     });
     const r = await searchPosts({ q: "DA Arrears" });
     expect(r[0].relatedFrom[0].relatedPost.slug).toBe(b.slug);
+  });
+});
+
+// UI_AUDIT.md F30: a quick-search chip or topic-tag chip that leads to "no
+// matching documents" is an unsupported claim, so both functions must drop a
+// candidate the moment nothing published actually matches it.
+describe("quickSearchChips", () => {
+  beforeEach(async () => {
+    await resetDb();
+    await fixture();
+  });
+
+  it("keeps a candidate that returns real results and drops one that doesn't", async () => {
+    const kept = await quickSearchChips(["District Allocation", "Nonexistent Topic Xyz"]);
+    expect(kept).toEqual(["District Allocation"]);
+  });
+
+  it("returns nothing when no candidate matches", async () => {
+    const kept = await quickSearchChips(["Totally Unrelated Phrase"]);
+    expect(kept).toEqual([]);
+  });
+});
+
+describe("tagsWithPublishedContent", () => {
+  beforeEach(async () => {
+    await resetDb();
+    await fixture();
+  });
+
+  it("keeps a tag a published post carries and drops one nothing carries", async () => {
+    const kept = await tagsWithPublishedContent(["Transfers", "Pension"]);
+    expect(kept).toEqual(["Transfers"]);
+  });
+
+  it("does not credit a tag that only exists on a draft", async () => {
+    // "hidden-draft" in the fixture carries "Transfers" too but is a draft;
+    // the published "transfers-go-129" post already covers the positive case
+    // above, so this asserts a tag with ONLY a draft carrier is excluded.
+    await testDb.post.update({ where: { slug: "transfers-go-129" }, data: { isDraft: true } });
+    const kept = await tagsWithPublishedContent(["Transfers"]);
+    expect(kept).toEqual([]);
   });
 });

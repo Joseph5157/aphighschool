@@ -47,10 +47,14 @@ export default function PensionCalculatorUI() {
     <div className="space-y-6 font-sans">
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div className="flex items-center gap-2">
-          <Badge variant="success" size="sm" shape="pill" dot>
+          <Badge variant="tamarind" size="sm" shape="pill" dot>
             AP Treasury Pension Standard
           </Badge>
-          <span className="font-mono text-xs text-inkSoft">Service Pension & Gratuity Calculator</span>
+          {/* This route's only heading (UI_AUDIT.md F12, promoted from a span in
+              UI-A11Y-1). UI-IMPECCABLE-1: dropped font-mono — DESIGN_SYSTEM.md §1
+              bans mono for headings — onto .text-card-title, the smallest defined
+              heading token, keeping this compact row's density. */}
+          <h1 className="text-card-title text-ink">Service Pension & Gratuity Calculator</h1>
         </div>
         <Button
           variant={isPrintMode ? "tamarind" : "outline"}

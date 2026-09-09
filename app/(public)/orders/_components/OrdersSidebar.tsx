@@ -2,22 +2,28 @@ import React from "react";
 import Link from "next/link";
 import Badge from "../../_components/Badge";
 
-const POPULAR_GO_TAGS = [
-  { label: "#DAArrears", href: "/search?q=DA+Arrears" },
-  { label: "#MegaDSC2026", href: "/search?q=Mega+DSC" },
-  { label: "#APTET", href: "/search?q=TET" },
-  { label: "#TransferRules", href: "/search?q=Transfers" },
-  { label: "#PRC2024", href: "/search?q=PRC" },
+// These point at static tool pages, not a search — always real, no verification needed.
+const STATIC_GO_TAGS = [
   { label: "#Form16Tax", href: "/tools/tax-calculator" },
   { label: "#GPFInterest", href: "/tools/gpf-apgli" },
   { label: "#EHSMedical", href: "/tools/cfms-checker" },
 ];
 
-export default function OrdersSidebar() {
+interface OrdersSidebarProps {
+  /**
+   * Search-query chips verified server-side (see `QUICK_SEARCH_QUERY_CANDIDATES`
+   * in `app/(public)/orders/page.tsx`) against real published content before
+   * this component ever sees them. Optional and defaults to empty.
+   */
+  verifiedSearchTags?: { label: string; href: string }[];
+}
+
+export default function OrdersSidebar({ verifiedSearchTags = [] }: OrdersSidebarProps) {
+  const tags = [...verifiedSearchTags, ...STATIC_GO_TAGS];
   return (
     <aside className="space-y-6 font-sans">
       {/* 1. Quick Searches Widget */}
-      <div className="bg-paperRaised border border-hair rounded-2xl p-5 space-y-4 shadow-2xs">
+      <div className="bg-paperRaised border border-hair rounded-2xl p-5 space-y-4">
         <div className="flex items-center justify-between border-b border-hair/60 pb-3">
           <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-ink flex items-center gap-1.5">
             Quick Searches
@@ -26,11 +32,11 @@ export default function OrdersSidebar() {
         </div>
 
         <div className="flex flex-wrap gap-2 font-mono text-xs">
-          {POPULAR_GO_TAGS.map((tag) => (
+          {tags.map((tag) => (
             <Link
               key={tag.label}
               href={tag.href}
-              className="px-3 py-1 rounded-full border border-hair bg-paper/50 hover:bg-ink hover:text-paper text-inkSoft font-semibold transition-all shadow-2xs"
+              className="px-3 py-1 rounded-full border border-hair bg-paper/50 hover:bg-ink hover:text-paper text-inkSoft font-semibold transition-all"
             >
               {tag.label}
             </Link>
@@ -39,7 +45,7 @@ export default function OrdersSidebar() {
       </div>
 
       {/* 2. GOIR resource banner */}
-      <div className="bg-masthead text-mastheadText rounded-2xl p-5 space-y-3 shadow-md border border-mastheadText/40">
+      <div className="on-masthead bg-masthead text-mastheadText rounded-2xl p-5 space-y-3 shadow-md border border-mastheadText/40">
         <div className="flex items-center justify-between">
           <Badge variant="turmeric" size="sm" shape="pill" dot>
             goir.ap.gov.in

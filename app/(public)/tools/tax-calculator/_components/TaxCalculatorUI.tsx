@@ -374,7 +374,7 @@ export default function TaxCalculatorUI() {
         <Link href="/tools" className="text-xs font-mono text-inkSoft hover:text-ink font-semibold">
           ← Back to Tools / ఇతర సాధనాలు
         </Link>
-        <div className="flex flex-wrap items-center bg-paperRaised border border-hair rounded-xl p-1 text-xs font-mono font-bold gap-1 shadow-2xs">
+        <div className="flex flex-wrap items-center bg-paperRaised border border-hair rounded-xl p-1 text-xs font-mono font-bold gap-1">
           {TABS.map((t) => (
             <button
               key={t.id}
@@ -402,7 +402,7 @@ export default function TaxCalculatorUI() {
 
       {/* Sticky Print Action Banner */}
       {activeTab !== "calculator" && (
-        <div className="bg-ink text-paper rounded-xl p-3 px-4 flex flex-wrap items-center justify-between gap-3 shadow-lg print:hidden border-l-4 border-paper sticky top-3 z-30">
+        <div className="bg-ink text-paper rounded-xl p-3 px-4 flex flex-wrap items-center justify-between gap-3 shadow-md print:hidden border-l-4 border-paper sticky top-[76px] z-30">
           <div className="flex items-center gap-2">
             <span className="font-mono text-xs font-bold text-paper uppercase">
               📄 {activeTab === "printAll" ? "Full Print Suite (All 7 Documents)" : TABS.find((t) => t.id === activeTab)?.label}
@@ -476,7 +476,7 @@ export default function TaxCalculatorUI() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
             <div className="lg:col-span-2 space-y-5">
               {/* Employee Particulars */}
-              <div className="bg-paperRaised border border-hair rounded-xl p-5 space-y-3 shadow-xs">
+              <div className="bg-paperRaised border border-hair rounded-xl p-5 space-y-3">
                 <h2 className="font-bold text-sm text-ink border-b border-hair pb-2">
                   Part A: Employee & DDO Particulars
                 </h2>
@@ -506,16 +506,16 @@ export default function TaxCalculatorUI() {
               </div>
 
               {/* Salary Inputs */}
-              <div className="bg-paperRaised border border-hair rounded-xl p-5 space-y-3 shadow-xs">
+              <div className="bg-paperRaised border border-hair rounded-xl p-5 space-y-3">
                 <h2 className="font-bold text-sm text-ink border-b border-hair pb-2">
                   Part B: Salary & Allowances
                 </h2>
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
                   <div>
-                    <label className="block text-[var(--label-primary)] md:text-[var(--label-secondary)] text-inkSoft font-semibold mb-0.5 tracking-wide">
+                    <label className="block text-xs text-inkSoft font-semibold mb-0.5 tracking-wide">
                       Monthly Basic Pay (₹)
                     </label>
-                    <input
+                    <input aria-label="Monthly Basic Pay (₹)"
                       type="number"
                       value={basic}
                       onChange={(e) => setBasic(e.target.value)}
@@ -523,10 +523,10 @@ export default function TaxCalculatorUI() {
                     />
                   </div>
                   <div>
-                    <label className="block text-[var(--label-primary)] md:text-[var(--label-secondary)] text-inkSoft font-semibold mb-0.5 tracking-wide">
+                    <label className="block text-xs text-inkSoft font-semibold mb-0.5 tracking-wide">
                       DA Rate %
                     </label>
-                    <select
+                    <select aria-label="DA Rate %"
                       value={daSelect}
                       onChange={(e) => setDaSelect(parseFloat(e.target.value))}
                       className="w-full bg-paperRaised border border-hair rounded px-2 py-1.5 text-sm text-ink"
@@ -539,10 +539,10 @@ export default function TaxCalculatorUI() {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-[var(--label-primary)] md:text-[var(--label-secondary)] text-inkSoft font-semibold mb-0.5 tracking-wide">
+                    <label className="block text-xs text-inkSoft font-semibold mb-0.5 tracking-wide">
                       HRA Rate %
                     </label>
-                    <select
+                    <select aria-label="HRA Rate %"
                       value={hraSelect}
                       onChange={(e) => setHraSelect(parseFloat(e.target.value))}
                       className="w-full bg-paperRaised border border-hair rounded px-2 py-1.5 text-sm text-ink"
@@ -555,7 +555,7 @@ export default function TaxCalculatorUI() {
                     </select>
                   </div>
                 </div>
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
                   <NumF label="Surrender Pay / Bonus" value={surrender} onChange={setSurrender} />
                   <NumF label="Perquisites u/s 17(2) (Form 12BA)" value={perq17_2} onChange={setPerq17_2} />
                   <NumF label="Profits in lieu u/s 17(3) (Form 12BA)" value={profit17_3} onChange={setProfit17_3} />
@@ -566,16 +566,16 @@ export default function TaxCalculatorUI() {
               </div>
 
               {/* Section 10 Exemptions */}
-              <div className="bg-paperRaised border border-hair rounded-xl p-5 space-y-3 shadow-xs">
+              <div className="bg-paperRaised border border-hair rounded-xl p-5 space-y-3">
                 <h2 className="font-bold text-sm text-ink border-b border-hair pb-2">
                   Section 10 Exemptions
                 </h2>
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
                   <div>
-                    <label className="block text-[var(--label-primary)] md:text-[var(--label-secondary)] text-inkSoft font-semibold mb-0.5 tracking-wide">
+                    <label className="block text-xs text-inkSoft font-semibold mb-0.5 tracking-wide">
                       House Status
                     </label>
-                    <select
+                    <select aria-label="House Status"
                       value={houseStatus}
                       onChange={(e) => setHouseStatus(e.target.value as "Rented" | "Own")}
                       className="w-full bg-paperRaised border border-hair rounded px-2 py-1.5 text-sm text-ink"
@@ -595,14 +595,14 @@ export default function TaxCalculatorUI() {
               </div>
 
               {/* Deductions */}
-              <div className="bg-paperRaised border border-hair rounded-xl p-5 space-y-3 shadow-xs">
+              <div className="bg-paperRaised border border-hair rounded-xl p-5 space-y-3">
                 <h2 className="font-bold text-sm text-ink border-b border-hair pb-2">
                   Part C: Chapter VI-A & Other Deductions
                 </h2>
                 <p className="text-xs text-inkSoft font-semibold">
                   80C Group (GPF, APGLI, GIS, LIC, PLI, PPF, Tuition, Principal — Max ₹1,50,000)
                 </p>
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
                   <NumF label="GPF / ZPPF" value={gpf} onChange={setGpf} />
                   <NumF label="APGLI" value={apgli} onChange={setApgli} />
                   <NumF label="GIS" value={gis} onChange={setGis} />
@@ -619,7 +619,7 @@ export default function TaxCalculatorUI() {
                 <p className="text-xs text-inkSoft font-semibold border-t border-hair pt-2">
                   Other Applicable Deductions
                 </p>
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
                   <NumF label="Professional Tax" value={pt} onChange={setPt} />
                   <NumF label="80D — Health Insurance" value={s80d} onChange={setS80d} />
                   <NumF label="Sec 24b — Home Loan Interest" value={s24b} onChange={setS24b} />
@@ -633,14 +633,25 @@ export default function TaxCalculatorUI() {
               </div>
 
               {/* Quarterly TDS & BIN for Govt Deductors */}
-              <div className="bg-paperRaised border border-hair rounded-xl p-5 space-y-3 shadow-xs">
+              <div className="bg-paperRaised border border-hair rounded-xl p-5 space-y-3">
                 <h2 className="font-bold text-sm text-ink border-b border-hair pb-2">
                   Quarterly TDS & BIN Details (Form 16 Part A)
                 </h2>
                 <p className="text-xs text-inkSoft">
                   For AP Govt Teachers: Book Adjustment (BIN) entries are used by Treasury/DDOs
                 </p>
-                <div className="grid grid-cols-5 gap-2 text-[var(--label-primary)] md:text-[var(--label-secondary)] font-semibold text-inkSoft">
+                {/* Genuinely tabular, so it keeps five columns and scrolls
+                    inside its own container rather than forcing the page to
+                    scroll (DESIGN_SYSTEM.md §9.3). tabIndex + role make the
+                    scroll region reachable by keyboard, which a bare
+                    overflow-x-auto div is not. */}
+                <div
+                  className="overflow-x-auto"
+                  tabIndex={0}
+                  role="region"
+                  aria-label="Quarterly TDS and BIN details"
+                >
+                <div className="grid min-w-[34rem] grid-cols-5 gap-2 text-xs font-semibold text-inkSoft">
                   <div>Quarter</div>
                   <div>Amt Paid (₹)</div>
                   <div>Tax Deducted (₹)</div>
@@ -653,35 +664,40 @@ export default function TaxCalculatorUI() {
                   { q: "Q3 Oct-Dec", paid: q3Paid, setPaid: setQ3Paid, ded: q3Ded, setDed: setQ3Ded, dep: q3Dep, setDep: setQ3Dep, rec: q3Rec, setRec: setQ3Rec },
                   { q: "Q4 Jan-Mar", paid: q4Paid, setPaid: setQ4Paid, ded: q4Ded, setDed: setQ4Ded, dep: q4Dep, setDep: setQ4Dep, rec: q4Rec, setRec: setQ4Rec },
                 ].map(({ q, paid, setPaid, ded, setDed, dep, setDep, rec, setRec }) => (
-                  <div key={q} className="grid grid-cols-5 gap-2 items-center">
+                  <div key={q} className="grid min-w-[34rem] grid-cols-5 items-center gap-2">
                     <div className="text-sm font-semibold text-ink">{q}</div>
                     <input
                       type="number"
                       value={paid}
                       onChange={(e) => setPaid(e.target.value)}
-                      className="bg-paperRaised border border-hair rounded px-2 py-1.5 text-sm tabular-nums"
+                      aria-label={`Amount paid for ${q}`}
+                      className="w-full min-w-0 bg-paperRaised border border-hair rounded px-2 py-1.5 text-sm tabular-nums"
                     />
                     <input
                       type="number"
                       value={ded}
                       onChange={(e) => setDed(e.target.value)}
-                      className="bg-paperRaised border border-hair rounded px-2 py-1.5 text-sm tabular-nums"
+                      aria-label={`Tax deducted for ${q}`}
+                      className="w-full min-w-0 bg-paperRaised border border-hair rounded px-2 py-1.5 text-sm tabular-nums"
                     />
                     <input
                       type="number"
                       value={dep}
                       onChange={(e) => setDep(e.target.value)}
-                      className="bg-paperRaised border border-hair rounded px-2 py-1.5 text-sm tabular-nums"
+                      aria-label={`Tax deposited for ${q}`}
+                      className="w-full min-w-0 bg-paperRaised border border-hair rounded px-2 py-1.5 text-sm tabular-nums"
                     />
                     <input
                       type="text"
                       value={rec}
                       onChange={(e) => setRec(e.target.value)}
-                      className="bg-paperRaised border border-hair rounded px-2 py-1.5 text-sm"
+                      aria-label={`Receipt number 24Q for ${q}`}
+                      className="w-full min-w-0 bg-paperRaised border border-hair rounded px-2 py-1.5 text-sm"
                     />
                   </div>
                 ))}
-                <div className="grid grid-cols-3 gap-3 border-t border-hair pt-2">
+                </div>
+                <div className="grid grid-cols-1 gap-3 border-t border-hair pt-2 sm:grid-cols-3">
                   <InputF label="BIN: Receipt No. Form 24G" value={bin24G} onChange={setBin24G} />
                   <InputF label="BIN: DDO Serial No. in 24G" value={binSerial} onChange={setBinSerial} />
                   <InputF label="BIN: Date of Transfer Voucher" value={binDate} onChange={setBinDate} />
@@ -689,7 +705,7 @@ export default function TaxCalculatorUI() {
               </div>
 
               {/* Landlord & Lender Information */}
-              <div className="bg-paperRaised border border-hair rounded-xl p-5 space-y-3 shadow-xs">
+              <div className="bg-paperRaised border border-hair rounded-xl p-5 space-y-3">
                 <h2 className="font-bold text-sm text-ink border-b border-hair pb-2">
                   Landlord & Lender Particulars (Form 12BB)
                 </h2>
@@ -705,10 +721,10 @@ export default function TaxCalculatorUI() {
                   <InputF label="Lender Address" value={lenderAddr} onChange={setLenderAddr} />
                   <InputF label="Lender PAN" value={lenderPan} onChange={setLenderPan} />
                   <div>
-                    <label className="block text-[var(--label-primary)] md:text-[var(--label-secondary)] text-inkSoft font-semibold mb-0.5 tracking-wide">
+                    <label className="block text-xs text-inkSoft font-semibold mb-0.5 tracking-wide">
                       Lender Type
                     </label>
-                    <select
+                    <select aria-label="Lender Type"
                       value={lenderType}
                       onChange={(e) => setLenderType(e.target.value)}
                       className="w-full bg-paperRaised border border-hair rounded px-2 py-1.5 text-sm text-ink"
@@ -724,7 +740,7 @@ export default function TaxCalculatorUI() {
 
             {/* Right Summary Panel */}
             <div className="space-y-4">
-              <div className="bg-ink text-paper rounded-xl p-6 shadow-md border-l-4 border-paper space-y-3 sticky top-4">
+              <div className="bg-ink text-paper rounded-xl p-6 shadow-md border-l-4 border-paper space-y-3 sticky top-[76px]">
                 <div className="font-mono text-[9px] text-paper/60 uppercase font-bold tracking-wider">
                   Tax Payable ({regime === "old" ? "Old Regime" : "New Regime"})
                 </div>
@@ -732,7 +748,7 @@ export default function TaxCalculatorUI() {
                 <div className="text-xs text-paper/70 font-mono">Gross Salary: ₹{fmt(totalGross)}</div>
                 <div className="text-xs text-paper/70 font-mono">Taxable Income: ₹{fmt(taxableIncome)}</div>
                 <div className="text-xs text-paper/70 font-mono">Net Tax to Pay Now: ₹{fmt(netPayable)}</div>
-                <div className="border-t border-hair/20 pt-3 space-y-1 text-[var(--label-primary)] md:text-[var(--label-secondary)] font-mono">
+                <div className="border-t border-hair/20 pt-3 space-y-1 text-xs font-mono">
                   <div className="flex justify-between">
                     <span>Gross Salary</span>
                     <span>₹{fmt(totalGross)}</span>
@@ -770,7 +786,7 @@ export default function TaxCalculatorUI() {
                 </div>
               </div>
 
-              <div className="bg-paperRaised border border-hair rounded-xl p-4 text-xs font-mono space-y-1.5 shadow-xs">
+              <div className="bg-paperRaised border border-hair rounded-xl p-4 text-xs font-mono space-y-1.5">
                 <div className="font-bold text-ink border-b border-hair pb-2 mb-2">📂 Official Documents to Print</div>
                 {(
                   [
@@ -838,7 +854,7 @@ export default function TaxCalculatorUI() {
                       <ol className="list-decimal pl-4 space-y-1">
                         <li>Actual HRA received from government payroll.</li>
                         <li>Actual rent paid minus 10% of (Basic Pay + DA).</li>
-                        <li>40% of (Basic Pay + DA) for non-metro towns/districts in AP & TS.</li>
+                        <li>40% of (Basic Pay + DA) for non-metro towns/districts.</li>
                       </ol>
                     </div>
                   ),
@@ -876,8 +892,13 @@ export default function TaxCalculatorUI() {
             <div>Month wise Income of: &nbsp;<span className="underline font-bold text-black text-sm">{empName}</span></div>
             <div className="text-xs font-normal text-black/70">DESIG: <b>{empDesig}</b> | PAN: <b>{empPan}</b></div>
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-center border-collapse border border-black text-[var(--label-primary)] md:text-[var(--label-secondary)]" style={{ tableLayout: "fixed" }}>
+          <div
+            className="overflow-x-auto"
+            tabIndex={0}
+            role="region"
+            aria-label="Month-wise income statement"
+          >
+            <table className="w-full text-center border-collapse border border-black text-xs" style={{ tableLayout: "fixed" }}>
               <thead>
                 <tr className="bg-black/15 font-bold border-b-2 border-black text-[9.5px]">
                   {[
@@ -953,7 +974,7 @@ export default function TaxCalculatorUI() {
                     <td colSpan={20}></td>
                   </tr>
                 ))}
-                <tr className="font-bold bg-black/15 border-t-2 border-black text-[var(--label-primary)] md:text-[var(--label-secondary)]">
+                <tr className="font-bold bg-black/15 border-t-2 border-black text-xs">
                   <td className="border-r border-black p-1.5">Grand Totals</td>
                   <td className="border-r border-black p-1.5">{totBasic}</td>
                   <td className="border-r border-black p-1.5"></td>
@@ -1024,7 +1045,7 @@ export default function TaxCalculatorUI() {
               <div className="pl-4 text-black/80">Standard deduction. Sec-16(ia)</div>
               <div className="text-right tabular-nums pr-2">{fmt(stdDed)}</div>
               <div className="text-right tabular-nums pr-2 font-bold">
-                <span className="text-[var(--label-primary)] md:text-[var(--label-secondary)] font-normal mr-2 text-black/60">Sec-16(ia)</span>
+                <span className="text-xs font-normal mr-2 text-black/60">Sec-16(ia)</span>
                 {fmt(stdDed)}
               </div>
             </div>
@@ -1063,7 +1084,7 @@ export default function TaxCalculatorUI() {
               <div className="pl-4 text-black/80">Profession Tax Sec.16(iii)</div>
               <div className="text-right tabular-nums pr-2">{fmt(ptNum)}</div>
               <div className="text-right tabular-nums pr-2 font-bold">
-                <span className="text-[var(--label-primary)] md:text-[var(--label-secondary)] font-normal mr-2 text-black/60">Sec.16(iii)</span>
+                <span className="text-xs font-normal mr-2 text-black/60">Sec.16(iii)</span>
                 {fmt(ptNum)}
               </div>
             </div>
@@ -1780,7 +1801,10 @@ export default function TaxCalculatorUI() {
       {(activeTab === "rentReceipt" || activeTab === "printAll") && (
         <div className="bg-white border-2 border-black p-8 font-['Arial','Segoe_UI',Calibri,sans-serif] text-black space-y-6 max-w-2xl mx-auto print:border-none print:p-0 print:max-w-none print:w-full print-page-break text-xs leading-relaxed antialiased">
           <div className="text-center border-b-2 border-black pb-3">
-            <h1 className="text-xl font-bold uppercase tracking-wider">RECEIPT OF HOUSE RENT</h1>
+            {/* This tab's own printable-document title, not the page's heading — the
+                page's one h1 is the tool title above (UI_AUDIT.md F12: this was a
+                second h1 on the route). */}
+            <h2 className="text-xl font-bold uppercase tracking-wider">RECEIPT OF HOUSE RENT</h2>
             <div className="text-xs font-semibold text-black/70">(Under Section 10(13-A) of Income Tax Act, 1961)</div>
           </div>
           <div className="space-y-4 text-xs">
@@ -1802,7 +1826,7 @@ export default function TaxCalculatorUI() {
               <div className="pt-8">Signature: ____________________</div>
             </div>
             <div className="text-center">
-              <div className="w-28 h-28 border-2 border-dashed border-black mx-auto flex items-center justify-center text-[var(--label-primary)] md:text-[var(--label-secondary)] font-bold leading-tight p-2 bg-amber-50/50">
+              <div className="w-28 h-28 border-2 border-dashed border-black mx-auto flex items-center justify-center text-xs font-bold leading-tight p-2 bg-amber-50/50">
                 Affix<br />Revenue Stamp<br />of ₹1/-
               </div>
             </div>

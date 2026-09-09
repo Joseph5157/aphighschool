@@ -4,9 +4,10 @@ import PensionersSidebar from "@/app/(public)/pensioners/_components/PensionersS
 import CommutationTrackerUI from "./_components/CommutationTrackerUI";
 
 export const metadata: Metadata = {
-  title: "Commutation 180-Month Restoration Tracker — AP Teacher Desk",
+  title: "Commutation 180-Month Restoration Tracker",
   description:
     "Track the 180-month recovery timeline for 40% commuted pension and generate an application to STO Treasury for full basic pension restoration.",
+  alternates: { canonical: "/pensioners/commutation-tracker" },
 };
 
 export default function CommutationTrackerPage() {

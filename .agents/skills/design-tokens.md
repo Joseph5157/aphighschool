@@ -8,7 +8,7 @@ or Tailwind's default color palette (no `blue-500`, `gray-100`, etc. in this pro
 
 - `ink` (#1B2A4A) — headers, primary text, CTA buttons
 - `inkSoft` (#33456B) — secondary text, metadata
-- `turmeric` (#E8A33D) / `turmericDeep` (#C7811F) — status accents, the lifecycle stepper
+- `turmeric` (#E8A33D) / `turmericDeep` (#CB8624) — status accents, the lifecycle stepper
 - `tamarind` (#2F6B4F) — open/live/success states
 - `kumkum` (#B5432E) — deadline/urgent/error states
 - `paper` (#EDE8DC) / `paperRaised` (#F7F4EC) — backgrounds

@@ -1,12 +1,21 @@
 import React from "react";
 
+// Variants name the TOKEN, not a judgement. `success` and `warning` were
+// removed in UI-SYSTEM-2 after their call sites moved to `tamarind` and
+// `turmeric`: they duplicated those two while implying an assessment the
+// product does not make — "GOIR Verified" is a statement of provenance, not a
+// quality rating (DESIGN_SYSTEM.md §12.1). `dark` became `ink` for the same
+// reason, and because it read as a dark-mode flag.
+//
+// `kumkum` was added in UI-SYSTEM-1 so `superseded` had somewhere to go; before
+// it, an order a later order had replaced rendered in the same green family as
+// one still in force.
 export type BadgeVariant =
   | "tamarind"
   | "turmeric"
+  | "kumkum"
   | "neutral"
-  | "success"
-  | "warning"
-  | "dark";
+  | "ink";
 
 export type BadgeSize = "sm" | "md" | "lg";
 export type BadgeShape = "rounded" | "pill";
@@ -19,18 +28,19 @@ export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
 }
 
 const VARIANT_MAP: Record<BadgeVariant, string> = {
-  tamarind: "bg-tamarind/10 text-tamarind border-tamarind/20",
-  turmeric: "bg-turmeric/20 text-turmericDeep border-turmeric/30",
-  neutral: "bg-hair/60 text-inkSoft border-hair",
-  success: "bg-emerald-50 text-emerald-700 border-emerald-200",
-  warning: "bg-amber-50 text-amber-800 border-amber-200",
-  dark: "bg-ink text-paperRaised border-ink",
+  tamarind: "bg-tamarind/10 text-tamarind border-tamarind/25",
+  turmeric: "bg-turmeric/15 text-turmericDeep border-turmeric/30",
+  kumkum: "bg-kumkum/10 text-kumkum border-kumkum/25",
+  neutral: "bg-hair/50 text-inkSoft border-hair",
+  ink: "bg-ink text-paperRaised border-ink",
 };
 
+// 12px is the floor (DESIGN_SYSTEM.md §1.2). `sm` was 9px and `md` 10px, and
+// `sm` is the default variant used by most call sites.
 const SIZE_MAP: Record<BadgeSize, string> = {
-  sm: "text-[9px] px-2 py-0.5",
-  md: "text-[10px] px-2.5 py-1",
-  lg: "text-xs px-3 py-1.5",
+  sm: "text-xs px-2 py-0.5",
+  md: "text-xs px-2.5 py-1",
+  lg: "text-[13px] px-3 py-1.5",
 };
 
 const SHAPE_MAP: Record<BadgeShape, string> = {
@@ -41,10 +51,9 @@ const SHAPE_MAP: Record<BadgeShape, string> = {
 const DOT_COLOR_MAP: Record<BadgeVariant, string> = {
   tamarind: "bg-tamarind",
   turmeric: "bg-turmericDeep",
+  kumkum: "bg-kumkum",
   neutral: "bg-inkSoft",
-  success: "bg-emerald-500",
-  warning: "bg-amber-500",
-  dark: "bg-turmeric",
+  ink: "bg-turmeric",
 };
 
 export const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(

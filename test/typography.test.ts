@@ -41,4 +41,28 @@ describe("typography configuration", () => {
     expect(css).toContain("line-height: 1.75;");
     expect(css).toMatch(/\.text-telugu-title \{[\s\S]*line-height: 1\.75;/);
   });
+
+  // UI-IMPECCABLE-1, DESIGN_SYSTEM.md §1: "Mono is not for body copy, headings,
+  // or navigation labels." Three route h1s added in UI-A11Y-1 briefly violated
+  // this (a Badge-row label promoted straight to h1 kept its font-mono styling).
+  it("never styles an <h1> with font-mono", () => {
+    const componentsRoot = path.join(process.cwd(), "app/(public)");
+    const offenders: string[] = [];
+
+    const walk = (dir: string) => {
+      for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+        const full = path.join(dir, entry.name);
+        if (entry.isDirectory()) walk(full);
+        else if (entry.name.endsWith(".tsx")) {
+          const source = fs.readFileSync(full, "utf8");
+          for (const match of source.matchAll(/<h1\b[^>]*>/g)) {
+            if (/font-mono/.test(match[0])) offenders.push(`${full}: ${match[0]}`);
+          }
+        }
+      }
+    };
+    walk(componentsRoot);
+
+    expect(offenders).toEqual([]);
+  });
 });

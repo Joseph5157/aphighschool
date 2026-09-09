@@ -9,9 +9,10 @@ import Accordion from "../_components/Accordion";
 import PensionersSidebar from "./_components/PensionersSidebar";
 
 export const metadata: Metadata = {
-  title: "Pensioners & Retired Employee Care Hub — AP Teacher Desk",
+  title: "Pensioners & Retired Employee Care Hub",
   description:
-    "Comprehensive guidance for retired AP teachers: Service Pension & DCRG Gratuity calculators, 180-month Commutation restoration trackers, EHS health guides, and 6-office clearance pipelines.",
+    "Guidance for retired AP teachers: Service Pension & DCRG Gratuity calculators, the 180-month Commutation tracker, and the 6-office retirement clearance guide.",
+  alternates: { canonical: "/pensioners" },
 };
 
 const PENSIONER_TOOLS = [
@@ -62,9 +63,9 @@ export default function PensionersHubPage() {
         {/* Mainfeed Column */}
         <div className="lg:col-span-8 space-y-6">
           {/* Emerald Treasury Hero Header */}
-          <div className="bg-masthead text-mastheadText border border-mastheadText/40 rounded-2xl p-6 md:p-8 space-y-3 shadow-md relative overflow-hidden">
+          <div className="on-masthead bg-masthead text-mastheadText border border-mastheadText/40 rounded-2xl p-6 md:p-8 space-y-3 shadow-md relative overflow-hidden">
             <div className="flex items-center justify-between">
-              <Badge variant="success" size="sm" shape="pill" dot>
+              <Badge variant="tamarind" size="sm" shape="pill" dot>
                 Emerald Treasury Care Suite
               </Badge>
               <span className="font-mono text-[10px] text-turmeric font-semibold">
@@ -82,7 +83,7 @@ export default function PensionersHubPage() {
             </div>
 
             <p className="text-body text-mastheadText/70">
-              Dedicated guidance for retired teachers and government employees in AP & TS — clear pension math, commutation restoration countdowns, and office clearance workflows.
+              Dedicated guidance for retired AP teachers and government employees — clear pension math, commutation restoration countdowns, and office clearance workflows.
             </p>
           </div>
 
@@ -175,7 +176,7 @@ export default function PensionersHubPage() {
                   titleEn: "When do pensioners receive additional quantum of pension?",
                   titleTe: "పెన్షనర్లకు అదనపు పింఛను (Additional Quantum) ఎప్పుడు అందుతుంది?",
                   badge: "Age Slabs",
-                  badgeVariant: "success",
+                  badgeVariant: "tamarind",
                   content: (
                     <p>
                       Additional quantum of pension is automatically granted upon reaching age milestones:

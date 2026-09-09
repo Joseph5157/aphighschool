@@ -4,12 +4,15 @@ import { useState, useMemo, useRef, type KeyboardEvent } from "react";
 import Link from "next/link";
 import type { DocType, OrderState } from "@prisma/client";
 import Badge from "@/app/(public)/_components/Badge";
+import GoirBadge from "@/app/(public)/_components/GoirBadge";
 import {
   resolveLifecyclePill,
   type RecruitmentPill,
 } from "@/app/(public)/_components/lifecyclePill";
 import { isLifecycleClosed } from "@/lib/posts/lifecycle";
 import { officialDate, dateLabel, formatDate, officialYear } from "@/lib/dates";
+import DocumentDate from "@/app/(public)/_components/DocumentDate";
+import EmptyState from "@/app/(public)/_components/EmptyState";
 
 // Only reached for documents that actually have an application lifecycle —
 // see resolveLifecyclePill. Everything else shows its order state instead.
@@ -24,9 +27,9 @@ const RECRUITMENT: RecruitmentPill = {
   },
   variants: {
     notification: "turmeric",
-    apply_link: "success",
+    apply_link: "tamarind",
     hall_ticket: "turmeric",
-    results: "success",
+    results: "tamarind",
     expired: "neutral",
   },
   fallbackVariant: "neutral",
@@ -179,21 +182,17 @@ export default function CategoryLogList({ posts }: CategoryLogListProps) {
 
       <div id="category-log-tabpanel" role="tabpanel" aria-labelledby={filterTabId(activeFilter)} className="space-y-6">
       {/* ── Results count ────────────────────────────────────────────────── */}
-      <div className="flex items-center justify-between text-meta text-inkSoft/70">
+      <div className="flex items-center justify-between text-meta text-inkSoft/80">
         <span>
           {filteredPosts.length} {filteredPosts.length === 1 ? "document" : "documents"}
           {activeFilter !== "All" && ` — filtered: ${activeFilter}`}
         </span>
-        <span className="font-mono text-[10px] text-inkSoft/50">Newest first</span>
+        <span className="font-mono text-[10px] text-inkSoft/80">Newest first</span>
       </div>
 
       {/* ── Document Log Entries ─────────────────────────────────────────── */}
       {filteredPosts.length === 0 ? (
-        <div className="bg-paperRaised border border-hair rounded-xl p-8 text-center">
-          <p className="font-mono text-xs text-inkSoft">
-            No documents found for &ldquo;{activeFilter}&rdquo; filter.
-          </p>
-        </div>
+        <EmptyState title={`No documents found for "${activeFilter}" filter.`} />
       ) : (
         <div className="space-y-3">
           {visiblePosts.map((post) => {
@@ -208,19 +207,15 @@ export default function CategoryLogList({ posts }: CategoryLogListProps) {
                       <Badge variant={pill.variant} size="sm" dot>
                         {pill.label}
                       </Badge>
-                      {post.verifiedAgainstGoir && (
-                        <Badge variant="success" size="sm" shape="pill" dot>
-                          GOIR Verified
-                        </Badge>
-                      )}
+                      <GoirBadge verified={post.verifiedAgainstGoir} />
                       {post.goReference && (
                         <span className="font-mono text-[10px] font-bold text-ink bg-ink/10 px-2 py-0.5 rounded border border-ink/15 break-words">
                           {post.goReference}
                         </span>
                       )}
                     </div>
-                    <span className="font-mono text-[10px] text-inkSoft/70 shrink-0">
-                      {dateLabelOf(post)} · {formatDate(officialDateOf(post))}
+                    <span className="font-mono text-[10px] text-inkSoft/80 shrink-0">
+                      <DocumentDate post={normalizedDates(post)} />
                     </span>
                   </div>
 
@@ -244,7 +239,7 @@ export default function CategoryLogList({ posts }: CategoryLogListProps) {
                   {post.summaryTe && post.summaryTe.length > 0 && (
                     <p
                       lang="te"
-                      className="text-xs text-inkSoft/70 line-clamp-1 pt-1.5 border-t border-hair/40"
+                      className="text-xs text-inkSoft/80 line-clamp-1 pt-1.5 border-t border-hair/40"
                       style={{ fontFamily: "var(--font-noto-telugu), sans-serif", lineHeight: "1.6" }}
                     >
                       {post.summaryTe[0]}

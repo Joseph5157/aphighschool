@@ -6,9 +6,10 @@ import { Card } from "@/app/(public)/_components/Card";
 import Badge from "@/app/(public)/_components/Badge";
 
 export const metadata: Metadata = {
-  title: "AP Teacher Retirement 6-Office File Clearance Guide — AP Teacher Desk",
+  title: "6-Office Retirement File Clearance Guide",
   description:
-    "Step-by-step roadmap detailing the 6 offices AP teachers must clear for pension authorization: HM/DDO, MEO/DEO, State Audit, AG AP Vijayawada, STO Treasury, and Pension Bank Branch.",
+    "Step-by-step guide to the 6 offices AP teachers clear for pension authorization: HM/DDO, MEO/DEO, State Audit, AG AP Vijayawada, STO Treasury, and Pension Bank.",
+  alternates: { canonical: "/pensioners/office-pipeline" },
 };
 
 const OFFICES = [
@@ -88,7 +89,7 @@ export default function OfficePipelinePage() {
 
       <div className="lg:grid lg:grid-cols-12 lg:gap-6 xl:gap-8 space-y-8 lg:space-y-0">
         <div className="lg:col-span-8 space-y-6">
-          <div className="bg-masthead text-mastheadText border border-mastheadText/40 rounded-2xl p-6 md:p-8 space-y-3 shadow-md">
+          <div className="on-masthead bg-masthead text-mastheadText border border-mastheadText/40 rounded-2xl p-6 md:p-8 space-y-3 shadow-md">
             <Badge variant="turmeric" size="sm" shape="pill" dot>
               Retirement Roadmap & Office Clearance
             </Badge>

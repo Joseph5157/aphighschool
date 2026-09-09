@@ -1,8 +1,22 @@
 import React from "react";
 
-export function Table({ children, className = "", ...props }: React.TableHTMLAttributes<HTMLTableElement>) {
+export interface TableProps extends React.TableHTMLAttributes<HTMLTableElement> {
+  /** Names the scroll region. Give every table one. */
+  label?: string;
+}
+
+export function Table({ children, className = "", label, ...props }: TableProps) {
   return (
-    <div className="w-full overflow-x-auto border border-hair rounded-xl shadow-2xs">
+    // A bare overflow-x-auto div scrolls with a pointer but cannot be reached
+    // by keyboard, so a wide table's right-hand columns were unreachable
+    // without a mouse. tabIndex + role make it a focusable scroll region
+    // (DESIGN_SYSTEM.md §8.7).
+    <div
+      className="w-full overflow-x-auto border border-hair rounded-xl"
+      tabIndex={0}
+      role="region"
+      aria-label={label ?? "Table"}
+    >
       <table className={`w-full text-left border-collapse text-xs sm:text-sm ${className}`} {...props}>
         {children}
       </table>
@@ -12,7 +26,7 @@ export function Table({ children, className = "", ...props }: React.TableHTMLAtt
 
 export function TableHeader({ children, className = "", ...props }: React.HTMLAttributes<HTMLTableSectionElement>) {
   return (
-    <thead className={`bg-hair/30 font-mono text-[11px] uppercase tracking-wider text-inkSoft border-b border-hair ${className}`} {...props}>
+    <thead className={`bg-hair/30 font-mono text-xs uppercase tracking-wider text-inkSoft border-b border-hair ${className}`} {...props}>
       {children}
     </thead>
   );
@@ -44,7 +58,10 @@ export function TableRow({ children, className = "", ...props }: React.HTMLAttri
 
 export function TableHead({ children, className = "", ...props }: React.ThHTMLAttributes<HTMLTableCellElement>) {
   return (
-    <th className={`p-3 font-semibold text-ink font-mono ${className}`} {...props}>
+    // Defaults to a column header (UI_AUDIT.md F26) — every current call site
+    // is a column heading; a caller with a genuine row header can still pass
+    // scope="row" explicitly, which overrides this since it spreads after.
+    <th scope="col" className={`p-3 font-semibold text-ink font-mono ${className}`} {...props}>
       {children}
     </th>
   );

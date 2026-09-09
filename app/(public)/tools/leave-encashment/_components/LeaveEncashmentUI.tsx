@@ -10,6 +10,7 @@ import NativeSelect from "@/app/(public)/_components/NativeSelect";
 import Badge from "@/app/(public)/_components/Badge";
 import Separator from "@/app/(public)/_components/Separator";
 import { calculateElSurrender } from "@/lib/calculators/leave-encashment";
+import Callout from "@/app/(public)/_components/Callout";
 
 function formatCurrency(value: number): string {
   return new Intl.NumberFormat("en-IN", {
@@ -149,10 +150,9 @@ export default function LeaveEncashmentUI() {
                     <option value="30">30 days</option>
                   </NativeSelect>
                 </Field>
-                <aside className="rounded-lg border border-turmeric/30 bg-turmeric/10 p-3 text-xs leading-relaxed text-inkSoft" aria-label="EL surrender guidance">
-                  <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-turmericDeep">Before you submit</span>
-                  <p className="mt-1">15 days normally follows a 12-month gap; 30 days normally follows a 24-month gap. Sanction depends on your Service Register and the competent authority.</p>
-                </aside>
+                <Callout as="aside" tone="guidance" title="Before you submit" className="text-xs" aria-label="EL surrender guidance">
+                  <p>15 days normally follows a 12-month gap; 30 days normally follows a 24-month gap. Sanction depends on your Service Register and the competent authority.</p>
+                </Callout>
               </>
             ) : (
               <div className="grid grid-cols-2 gap-3">

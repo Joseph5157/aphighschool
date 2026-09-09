@@ -1,14 +1,18 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, startTransition } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import Input from "@/app/(public)/_components/Input";
 import Badge from "@/app/(public)/_components/Badge";
+import GoirBadge from "@/app/(public)/_components/GoirBadge";
+import IconButton from "@/app/(public)/_components/IconButton";
 import { Card } from "@/app/(public)/_components/Card";
 import { dateLabel, formatDate, officialDate } from "@/lib/dates";
 import type { RecentDocument, SearchResult } from "@/lib/posts/query";
+import DocumentDate from "@/app/(public)/_components/DocumentDate";
+import EmptyState from "@/app/(public)/_components/EmptyState";
 
 type SearchUIProps = {
   results: SearchResult[];
@@ -16,16 +20,13 @@ type SearchUIProps = {
   activeType: string | null;
   isDiscovery: boolean;
   recentDocuments: RecentDocument[];
+  /**
+   * Candidates already verified server-side (lib/posts/query.ts's
+   * quickSearchChips) to return at least one result right now. Never a
+   * hardcoded guess — see UI_AUDIT.md F30.
+   */
+  quickSearchChips: string[];
 };
-
-const QUICK_SEARCH_CHIPS = [
-  "TET 2026",
-  "DA Arrears",
-  "Mega DSC",
-  "PRC arrears",
-  "Transfers",
-  "Form 16",
-];
 
 const TYPE_FILTERS: { value: string; label: string }[] = [
   { value: "go", label: "GO" },
@@ -100,6 +101,7 @@ export default function SearchUI({
   activeType,
   isDiscovery,
   recentDocuments,
+  quickSearchChips,
 }: SearchUIProps) {
   const router = useRouter();
   const params = useSearchParams();
@@ -115,7 +117,13 @@ export default function SearchUI({
       const next = new URLSearchParams(params?.toString() ?? "");
       if (value.trim()) next.set("q", value.trim());
       else next.delete("q");
-      router.push(`/search?${next.toString()}`);
+      // Wrapped in a transition so this same-route, params-only navigation
+      // keeps the current results on screen (React marks it pending instead
+      // of falling back to the route's loading.tsx) — otherwise every
+      // keystroke would blank the page to a full-page skeleton mid-typing.
+      startTransition(() => {
+        router.push(`/search?${next.toString()}`);
+      });
     }, 400);
     return () => clearTimeout(timer);
   }, [value, params, router]);
@@ -125,11 +133,18 @@ export default function SearchUI({
     const next = new URLSearchParams(params?.toString() ?? "");
     if (value.trim()) next.set("q", value.trim());
     else next.delete("q");
-    router.push(`/search?${next.toString()}`);
+    startTransition(() => {
+      router.push(`/search?${next.toString()}`);
+    });
   };
 
   const trimmedQuery = query.trim();
   const isNoMatches = !isDiscovery && results.length === 0;
+  // Derived rather than stored: the input reads ahead of `query` (the last
+  // navigation Next actually completed) for exactly as long as a search is
+  // in flight, and lands back in sync the instant new props confirm it —
+  // no separate state to keep consistent with that completion signal.
+  const isSearching = value.trim() !== trimmedQuery;
 
   return (
     <div className="w-full space-y-6">
@@ -140,20 +155,32 @@ export default function SearchUI({
           value={value}
           onChange={(e) => setValue(e.target.value)}
           placeholder="Search GO number, Telugu phrase, or topic..."
-          className="py-3 pr-10"
+          className="py-3 pr-12"
           autoFocus
         />
         {value && (
-          <button
-            type="button"
+          // Was a bare ✕ glyph roughly 16px square. IconButton gives it the
+          // 44px target the rest of the controls now meet.
+          <IconButton
+            label="Clear search"
             onClick={() => setValue("")}
-            className="absolute right-3.5 top-3.5 text-xs font-mono text-inkSoft hover:text-ink"
-            aria-label="Clear search"
-          >
-            ✕
-          </button>
+            className="absolute right-1 top-1/2 -translate-y-1/2"
+            icon={
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            }
+          />
         )}
       </form>
+
+      {/* Pending affordance for the debounced navigation — announced, not just
+          visual, since the results below update with no other cue. */}
+      {isSearching && (
+        <p role="status" aria-live="polite" className="font-mono text-xs text-inkSoft/80">
+          Searching…
+        </p>
+      )}
 
       {/* Document type filter chips */}
       <div className="flex items-center gap-2 flex-wrap">
@@ -162,7 +189,7 @@ export default function SearchUI({
           aria-current={activeType === null ? "true" : undefined}
         >
           <Badge
-            variant={activeType === null ? "dark" : "neutral"}
+            variant={activeType === null ? "ink" : "neutral"}
             size="sm"
             shape="pill"
             className="cursor-pointer hover:border-ink/40"
@@ -177,7 +204,7 @@ export default function SearchUI({
             aria-current={activeType === filter.value ? "true" : undefined}
           >
             <Badge
-              variant={activeType === filter.value ? "dark" : "neutral"}
+              variant={activeType === filter.value ? "ink" : "neutral"}
               size="sm"
               shape="pill"
               className="cursor-pointer hover:border-ink/40"
@@ -190,39 +217,41 @@ export default function SearchUI({
 
       {isDiscovery && (
         <div className="space-y-6 pt-2">
-          <section className="space-y-2.5" aria-labelledby="quick-searches-heading">
-            <h2 id="quick-searches-heading" className="font-mono text-[9.5px] uppercase tracking-wider text-inkSoft font-semibold">
-              Quick Searches
-            </h2>
-            <div className="flex items-center gap-2 flex-wrap">
-              {QUICK_SEARCH_CHIPS.map((chip) => (
-                <button
-                  key={chip}
-                  onClick={() => setValue(chip)}
-                  className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-tamarind rounded-full"
-                >
-                  <Badge variant="neutral" size="sm" shape="pill" className="cursor-pointer hover:border-ink/40">
-                    🔍 {chip}
-                  </Badge>
-                </button>
-              ))}
-            </div>
-          </section>
-
-          {recentDocuments.length > 0 && (
-            <section className="space-y-3" aria-labelledby="recent-documents-heading">
-              <div className="flex items-center justify-between gap-3 border-b border-hair pb-2">
-                <h2 id="recent-documents-heading" className="font-mono text-[10px] uppercase tracking-widest text-inkSoft font-semibold">
-                  Recent Documents
-                </h2>
-                <span className="text-meta font-mono text-inkSoft/70">Published documents</span>
+          {quickSearchChips.length > 0 && (
+            <section className="space-y-2.5" aria-labelledby="quick-searches-heading">
+              <h2 id="quick-searches-heading" className="font-mono text-[9.5px] uppercase tracking-wider text-inkSoft font-semibold">
+                Quick Searches
+              </h2>
+              <div className="flex items-center gap-2 flex-wrap">
+                {quickSearchChips.map((chip) => (
+                  <button
+                    key={chip}
+                    onClick={() => setValue(chip)}
+                    className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-tamarind rounded-full"
+                  >
+                    <Badge variant="neutral" size="sm" shape="pill" className="cursor-pointer hover:border-ink/40">
+                      🔍 {chip}
+                    </Badge>
+                  </button>
+                ))}
               </div>
+            </section>
+          )}
+
+          <section className="space-y-3" aria-labelledby="recent-documents-heading">
+            <div className="flex items-center justify-between gap-3 border-b border-hair pb-2">
+              <h2 id="recent-documents-heading" className="font-mono text-[10px] uppercase tracking-widest text-inkSoft font-semibold">
+                Recent Documents
+              </h2>
+              <span className="text-meta font-mono text-inkSoft/80">Published documents</span>
+            </div>
+            {recentDocuments.length > 0 ? (
               <div className="space-y-2">
                 {recentDocuments.map((post) => (
                   <Link
                     key={post.id}
                     href={`/posts/${post.slug}`}
-                    className="block rounded-xl border border-hair bg-paperRaised px-3.5 py-3 transition-all hover:border-ink/40 hover:shadow-2xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-tamarind"
+                    className="block rounded-xl border border-hair bg-paperRaised px-3.5 py-3 transition-all hover:border-ink/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-tamarind"
                   >
                     <div className="flex items-start justify-between gap-3">
                       <h3 className="text-sm font-semibold leading-snug text-ink">{post.titleEn}</h3>
@@ -234,20 +263,18 @@ export default function SearchUI({
                           {DOCUMENT_TYPE_LABELS[post.documentType]}
                         </Badge>
                       )}
-                      {post.verifiedAgainstGoir && (
-                        <Badge variant="success" size="sm" shape="pill" dot>
-                          GOIR Verified
-                        </Badge>
-                      )}
+                      <GoirBadge verified={post.verifiedAgainstGoir} />
                       <span className="text-meta font-mono text-inkSoft/75">
-                        {dateLabel(post)} · {formatDate(officialDate(post))}
+                        <DocumentDate post={post} />
                       </span>
                     </div>
                   </Link>
                 ))}
               </div>
-            </section>
-          )}
+            ) : (
+              <EmptyState compact title="No recent documents yet." />
+            )}
+          </section>
 
           <section className="space-y-3" aria-labelledby="find-by-task-heading">
             <div className="border-b border-hair pb-2">
@@ -276,9 +303,15 @@ export default function SearchUI({
       )}
 
       {isNoMatches && (
-        <Card className="p-8 text-center text-body text-inkSoft">
-          No matching documents found.
-        </Card>
+        <EmptyState
+          title="No matching documents found."
+          description="Try a different keyword or GO number, or browse documents by category."
+          action={
+            <Link href="/orders" className="text-sm font-semibold text-tamarind hover:underline">
+              Browse Orders & Circulars →
+            </Link>
+          }
+        />
       )}
 
       {!isDiscovery && !isNoMatches && (
@@ -303,9 +336,10 @@ export default function SearchUI({
                     <div className="text-telugu-body text-inkSoft font-telugu" lang="te">
                       {highlightMatch(post.titleTe, trimmedQuery)}
                     </div>
-                    <div className="text-meta text-inkSoft/70 uppercase tracking-wider pt-1 border-t border-hair/30 flex items-center gap-2 font-mono">
-                      <span>{dateLabel(post)}</span>
-                      <span>{formatDate(officialDate(post))}</span>
+                    {/* flex-wrap + min-w-0: label, date and a long GO reference
+                        on one unwrapping row pushed past the card at 320px. */}
+                    <div className="text-meta text-inkSoft/80 uppercase tracking-wider pt-1 border-t border-hair/30 flex flex-wrap items-center gap-x-2 gap-y-1 min-w-0 font-mono">
+                      <DocumentDate post={post} />
                       {post.goReference && (
                         <>
                           <span>/</span>
@@ -331,7 +365,7 @@ export default function SearchUI({
                     </div>
                   )}
                   {relatedTitles && relatedTitles.length > 0 && (
-                    <p className="text-meta text-inkSoft/70 font-mono pt-2">
+                    <p className="text-meta text-inkSoft/80 font-mono pt-2">
                       Related: {relatedTitles.join(", ")}
                     </p>
                   )}

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Badge from "./Badge";
+import GoirBadge from "./GoirBadge";
 import Card from "./Card";
 import { formatDate } from "@/lib/dates";
 
@@ -40,15 +41,11 @@ export default function UpcomingActionDates({ posts }: UpcomingActionDatesProps)
                 <div className="flex flex-wrap items-center gap-2">
                   <time
                     dateTime={post.actionDeadline.toISOString()}
-                    className="font-mono text-[10px] font-semibold uppercase tracking-wider text-turmericDeep"
+                    className="font-mono text-xs font-semibold uppercase tracking-wider text-turmericDeep"
                   >
                     Action date · {formatDate(post.actionDeadline)}
                   </time>
-                  {post.verifiedAgainstGoir && (
-                    <Badge variant="success" size="sm" shape="pill" dot>
-                      GOIR Verified
-                    </Badge>
-                  )}
+                  <GoirBadge verified={post.verifiedAgainstGoir} />
                 </div>
 
                 <Link href={`/posts/${post.slug}`} className="group mt-2 block w-fit focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-turmericDeep">
@@ -58,7 +55,7 @@ export default function UpcomingActionDates({ posts }: UpcomingActionDatesProps)
                 </Link>
 
                 {(post.goReference || post.sourceDept) && (
-                  <p className="mt-2 font-mono text-[10px] leading-relaxed text-inkSoft">
+                  <p className="mt-2 font-mono text-xs leading-relaxed text-inkSoft">
                     {[post.goReference, post.sourceDept].filter(Boolean).join(" · ")}
                   </p>
                 )}

@@ -4,11 +4,13 @@ import Breadcrumb from "@/app/(public)/_components/Breadcrumb";
 import Badge from "@/app/(public)/_components/Badge";
 import { Card } from "@/app/(public)/_components/Card";
 import { buttonClassName } from "@/app/(public)/_components/Button";
+import Callout from "@/app/(public)/_components/Callout";
 
 export const metadata: Metadata = {
-  title: "Teacher Service Desk — AP Teacher Desk",
+  title: "Teacher Service Desk",
   description:
-    "Find AP teacher pay, leave, CFMS, GPF, pension, and official-order guidance in one place.",
+    "AP teacher pay, leave, CFMS, GPF, pension, and official-order guidance in one place.",
+  alternates: { canonical: "/service-desk" },
 };
 
 const TASKS = [
@@ -61,7 +63,7 @@ export default function ServiceDeskPage() {
     <div className="mx-auto max-w-5xl space-y-6 pb-12 font-sans">
       <Breadcrumb items={[{ label: "Teacher Service Desk" }]} />
 
-      <section className="relative overflow-hidden rounded-2xl border border-mastheadText/35 bg-masthead p-6 text-mastheadText shadow-md md:p-8">
+      <section className="relative overflow-hidden rounded-2xl border border-mastheadText/35 on-masthead bg-masthead p-6 text-mastheadText shadow-md md:p-8">
         <div className="absolute inset-y-0 right-0 w-1/3 bg-turmeric/10" aria-hidden="true" />
         <div className="relative max-w-3xl space-y-4">
           <div className="flex items-center gap-2">
@@ -129,12 +131,11 @@ export default function ServiceDeskPage() {
         </div>
       </section>
 
-      <aside className="rounded-xl border border-turmeric/30 bg-turmeric/10 px-4 py-3 text-sm text-inkSoft" aria-label="Service desk disclaimer">
-        <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-turmericDeep">Please note</span>
-        <p className="mt-1 leading-relaxed">
+      <Callout as="aside" tone="guidance" title="Please note" aria-label="Service desk disclaimer">
+        <p>
           AP Teacher Desk provides unofficial guidance. Official transactions, submissions, and account access happen only on the relevant government portals.
         </p>
-      </aside>
+      </Callout>
     </div>
   );
 }

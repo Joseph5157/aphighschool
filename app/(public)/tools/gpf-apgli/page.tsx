@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import GpfApgliUI from "./_components/GpfApgliUI";
 
 export const metadata: Metadata = {
-  title: "GPF & APGLI Interest & Loan Calculator — AP Teacher Desk",
+  title: "GPF & APGLI Interest & Loan Calculator",
   description:
-    "Free online GPF compound interest, Part-Final loan eligibility, and APGLI maturity estimator for AP & TS government teachers.",
+    "Free GPF compound interest, Part-Final loan eligibility, and APGLI maturity estimator for AP government teachers.",
+  alternates: { canonical: "/tools/gpf-apgli" },
 };
 
 export default function GpfApgliPage() {
