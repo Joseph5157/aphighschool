@@ -10,7 +10,7 @@ import {
   type RecruitmentPill,
 } from "@/app/(public)/_components/lifecyclePill";
 import { isLifecycleClosed } from "@/lib/posts/lifecycle";
-import { officialDate, dateLabel, formatDate, officialYear } from "@/lib/dates";
+import { officialYear } from "@/lib/dates";
 import DocumentDate from "@/app/(public)/_components/DocumentDate";
 import EmptyState from "@/app/(public)/_components/EmptyState";
 
@@ -70,14 +70,6 @@ function normalizedDates(post: PostItem) {
 // never rename to reference the DB's `effectiveDate` column: this reads
 // documentDate/createdAt directly and must never be confused with, or swapped
 // for, that column (a sort-helper only — see lib/dates.ts).
-function officialDateOf(post: PostItem): Date {
-  return officialDate(normalizedDates(post));
-}
-
-function dateLabelOf(post: PostItem) {
-  return dateLabel(normalizedDates(post));
-}
-
 function officialYearOf(post: PostItem): number {
   return officialYear(normalizedDates(post));
 }
@@ -87,42 +79,107 @@ function officialYearOf(post: PostItem): number {
 // they may contain spaces/punctuation, hence the encode.
 const filterTabId = (filter: string) => `filter-tab-${encodeURIComponent(filter)}`;
 
+/**
+ * One page of documents, and the step "Load More" adds.
+ *
+ * It is also the floor for showing filters at all — SLOP-DETAIL-1, see
+ * AI_SLOP_AUDIT.md A07. Below it every document in the category is already
+ * rendered on the page, so scanning the list is faster than operating a control
+ * that hides part of it — the rendered Government Orders category had three
+ * documents under eight filter pills. Above it the reader cannot see the whole
+ * list at once, which is the point at which narrowing it starts to help.
+ */
+export const FILTER_MIN_DOCUMENTS = 10;
+
+type Facet = {
+  /** Also the visible label. */
+  id: string;
+  matches: (post: PostItem, now: Date) => boolean;
+};
+
+/**
+ * Facets derived from the documents actually in this category.
+ *
+ * The single rule: **a facet is offered only if choosing it would change the
+ * result set** — it must match at least one document and fewer than all of
+ * them. That one test retires every hardcoded assumption at once. The fixed
+ * `2026` / `2025` pills aged on their own and offered a year that might match
+ * nothing; `Open` / `Closed` appeared even where every document was in force,
+ * where one of them was the whole list and the other was empty; and a tag
+ * carried by every document narrowed nothing.
+ */
+function deriveFacets(posts: PostItem[], now: Date): Facet[] {
+  const total = posts.length;
+  const meaningful = (count: number) => count > 0 && count < total;
+  const facets: Facet[] = [];
+
+  const closedCount = posts.filter((post) => isLifecycleClosed(post, now)).length;
+  if (meaningful(closedCount)) {
+    // Open/Closed reads the same lifecycle model as the pill rendered on the
+    // row below — see isLifecycleClosed. Never reintroduce a local statusBadge
+    // rule here: it made the filter contradict the pill.
+    facets.push({ id: "Open", matches: (post, at) => !isLifecycleClosed(post, at) });
+    facets.push({ id: "Closed", matches: (post, at) => isLifecycleClosed(post, at) });
+  }
+
+  const yearCounts = new Map<number, number>();
+  for (const post of posts) {
+    const year = officialYearOf(post);
+    yearCounts.set(year, (yearCounts.get(year) ?? 0) + 1);
+  }
+  for (const [year, count] of [...yearCounts.entries()].sort((a, b) => b[0] - a[0])) {
+    if (meaningful(count)) {
+      facets.push({ id: String(year), matches: (post) => officialYearOf(post) === year });
+    }
+  }
+
+  const tagCounts = new Map<string, number>();
+  for (const post of posts) {
+    for (const tag of post.tags ?? []) tagCounts.set(tag, (tagCounts.get(tag) ?? 0) + 1);
+  }
+  for (const [tag, count] of [...tagCounts.entries()].sort((a, b) => a[0].localeCompare(b[0]))) {
+    if (meaningful(count)) {
+      facets.push({ id: tag, matches: (post) => Boolean(post.tags?.includes(tag)) });
+    }
+  }
+
+  return facets;
+}
+
 export default function CategoryLogList({ posts }: CategoryLogListProps) {
   const [activeFilter, setActiveFilter] = useState<string>("All");
-  const [visibleCount, setVisibleCount] = useState(10);
+  const [visibleCount, setVisibleCount] = useState(FILTER_MIN_DOCUMENTS);
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
-  const availableTags = useMemo(() => {
-    const tagSet = new Set<string>();
-    posts.forEach((post) => post.tags?.forEach((tag) => tagSet.add(tag)));
-    return Array.from(tagSet).sort();
+  // `now` is captured with the facets and reused when filtering, so both reads
+  // of the lifecycle model happen at the same instant. That is what makes the
+  // derivation rule a guarantee rather than an approximation: every facet on
+  // screen matches at least one of these documents, so choosing one can never
+  // produce an empty list, and the only empty state is an empty category.
+  const { facets, now } = useMemo(() => {
+    const at = new Date();
+    return {
+      now: at,
+      facets: posts.length <= FILTER_MIN_DOCUMENTS ? [] : deriveFacets(posts, at),
+    };
   }, [posts]);
 
-  const filteredPosts = useMemo(() => {
-    const now = new Date();
-    return posts.filter((post) => {
-      const postYear = officialYearOf(post).toString();
-      // Open/Closed reads the same lifecycle model as the pill rendered on the
-      // row below — see isLifecycleClosed. Never reintroduce a local
-      // statusBadge rule here: it made the filter contradict the pill.
-      const isClosed = isLifecycleClosed(post, now);
+  const showFilters = facets.length > 0;
 
-      if (activeFilter === "Open") return !isClosed;
-      if (activeFilter === "Closed") return isClosed;
-      if (activeFilter === "2026") return postYear === "2026";
-      if (activeFilter === "2025") return postYear === "2025";
-      if (activeFilter !== "All" && !post.tags?.includes(activeFilter)) return false;
-      return true;
-    });
-  }, [posts, activeFilter]);
+  const filteredPosts = useMemo(() => {
+    if (activeFilter === "All") return posts;
+    const facet = facets.find((f) => f.id === activeFilter);
+    if (!facet) return posts;
+    return posts.filter((post) => facet.matches(post, now));
+  }, [posts, facets, activeFilter, now]);
 
   const visiblePosts = filteredPosts.slice(0, visibleCount);
 
-  const filters = ["All", "Open", "Closed", "2026", "2025", ...availableTags];
+  const filters = showFilters ? ["All", ...facets.map((f) => f.id)] : [];
 
   const selectFilter = (filter: string) => {
     setActiveFilter(filter);
-    setVisibleCount(10);
+    setVisibleCount(FILTER_MIN_DOCUMENTS);
   };
 
   // Roving-tabindex arrow key navigation per the WAI-ARIA tabs pattern:
@@ -144,9 +201,10 @@ export default function CategoryLogList({ posts }: CategoryLogListProps) {
   return (
     <div className="space-y-6">
       {/* ── Filter Pills (ARIA tablist — filtering the log below) ──────────── */}
+      {showFilters && (
       <div
         role="tablist"
-        aria-label="Filter documents by status or year"
+        aria-label="Filter documents by status, year or topic"
         className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar"
       >
         {filters.map((filter, index) => {
@@ -179,20 +237,31 @@ export default function CategoryLogList({ posts }: CategoryLogListProps) {
           );
         })}
       </div>
+      )}
 
-      <div id="category-log-tabpanel" role="tabpanel" aria-labelledby={filterTabId(activeFilter)} className="space-y-6">
-      {/* ── Results count ────────────────────────────────────────────────── */}
-      <div className="flex items-center justify-between text-meta text-inkSoft/80">
-        <span>
+      <div
+        id="category-log-tabpanel"
+        {...(showFilters
+          ? { role: "tabpanel" as const, "aria-labelledby": filterTabId(activeFilter) }
+          : {})}
+        className="space-y-6"
+      >
+      {/*
+        The count only appears once a filter is narrowing the list. Unfiltered
+        it repeated the category masthead's own document count two elements
+        higher up, and "Newest first" repeated the masthead sentence that
+        already says the list is sorted newest first (A07).
+      */}
+      {activeFilter !== "All" && (
+        <div className="text-meta text-inkSoft/80">
           {filteredPosts.length} {filteredPosts.length === 1 ? "document" : "documents"}
-          {activeFilter !== "All" && ` — filtered: ${activeFilter}`}
-        </span>
-        <span className="font-mono text-[10px] text-inkSoft/80">Newest first</span>
-      </div>
+          {` — filtered: ${activeFilter}`}
+        </div>
+      )}
 
       {/* ── Document Log Entries ─────────────────────────────────────────── */}
       {filteredPosts.length === 0 ? (
-        <EmptyState title={`No documents found for "${activeFilter}" filter.`} />
+        <EmptyState title="No documents in this category yet." />
       ) : (
         <div className="space-y-3">
           {visiblePosts.map((post) => {
@@ -260,7 +329,7 @@ export default function CategoryLogList({ posts }: CategoryLogListProps) {
           {visibleCount < filteredPosts.length && (
             <div className="pt-2 text-center">
               <button
-                onClick={() => setVisibleCount((prev) => prev + 10)}
+                onClick={() => setVisibleCount((prev) => prev + FILTER_MIN_DOCUMENTS)}
                 className="font-mono text-xs font-semibold text-ink border border-ink/30 bg-paperRaised hover:bg-ink hover:text-paper px-5 py-2.5 rounded-full transition-all"
               >
                 Load More Documents ({filteredPosts.length - visibleCount} remaining)

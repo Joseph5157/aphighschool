@@ -9,7 +9,6 @@ import Badge from "@/app/(public)/_components/Badge";
 import GoirBadge from "@/app/(public)/_components/GoirBadge";
 import IconButton from "@/app/(public)/_components/IconButton";
 import { Card } from "@/app/(public)/_components/Card";
-import { dateLabel, formatDate, officialDate } from "@/lib/dates";
 import type { RecentDocument, SearchResult } from "@/lib/posts/query";
 import DocumentDate from "@/app/(public)/_components/DocumentDate";
 import EmptyState from "@/app/(public)/_components/EmptyState";
@@ -25,7 +24,7 @@ type SearchUIProps = {
    * quickSearchChips) to return at least one result right now. Never a
    * hardcoded guess — see UI_AUDIT.md F30.
    */
-  quickSearchChips: string[];
+  suggestedSearches: string[];
 };
 
 const TYPE_FILTERS: { value: string; label: string }[] = [
@@ -45,14 +44,6 @@ const DOCUMENT_TYPE_LABELS: Record<string, string> = {
   notification: "Notification",
   other: "Other",
 };
-
-const TASK_LINKS = [
-  { href: "/tools/da-arrears", label: "Pay & DA", detail: "DA arrears calculator" },
-  { href: "/orders", label: "Government Orders", detail: "Orders and circulars" },
-  { href: "/pensioners", label: "Pension", detail: "Pensioner guidance" },
-  { href: "/tools/cfms-checker", label: "Official Portal Guides", detail: "CFMS and service links" },
-  { href: "/tools/tax-calculator", label: "Tax Forms", detail: "Tax calculator and forms" },
-];
 
 function highlightMatch(text: string, query: string) {
   if (!query || query.trim().length < 2) return text;
@@ -101,7 +92,7 @@ export default function SearchUI({
   activeType,
   isDiscovery,
   recentDocuments,
-  quickSearchChips,
+  suggestedSearches,
 }: SearchUIProps) {
   const router = useRouter();
   const params = useSearchParams();
@@ -215,30 +206,43 @@ export default function SearchUI({
         ))}
       </div>
 
+      {/*
+        SLOP-DETAIL-1 (AI_SLOP_AUDIT.md A08). Before a query was typed this
+        route rendered a second portal: seven type pills, a "Quick Searches"
+        row of emoji pills wrapped in buttons, five recent-document cards, and
+        six "Find by Task" cards pointing at /orders, /pensioners and two
+        calculators — destinations the primary navigation already carries. Two
+        of the four were suggestion surfaces competing with each other, and the
+        page still renders the verified topic bar above this component.
+
+        What is left is the job: the field, the type control, and one compact
+        area: verified suggestions on one line, then the recent documents they
+        sit above. The suggestions are still checked against published content
+        before they render (lib/posts/query.ts's quickSearchChips), so none of
+        them can lead to "no matching documents" — they simply lost the pill,
+        the button wrapper, the magnifying-glass emoji and the section heading
+        that made three words look like a widget.
+      */}
       {isDiscovery && (
         <div className="space-y-6 pt-2">
-          {quickSearchChips.length > 0 && (
-            <section className="space-y-2.5" aria-labelledby="quick-searches-heading">
-              <h2 id="quick-searches-heading" className="font-mono text-[9.5px] uppercase tracking-wider text-inkSoft font-semibold">
-                Quick Searches
-              </h2>
-              <div className="flex items-center gap-2 flex-wrap">
-                {quickSearchChips.map((chip) => (
-                  <button
-                    key={chip}
-                    onClick={() => setValue(chip)}
-                    className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-tamarind rounded-full"
-                  >
-                    <Badge variant="neutral" size="sm" shape="pill" className="cursor-pointer hover:border-ink/40">
-                      🔍 {chip}
-                    </Badge>
-                  </button>
-                ))}
-              </div>
-            </section>
-          )}
-
           <section className="space-y-3" aria-labelledby="recent-documents-heading">
+            {suggestedSearches.length > 0 && (
+              <p className="text-body text-inkSoft">
+                <span className="text-inkSoft/80">Try: </span>
+                {suggestedSearches.map((suggestion, index) => (
+                  <span key={suggestion}>
+                    {index > 0 && <span className="text-inkSoft/50"> · </span>}
+                    <button
+                      type="button"
+                      onClick={() => setValue(suggestion)}
+                      className="font-semibold text-tamarind hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-tamarind rounded"
+                    >
+                      {suggestion}
+                    </button>
+                  </span>
+                ))}
+              </p>
+            )}
             <div className="flex items-center justify-between gap-3 border-b border-hair pb-2">
               <h2 id="recent-documents-heading" className="font-mono text-[10px] uppercase tracking-widest text-inkSoft font-semibold">
                 Recent Documents
@@ -259,9 +263,9 @@ export default function SearchUI({
                     </div>
                     <div className="mt-2 flex flex-wrap items-center gap-1.5">
                       {post.documentType && (
-                        <Badge variant="neutral" size="sm" shape="pill">
+                        <span className="text-meta font-mono text-inkSoft/75">
                           {DOCUMENT_TYPE_LABELS[post.documentType]}
-                        </Badge>
+                        </span>
                       )}
                       <GoirBadge verified={post.verifiedAgainstGoir} />
                       <span className="text-meta font-mono text-inkSoft/75">
@@ -274,30 +278,6 @@ export default function SearchUI({
             ) : (
               <EmptyState compact title="No recent documents yet." />
             )}
-          </section>
-
-          <section className="space-y-3" aria-labelledby="find-by-task-heading">
-            <div className="border-b border-hair pb-2">
-              <h2 id="find-by-task-heading" className="font-mono text-[10px] uppercase tracking-widest text-inkSoft font-semibold">
-                Find by Task
-              </h2>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-              {TASK_LINKS.map((task) => (
-                <Card key={task.href} hoverable className="p-0">
-                  <Link
-                    href={task.href}
-                    className="flex items-center justify-between gap-3 p-3.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-tamarind rounded-xl"
-                  >
-                    <span>
-                      <span className="block text-sm font-semibold text-ink">{task.label}</span>
-                      <span className="block pt-0.5 text-meta font-mono text-inkSoft/75">{task.detail}</span>
-                    </span>
-                    <span className="shrink-0 text-tamarind" aria-hidden="true">→</span>
-                  </Link>
-                </Card>
-              ))}
-            </div>
           </section>
         </div>
       )}

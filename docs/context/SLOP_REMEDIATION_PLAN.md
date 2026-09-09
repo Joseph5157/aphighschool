@@ -28,10 +28,10 @@ document wins.
 | A04 sub-12px text | Design debt + slop symptom — fix carefully | `SLOP-VISUAL-1` |
 | A05 mono uppercase labels | Design-system drift — simplify | `SLOP-VISUAL-1` |
 | A06 orders discovery overload | Clear slop — simplify | `SLOP-DENSITY-1` ✅ |
-| A07 category filter overload | UX debt — make data-driven/proportional | `SLOP-DETAIL-1` |
-| A08 empty Search dashboard | Likely slop — simplify conservatively | `SLOP-DETAIL-1` |
-| A09 detail metadata duplication | Design debt — simplify | `SLOP-DETAIL-1` |
-| A10 TOC/helper machinery | Clear slop — simplify/remove conditionally | `SLOP-DETAIL-1` |
+| A07 category filter overload | UX debt — make data-driven/proportional | `SLOP-DETAIL-1` ✅ |
+| A08 empty Search dashboard | Likely slop — simplify conservatively | `SLOP-DETAIL-1` ✅ |
+| A09 detail metadata duplication | Design debt — simplify | `SLOP-DETAIL-1` ✅ |
+| A10 TOC/helper machinery | Clear slop — simplify/remove conditionally | `SLOP-DETAIL-1` ✅ |
 | A11 latest/prev-next recirculation | Very clear slop — remove | `SLOP-REMOVE-1` ✅ |
 | A12 "Utility Suite / Privacy First" | Very clear copy slop — remove | `SLOP-REMOVE-1` ✅ |
 | A13 financial sidebar | Slop + trust risk — remove | `SLOP-REMOVE-1` ✅ |
@@ -73,7 +73,7 @@ SLOP-REMOVE-1    ✅ complete — A11 + A12 + A13 + A20
       ↓
 SLOP-DENSITY-1   ✅ complete — A01 + A02 + A06 + A14 + A15
       ↓
-SLOP-DETAIL-1       A07 + A08 + A09 + A10
+SLOP-DETAIL-1    ✅ complete — A07 + A08 + A09 + A10
       ↓
 SLOP-VISUAL-1       A03 + A04 + A05
       ↓
@@ -272,3 +272,146 @@ client. This is an environment lock, not a build failure.
 Emoji still stand in for icons on the tool and pension cards and in the shell (A03), the
 remaining mono uppercase labels are untouched (A05), and skeletons still describe the old page
 shapes beyond the two this gate had to edit to keep them honest (A17). A16 remains deferred.
+
+## `SLOP-DETAIL-1` — record
+
+Scope: A07, A08, A09, A10. The emphasis here is the opposite of the last gate's: **keep the
+information, remove the machinery around it.** Nothing a document knows about itself was
+dropped; what went is the apparatus that presented the same fact more than once.
+
+### What changed
+
+- **A07 — category filters are derived, and proportional.** The bar was fixed at `All`, `Open`,
+  `Closed`, `2026`, `2025` plus every tag, so the rendered Government Orders category offered
+  eight pills over three documents, with two hardcoded years that age on their own. Two rules
+  replace all of it:
+
+  1. **A facet is offered only if choosing it would change the result set** — it must match at
+     least one document and fewer than all of them. That single test retires the hardcoded
+     years (a year every document shares narrows nothing; one no document has is a dead end),
+     the always-present Open/Closed pair, and a tag every document carries.
+  2. **No filter bar until the list is longer than one page** (`FILTER_MIN_DOCUMENTS`, 10 — the
+     number "Load More" already pages by). Below it every document is on the screen, so
+     scanning beats operating a control that hides part of the list.
+
+  `now` is captured once and shared between deriving the facets and filtering by them, which
+  makes rule 1 a guarantee rather than an approximation: a facet on screen always matches at
+  least one visible document, so a filtered-empty result is unreachable and the only empty
+  state is an empty category. The list also stopped repeating the masthead's own document count
+  and its "Newest first" sort note; the count now appears only while a filter is narrowing the
+  list. Lifecycle state stays on every row either way.
+
+- **A08 — the empty search stopped being a second portal.** Removed: the "Find by Task" grid of
+  six cards pointing at `/orders`, `/pensioners` and two calculators (all primary navigation
+  targets), and the "Quick Searches" widget — a heading over pills-inside-buttons carrying a
+  magnifying-glass emoji. What remains is the field, the type control, and one compact area: a
+  single line of verified suggestions (`Try: TET 2026 · Mega DSC · Transfers`) above the recent
+  documents. The recent-document rows lost their document-type pill, which is now plain
+  metadata beside the GOIR marker and the labelled date.
+
+- **A09 — one document header.** The state indicator, the masthead and At a Glance were three
+  consecutive full-width bordered panels, and between them the reference, department, date,
+  deadline and GOIR check each appeared twice. The state indicator is now the strip that opens
+  a single bordered header block — state still first on the page — and At a Glance lost the
+  fact table entirely, because every row in it was already stated above. Its subtitle
+  ("Author-provided summary and document facts") and the state card's "Document Status" label
+  went too: both named the section instead of telling the reader anything. At a Glance now
+  carries only what nothing else does — the authored Telugu summary, the English abstract and
+  the action/PDF/source links — and renders nothing at all when a document has none of them.
+
+  The state strip stays on paper rather than moving onto the navy masthead: the badge variants
+  are tinted fills built for the paper ground, and the product's single most important marker
+  is not the place to trade measured contrast for a cosmetic gain.
+
+- **A10 — the helper label and a proportional TOC.** "Structured Document" is gone. The table of
+  contents renders only at `MIN_TOC_HEADINGS` (4) or more headings; below that the document
+  flows normally, and `DocumentTemplate` counts the headings server-side so the LAYOUT follows
+  the same rule — a short document's text now takes the full width instead of leaving the
+  contents column reserved and empty. `TableOfContents` is still mounted below the threshold,
+  where it draws nothing but still assigns heading ids, so a direct link to a section keeps
+  working on a document with no contents list.
+
+### The one decision reversed mid-gate
+
+The quick-search chips were deleted outright first, on the reasoning that the verified topic bar
+above `SearchUI` was already the page's suggestion surface. Browser acceptance showed the topic
+bar renders **nothing** on this dataset — no curated topic tag has a published post carrying it
+— which would have left the empty search with no suggestion at all. The instruction was that
+suggestions must *remain* self-verifying, not that they should go, so `quickSearchChips` and its
+test were restored and the suggestions came back as one plain line of text links: the same
+verification against published content, none of the widget.
+
+### Measured acceptance (real Chromium, 390×844 and 1440×1000)
+
+| Measurement | Before | After |
+| --- | --- | --- |
+| `/category/govt-orders` filters vs documents | 8 pills / 3 documents | **0 pills / 3 documents** |
+| `/category/notifications` (largest available) | filters over 4 documents | **0 pills / 4 documents** |
+| Duplicated document count on a category page | 2 ("3 documents" twice) | **1** |
+| Empty `/search` first-viewport regions | search + chips + recent + task grid | **search + one recent/suggestion area** |
+| Consecutive large bordered panels before the document body | 3 | **2** |
+| Facts stated twice in the detail header (reference, department, date, GOIR) | 4 | **0** |
+| Short document (2 headings) TOC | rendered, "(2 sections)" | **suppressed**, heading ids kept |
+| Long document (25 headings) TOC | rendered | **rendered**, 25 entries, mobile and desktop |
+| Short document content width at 1440 | ~70% (empty TOC column) | **1345 px of 1440** |
+| Horizontal overflow | — | none on category, search or short document |
+| Console errors | — | none on any route tested |
+
+No category in the local dataset holds more than four documents, so the **above**-threshold
+filter bar could not be shown in a browser; that direction is covered by unit tests instead,
+including the year, state and tag derivation rules.
+
+### A pre-existing defect found during acceptance, and left alone
+
+`/posts/appsc-departmental-tests-notification-material` scrolls horizontally by 35px at 390px.
+It is **not** caused by this gate: the same 35px was measured after temporarily reverting all
+five changed detail files to their pre-gate state (that render still contained "Structured
+Document", confirming it was the old code). No element extends the page outside a local scroll
+container — the wide elements sit inside the breadcrumb's `overflow-x-auto` and the prose
+tables' own scrollers, both permitted by `DESIGN_SYSTEM.md` §9.3 — so the cause needs its own
+investigation. Recorded rather than fixed, because it belongs to no finding in this gate.
+
+### Test changes
+
+- New `test/detail-header.test.tsx` (19 cases) covering A07, A09 and A10, again pairing "the
+  machinery is gone" with "the information is still rendered". The A09 duplication check counts
+  occurrences inside the header and inside At a Glance rather than across the page, because the
+  breadcrumb legitimately names the document by its reference — and repeats it in schema.org
+  JSON-LD.
+- Mutation-checked five ways: restoring the fact table to At a Glance, dropping the TOC
+  threshold, weakening the facet rule to "always meaningful", showing the filter bar regardless
+  of list size, and putting a task-links grid back on the empty search. Each failed the specific
+  guard that owns it, and nothing else.
+- Rewritten rather than deleted: the ActionSummary fact-row cases (their subject moved to the
+  header), the category filter cases (padded past the threshold, with the padding filtered out
+  of the assertions so they still read as exact lists), the `Document Status` assertions in
+  `post-lifecycle-render.test.ts` (now on the state sentence, which is the part §2.4 actually
+  requires), and "labels the document date wherever it appears" — which asserted a fixed count
+  of two surfaces and would now have passed by accident, so it finds every date the page renders
+  and requires each to carry its label.
+- `states.test.tsx`'s filtered-empty case was replaced: that state is unreachable now, so it
+  asserts the absent filter bar on a one-document category instead.
+
+### Verification
+
+`tsc --noEmit` clean · **64 files / 466 tests pass** · Tailwind class and colour guards pass ·
+`git diff --check` clean · build succeeds, 42 static pages, First Load JS shared unchanged at
+87.3 kB · real-Chromium acceptance at both widths on a small category, the largest available
+category, empty `/search`, `/search?q=`, a current and verified document, a 25-heading document
+and a 2-heading document.
+
+**Build path.** `npm run build` still fails at `prisma generate` with `EPERM: operation not
+permitted, rename 'query_engine-windows.dll.node'`. The holder was identified this time rather
+than assumed: a `next dev` process (PID 20432, started 18:36:05, launched by `npm run dev` PID
+23276) unrelated to this session holds the DLL open. Per the gate's instruction nothing was
+killed or reconfigured; `prisma/` is unchanged in this gate (verified with `git diff -- prisma/`),
+so the generated client is current and `npx next build` — the strongest valid path — was run
+against it.
+
+### Deliberately not done here
+
+The emoji in the TOC's own labels (`📑 Page Index`) and across the shell are untouched (A03), as
+are the mono uppercase section labels (A05) and the sub-12px text inside them (A04). A16 stays
+deferred. Skeletons were not touched at all: the category and search loading files still reserve
+filter pills that a short list no longer renders, which belongs to SLOP-STATES-1 (A17) and is
+recorded here so that gate does not have to rediscover it.

@@ -222,13 +222,24 @@ describe("the merged document template", () => {
   });
 
   it("labels the document date wherever it appears", () => {
-    renderDocument(makePost({ documentDate: null }), STATE_VIEW);
+    // This used to assert the label on two surfaces, because the masthead and
+    // ActionSummary's fact row both showed the date. SLOP-DETAIL-1
+    // (AI_SLOP_AUDIT.md A09) left one, so a fixed count would now pass by
+    // accident on a page that dropped the label from the surviving one.
+    // Instead: find every date the page renders and require each to be
+    // introduced by its label, whatever the number of surfaces.
+    const { container } = renderDocument(makePost({ documentDate: null }), STATE_VIEW);
 
-    // Two surfaces show it — the masthead line and ActionSummary's fact row —
-    // and BOTH must carry the label. Asserting on one would let the other
-    // regress to a bare date.
-    const labelled = screen.getAllByText(/Added to portal/);
-    expect(labelled.length).toBeGreaterThanOrEqual(2);
+    const DATE = /\d{1,2}\s+\w{3,}\s+\d{4}/;
+    const dateNodes = [...container.querySelectorAll("*")].filter(
+      (el) => el.children.length === 0 && DATE.test(el.textContent ?? ""),
+    );
+
+    expect(dateNodes.length).toBeGreaterThan(0);
+    for (const node of dateNodes) {
+      const withLabel = node.closest("span, div, dd, p, li")?.textContent ?? "";
+      expect(withLabel, node.textContent ?? "").toMatch(/Added to portal|Issued|Deadline/);
+    }
     expect(screen.queryByText(/^Issued/)).toBeNull();
   });
 });

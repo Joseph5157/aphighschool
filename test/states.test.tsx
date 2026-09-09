@@ -150,10 +150,19 @@ describe("orders index empty states", () => {
 describe("CategoryLogList empty states", () => {
   it("shows an empty state for a genuinely empty category", () => {
     render(<CategoryLogList posts={[]} />);
-    expect(screen.getByText('No documents found for "All" filter.')).toBeInTheDocument();
+    // SLOP-DETAIL-1 (AI_SLOP_AUDIT.md A07): the message used to name the "All"
+    // filter, which read as nonsense on a category that renders no filter bar
+    // at all. A filtered-empty message is no longer reachable either — a facet
+    // is only offered when it matches at least one of the documents on screen.
+    expect(screen.getByText("No documents in this category yet.")).toBeInTheDocument();
   });
 
-  it("names the active filter in the empty state after switching it", () => {
+  it("renders no filter bar for a category the reader can already see whole", () => {
+    // The replacement for a case that can no longer happen: this used to click
+    // "Closed" on a one-document category and assert the filtered-empty
+    // message. A one-document category now has no filter bar to click, which
+    // is the finding (A07) — the rendered Government Orders category showed
+    // eight filter pills over three documents.
     const post = {
       id: "p1",
       slug: "p1",
@@ -171,8 +180,11 @@ describe("CategoryLogList empty states", () => {
       tags: [],
     };
     render(<CategoryLogList posts={[post]} />);
-    fireEvent.click(screen.getByRole("tab", { name: "Closed" }));
-    expect(screen.getByText('No documents found for "Closed" filter.')).toBeInTheDocument();
+    expect(screen.queryByRole("tablist")).not.toBeInTheDocument();
+    expect(screen.queryByRole("tab")).not.toBeInTheDocument();
+    // The document itself, and its state, are untouched by the filter decision.
+    expect(screen.getByRole("heading", { name: "Sample Order" })).toBeInTheDocument();
+    expect(screen.getByText("Current")).toBeInTheDocument();
   });
 });
 

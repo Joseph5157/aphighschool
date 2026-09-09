@@ -12,6 +12,22 @@ interface TableOfContentsProps {
   contentSelector?: string;
 }
 
+/**
+ * How many headings a document needs before it gets a table of contents.
+ *
+ * SLOP-DETAIL-1 (AI_SLOP_AUDIT.md A10). The inspected document had two
+ * sections and still got the full apparatus: a collapsible bordered widget on
+ * mobile announcing "(2 sections)", a sticky desktop rail, generated ids, an
+ * IntersectionObserver scroll-spy and an active state — interface ceremony for
+ * a document a reader can take in by scrolling.
+ *
+ * Four is where the list stops being a restatement of what is already on screen
+ * and starts being faster than scrolling. Long official orders — the ones with
+ * numbered clauses and annexures, which are exactly the documents a TOC is for
+ * — clear it easily, so the capability is intact where it earns its space.
+ */
+export const MIN_TOC_HEADINGS = 4;
+
 export default function TableOfContents({ contentSelector = ".prose-gazette" }: TableOfContentsProps) {
   const [items, setItems] = useState<TocItem[]>([]);
   const [activeId, setActiveId] = useState<string>("");
@@ -22,6 +38,9 @@ export default function TableOfContents({ contentSelector = ".prose-gazette" }: 
     if (!container) return;
 
     const headings = Array.from(container.querySelectorAll("h2, h3"));
+
+    // Ids are assigned to every heading whatever the count, so a direct link to
+    // a section keeps working on documents that render no TOC.
     const tocItems: TocItem[] = headings.map((heading, index) => {
       let id = heading.id;
       if (!id) {
@@ -37,7 +56,10 @@ export default function TableOfContents({ contentSelector = ".prose-gazette" }: 
 
     setItems(tocItems);
 
-    // ScrollSpy observer
+    // Below the threshold nothing renders, so the scroll-spy would observe
+    // headings for an active state no one can see.
+    if (tocItems.length < MIN_TOC_HEADINGS) return;
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -53,7 +75,7 @@ export default function TableOfContents({ contentSelector = ".prose-gazette" }: 
     return () => observer.disconnect();
   }, [contentSelector]);
 
-  if (items.length === 0) return null;
+  if (items.length < MIN_TOC_HEADINGS) return null;
 
   const scrollToHeading = (id: string) => {
     const el = document.getElementById(id);

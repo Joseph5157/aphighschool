@@ -12,7 +12,7 @@
 import { describe, it, expect, afterEach } from "vitest";
 import { render, screen, fireEvent, cleanup } from "@testing-library/react";
 import type { DocType, OrderState } from "@prisma/client";
-import CategoryLogList from "@/app/(public)/category/[slug]/_components/CategoryLogList";
+import CategoryLogList, { FILTER_MIN_DOCUMENTS } from "@/app/(public)/category/[slug]/_components/CategoryLogList";
 
 afterEach(cleanup);
 
@@ -55,6 +55,20 @@ function makePost(id: string, overrides: Partial<LogPost> = {}): LogPost {
   };
 }
 
+// SLOP-DETAIL-1 (AI_SLOP_AUDIT.md A07) made the filter bar proportional: it
+// appears only above FILTER_MIN_DOCUMENTS, because below it every document in
+// the category is already on the page. These cases are about WHICH documents a
+// filter selects, not about when the bar appears, so each one is padded to the
+// point where the bar exists. The padding is deliberately open (current, no
+// deadline) so it never changes which facets are derived, and `titlesShown`
+// drops it so the assertions still read as exact lists of the rows under test.
+function withFilterBar(posts: LogPost[]): LogPost[] {
+  const filler = Array.from({ length: FILTER_MIN_DOCUMENTS }, (_, i) =>
+    makePost(`filler-${i}`, { titleEn: `Filler Document ${i}` })
+  );
+  return [...posts, ...filler];
+}
+
 function clickFilter(name: "All" | "Open" | "Closed") {
   // The filter pills are an ARIA tablist (Task 22) — role="tab", not the
   // <button> element's implicit role="button".
@@ -64,7 +78,8 @@ function clickFilter(name: "All" | "Open" | "Closed") {
 function titlesShown(): string[] {
   return screen
     .getAllByRole("heading", { level: 3 })
-    .map((h) => h.textContent ?? "");
+    .map((h) => h.textContent ?? "")
+    .filter((title) => !title.startsWith("Filler Document"));
 }
 
 describe("CategoryLogList Open/Closed filter", () => {
@@ -120,7 +135,7 @@ describe("CategoryLogList Open/Closed filter", () => {
   });
 
   it("files a state document by whether its order is still in force, not by statusBadge", () => {
-    render(<CategoryLogList posts={ALL} />);
+    render(<CategoryLogList posts={withFilterBar(ALL)} />);
 
     clickFilter("Open");
     expect(titlesShown()).toEqual(["PTR Norms Guidelines", "Mega Recruitment Examination"]);
@@ -133,7 +148,7 @@ describe("CategoryLogList Open/Closed filter", () => {
   });
 
   it("still files an expired recruitment notification as Closed", () => {
-    render(<CategoryLogList posts={[EXPIRED_NOTIFICATION, LIVE_NOTIFICATION]} />);
+    render(<CategoryLogList posts={withFilterBar([EXPIRED_NOTIFICATION, LIVE_NOTIFICATION])} />);
 
     clickFilter("Closed");
     expect(titlesShown()).toEqual(["Teacher Eligibility Test Application"]);
@@ -148,7 +163,7 @@ describe("CategoryLogList Open/Closed filter", () => {
 
     render(
       <CategoryLogList
-        posts={[
+        posts={withFilterBar([
           makePost("go-deadline-passed", {
             titleEn: "Allocation Window Ended",
             documentType: "go",
@@ -163,7 +178,7 @@ describe("CategoryLogList Open/Closed filter", () => {
             orderState: "current",
             actionDeadline: tomorrow,
           }),
-        ]}
+        ])}
       />
     );
 
@@ -175,7 +190,7 @@ describe("CategoryLogList Open/Closed filter", () => {
   });
 
   it("shows every document under All", () => {
-    render(<CategoryLogList posts={ALL} />);
+    render(<CategoryLogList posts={withFilterBar(ALL)} />);
     expect(titlesShown()).toHaveLength(4);
   });
 });
