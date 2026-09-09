@@ -12,19 +12,18 @@
 
 ## Current UI program state
 
-- Current phase: Phase 14
-- Active gate: `UI-A11Y-1` (CLOSED)
-- Scope in this gate: an accessibility pass, per Phase 14 — keyboard navigation, focus,
-  semantics, labels, alt text, form errors, contrast, dialogs, menus, touch targets, reduced
-  motion
+- Current phase: Phase 15
+- Active gate: `UI-IMPECCABLE-1` (CLOSED)
+- Scope in this gate: controlled visual critique against `DESIGN_SYSTEM.md`, per Phase 15 —
+  polish/consistency only, no redesign, no information-architecture change
 - UI redesign performed: no
-- Application behaviour changed: yes, semantic/markup-level — three routes gained their
-  missing `h1` (a label `<span>` promoted to `<h1>` in place, same class, same position), a
-  fourth route's duplicate `h1` demoted to `h2`, a skip-to-content link was added to the
-  public layout, `TableHead` now defaults to `scope="col"`, and `Breadcrumb`'s current-page
-  marker lost an incorrect `role="link" aria-disabled="true"` pair and gained a `title`
-  attribute for its truncated text. No visual redesign; every change is additive/semantic.
-- Next planned gate: `UI-IMPECCABLE-1`
+- Application behaviour changed: yes, styling-only — three calculator routes' `<h1>` dropped
+  `font-mono` (a `DESIGN_SYSTEM.md` §1 violation) for `.text-card-title`; category/orders'
+  `<h1>` switched from a raw `text-2xl md:text-3xl` size to the shared `.text-display` token
+  five sibling page headers already use. The deferred `UI-PATTERNS-1` `PageHeader` decision
+  was revisited and resolved: preserve the variation (it reflects real differences in what
+  each page is), fix only the two unexplained token-drift cases above.
+- Next planned gate: `UI-21DEV-1`
 
 ### Gate history
 
@@ -45,6 +44,7 @@
 | `UI-404-1` | CLOSED | Custom `app/(public)/not-found.tsx` and root `app/not-found.tsx` added with real recovery links. Pre-existing dynamic-route soft-404 (200 instead of 404) found, root-cause-eliminated down to "correlates with real route-group scale, no single file responsible" — left undone and precisely documented per explicit instruction (no Next.js upgrade, no unexplained workaround). 424 tests pass. |
 | `UI-PERF-1` | CLOSED | No images anywhere in the app — the checklist's image items re-confirmed not applicable, not re-litigated. Found and fixed the real "frontend weight" work instead: `category/[slug]`'s posts query was unbounded *and* unselected (fetching every post's full `content` field for an entire category, on every view); the homepage's query fetched a `relatedFrom` relation neither `HeroCard` nor `PostCard` renders at all. Both narrowed to exactly the fields their consumers read. Unused-but-zero-cost `Pagination.tsx` recorded, not deleted (already tree-shaken, out of this gate's scope). 426 tests pass. |
 | `UI-A11Y-1` | CLOSED | Re-audited all 17 accessibility-tagged audit items against current source rather than trusting old gate-history claims; 13 were already fixed by earlier gates (confirmed, not re-fixed). Fixed the 4 that were still genuinely open: three routes with no `h1` (a label span promoted in place) plus a fourth's duplicate `h1` demoted to `h2`; a missing skip-to-content link; `TableHead`'s missing `scope="col"` default; `Breadcrumb`'s current-page marker announcing a fake disabled link instead of just `aria-current`, plus a missing `title` for its truncated text. Contrast recorded as target-specified-but-unmeasured (no tooling), same disposition as every prior browser-dependent claim in this program. 436 tests pass. |
+| `UI-IMPECCABLE-1` | CLOSED | Impeccable confirmed unavailable (checked, not assumed); manual structured review against `DESIGN_SYSTEM.md` instead, no browser tooling so no visual-acceptance claims made. Revisited `UI-PATTERNS-1`'s deferred `PageHeader` decision: preserved the four masthead variants (they carry real differences in page purpose), fixed only two unexplained token-drift cases — category/orders' `h1` switched from a raw size to the shared `.text-display` token. Fixed three calculator routes' `h1` styled with `font-mono` (`DESIGN_SYSTEM.md` §1: "Mono is not for... headings") onto `.text-card-title`. Deliberately left emoji iconography and ~100 sub-12px sizes untouched — both real, both explicitly owned by later gates that can actually render. 437 tests pass. |
 
 ## Repository observations
 
@@ -607,10 +607,12 @@ indicator's appear/clear cycle. Eight mutations run — **all eight caught, zero
 - The full Vitest suite was not run for `UI-AUDIT-1` or `UI-DESIGN-1` because neither gate
   changed application code. `npx tsc --noEmit` passes for both. `UI-REGRESSION-1` owns full
   regression verification.
-- **Impeccable was not available** in this environment, so no external design critique was run
-  for `UI-DESIGN-1`. The critique recorded in `DESIGN.md` is self-applied against the audit
-  findings and the product constraints. `UI-IMPECCABLE-1` remains the gate that would use it,
-  and `DESIGN.md` is what it should critique against.
+- **Impeccable was not available**, checked twice now — at `UI-DESIGN-1` and again at
+  `UI-IMPECCABLE-1` (`ToolSearch` plus a `PATH`/`npm ls` sweep, both empty). Both gates
+  self-applied the critique against `DESIGN.md`/`DESIGN_SYSTEM.md` instead, without
+  installing substitute tooling. A future gate that wants an actual Impeccable-run critique
+  should re-check availability rather than assume either prior "unavailable" result is still
+  current — the environment may change.
 - **No colour-contrast ratios have been measured, still.** `DESIGN_SYSTEM.md` §14 specifies
   the target (4.5:1 body text, 3:1 large text/UI boundaries, both themes) and named
   `UI-A11Y-1` as the owner of verification — that gate closed without measuring it, for the
@@ -643,6 +645,16 @@ indicator's appear/clear cycle. Eight mutations run — **all eight caught, zero
 - Still carried forward (see `DESIGN_SYSTEM.md` §15): ~100 sub-12px sizes in route-local
   components, emoji used as iconography outside `ThemeToggle`, and the recurring
   tinted-callout pattern awaiting the semantic decision `UI-PATTERNS-1` owns.
+- **`UI-IMPECCABLE-1` re-confirmed both items above are real and deliberately still open**,
+  not overlooked: both need rendered verification to fix safely (icon replacement needs
+  drawn/selected SVGs checked for alignment; ~100 size bumps risk wrapping regressions), which
+  this gate's no-browser-tooling constraint ruled out. Neither is silently dropped — no new
+  owner gate is assigned beyond what `DESIGN_SYSTEM.md` §15 already names
+  (`UI-A11Y-1`/`UI-ACCEPTANCE-1` for sizes; `UI-21DEV-1` or a dedicated pass for icons).
+  A third, smaller item was found this gate: page-header masthead borders split between
+  `border-mastheadText/40` (`pensioners`, `tools`, `office-pipeline`) and `/35`
+  (`service-desk`, `topics`) with no stated reason — a 5-percentage-point opacity difference
+  too small to judge from source alone, deferred to `UI-ACCEPTANCE-1` rather than guessed at.
 - The sidebar drawer's own behaviour — Escape, focus trap, scroll lock, closed-state
   inertness — is unchanged and remains `UI-MOBILE-NAV-1`. `Dialog` now demonstrates the
   contract that gate has to meet.
@@ -680,6 +692,7 @@ indicator's appear/clear cycle. Eight mutations run — **all eight caught, zero
 | `UI-404-1` | pass (`npx tsc --noEmit`, exit 0) | clean | **62 files, 424 tests pass** | not a full browser check; `next build` + `next start` + `curl -D -` (status + headers) verified all three representative cases (unmatched URL, invalid post slug, invalid category slug) for status code, not-found content, `robots` meta, and recovery links — table in `UI_ACTIVE_GATE.md`; `next` version unchanged (`14.2.35`) |
 | `UI-PERF-1` | pass (`npx tsc --noEmit`, exit 0) | clean | **63 files, 426 tests pass**; both new/changed guards mutation-tested via `git stash` against the pre-fix source (both failed as expected, then passed clean after restore) | not a full browser check; `next build` succeeded with an unchanged bundle-size report (expected — server-side `select` changes don't affect client JS size); `next start` + `curl` smoke-tested `/`, `/orders`, and an invalid category slug for absence of 500s/error-boundary text |
 | `UI-A11Y-1` | pass (`npx tsc --noEmit`, exit 0) | clean | **64 files, 436 tests pass**; all 4 new/changed guards mutation-tested (two `git stash` passes, since the heading-structure guards live in an untracked file a single stash doesn't move) — all failed against pre-fix source, all pass restored | not a full browser check (contrast unmeasured, recorded as a known limitation); `next build` succeeded, bundle-size unchanged; `next start` + `curl` against the three previously-headless routes confirmed exactly one real server-rendered `<h1>` on each, and confirmed the skip link + its target both appear in real rendered HTML |
+| `UI-IMPECCABLE-1` | pass (`npx tsc --noEmit`, exit 0) | clean | **64 files, 437 tests pass** (incl. `test/tailwind-classes.test.ts`'s compiled-CSS validation); the new `font-mono`-heading guard mutation-tested via a scoped `git stash push` — failed against pre-fix source (all three offending routes listed), restored passing | not a full browser check, no visual-acceptance claim made (explicit constraint — no rendering tool exists); `next build` succeeded, bundle-size unchanged; `next start` + `curl` against `/tools/prc-calculator` and `/orders` confirmed the fixed classes in real rendered HTML and in the compiled, non-purged CSS |
 
 ## `UI-CONTENT-1` outcome summary
 
@@ -994,19 +1007,70 @@ primitives.test.tsx` (+4) — `TableHead`'s scope default and override, `Breadcr
 second pass was needed because the heading-structure guards live in a file `git stash` alone
 doesn't move until it's tracked) — all failed against pre-fix source, all restored passing.
 
+## `UI-IMPECCABLE-1` outcome summary
+
+Full findings-to-disposition detail lives in `docs/context/UI_ACTIVE_GATE.md`, which stays
+the recoverable record for this gate; this is the summary.
+
+### Impeccable checked, confirmed unavailable
+
+`ToolSearch` and a `PATH`/`npm ls` sweep both came back empty. Per explicit instruction, no
+substitute design tooling was installed — the same structured review ran manually against
+`DESIGN_SYSTEM.md`, and the substitution is recorded rather than left implicit. Second time
+this program has checked and gotten the same answer (`UI-DESIGN-1` first).
+
+### The deferred `PageHeader` decision — resolved
+
+`UI-PATTERNS-1` left this open ("picking one look is a visual decision for
+`UI-IMPECCABLE-1`"). Found four masthead variants across 9 files, not the two originally
+named — and decided **against** forcing one component: the ribbon variant (orders/category)
+carries real document-index/count information the bordered variants (pensioners, tools,
+service-desk, topics, office-pipeline) don't need, and the home page isn't a listing at all.
+Collapsing four different purposes behind one props-switch was rejected for the same reason
+`UI-PATTERNS-1` already rejected it. What WAS fixed: two unexplained token-drift cases inside
+that variation — category/orders' `h1` used a raw `text-2xl md:text-3xl` size instead of the
+`.text-display` token five sibling headers already use correctly.
+
+### Fixed
+
+- **Three calculator `h1`s styled as metadata.** `CommutationTrackerUI`,
+  `PensionCalculatorUI`, `PrcCalculatorUI` — their `h1` (promoted from a label span in
+  `UI-A11Y-1`) kept `font-mono text-xs`, directly violating `DESIGN_SYSTEM.md` §1 ("Mono is
+  not for body copy, headings, or navigation labels"). Switched to `.text-card-title`
+  (smallest defined heading token) rather than the larger `.text-display` tool-page headers
+  use, to preserve these three routes' existing compact single-row density without an
+  unverifiable-unrendered restructure.
+- **Category/orders `h1` size drift**, covered above.
+
+### Deliberately not touched, with reasoning shown
+
+Emoji iconography and ~100 sub-12px route-local text sizes are both real, `DESIGN_SYSTEM.md`-
+cited defects — but both need rendered verification (icon legibility/alignment; wrapping risk
+from bumping ~100 sizes) that this no-browser-tooling environment cannot provide, and
+`DESIGN_SYSTEM.md` §15 already assigns their ownership elsewhere. A smaller masthead-border
+opacity split (`/40` vs `/35`) was found and deferred to `UI-ACCEPTANCE-1` for the same
+reason — not a guess this gate was positioned to make safely.
+
+### Guards added
+
+One test added to `test/typography.test.ts`: a repo-wide scan that no `<h1>` in
+`app/(public)` carries `font-mono`. Mutation-tested via a scoped `git stash push` of the
+three fixes — failed against pre-fix source (all three offending files listed), restored
+passing.
+
 ## Gate transition rule
 
 Update `UI_ACTIVE_GATE.md` only when work on the next gate actually begins. Each closed
 gate's evidence remains recoverable from this document, from `docs/ui/UI_AUDIT.md`, and from
 Git history.
 
-`UI-IMPECCABLE-1` is next, the master plan's own sequential next step (Phase 15): use
-Impeccable for controlled visual critique against the established design rules, preserving
-functionality and information architecture. (Impeccable was not available in this environment
-as of `UI-DESIGN-1`; that gate's self-applied critique in `DESIGN.md` may be what this one has
-to work from again — confirm tool availability before assuming otherwise.)
+`UI-21DEV-1` is next, per explicit instruction (also the master plan's own sequential next
+step, Phase 16): a selective 21st.dev enhancement pass for weak components only, following
+"search -> compare -> choose -> import -> normalize -> test -> own." 21st.dev is a selective
+reference source, not the design system — imported components must be normalized into the
+repository's own visual language, not introduce a second one.
 
-Eleven practices are worth carrying forward.
+Twelve practices are worth carrying forward.
 
 **Mutate every new guard.** In five of the last six gates a guard passed its first mutation and
 had to be rewritten or, this gate, needed a genuinely new test to exist at all —
@@ -1097,3 +1161,17 @@ current file at the actual current line for every single item before deciding wh
 gate's real scope was — a fork was used for exactly this read-heavy, decision-light pass, so
 the 26-tool-call investigation didn't have to sit in the coordinating context before the
 scoping decision that mattered.
+
+**A "pick one pattern" instruction is not a mandate to pick one — the five-question test
+exists to let "preserve the variation" be the answer.** `UI-IMPECCABLE-1` inherited a
+`PageHeader` decision `UI-PATTERNS-1` explicitly deferred rather than made, and the easy,
+visible-looking move would have been building one component and migrating four pages onto
+it. That would have failed question 3 (does it improve comprehension) for the two pages —
+orders/category — that carry information (document scope, live count) the other three
+genuinely don't have a use for; forcing them into one shape would have hidden that
+difference behind uniformity rather than resolved anything. The actual defect hiding inside
+the "four different patterns" framing was much smaller and much safer to fix: two page
+headers used a hand-picked font size instead of the shared token every sibling already used.
+Separating "this variation is meaningful, leave it" from "this specific detail drifted with
+no reason, fix it" is the whole value the five-question test adds over either reflexively
+unifying everything or reflexively leaving everything alone.

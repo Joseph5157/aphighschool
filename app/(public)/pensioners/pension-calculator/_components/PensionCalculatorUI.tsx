@@ -50,9 +50,11 @@ export default function PensionCalculatorUI() {
           <Badge variant="tamarind" size="sm" shape="pill" dot>
             AP Treasury Pension Standard
           </Badge>
-          {/* This route's only heading (UI_AUDIT.md F12) — same visual treatment as
-              before, now the page's h1 instead of an unheaded span. */}
-          <h1 className="font-mono text-xs text-inkSoft font-normal">Service Pension & Gratuity Calculator</h1>
+          {/* This route's only heading (UI_AUDIT.md F12, promoted from a span in
+              UI-A11Y-1). UI-IMPECCABLE-1: dropped font-mono — DESIGN_SYSTEM.md §1
+              bans mono for headings — onto .text-card-title, the smallest defined
+              heading token, keeping this compact row's density. */}
+          <h1 className="text-card-title text-ink">Service Pension & Gratuity Calculator</h1>
         </div>
         <Button
           variant={isPrintMode ? "tamarind" : "outline"}

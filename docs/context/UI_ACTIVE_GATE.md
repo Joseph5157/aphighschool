@@ -2,7 +2,7 @@
 
 ## Active gate
 
-`UI-A11Y-1`
+`UI-IMPECCABLE-1`
 
 ## Status
 
@@ -10,149 +10,142 @@ CLOSED
 
 ## Purpose
 
-An accessibility pass, per `UI_SYSTEM_MASTER_PLAN.md` Phase 14: keyboard navigation, focus,
-semantics, labels, alt text, form errors, contrast, dialogs, menus, touch targets, and
-reduced motion. `DESIGN_SYSTEM.md` §14 ("Accessibility floor") already states this gate's
-definition of done, written at `UI-DESIGN-1` and never updated since.
+Use Impeccable for controlled visual critique against the established design rules, per
+`UI_SYSTEM_MASTER_PLAN.md` Phase 15. Preserve functionality and information architecture —
+this is a polish/consistency gate, not a redesign gate.
 
-## Scope boundary
+## Tool availability — checked, not assumed
 
-Accessibility only — no visual redesign, no information-architecture change. Several original
-`UI_AUDIT.md` findings tagged for this gate (F4, F6, F7, F13, F14/Dialog, F15, F17's nav
-semantics, F28, F31, F32) were already closed by earlier gates that happened to touch the
-same files (`UI-SYSTEM-1`, `UI-SYSTEM-2`, `UI-MOBILE-NAV-1`). This gate re-verified each
-against current source (not old gate-history prose) before treating it as done, and did the
-actual remaining work: four still-open findings plus a documented contrast disposition.
+Impeccable was checked for in this environment before doing anything else: `ToolSearch` for
+"Impeccable" / "design critique" returned no matching deferred tool (only unrelated tools —
+`DesignSync`, `EnterPlanMode`); a `PATH`/`npm ls` sweep found no CLI or package named
+`impeccable` anywhere. **Not available**, matching the identical disposition
+`UI-DESIGN-1` already recorded for the same reason. Per explicit instruction: no substitute
+design tooling was installed. The same structured visual review was performed manually
+against `DESIGN.md`/`DESIGN_SYSTEM.md` instead, and that substitution is recorded here rather
+than silently treated as equivalent.
 
-## Re-audit method
+## Method
 
-Rather than trust `UI_CURRENT_STATE.md`'s gate-history claims at face value, every
-accessibility-tagged finding from `UI-AUDIT-1` (F4, F6, F7, F12, F13, F14, F15, F17, F26, F27,
-F28, F31, F32) plus alt text, contrast, reduced motion, and other dialog/menu-shaped widgets
-were re-checked directly against current source. Result: **13 of 17 checked items were
-already fixed** (verified in source, not assumed from prose); **4 were still genuinely open**;
-contrast remains unverified for the same reason every prior gate has recorded it that way (no
-browser/contrast-measurement tool in this environment).
+**No browser rendering tooling exists in this environment either**, so this gate could not
+and did not claim visual acceptance of anything. Every change below is justified by a
+specific, quoted `DESIGN_SYSTEM.md` rule or a specific, cited source inconsistency between
+routes doing the same job — never by an unverifiable claim about how something looks
+rendered. Actual rendered/visual acceptance stays `UI-ACCEPTANCE-1`'s job, per explicit
+instruction.
 
-## What was found and fixed
+A structured review was run across all ten named representative surfaces (home, orders,
+category, search, post detail, calculator/tool pages, navigation, empty/loading/error states,
+404) against all eighteen named evaluation dimensions, scored through the five-question test
+(real problem? conforms to `DESIGN_SYSTEM.md`? improves consistency/comprehension? preserves
+density? avoids generic-AI-dashboard aesthetics?). Only items passing all five were acted on.
 
-### F12 — three routes had no `h1`; a fourth had two
+## The deferred `PageHeader` decision, revisited
 
-`/pensioners/commutation-tracker`, `/pensioners/pension-calculator`, and
-`/tools/prc-calculator` had no `<h1>` anywhere — each route's only "header" was a `Badge` +
-an unheaded `<span>` (their print-view sections use `<h2>` correctly; the interactive view
-never had its own heading at all). Fixed by promoting the existing label `<span>` to `<h1>`
-in place, same className, same visual position — a semantic-only change, not a redesign.
+`UI-PATTERNS-1` left this open: "Four pages, two hero shapes differing in five ways...
+picking one look is a visual decision for `UI-IMPECCABLE-1`." Current state (more page
+headers exist now than at that gate) is **four masthead variants across 9 files**:
 
-`/tools/tax-calculator` rendered two `<h1>`s across different tab states: the tool's own
-title (`activeTab === "calculator"`) and a printable "RECEIPT OF HOUSE RENT" document title
-(`activeTab === "rentReceipt" || "printAll"`). These two conditions never overlap, so the two
-`h1`s were never simultaneously present in the DOM — but a route's semantic heading
-identity still shouldn't change depending on which tab is active. Demoted the receipt
-section's heading to `<h2>`, matching every sibling calculator's own print-view convention
-(`CommutationTrackerUI`, `PensionCalculatorUI`, `PrcCalculatorUI` all already use `<h2>` for
-their printable-document titles — `TaxCalculatorUI`'s `rentReceipt` tab was the one
-inconsistent case).
+- **Variant A (ribbon + count).** `category/[slug]/page.tsx`, `orders/page.tsx` —
+  `on-masthead bg-masthead ... rounded-2xl shadow-md` plus a classification-ribbon sub-strip
+  showing document scope/count.
+- **Variant B (bordered, no ribbon).** `pensioners/page.tsx`, `tools/page.tsx`,
+  `pensioners/office-pipeline/page.tsx` — `border border-mastheadText/40 rounded-2xl p-6
+  md:p-8`.
+- **Variant C (bordered, `<section>` not `<div>`).** `service-desk/page.tsx`,
+  `topics/page.tsx` — `border-mastheadText/35`, semantic `<section>`.
+- **Variant D (no masthead).** `app/(public)/page.tsx` — plain `border-b border-hair pb-4`;
+  the home feed isn't a document index, so it never had a masthead treatment to begin with.
 
-### F17 (remainder) — no skip-to-content link
+**Decision: preserve the variation, do not force one `PageHeader` component.** The ribbon
+(A) carries real information the others don't — orders/category are literal document
+listings with a scope and a live count; pensioners/tools/service-desk/topics are simpler hub
+pages; home isn't a listing at all. Collapsing four purposes behind one props-switch would
+freeze meaningfully different content into a uniform shape, which is exactly what
+`UI-PATTERNS-1` already declined to do and what this gate's own instruction says to avoid
+unless "the current review supports one coherent pattern."
 
-Everything else F17 named (`aria-current="page"` on active nav, distinguishing `aria-label`
-per `<nav>`) was already fixed by `UI-MOBILE-NAV-1`/`UI-SYSTEM-1`, confirmed in source this
-gate. The skip link specifically was still missing. Added as the first element inside
-`app/(public)/layout.tsx`'s provider tree — before the sidebar drawer, header, logo link, and
-full desktop nav — `sr-only` until keyboard-focused, then visible and positioned above every
-other layer (`z-[70]`, above the drawer's own `z-60`). Targets a new `id="main-content"` on
-the existing `<main>` landmark. The root `app/not-found.tsx` boundary (added in `UI-404-1`,
-not wrapped by this layout) was left alone — it has no complex nav to skip past.
+**What the review did find and fix: two of those variants had unexplained token drift, not
+meaningful variation.** Category and orders' `<h1>` used a raw `text-2xl md:text-3xl` size
+instead of the `.text-display` utility every other page-header `<h1>` (pensioners, tools,
+service-desk, topics, office-pipeline) already uses correctly. No comment anywhere justified
+the difference, the sizes are nearly identical (24→30px vs. 22→28px), and `.text-display` is
+the token this exact role already has. Fixed — see below.
 
-### F26 (remainder) — `<th>` had no `scope`
+A second, smaller split (`border-mastheadText/40` on variant B vs. `/35` on variant C) was
+found and **deliberately not touched**: a 5-percentage-point border-opacity difference is not
+reliably judgeable from source alone and needs a rendered comparison, which this gate cannot
+perform. Recorded for `UI-ACCEPTANCE-1`, not guessed at here.
 
-The scroll-region fix (`tabIndex`, `role="region"`, label) was already done in
-`UI-RESPONSIVE-1`, confirmed in source. `TableHead` itself still emitted a bare `<th>` with
-no `scope`, and its one current consumer (`DaArrearsUI`'s 3-column table) didn't pass one
-either. Defaulted `TableHead` to `scope="col"` — every existing call site is a column header —
-while still letting a future genuine row-header call site override it explicitly (`scope`
-spreads from `...props` after the default, so an explicit prop wins).
+## What was fixed
 
-### F27 — breadcrumb current-page semantics and truncation
+### 1. Three route headings styled as metadata, not as headings
 
-`BreadcrumbPage` announced a broken interactive control: `role="link" aria-disabled="true"`
-on a non-focusable `<span>` tells assistive technology "this is a link" and "this link is
-disabled" simultaneously, which is not what a breadcrumb's current-page marker means.
-`aria-current="page"` alone is the correct, sufficient pattern, and was already present
-alongside the incorrect attributes — removed only the incorrect pair. Separately, the
-truncated current-page text (`max-w-[200px] truncate`, no full-text fallback) now carries a
-`title` attribute with the untruncated label, so a long G.O. reference is recoverable on
-hover/long-press instead of permanently cut off.
+`CommutationTrackerUI.tsx`, `PensionCalculatorUI.tsx`, `PrcCalculatorUI.tsx` — their `<h1>`
+(added in `UI-A11Y-1` by promoting an existing label to a real heading) kept that label's
+original `font-mono text-xs text-inkSoft font-normal` styling. `DESIGN_SYSTEM.md` §1 states
+plainly: **"Mono is not for body copy, headings, or navigation labels."** A page's one
+heading, styled identically to a metadata chip beside it, is semantically present but
+visually camouflaged — a real, rule-cited defect, not a preference.
 
-## Re-confirmed already correct (not re-fixed, not re-decided)
+**Fix.** Dropped `font-mono`; applied `.text-card-title` (15px mobile / 16px desktop, weight
+700 — the smallest of the three defined heading tokens) and `text-ink`. Chosen over the
+larger `.text-display` used by dedicated tool-page header blocks (GPF/APGLI, DA arrears,
+leave encashment) specifically to preserve these three routes' existing compact, single-row
+badge+heading density — going all the way to `.text-display` would restructure the row in a
+way this gate cannot verify unrendered. Same visual position, same row, same badge beside it;
+only the type styling changed.
 
-- **F4 — focus indicator.** `app/globals.css`'s base `:focus-visible` rule now lives outside
-  `@layer base`; `Input.tsx`/`NativeSelect.tsx` no longer use `outline-none` at all.
-- **F6 — iOS zoom.** Both now use `text-base sm:text-sm` (16px on mobile).
-- **F7 — touch targets.** All six originally-named controls (`Button` sm/md, `Input`/
-  `NativeSelect`, `Pagination` links, `BottomNav` items, search clear control) are at or
-  above 44px.
-- **F13 — field errors.** `Field` clones `id`/`aria-describedby`/`aria-invalid`/
-  `aria-required` onto its child; `TaxCalculatorUI`'s `NumF` wrapper (33 call sites) now
-  routes through `Field`.
-- **F14 / Dialog.** `Sheet.tsx` confirmed deleted (only referenced in `Dialog.tsx`'s own
-  comment explaining what it replaced). `Dialog.tsx` carries the full contract directly:
-  `role="dialog"`, `aria-modal`, `aria-labelledby`, focus trap, Escape, focus return, scroll
-  lock.
-- **F15 — accordion.** Collapsed content is `hidden={!isOpen}`, out of the tab order and
-  accessibility tree, not merely `opacity-0`.
-- **F17 (nav semantics half) — `aria-current`/`aria-label`.** Present on `BottomNav`,
-  `DesktopNav`, and the sidebar; each `<nav>` carries a distinguishing label.
-- **F28 — global shortcut.** `Sidebar.tsx`'s `Ctrl/Cmd+B` handler already checks the event
-  target against input/textarea/contenteditable before intercepting.
-- **F31 — 10px labels.** `FieldLabel` is `text-xs` (12px); no `text-[10px]` remains in the
-  checked files.
-- **F32 — ThemeToggle.** `aria-pressed` present; the pre-mount placeholder is a
-  non-focusable, `aria-hidden` element, not a ghost button; the `title` reads "Switch to
-  day/night mode," no internal codenames.
-- **Alt text.** No `<img>`/`next/image`/`role="img"` anywhere (matches `UI-PERF-1`'s
-  confirmed no-images finding). Decorative inline SVGs carry `aria-hidden="true"` inside a
-  labelled parent; every icon-only control requires a `label` prop by its own TypeScript
-  signature.
-- **Reduced motion.** `app/globals.css`'s `prefers-reduced-motion: reduce` block zeroes
-  animation duration/iteration-count, transition duration, and scroll-behavior — substantive,
-  not a stub.
-- **Other dialogs/menus.** `Tabs.tsx` implements the full WAI-ARIA tabs pattern correctly
-  (roving tabindex, `aria-selected`, `aria-controls`, arrow/Home/End keys). No other
-  dialog/menu-shaped widget exists beyond what's covered above.
+### 2. Category/orders header size drift from the shared token
 
-## Closed as not applicable / not verifiable here, with reason
+Covered above under the `PageHeader` decision. `text-2xl md:text-3xl font-bold ... leading-
+snug` → `text-display` (color/tracking classes kept), matching the five other page headers
+that already use the token correctly.
 
-- **Contrast.** `DESIGN_SYSTEM.md` §14 specifies the target (4.5:1 body text, 3:1 large
-  text/UI boundaries, both themes) and names this gate as the owner of measurement — but this
-  environment has no browser or contrast-measurement tool, the same disposition every prior
-  gate in this program has recorded for anything requiring rendered/measured output. The
-  target is specified; the actual ratios remain unmeasured. Not silently dropped — carried
-  forward as a known limitation, same as browser/device acceptance generally.
+## Re-confirmed via source, deliberately not flagged
+
+- **Emoji iconography** (`DESIGN.md`: reject outright; `DESIGN_SYSTEM.md` §15: still carried
+  forward, ~15-20 sites). Real, rule-cited — but replacing icons across the sidebar,
+  `DesktopLeftNav`, search chips, `ThumbZoneBar` means drawing/selecting SVGs and verifying
+  alignment/sizing rendered. Fails "supported by code/design-system evidence alone" the same
+  way this gate's own instruction constrains it; `DESIGN_SYSTEM.md` itself names no owner
+  gate for this specific item. Left for `UI-21DEV-1` or a dedicated pass — not silently
+  dropped, just not blind-fixed here.
+- **~100 sub-12px arbitrary text sizes in route-local components** (`DESIGN_SYSTEM.md` §15's
+  own count, ~42 files) — mechanically detectable, but that same section explicitly assigns
+  this to **"`UI-A11Y-1` with `UI-ACCEPTANCE-1`,"** not this gate, because bumping ~100 sizes
+  risks wrapping/density regressions only a browser can catch. `UI-A11Y-1` closed without
+  touching it (its own scope was narrower — see that gate's record); left as a carried-
+  forward known limitation rather than attempted here without rendering.
+- **`Callout.tsx`, `EmptyState.tsx`** — read in full against `DESIGN_SYSTEM.md` §8.4a and the
+  empty-state conventions. Already correct: tone-as-meaning mapping, `rounded-xl`, `hair`
+  border, `role="status"`. No defect found.
+- **Radius scale** — grepped app-wide for oversized/arbitrary radii (`rounded-3xl` and
+  similar): zero hits. No violation of the closed radius scale.
+- **Raw hex/arbitrary colors in components** — grepped app-wide outside `globals.css`: zero
+  hits. The closed token set (`DESIGN_SYSTEM.md` §R0.2) holds everywhere checked.
+
+## Closed as not applicable / deferred, with reason
+
+- **Visual/rendered acceptance of anything in this gate.** No browser tooling exists in this
+  environment. Every change above is justified by source/design-system evidence only, per
+  explicit instruction; `UI-ACCEPTANCE-1` owns actually seeing any of it rendered.
 
 ## Verification
 
 - `npx tsc --noEmit` passes.
-- Full Vitest suite: 64 files, 436 tests pass (up from 426 — 10 new: `test/
-  heading-structure.test.tsx` (5, new file), `test/primitives.test.tsx` (+4: `TableHead`
-  scope default/override, `BreadcrumbPage` semantics/title), `test/a11y.test.ts` (+1:
-  skip-link source guard).
-- **Mutation-tested**, in two passes (the heading-structure guards are in an untracked file
-  `git stash` alone doesn't move, so they were verified separately from the rest): (1) full
-  `git stash` of all tracked changes confirmed all 4 `test/heading-structure.test.tsx`
-  assertions fail against the pre-fix component source; (2) a scoped `git stash push` of just
-  `Table.tsx`/`Breadcrumb.tsx`/`layout.tsx` (keeping the new tests in place) confirmed the
-  `TableHead` scope, both `BreadcrumbPage` assertions, and the skip-link source guard all fail
-  against their pre-fix source too. All four restored and re-verified passing.
+- Full Vitest suite (including Tailwind class-usage validation, `test/tailwind-classes.
+  test.ts`): 64 files, 437 tests pass (up from 436 — one new guard, `test/typography.test.ts`
+  "never styles an `<h1>` with `font-mono`").
+- **Mutation-tested.** A scoped `git stash push` of the three `font-mono` fixes (keeping the
+  new guard in place) confirmed it fails against the pre-fix source — all three offending
+  `<h1>`s listed by file — then restored and re-verified passing.
 - `git diff --check` clean.
-- A full `next build` succeeds; bundle-size report unchanged (semantic/markup-only changes,
-  as expected). `next start` + `curl` against the three previously-headless routes confirmed
-  exactly one real, server-rendered `<h1>` on each (not just passing in a component test), and
-  confirmed the skip link plus its `#main-content` target both appear in real rendered HTML,
-  not only in the source file.
+- A full `next build` succeeds; bundle-size report unchanged (pure className/markup changes,
+  as expected). `next start` + `curl` against `/tools/prc-calculator` and `/orders` confirmed
+  in real rendered HTML: the `<h1>` no longer carries `font-mono`, and `.text-card-title`/
+  `.text-display` both compile to real, non-purged CSS rules.
 
 ## Next gate after closure
 
-`UI-IMPECCABLE-1` (Phase 15, per `UI_SYSTEM_MASTER_PLAN.md`'s sequential roadmap — no
-explicit instruction overrode it this gate).
+`UI-21DEV-1` (per explicit instruction).

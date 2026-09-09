@@ -125,7 +125,12 @@ export default async function CategoryDetailPage({
           </div>
 
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-mastheadText tracking-tight leading-snug">
+            {/* UI-IMPECCABLE-1: was a raw text-2xl/md:text-3xl size, an unexplained
+                drift from .text-display — the token every other page-header h1
+                (pensioners, tools, service-desk, topics, office-pipeline) already
+                uses. Sizes are close (24→30px vs 22→28px); this just removes the
+                unjustified inconsistency. */}
+            <h1 className="text-display text-mastheadText tracking-tight">
               {category.nameEn}
             </h1>
             {category.nameTe && (
