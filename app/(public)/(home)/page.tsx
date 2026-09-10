@@ -71,13 +71,25 @@ export default async function HomePage() {
   ]);
 
   return (
-    <div className="lg:grid lg:grid-cols-12 lg:gap-8 space-y-8 lg:space-y-0">
+    <div className="lg:grid lg:grid-cols-12 lg:gap-8">
       {/*
         SLOP-DENSITY-1 (AI_SLOP_AUDIT.md A02): one quiet category rail, not two
         card-kit rails. The right rail duplicated four calculators that the
         primary navigation already reaches, then repeated a "Quick Searches" chip
         set that /search owns — so the document feed was given half the page
         while its two rails competed with it. The feed now takes three quarters.
+      */}
+      {/*
+        HOME-POLISH-1 (HOME-21ST-AUDIT-1 finding): this container previously
+        carried `space-y-8 lg:space-y-0` to space the rail column from the feed
+        column when they stack. They never actually stack: DesktopLeftNav's own
+        root is `hidden lg:block`, so below `lg` this column renders empty every
+        time. Tailwind's `space-y-*` margin lands on the feed column regardless
+        — it's a `:not([hidden])` sibling-attribute selector, not a computed-
+        display check, so an empty-but-present sibling still triggers it. The
+        result was an unexplained ~32px gap above the heading on every phone
+        width. `lg:gap-8` alone is correct: it only ever applies once this
+        becomes a two-column grid at `lg`, where both columns are real.
       */}
       <div className="lg:col-span-3">
         <DesktopLeftNav />
