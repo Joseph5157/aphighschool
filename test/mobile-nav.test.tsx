@@ -20,6 +20,9 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
+  SidebarCollapsible,
+  SidebarMenuSubItem,
+  SidebarMenuSubButton,
 } from "@/app/(public)/_components/Sidebar";
 
 /** jsdom reports 1024 by default, which is desktop. Below NAV_BREAKPOINT. */
@@ -266,5 +269,68 @@ describe("the Ctrl/Cmd+B shortcut", () => {
     // Previously this fired unconditionally, so Ctrl+B while typing opened the
     // menu AND suppressed the browser's own shortcut.
     expect(drawer()).toHaveAttribute("inert");
+  });
+});
+
+// NAV-FIX-1: SidebarCollapsible's toggle button announced open/closed state
+// only through a rotating chevron, which a screen-reader user cannot see.
+describe("SidebarCollapsible disclosure semantics", () => {
+  function CollapsibleShell({ defaultOpen = false }: { defaultOpen?: boolean }) {
+    return (
+      <SidebarProvider defaultOpen={false}>
+        <Sidebar side="left" collapsible="offcanvas">
+          <SidebarContent>
+            <SidebarMenu>
+              <SidebarCollapsible title="Calculators & Bills" defaultOpen={defaultOpen}>
+                <SidebarMenuSubItem>
+                  <SidebarMenuSubButton href="/tools/tax-calculator">Income Tax Calculator</SidebarMenuSubButton>
+                </SidebarMenuSubItem>
+              </SidebarCollapsible>
+            </SidebarMenu>
+          </SidebarContent>
+        </Sidebar>
+      </SidebarProvider>
+    );
+  }
+
+  const toggle = () => screen.getByRole("button", { name: "Calculators & Bills" });
+
+  it("exposes an accessible name and starts with aria-expanded=false when closed", () => {
+    render(<CollapsibleShell />);
+    expect(toggle()).toHaveAttribute("aria-expanded", "false");
+  });
+
+  it("flips aria-expanded to true on a real click, and back to false on a second click", async () => {
+    const user = userEvent.setup();
+    render(<CollapsibleShell />);
+
+    await user.click(toggle());
+    expect(toggle()).toHaveAttribute("aria-expanded", "true");
+    expect(screen.getByRole("link", { name: "Income Tax Calculator" })).toBeVisible();
+
+    await user.click(toggle());
+    expect(toggle()).toHaveAttribute("aria-expanded", "false");
+  });
+
+  it("toggles via the keyboard, not only pointer clicks", async () => {
+    const user = userEvent.setup();
+    render(<CollapsibleShell />);
+
+    await user.tab();
+    expect(toggle()).toHaveFocus();
+    await user.keyboard("{Enter}");
+    expect(toggle()).toHaveAttribute("aria-expanded", "true");
+  });
+
+  it("starts expanded when defaultOpen is true, matching its rendered submenu", () => {
+    render(<CollapsibleShell defaultOpen />);
+    expect(toggle()).toHaveAttribute("aria-expanded", "true");
+    expect(screen.getByRole("link", { name: "Income Tax Calculator" })).toBeVisible();
+  });
+
+  it("keeps the chevron decorative", () => {
+    render(<CollapsibleShell />);
+    const svg = toggle().querySelector("svg");
+    expect(svg).toHaveAttribute("aria-hidden", "true");
   });
 });
