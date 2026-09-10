@@ -18,7 +18,12 @@ export default function HomeLoading() {
     <div
       role="status"
       aria-label="Loading latest orders"
-      className="lg:grid lg:grid-cols-12 lg:gap-8 space-y-8 lg:space-y-0"
+      // HOME-POLISH-1: matches page.tsx's container — no `space-y-8`. The rail
+      // column is always empty below `lg` (DesktopLeftNav is `hidden lg:block`),
+      // and margin from `space-y-*` lands on the feed column regardless of
+      // whether the preceding sibling renders anything, so it produced a dead
+      // ~32px gap above this skeleton's heading on every phone width.
+      className="lg:grid lg:grid-cols-12 lg:gap-8"
     >
       <span className="sr-only">Loading latest orders…</span>
 

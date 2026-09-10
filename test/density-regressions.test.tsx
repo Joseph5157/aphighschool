@@ -151,6 +151,28 @@ describe("A02 — the homepage carries one quiet rail, not two card kits", () =>
   });
 });
 
+describe("HOME-POLISH-1 — no dead space-y gap above the mobile-hidden rail", () => {
+  beforeEach(resetDb);
+
+  it("does not use space-y-* to space the rail column from the feed column", async () => {
+    await makePost({ isDraft: false, titleEn: "Some Order" });
+    const html = renderToStaticMarkup(await HomePage());
+
+    // space-y-8 (and the lg:space-y-0 that used to cancel it back out at
+    // desktop) puts margin-top on whichever element renders second in this
+    // container. DesktopLeftNav's wrapper is a real, always-present sibling
+    // that just renders empty below `lg` — the selector Tailwind generates for
+    // space-y-* is `:not([hidden])`, which checks the HTML `hidden` attribute,
+    // not computed display, so an empty-but-present sibling still triggers the
+    // margin. That produced an unexplained ~32px gap above the heading on every
+    // phone width (HOME-21ST-AUDIT-1). `lg:gap-8` alone is correct: gap is
+    // skipped for grid/flex items that are actually not rendered.
+    expect(html).not.toMatch(/space-y-8/);
+    expect(html).toContain("lg:grid-cols-12");
+    expect(html).toContain("lg:gap-8");
+  });
+});
+
 describe("A06 — the orders index runs one browse model", () => {
   beforeEach(resetDb);
 
