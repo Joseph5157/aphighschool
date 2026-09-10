@@ -104,7 +104,7 @@ export default function LeaveEncashmentUI() {
           ← Back to Utility Tools
         </Link>
         <Badge variant="tamarind" size="sm" shape="pill" dot>
-          Runs 100% on device
+          Runs in your browser
         </Badge>
       </div>
 

@@ -20,7 +20,7 @@ interface TopicTagBarProps {
   /**
    * Tags a published post actually carries right now (lib/posts/query.ts's
    * tagsWithPublishedContent). A curated topic whose tag isn't in this list is
-   * a "1-Click Filter" that would land on "no matching documents" — UI_AUDIT.md
+   * a chip that would land on "no matching documents" — UI_AUDIT.md
    * F30 — so it's dropped rather than shown as a dead end.
    */
   availableTags: string[];
@@ -41,7 +41,6 @@ export default function TopicTagBar({ baseUrl = "/search", availableTags }: Topi
           <Link href="/topics" className="text-xs text-tamarind hover:text-tamarindDark transition-colors">
             All topics <span aria-hidden="true">→</span>
           </Link>
-          <span className="text-xs text-inkSoft/80">1-Click Filter</span>
         </div>
       </div>
 

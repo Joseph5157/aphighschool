@@ -98,7 +98,7 @@ export default function TableOfContents({ contentSelector = ".prose-gazette" }: 
           className="w-full flex items-center justify-between font-mono text-xs font-bold text-tamarind"
         >
           <div className="flex items-center gap-2">
-            <span>Page Index / విశయ సూచిక ({items.length} sections)</span>
+            <span>Page Index / విషయ సూచిక ({items.length} sections)</span>
           </div>
           {/* SLOP-VISUAL-1 (A03): this was the only disclosure control in the
               product drawn with ▲/▼ text glyphs. Accordion and SidebarCollapsible

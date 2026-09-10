@@ -211,7 +211,7 @@ export default function DaArrearsUI() {
           ← Back to Utility Tools / ఇతర సాధనాలు
         </Link>
         <Badge variant="tamarind" size="sm" shape="pill" dot>
-          Runs 100% On Device
+          Runs in your browser
         </Badge>
       </div>
 
