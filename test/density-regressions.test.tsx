@@ -26,7 +26,7 @@ import { resetDb, seedCategory, makePost, testDb } from "./db";
 // assertions below, against the component itself.
 vi.mock("@/app/(public)/_components/DesktopLeftNav", () => ({ default: () => null }));
 
-const HomePage = (await import("@/app/(public)/page")).default;
+const HomePage = (await import("@/app/(public)/(home)/page")).default;
 const OrdersPage = (await import("@/app/(public)/orders/page")).default;
 const PensionersPage = (await import("@/app/(public)/pensioners/page")).default;
 

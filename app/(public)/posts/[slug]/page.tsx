@@ -19,7 +19,7 @@ export async function generateMetadata({
 
     if (!post) {
       return {
-        title: "Order Not Found",
+        title: "Page Not Found",
       };
     }
 

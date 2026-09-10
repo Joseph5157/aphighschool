@@ -9,7 +9,7 @@ vi.mock("@/lib/prisma", () => ({
 }));
 vi.mock("@/app/(public)/_components/DesktopLeftNav", () => ({ default: () => null }));
 
-const HomePage = (await import("@/app/(public)/page")).default;
+const HomePage = (await import("@/app/(public)/(home)/page")).default;
 
 type ActionPost = {
   id: string;

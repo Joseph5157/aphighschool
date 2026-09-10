@@ -127,3 +127,75 @@ designed preflight architecture in option 2. Do not upgrade Next.js as a fix
 attempt. Before implementation, require production status/head verification for
 both post and category routes, valid-route metadata regression checks, and an
 explicit draft-visibility review.
+
+## `SOFT-404-2` — implementation result
+
+**Disposition: CLOSED — accepted fix direction implemented and verified with
+the configured database service.**
+
+The two route-level streaming boundaries were removed. The homepage was placed
+in a route group so its existing loading UI remains isolated from dynamic detail
+routes. Metadata changes are limited to preserving the homepage title after that
+move and using the shared `Page Not Found` title for missing records.
+
+- `app/(public)/posts/[slug]/loading.tsx`
+- `app/(public)/category/[slug]/loading.tsx`
+
+The resulting detail routes wait for their server query on navigation rather than
+showing the former route-level skeleton. No replacement spinner or skeleton was
+introduced. This is the accepted trade-off for a reference portal: correct status
+and indexing semantics take priority over decorative loading feedback.
+
+### Regression protection
+
+`test/states.test.tsx` now distinguishes the three retained list/search loading
+boundaries from the two dynamic detail routes that must remain non-streamed. It
+asserts both detail `loading.tsx` files are absent and their pages retain a
+`notFound()` path. The guard was mutation-checked by adding a temporary category
+`loading.tsx`; the focused test failed, then passed again after its removal.
+
+Existing `test/draft-leaks.test.ts` continues to protect the post detail and
+metadata `isDraft: false` predicates and the published-only static params.
+
+### Final production status matrix
+
+Production `next build` plus `next start` verification is recorded here after
+the implementation:
+
+| Route | Before `SOFT-404-2` | After `SOFT-404-2` | Robots after |
+|---|---:|---:|---|
+| valid post | 200 | 200 | `index, follow` |
+| missing post | 200 | 404 | `noindex` only |
+| valid category | 200 | 200 | `index, follow` |
+| missing category | 200 | 404 | `noindex` only |
+| unmatched URL | 404 | 404 | unchanged noindex behavior |
+
+The custom public not-found UI remains the route-group boundary for missing posts
+and categories. Valid route titles, canonical metadata, static params, ISR, and
+published-only data visibility remain unchanged. Chromium and direct HTTP
+inspection confirmed no console errors and no conflicting `index, follow`
+directive on the two invalid dynamic routes.
+
+### Current release-gate verification status
+
+The source change and direct production HTTP probe pass: homepage, valid post,
+and valid category return `200`; missing post, missing category, and an
+unmatched URL return `404`. Valid post/category pages retain `index, follow`;
+the missing dynamic routes carry only the effective `noindex` directive and the
+public not-found boundary renders.
+
+The configured Docker Postgres service is healthy at `localhost:5433`; the
+isolated `portal_test` database exists and is schema-synchronized. The complete
+Vitest suite passes (69 files, 485 tests), including database-backed draft and
+Related Orders coverage. `npx next build` and production `next start` passed.
+
+Chromium verified the direct and client-side flows at 390×844 and 1440×1000:
+homepage-to-document, homepage-to-category, category-to-document, Back, and
+both invalid dynamic routes. There were no RSC payload, hydration, database, or
+console errors. The earlier RSC failures were caused by the unavailable local
+database service, not by the route change.
+
+`npm run build` remains unable to complete only because Prisma cannot rename
+its Windows query-engine DLL while an existing local `next dev` process holds
+it. The schema is unchanged and the direct `npx next build` path completed, so
+this is a wrapper limitation rather than a build or application failure.

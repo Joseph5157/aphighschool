@@ -19,7 +19,7 @@ export async function generateMetadata({
       select: { nameEn: true, nameTe: true },
     });
 
-    if (!category) return { title: "Category Not Found" };
+    if (!category) return { title: "Page Not Found" };
 
     // Avoids "Government Orders Orders" — only append "Orders" when the
     // category name doesn't already end with it.
