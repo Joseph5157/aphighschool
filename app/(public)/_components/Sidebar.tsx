@@ -155,6 +155,9 @@ export interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
   collapsible?: "icon" | "offcanvas" | "none";
   variant?: "sidebar" | "floating" | "inset";
   side?: "left" | "right";
+  /** NAV-SIDEBAR-WIDTH-1: which desktop container to use. Mobile is always
+   * MobileDrawer regardless of this prop. */
+  desktopVariant?: "push" | "popover";
 }
 
 const FOCUSABLE = [
@@ -307,8 +310,102 @@ const MobileDrawer = React.forwardRef<HTMLDivElement, SidebarProps>(
 );
 MobileDrawer.displayName = "MobileDrawer";
 
+// ---------------------------------------------------------------------------
+// NAV-SIDEBAR-WIDTH-1: the desktop "Public Quick Menu" (eight utility deep
+// links, NAV-SIDEBAR-2) used to push the whole layout sideways by up to 256px
+// when opened — measured to collide with DesktopNav at 1024–1280px and to
+// shrink the reading column at every width. An overlay prototype (full-height,
+// scrimmed, modal) was built and measured alongside this one; this compact
+// popover won on the product's own terms — same zero header/content impact,
+// but without dimming the document the reader came for. The overlay's code
+// was removed, not kept behind a flag: PRODUCT.md is explicit that the
+// document is primary and this menu is secondary furniture, so the least
+// disruptive working option is the right default, not a configurable choice.
+// Full comparison: docs/context/NAV_SIDEBAR_WIDTH_PLAN.md.
+// ---------------------------------------------------------------------------
+
+/**
+ * Compact header quick-links popover — the desktop-only "Public Quick Menu"
+ * container. Anchored below the trigger rather than full-height; closes on
+ * Escape or an outside click; returns focus to the trigger. No scrim — it's a
+ * lightweight, non-modal popover (`aria-modal="false"`), so the document stays
+ * visible and interactive while it's open, and Tab is deliberately not
+ * trapped inside it (trapping is a modal-dialog behaviour, not a popover
+ * one). Unlike the push `<aside>` below (still used by the admin CMS via
+ * `collapsible="icon"`), this never participates in page layout, so it cannot
+ * push the header or content at any width.
+ */
+const DesktopPopoverPanel = React.forwardRef<HTMLDivElement, SidebarProps>(
+  ({ className = "", children, ...props }, ref) => {
+    const { open, setOpen } = useSidebar();
+    const panelRef = useRef<HTMLDivElement | null>(null);
+    const returnFocusRef = useRef<HTMLElement | null>(null);
+
+    const setRefs = useCallback(
+      (node: HTMLDivElement | null) => {
+        panelRef.current = node;
+        if (typeof ref === "function") ref(node);
+        else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
+      },
+      [ref],
+    );
+
+    useEffect(() => {
+      if (!open) return;
+      returnFocusRef.current = document.activeElement as HTMLElement | null;
+      const first = panelRef.current?.querySelector<HTMLElement>(FOCUSABLE);
+      first?.focus();
+      return () => {
+        returnFocusRef.current?.focus?.();
+      };
+    }, [open]);
+
+    useEffect(() => {
+      if (!open) return;
+      const onKeyDown = (event: KeyboardEvent) => {
+        if (event.key === "Escape") {
+          event.stopPropagation();
+          setOpen(false);
+        }
+      };
+      const onPointerDown = (event: MouseEvent) => {
+        const target = event.target as Node;
+        if (panelRef.current && !panelRef.current.contains(target)) {
+          setOpen(false);
+        }
+      };
+      document.addEventListener("keydown", onKeyDown, true);
+      // Capture phase, and on the next tick: the same click that opened the
+      // popover (via the trigger) would otherwise immediately bubble into
+      // this listener and close it again.
+      const id = window.setTimeout(() => document.addEventListener("mousedown", onPointerDown, true), 0);
+      return () => {
+        window.clearTimeout(id);
+        document.removeEventListener("keydown", onKeyDown, true);
+        document.removeEventListener("mousedown", onPointerDown, true);
+      };
+    }, [open, setOpen]);
+
+    if (!open) return null;
+
+    return (
+      <div
+        ref={setRefs}
+        role="dialog"
+        aria-modal="false"
+        aria-label="Quick links"
+        className={`fixed left-4 top-[72px] z-60 w-64 max-h-[calc(100vh-88px)] overflow-y-auto bg-paperRaised border border-hair rounded-xl shadow-md ${className}`}
+        {...props}
+      >
+        {children}
+      </div>
+    );
+  },
+);
+DesktopPopoverPanel.displayName = "DesktopPopoverPanel";
+
 export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
-  ({ collapsible = "icon", variant = "sidebar", side = "left", className = "", children, ...props }, ref) => {
+  ({ collapsible = "icon", variant = "sidebar", side = "left", desktopVariant = "push", className = "", children, ...props }, ref) => {
     const { open, isMobile } = useSidebar();
 
     if (isMobile) {
@@ -319,7 +416,17 @@ export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
       );
     }
 
-    // Desktop Collapsible Sidebar
+    if (desktopVariant === "popover") {
+      return (
+        <DesktopPopoverPanel ref={ref} className={className} {...props}>
+          {children}
+        </DesktopPopoverPanel>
+      );
+    }
+
+    // Desktop Collapsible Sidebar (push) — still used by the admin CMS
+    // (AdminSidebar, `collapsible="icon"`). The public "Public Quick Menu"
+    // opts into the popover above instead (NAV-SIDEBAR-WIDTH-1).
     const widthClass = !open
       ? collapsible === "icon"
         ? "w-16"
