@@ -84,6 +84,88 @@ SLOP-ACCEPTANCE-1   browser before/after compare, mobile + desktop
 SLOP-CLOSE
 ```
 
+## `SLOP-ACCEPTANCE-1` — record
+
+**Disposition: NOT ACCEPTED.** This is a verification-only gate. It did not start
+a new redesign or alter the protected document/trust system.
+
+### What passed
+
+- Real Chromium review covered `/`, `/orders`, `/category/govt-orders`, empty and
+  populated `/search`, a two-heading document, the 26-heading APPSC document,
+  `/tools`, `/tools/tax-calculator`, `/pensioners`, `/service-desk`, `/topics`, and
+  a genuine unmatched 404 at both 390×844 and 1440×1000. No page-level horizontal
+  overflow was measured on those routes. The homepage showed three ordinary document
+  rows in the phone first viewport; it no longer spends that viewport on a feature
+  card.
+- A01, A02, A04–A15, A17 and A20 hold in the rendered product. In particular:
+  the orders hub has one category index rather than its former parallel discovery
+  widgets; the three-document category has no filter bar; empty Search is a search
+  field plus one compact suggestion/recent area; duplicate detail facts are absent;
+  the two-heading document suppresses its TOC; and the 26-heading document retains
+  the mobile Page Index after hydration. The stripped tools index has no rates widget,
+  privacy repetition, or suite promotion. A16 remains deferred.
+- The protected semantics remain intact in rendered/source verification: `CURRENT`,
+  `SUPERSEDED`, and notification lifecycle stages; positive-only GOIR provenance;
+  labelled `Issued`/`Added to portal` dates; reference numbers; Telugu titles;
+  source links; the independent/unofficial statement; and public-query `isDraft:
+  false` boundaries. Related Orders remains the only intentional detail-page lateral
+  continuation and continues to require approved, published related posts.
+- The three housekeeping items are corrected: `విషయ సూచిక`, no `1-Click Filter`,
+  and `Runs in your browser` replacing `Runs 100% On Device`.
+- The pre-existing 35px detail overflow is **not reproducible at 390px now**. Its
+  formerly-wide APPSC tables are contained by their own local horizontal scrollers;
+  `documentElement.scrollWidth` was 375px for the 390px browser viewport (the 15px
+  scrollbar reservation), not wider than it. No escaping page box was found. The
+  historical exact root cause remains unproven: SLOP-DETAIL-1 established that its
+  then-observed 35px overflow predated that gate and identified no escaping element.
+  It is unrelated to the remediation under review and has no current user impact;
+  no scope exception is justified.
+
+### Acceptance blocker: A03 is not fully closed
+
+The remediated shell, index routes, tools, and pension routes have no emoji iconography
+and no visible screen text below 12px. However the required long-document route,
+`/posts/appsc-departmental-tests-notification-material`, still renders decorative
+article-content emoji: `💬`, `📢`, `📥`, `📰`, and `🔔` (plus directional link glyphs).
+They are visible below the masthead in the document body. This is outside the prior
+route-component source guard, but it is inside the actual public product and conflicts
+with `DESIGN.md`/`DESIGN_SYSTEM.md`'s no-emoji product-content rule. The prior
+"visible emoji 104 → 0" measure therefore does not cover the required representative
+long-document route. It is meaningful enough to withhold acceptance; it should be
+removed or replaced with restrained semantic structure in a focused follow-up, without
+transcribing or changing the document's numeric/tabular source material.
+
+### Fresh measurements and regression evidence
+
+| Measure | Audit baseline / prior gate | Acceptance observation |
+| --- | --- | --- |
+| Homepage ordinary rows in 390px first viewport | 0 (`A01`) | 3 |
+| Government Orders filters / documents | 8 / 3 (`A07`) | 0 / 3 |
+| Empty Search first-viewport composition | chips + recent + task grid (`A08`) | search controls + one recent/suggestion area |
+| Detail duplicated facts | 4 (`A09`) | 0 |
+| Short / long TOC | both rendered (`A10`) | 2-heading suppressed / 26-heading retained |
+| Visible sub-12px screen text | 69 before / 0 after in `SLOP-VISUAL-1` | 0 on all acceptance first viewports (print-only carve-out not counted) |
+| Visible emoji | 104 before / 0 after in `SLOP-VISUAL-1` | 0 on major index first viewports; **5 decorative emoji in the required long document body** |
+| Horizontal overflow | none after earlier gates | none on all required route/viewport pairs; historical 35px defect not reproduced |
+| CLS | 0.0000–0.0008 before and after (`SLOP-STATES-1`) | no improvement claimed |
+
+Nested borders and pills were not pursued as abstract targets: retained borders carry
+document rows, lifecycle, forms, or actual section boundaries. The orders desktop
+discovery systems remaining are its category index and one quiet GOIR explanation;
+there is no recent strip, tab system, or quick-search rail. Fresh Chromium console
+smoke on a clean production tab reported no errors. `npm run build` reproduced the
+known Prisma DLL rename lock; listener PID 6952 was this gate's isolated port-3010
+Next dev server, so no unrelated process was killed. `prisma/` was unchanged and
+`npx next build` completed successfully against the current generated client.
+
+Regression status: TypeScript and `git diff --check` clean. The full Vitest command
+was launched repeatedly but this constrained runner ended its output window before it
+emitted a final aggregate result; a later focused Vitest invocation was blocked during
+Vite config startup by the sandbox's denied parent-directory read. Both outcomes are
+recorded as incomplete test evidence, not represented as green full-suite or guard
+results.
+
 ## `SLOP-REMOVE-1` — record
 
 Scope: A11, A12, A13, A20. Chosen first because all four are high-confidence subtractions with
