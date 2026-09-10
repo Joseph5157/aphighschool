@@ -104,12 +104,24 @@ export default async function CategoryDetailPage({
 
       {/* ── Option A: Imperial Gazette Category Masthead ─────────────────── */}
       <div className="on-masthead bg-masthead text-mastheadText rounded-2xl overflow-hidden shadow-md">
-        {/* Top classification ribbon */}
+        {/* Top classification ribbon.
+
+            SLOP-VISUAL-1 (A04/A05). The band is gazette identity and is
+            protected (A19), so it stays. Only the duplicated half of the left
+            label goes: "AP School Education" already sits in the site header two
+            rows above this. "Document Category" classifies the page, and
+            "Published documents" is a FRESHNESS-1 trust boundary — it bounds what
+            the feed below is claiming to be, which is why freshness-trust asserts
+            it here — so both stay.
+
+            It was 10px at 40% opacity on navy: under the §1.2 type floor and the
+            §14 contrast floor at once. A classification line nobody can read is
+            not classifying anything. */}
         <div
-          className="border-b border-mastheadText/20 px-6 py-2 flex items-center justify-between text-[10px] font-mono text-mastheadText/40 tracking-widest uppercase"
+          className="border-b border-mastheadText/20 px-6 py-2 flex items-center justify-between text-xs font-mono text-mastheadText/70 tracking-widest uppercase"
           style={{ backgroundColor: "color-mix(in srgb, var(--color-masthead) 85%, black)" }}
         >
-          <span>AP School Education · Document Category</span>
+          <span>Document Category</span>
           <span className="hidden sm:block">Published documents</span>
         </div>
 
@@ -154,7 +166,7 @@ export default async function CategoryDetailPage({
       <CategoryLogList posts={category.posts} />
 
       {/* ── Gazette Footer ───────────────────────────────────────────────── */}
-      <div className="border-t border-hair pt-4 font-mono text-[10px] text-inkSoft/80 text-center tracking-wide">
+      <div className="border-t border-hair pt-4 font-mono text-xs text-inkSoft/80 text-center tracking-wide">
         GOIR status is shown per document where recorded.
       </div>
     </div>

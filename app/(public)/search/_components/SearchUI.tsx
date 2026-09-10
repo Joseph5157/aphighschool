@@ -244,7 +244,7 @@ export default function SearchUI({
               </p>
             )}
             <div className="flex items-center justify-between gap-3 border-b border-hair pb-2">
-              <h2 id="recent-documents-heading" className="font-mono text-[10px] uppercase tracking-widest text-inkSoft font-semibold">
+              <h2 id="recent-documents-heading" className="text-xs text-inkSoft font-semibold">
                 Recent Documents
               </h2>
               <span className="text-meta font-mono text-inkSoft/80">Published documents</span>
@@ -296,7 +296,7 @@ export default function SearchUI({
 
       {!isDiscovery && !isNoMatches && (
         <div className="space-y-3 pt-2">
-          <div className="font-mono text-[10px] uppercase tracking-wider text-inkSoft">
+          <div className="text-xs text-inkSoft font-semibold">
             Results ({results.length})
           </div>
 

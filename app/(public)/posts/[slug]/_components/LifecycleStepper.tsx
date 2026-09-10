@@ -43,7 +43,7 @@ export default function LifecycleStepper({ stages, currentStage, isExpired }: St
                 {isDone ? "✓" : id}
               </div>
               <span
-                className={`font-mono text-[11px] mt-2 font-medium ${
+                className={`font-mono text-xs mt-2 font-medium ${
                   isCurrent
                     ? "text-ink font-bold"
                     : isDone

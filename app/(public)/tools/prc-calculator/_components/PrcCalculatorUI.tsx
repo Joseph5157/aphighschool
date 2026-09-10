@@ -89,7 +89,7 @@ export default function PrcCalculatorUI() {
             size="sm"
             onClick={() => setIsPrintMode(!isPrintMode)}
           >
-            {isPrintMode ? "📄 Back to Form" : "🖨️ Print DDO Statement"}
+            {isPrintMode ? "Back to Form" : "Print DDO Statement"}
           </Button>
         </div>
       </div>
@@ -331,16 +331,16 @@ export default function PrcCalculatorUI() {
 
             {/* Arrears Allocation Split Card */}
             <Card className="p-5 space-y-3 bg-paperRaised border-hair">
-              <h3 className="text-xs font-bold font-mono text-ink uppercase tracking-wide">
+              <h3 className="text-xs font-bold text-ink">
                 Arrears Split & Deductions
               </h3>
               <div className="grid grid-cols-2 gap-3 text-xs font-mono">
                 <div className="p-3 bg-ink/5 border border-hair rounded-lg space-y-1">
-                  <span className="text-inkSoft text-[10px]">10% CPS / PRAN Share</span>
+                  <span className="text-inkSoft text-xs">10% CPS / PRAN Share</span>
                   <p className="font-bold text-ink text-sm">₹{fmt(result.cpsDeduction)}</p>
                 </div>
                 <div className="p-3 bg-turmeric/10 border border-turmeric/30 rounded-lg space-y-1">
-                  <span className="text-turmericDeep text-[10px]">GPF / Cash Net Payout</span>
+                  <span className="text-turmericDeep text-xs">GPF / Cash Net Payout</span>
                   <p className="font-bold text-ink text-sm">₹{fmt(result.gpfOrCashCredit)}</p>
                 </div>
               </div>
@@ -352,7 +352,7 @@ export default function PrcCalculatorUI() {
       {/* FAQ Accordion */}
       <div className="pt-4 border-t border-hair space-y-3">
         <h2 className="text-section text-ink flex items-center gap-2">
-          <span>❓</span> PRC Pay Fixation FAQ
+          PRC Pay Fixation FAQ
         </h2>
         <Accordion
           allowMultiple

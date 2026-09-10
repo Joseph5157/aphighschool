@@ -278,12 +278,12 @@ export default function CategoryLogList({ posts }: CategoryLogListProps) {
                       </Badge>
                       <GoirBadge verified={post.verifiedAgainstGoir} />
                       {post.goReference && (
-                        <span className="font-mono text-[10px] font-bold text-ink bg-ink/10 px-2 py-0.5 rounded border border-ink/15 break-words">
+                        <span className="font-mono text-xs font-bold text-ink bg-ink/10 px-2 py-0.5 rounded border border-ink/15 break-words">
                           {post.goReference}
                         </span>
                       )}
                     </div>
-                    <span className="font-mono text-[10px] text-inkSoft/80 shrink-0">
+                    <span className="font-mono text-xs text-inkSoft/80 shrink-0">
                       <DocumentDate post={normalizedDates(post)} />
                     </span>
                   </div>
@@ -317,8 +317,13 @@ export default function CategoryLogList({ posts }: CategoryLogListProps) {
 
                   {/* Row 5: CTA arrow */}
                   <div className="flex justify-end">
-                    <span className="font-mono text-[10px] text-ink/40 group-hover:text-turmericDeep transition-colors font-semibold">
-                      Read Full Order →
+                    {/* SLOP-VISUAL-1: 10px under the §1.2 floor (A04), in mono
+                        (§13 reserves mono for data, and this is a call to
+                        action), Title Case where §13 asks for sentence case, and
+                        an arrow inside the readable label rather than beside it
+                        as hidden decoration. */}
+                    <span className="text-xs text-ink/40 group-hover:text-turmericDeep transition-colors font-semibold">
+                      Read full order <span aria-hidden="true">→</span>
                     </span>
                   </div>
                 </div>

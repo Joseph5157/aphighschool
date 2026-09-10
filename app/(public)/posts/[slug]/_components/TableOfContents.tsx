@@ -94,12 +94,26 @@ export default function TableOfContents({ contentSelector = ".prose-gazette" }: 
       <div className="lg:hidden bg-paperRaised border border-hair rounded-lg p-3 my-4">
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
+          aria-expanded={mobileOpen}
           className="w-full flex items-center justify-between font-mono text-xs font-bold text-tamarind"
         >
           <div className="flex items-center gap-2">
-            <span>📑 Page Index / విశయ సూచిక ({items.length} sections)</span>
+            <span>Page Index / విశయ సూచిక ({items.length} sections)</span>
           </div>
-          <span>{mobileOpen ? "▲" : "▼"}</span>
+          {/* SLOP-VISUAL-1 (A03): this was the only disclosure control in the
+              product drawn with ▲/▼ text glyphs. Accordion and SidebarCollapsible
+              both use a rotating stroke chevron, so this one now does too —
+              DESIGN_SYSTEM.md §13 wants inline SVG on currentColor, not a
+              character whose shape and weight vary by platform font. */}
+          <svg
+            className={`w-4 h-4 shrink-0 transition-transform ${mobileOpen ? "rotate-180" : ""}`}
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
         </button>
 
         {mobileOpen && (
@@ -125,8 +139,8 @@ export default function TableOfContents({ contentSelector = ".prose-gazette" }: 
 
       {/* Desktop Sticky Sidebar Navigation */}
       <nav aria-label="Table of contents" className="hidden lg:block sticky top-24 space-y-3 font-sans">
-        <div className="font-mono text-xs font-bold text-inkSoft uppercase tracking-wider border-b border-hair pb-2 flex items-center gap-2">
-          <span>📑 Table of Contents</span>
+        <div className="text-xs font-bold text-inkSoft border-b border-hair pb-2 flex items-center gap-2">
+          <span>Table of Contents</span>
         </div>
 
         <ul className="space-y-1 text-xs font-medium text-inkSoft max-h-[75vh] overflow-y-auto no-scrollbar">
@@ -135,7 +149,10 @@ export default function TableOfContents({ contentSelector = ".prose-gazette" }: 
               <button
                 onClick={() => scrollToHeading(item.id)}
                 className={`block w-full text-left py-1 px-2.5 rounded transition-all line-clamp-2 ${
-                  item.level === 3 ? "ml-3 text-[11px]" : ""
+                  // SLOP-VISUAL-1 (A04): the 11px here was a second, redundant
+                  // depth cue — `ml-3` already states the nesting — bought at the
+                  // cost of dropping under the 12px floor (DESIGN_SYSTEM.md §1.2).
+                  item.level === 3 ? "ml-3" : ""
                 } ${
                   activeId === item.id
                     ? "bg-tamarind text-white font-bold translate-x-0.5"

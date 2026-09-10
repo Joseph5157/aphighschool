@@ -183,7 +183,7 @@ export default function LeaveEncashmentUI() {
                   <div className="flex justify-between text-inkSoft"><span>DA ({daNum}%):</span><span className="font-bold text-ink">{formatCurrency(daAmount)}</span></div>
                   <Separator />
                   <div className="flex justify-between font-bold text-ink"><span>Total Monthly Emoluments:</span><span>{formatCurrency(totalMonthlyEmoluments)}</span></div>
-                  <div className="flex justify-between text-[11px] text-inkSoft"><span>Daily Emolument Rate (÷30):</span><span>{formatCurrency(dailyRate)} / day</span></div>
+                  <div className="flex justify-between text-xs text-inkSoft"><span>Daily Emolument Rate (÷30):</span><span>{formatCurrency(dailyRate)} / day</span></div>
                   <div className="mt-4 space-y-1 rounded-lg bg-hair/30 p-3 text-xs">
                     <div className="flex justify-between text-inkSoft"><span>EL Encashment ({elNum} Days):</span><span className="font-bold text-ink">{formatCurrency(displayedElEncashment)}</span></div>
                     {!isSurrender && hplNum > 0 && (
@@ -201,7 +201,7 @@ export default function LeaveEncashmentUI() {
             <span className="text-2xl font-bold text-tamarind">{formatCurrency(totalGrossEncashment)}</span>
           </div>
           {!isSurrender && (
-            <p className="px-5 pb-4 text-[11px] leading-relaxed text-inkSoft">
+            <p className="px-5 pb-4 text-xs leading-relaxed text-inkSoft">
               This retirement figure is an estimate. Confirm leave balances and eligibility with your Service Register and competent authority.
             </p>
           )}
@@ -210,7 +210,7 @@ export default function LeaveEncashmentUI() {
 
       <div className="space-y-4 border-t border-hair pt-6">
         <h2 className="flex items-center gap-2 text-lg font-bold tracking-tight text-ink">
-          <span>📘</span> Leave Encashment Rules &amp; Guidance
+          Leave Encashment Rules &amp; Guidance
         </h2>
         <Accordion items={LEAVE_FAQ_ITEMS} allowMultiple />
       </div>

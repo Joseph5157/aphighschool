@@ -28,28 +28,24 @@ const PENSIONER_TOOLS = [
     title: "Service Pension & DCRG Gratuity Calculator",
     titleTe: "పింఛను మరియు గ్రాట్యుటీ లెక్కింపు సాధనం",
     desc: "Calculate Basic Pension, 40% Commutation lump sum, DCRG Gratuity (₹16L limit), and EL encashment under AP Revised Pension Rules.",
-    icon: "👴",
   },
   {
     href: "/pensioners/commutation-tracker",
     title: "Commutation 180-Month Restoration Tracker",
     titleTe: "కమ్యూటేషన్ 15 సంవత్సరాల రికవరీ పునరుద్ధరణ లెక్కింపు",
     desc: "Track the exact 180-month timeline for 40% commuted pension recovery and generate a ready application for STO Treasury restoration.",
-    icon: "⏳",
   },
   {
     href: "/pensioners/office-pipeline",
     title: "6-Office Retirement File Clearance Guide",
     titleTe: "6 ప్రభుత్వ కార్యాలయాల పెన్షన్ ఫైలు క్లియరెన్స్ మార్గదర్శి",
     desc: "Step-by-step roadmap detailing file movement through HM/DDO, MEO/DEO, State Audit, AG AP Vijayawada, STO Treasury, and Pension Bank.",
-    icon: "🗺️",
   },
   {
     href: "/tools/tax-calculator",
     title: "Pensioner Income Tax & Form 10E Guide",
     titleTe: "పింఛనుదారుల ఆదాయ పన్ను మరియు ఫారమ్ 10E మార్గదర్శి",
     desc: "Compare New vs Old Tax Regime for pension income, DR arrears relief under Section 89(1), and print Annexure-I tax statements.",
-    icon: "🧮",
   },
 ];
 
@@ -90,7 +86,6 @@ export default function PensionersHubPage() {
               <Card key={tool.href} hoverable className="p-5 space-y-3 bg-paperRaised border-hair flex flex-col justify-between">
                 <div className="space-y-2">
                   <h3 className="text-card-title text-ink">
-                    <span aria-hidden="true" className="mr-1.5">{tool.icon}</span>
                     <span>{tool.title}</span>
                   </h3>
                   <div className="text-telugu-body text-inkSoft">{tool.titleTe}</div>
@@ -118,7 +113,7 @@ export default function PensionersHubPage() {
           {/* FAQ Accordion */}
           <div className="space-y-3 pt-4 border-t border-hair">
             <h2 className="text-section text-ink flex items-center gap-2">
-              <span>❓</span> Pensioner Guidance FAQ
+              Pensioner Guidance FAQ
             </h2>
             <Accordion
               allowMultiple

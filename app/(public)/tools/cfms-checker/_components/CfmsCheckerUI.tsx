@@ -160,7 +160,7 @@ export default function CfmsCheckerUI() {
         >
           ← Back to Utility Tools / ఇతర సాధనాలు
         </Link>
-        <span className="font-mono text-[9px] uppercase tracking-wider bg-tamarind/10 text-tamarind border border-tamarind/20 px-2.5 py-0.5 rounded-full font-semibold">
+        <span className="text-xs bg-tamarind/10 text-tamarind border border-tamarind/20 px-2.5 py-0.5 rounded-full font-semibold">
           Interactive Guide Directory
         </span>
       </div>
@@ -178,7 +178,7 @@ export default function CfmsCheckerUI() {
       {/* Accordion List for Govt Links */}
       <div className="space-y-4">
         <h2 className="text-lg font-bold text-ink tracking-tight flex items-center gap-2">
-          <span>🏛️</span> Official Portal Guides & Direct Links
+          Official Portal Guides & Direct Links
         </h2>
         <Accordion items={accordionLinkItems} allowMultiple={true} />
       </div>
@@ -186,7 +186,7 @@ export default function CfmsCheckerUI() {
       {/* FAQ Section */}
       <div className="space-y-4 pt-6 border-t border-hair">
         <h2 className="text-lg font-bold text-ink tracking-tight flex items-center gap-2">
-          <span>❓</span> Frequently Asked Questions (తరచుగా అడిగే ప్రశ్నలు)
+          Frequently Asked Questions (తరచుగా అడిగే ప్రశ్నలు)
         </h2>
         <Accordion items={FAQ_ITEMS} allowMultiple={true} />
       </div>

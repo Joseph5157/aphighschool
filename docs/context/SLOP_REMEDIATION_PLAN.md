@@ -24,9 +24,9 @@ document wins.
 | --- | --- | --- |
 | A01 homepage hero | Clear slop — replace | `SLOP-DENSITY-1` ✅ |
 | A02 homepage rails | Clear slop — strongly simplify | `SLOP-DENSITY-1` ✅ |
-| A03 emoji icon system | Clear slop — replace/remove | `SLOP-VISUAL-1` |
-| A04 sub-12px text | Design debt + slop symptom — fix carefully | `SLOP-VISUAL-1` |
-| A05 mono uppercase labels | Design-system drift — simplify | `SLOP-VISUAL-1` |
+| A03 emoji icon system | Clear slop — replace/remove | `SLOP-VISUAL-1` ✅ |
+| A04 sub-12px text | Design debt + slop symptom — fix carefully | `SLOP-VISUAL-1` ✅ |
+| A05 mono uppercase labels | Design-system drift — simplify | `SLOP-VISUAL-1` ✅ |
 | A06 orders discovery overload | Clear slop — simplify | `SLOP-DENSITY-1` ✅ |
 | A07 category filter overload | UX debt — make data-driven/proportional | `SLOP-DETAIL-1` ✅ |
 | A08 empty Search dashboard | Likely slop — simplify conservatively | `SLOP-DETAIL-1` ✅ |
@@ -75,7 +75,7 @@ SLOP-DENSITY-1   ✅ complete — A01 + A02 + A06 + A14 + A15
       ↓
 SLOP-DETAIL-1    ✅ complete — A07 + A08 + A09 + A10
       ↓
-SLOP-VISUAL-1       A03 + A04 + A05
+SLOP-VISUAL-1    ✅ complete — A03 + A04 + A05
       ↓
 SLOP-STATES-1       A17
       ↓
@@ -415,3 +415,184 @@ are the mono uppercase section labels (A05) and the sub-12px text inside them (A
 deferred. Skeletons were not touched at all: the category and search loading files still reserve
 filter pills that a short list no longer renders, which belongs to SLOP-STATES-1 (A17) and is
 recorded here so that gate does not have to rediscover it.
+
+## `SLOP-VISUAL-1` — record
+
+Scope: A03, A04, A05. This gate enforces rules the design system already writes down; it does
+not invent a standard. `DESIGN_SYSTEM.md` §13 bans emoji as iconography and specifies inline
+SVG (stroke-based, 1.5–2px, 16/20/24 grid, `currentColor`, decorative ones `aria-hidden`);
+§1.2 sets 12px as the absolute floor for any text; §1.3 permits uppercase tracked labels only
+as genuine section labels, at minimum 12px, at most one per region.
+
+### Scope correction — the audit's evidence is stale in two directions
+
+The audit cites `DesktopSidebar.tsx`, `OrdersFilterTabs.tsx`, `ToolsSidebar.tsx` and
+`orders/page.tsx:179` as A03/A04/A05 sites. **All of those were deleted by `SLOP-REMOVE-1` and
+`SLOP-DENSITY-1`**, and with them the audit's worst counts: `/orders` measured 37 visible
+sub-12px elements and `/tools` 57, against 2 each today, both from the shared shell. What
+remains is smaller than the audit describes and sits in the shell, the calculators, search and
+the category log — not on the index pages the audit measured.
+
+Measured from source at the start of this gate: 66 emoji occurrences across 24 public files,
+39 sub-12px class sites, 19 `font-mono` + `uppercase` label sites.
+
+### The print carve-out, verified rather than assumed
+
+A04 says the 9–11px typography inside the tax calculator's official form reproductions is "a
+separate, intentional print-density case" that must not be swept into the same classification.
+Checked site by site: **10 of the sub-12px sites are print**, and they are not touched —
+nine in `TaxCalculatorUI` (lines 887–1841, all inside `bg-white border-2 border-black
+print-page-break` A4 reproductions of Annexure-I and Form 10E) and one in `CommutationTrackerUI`
+(the STO restoration application's signature block). The other two `TaxCalculatorUI` sites are
+screen chrome, not print — the sticky result panel's 9px label and the tab bar's 11px caption —
+and are in scope.
+
+### What changed
+
+- **A03 — the emoji icon system is gone, and mostly by subtraction.** Every drawer nav item,
+  tool card, pension card, topic chip and FAQ/guidance heading already carried a full text label,
+  so the symbol beside it was removed rather than redrawn: the audit's arbitrary mappings (a beach
+  for leave, an elderly-person glyph for all pensioners, lightning for calculators, and three
+  different chart/document emoji to separate six calculators) had no meaning left to preserve. The
+  `SD` letter mark on Teacher Service Desk went with them — a set of five emoji plus one
+  initialism is not a system.
+
+  Three controls needed the other half of the audit's direction, because a bare character *was*
+  their entire visible content and no adjacent label existed: `ThumbZoneBar`'s source link and the
+  mobile table of contents' disclosure toggle are now inline stroke SVG on `currentColor`, which
+  is what `BottomNav`, `Accordion` and `SidebarCollapsible` already used. No new icon library was
+  added and no icon was invented for a label that already worked.
+
+- **A04 — 12px is the floor on screen, and the print forms were left alone.** 29 screen sites
+  moved up to the floor. Where the small size was carrying a second, redundant signal it was
+  subtracted instead of enlarged: the desktop TOC's level-3 items dropped to 11px to indicate a
+  nesting `ml-3` already indicates, and the two `service-desk` captions ("Service guide",
+  "Internal portal guide") were 10px restatements of the heading beside them, so they are gone
+  rather than promoted — A04's own direction is to remove a low-value label before increasing
+  its size.
+
+- **A05 — mono and uppercase went back to what they are reserved for.** The audit's evidence list
+  is now mostly historical: five of its six named labels (`QUICK SEARCHES`, `FIND BY TASK`,
+  `FINANCIAL RATES SUMMARY`, `DDO BILL SUBMISSION GUIDE`, `CATEGORY STACKS`) were deleted by
+  earlier gates. Section identity — `Recent Documents`, `Results (n)`, `Table of Contents`,
+  `Categories`, the topic bar heading, two calculator card headings — now uses the normal heading
+  face. `ThumbZoneBar`'s primary action was the product's last ALL-CAPS button (§13 asks for
+  sentence case) and the dialog title was uppercased section identity.
+
+  Mono uppercase stays exactly where §13 reserves it: `Badge` (status), `DocumentDate`,
+  GO/reference numbers, `UpcomingActionDates`' `<time>`, `Table` headers, the sidebar group
+  labels and the category classification ribbon.
+
+### The largest single change was found by the browser, not by reading the source
+
+Source review had A05 down as nearly finished. The rendered measurement disagreed:
+`/tools/da-arrears` showed **19** uppercase mono elements and `/tools/prc-calculator` 11, and most
+of them were *form labels* — `BASIC PAY (MONTHLY)`, `OLD DA %`, `FROM MONTH` — eight tracked
+ALL-CAPS labels stacked in one column. They all render through one primitive, `FieldLabel`, which
+no route-level grep for a heading would ever surface. §1.3 allows at most one uppercase label per
+region; §13 asks for sentence case on labels outright; and A05 reserves mono for dates, GO
+numbers, status and calculator figures, which a field label is none of. One line in `Field.tsx`
+took da-arrears from 19 to 7 and prc-calculator from 11 to 5.
+
+Its `labelTe` span carried a `lowercase` counter-transform whose only job was to undo this
+element's own `uppercase` on the Telugu parenthetical — a fair sign the transform was fighting the
+content rather than serving it. Both are gone.
+
+This is the third gate in a row where reading the source under-reported the defect.
+
+### The one removal that was reverted, and why
+
+"Published documents" was pulled from the category masthead ribbon on the reasoning that telling a
+reader of a category page that it lists published documents is vacuous. It is not: it is a
+**FRESHNESS-1 trust boundary**, asserted by `freshness-trust.test.tsx` on `/orders`, `/category`
+and `SearchUI` under the name "does not describe a category or homepage feed as collection-wide
+verified". It bounds what the feed claims to be, which is the protected trust system (A19), and it
+was restored before the gate ran its suite. Only the genuinely duplicated half of the ribbon's
+other label went — "AP School Education", which sits in the site header two rows above it.
+
+The ribbon was also 10px at 40% opacity on navy: below the §1.2 type floor and the §14 contrast
+floor at once. A classification line nobody can read is not classifying anything, so it is now
+12px at 70%.
+
+### Measured acceptance (real Chromium, dev server, 390×844 and 1440×1000)
+
+Ten routes × two viewports, measured on the rendered DOM — visible elements only, computed
+`font-size` — with the same script run against this branch and against the stashed pre-gate tree
+on the same server.
+
+| Measurement (20 route/viewport pairs) | Before | After |
+| --- | --- | --- |
+| Visible emoji characters | **104** | **0** |
+| Visible text elements below 12px | **69** | **0** |
+| Uppercase mono elements | 173 | **129** |
+| Horizontal overflow | none | **none** |
+| Console errors | — | **0** |
+
+Per route the emoji were concentrated where the audit said: `/tools` 14 → 0 and `/pensioners`
+12 → 0 at desktop, with a 7-emoji floor on every route from the shell drawer alone.
+
+The sub-12px count is worth reading in detail, because on `/category/govt-orders` the 14 elements
+below the floor were not decoration. They were **`G.O.Ms.No.129`, `G.O.Ms.No.21`, and three
+`Added to portal · <date>` labels** — GO reference numbers and labelled dates, both protected
+content, both rendered at 10px. Raising the floor there is not a tidying change; it makes the data
+the product exists to show legible.
+
+The 129 uppercase mono elements that remain are the reserved set: the `AP School Education`
+masthead identity line, `Badge` status pills, document-type filters, and accordion section badges.
+None is a heading, a button or a form label.
+
+`/orders` at mobile reported two console errors in both the before and the after run — a Next dev
+`Failed to fetch RSC payload` prefetch race against `/`, present without this gate's changes and
+therefore not caused by it. The final measurement on a warm server is clean on every route.
+
+### Test changes
+
+- New `test/visual-system.test.ts` (9 cases) and `test/visual-system-render.test.tsx` (5 cases).
+  The source guards state the invariant the findings are actually about — "this device does not
+  reappear anywhere in `app/(public)`" — which no per-component render test can express; the
+  render file carries the paired "the information is still there" half, since proving emoji are
+  gone would also pass on a blank page.
+- **The print carve-out is an allowlist of exact lines, not a file exclusion.** A04 says the
+  9–11px typography inside the tax form reproductions is a separate case needing print review, so
+  its 9 sites and `CommutationTracker`'s signature block are listed individually. Excluding the
+  file instead would let a *new* screen-side 9px label into `TaxCalculatorUI` unnoticed, which is
+  how the audit's 57-element count on `/tools` accumulated in the first place. A paired assertion
+  requires those 9 print sites to still be there, so the floor cannot be reached by flattening the
+  official A4 layouts.
+- **Mutation-checked, 11 of 11 caught.** Each guard was run against the defect it owns and
+  required to fail: an emoji back on a tool card (source *and* render), a bare arrow glyph back in
+  `ThumbZoneBar`, a sub-12px back on a screen element, a **new** sub-12px added inside the
+  allowlisted print file at a screen line (this is the one that proves the allowlist is per-line),
+  a print form flattened to the screen floor, mono uppercase back on a section heading, ALL CAPS
+  back on the primary button, ALL CAPS back on `FieldLabel`, mono stripped from the data it is
+  reserved for, and a tool card losing its title.
+
+### Verification
+
+`tsc --noEmit` clean · **66 files / 480 tests pass** (from 64/466) · Tailwind class and colour
+guards pass · `git diff --check` clean · build succeeds, First Load JS shared unchanged at
+87.3 kB · real-Chromium acceptance at 390×844 and 1440×1000 on `/`, `/orders`, `/tools`,
+`/pensioners`, `/search`, `/service-desk`, `/tools/prc-calculator`, `/tools/da-arrears`,
+`/tools/cfms-checker` and `/category/govt-orders`.
+
+**Build path.** `npm run build` still fails at `prisma generate` with `EPERM ... rename
+'query_engine-windows.dll.node'`. `prisma/` is unchanged in this gate (verified with
+`git diff HEAD -- prisma/`), so the generated client is current and `npx next build` was run
+against it, exactly as in `SLOP-DETAIL-1`.
+
+### Deliberately not done here
+
+- **A16 stays deferred**, unchanged.
+- **Skeletons untouched** — `/category` and `/search` loading files still reserve filter pills a
+  short list no longer renders. That is `SLOP-STATES-1` (A17) and was already recorded by the last
+  gate; this one adds nothing to it.
+- **`Table` headers, `Badge`, sidebar group labels and the classification ribbon keep mono
+  uppercase.** They are the data, status and section-label cases §13 and §1.3 explicitly reserve
+  it for; stripping them would be A05 applied in reverse.
+- **Two things noticed and left, because they belong to no finding in this gate.** `TopicTagBar`
+  renders the microcopy "1-Click Filter", and `/tools/da-arrears` carries a "Runs 100% On Device"
+  pill — the A12 privacy-repetition pattern, which was scoped to `/tools` and closed there. Both
+  are copy decisions, not visual-system ones.
+- **A Telugu typo, left for the founder.** The mobile TOC reads `విశయ సూచిక`; the word for
+  "contents" is `విషయ` (ష, not శ). It sits on a line this gate edited, but correcting product
+  Telugu is a content decision and is not silently folded into a visual pass.

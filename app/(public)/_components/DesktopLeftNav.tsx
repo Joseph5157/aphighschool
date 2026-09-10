@@ -32,7 +32,7 @@ export default async function DesktopLeftNav() {
 
   return (
     <aside className="sticky top-20 hidden lg:block font-sans" aria-label="Document categories">
-      <h2 className="text-meta font-mono uppercase tracking-wider text-inkSoft border-b border-hair pb-2">
+      <h2 className="text-xs font-semibold text-inkSoft border-b border-hair pb-2">
         Categories
       </h2>
 

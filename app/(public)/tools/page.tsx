@@ -33,7 +33,6 @@ const TOOLS = [
     title: "Income Tax Calculator (FY 2025-26)",
     titleTe: "ఆదాయ పన్ను అంచనా సాధనం (ఆయవ్యయ సంవత్సరం 2025-26)",
     desc: "Compare New Tax Regime vs Old Tax Regime with HRA, 80C, 80D deductions and instant Annexure-I tax statement export.",
-    icon: "🧮",
     // Verified against TaxCalculatorUI.tsx: window.print() drives a real export.
     exportsStatement: true,
   },
@@ -42,7 +41,6 @@ const TOOLS = [
     title: "Earned Leave (EL) & HPL Encashment Bill",
     titleTe: "ఆర్జిత సెలవుల (EL) ఎన్‌క్యాష్‌మెంట్ బిల్లు లెక్కింపు",
     desc: "Calculate cash equivalent of Earned Leave surrender (15/30 days) and Half Pay Leave retirement encashment.",
-    icon: "🏖️",
     // LeaveEncashmentUI.tsx has no print/export path.
     exportsStatement: false,
   },
@@ -51,7 +49,6 @@ const TOOLS = [
     title: "GPF & APGLI Balance Estimator",
     titleTe: "జిపిఎఫ్ మరియు ఎపిజిఎల్ఐ నిధుల అంచనా సాధనం",
     desc: "Project General Provident Fund 7.1% interest growth and APGLI maturity sum assured with loan eligibility bounds.",
-    icon: "💰",
     // GpfApgliUI.tsx has no print/export path.
     exportsStatement: false,
   },
@@ -60,7 +57,6 @@ const TOOLS = [
     title: "CFMS Bill Status & Payslip Guide",
     titleTe: "సిఎఫ్‌ఎమ్‌ఎస్ బిల్లు స్థితి మరియు పేస్లిప్ మార్గదర్శి",
     desc: "Direct verification portal for DDO bill submission status, EHS medical reimbursement, and monthly payslip downloads.",
-    icon: "📑",
     // CfmsCheckerUI.tsx is a links directory — no form, no calculation, no export.
     exportsStatement: false,
   },
@@ -69,7 +65,6 @@ const TOOLS = [
     title: "PRC Pay Fixation & Arrears Calculator",
     titleTe: "పీఆర్‌సి పే ఫిక్సేషన్ మరియు బకాయిల లెక్కింపు సాధనం",
     desc: "Calculate revised Basic Pay under AP RPS 2022 Master Scale, fitment percentage, gross benefit, and CPS/GPF arrears allocation.",
-    icon: "📊",
     // Verified against PrcCalculatorUI.tsx: isPrintMode drives a real export.
     exportsStatement: true,
   },
@@ -78,7 +73,6 @@ const TOOLS = [
     title: "DA Arrears Calculator",
     titleTe: "డిఏ బకాయిల లెక్కింపు సాధనం",
     desc: "Calculate Dearness Allowance arrears owed for a given Basic Pay, old/new DA percentage, and revision period, with a month-by-month breakdown.",
-    icon: "📈",
     // DaArrearsUI.tsx has no print/export path.
     exportsStatement: false,
   },
@@ -122,7 +116,6 @@ export default function ToolsIndexPage() {
               <Card key={tool.href} hoverable className="p-5 space-y-3 bg-paperRaised border-hair flex flex-col justify-between">
                 <div className="space-y-2">
                   <h3 className="text-card-title text-ink">
-                    <span aria-hidden="true" className="mr-1.5">{tool.icon}</span>
                     <span>{tool.title}</span>
                   </h3>
                   <div className="text-telugu-body text-inkSoft">
@@ -156,7 +149,7 @@ export default function ToolsIndexPage() {
           {/* FAQ Section */}
           <div className="space-y-3 pt-4 border-t border-hair">
             <h2 className="text-section text-ink flex items-center gap-2">
-              <span>❓</span> Frequently Asked Questions
+              Frequently Asked Questions
             </h2>
             <Accordion allowMultiple items={[
               {
