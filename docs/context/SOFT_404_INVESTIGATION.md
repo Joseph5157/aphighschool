@@ -199,3 +199,36 @@ database service, not by the route change.
 its Windows query-engine DLL while an existing local `next dev` process holds
 it. The schema is unchanged and the direct `npx next build` path completed, so
 this is a wrapper limitation rather than a build or application failure.
+
+## `SOFT-404-CLOSE` — final program record
+
+**CLOSED.** The soft-404 program began from
+`e8ba8229b7ec8c95783050a369498d9d5e070a9c` and its accepted implementation is
+`e20a9a0b565d85da457ae16898a859a1d00db0a1`.
+
+The root cause was route-level `loading.tsx`: each detail segment became a
+Suspense/streaming boundary, committing a `200` response and inherited indexing
+metadata before its published-only lookup could run `notFound()`. Removing the
+post and category detail boundaries makes invalid dynamic routes real `404`s.
+The homepage page and loading UI now live under `(home)`, a URL-neutral route
+group, so homepage loading remains available without streaming detail routes.
+
+The final production matrix is: valid dynamic post/category routes remain
+`200`; missing post/category routes are `404` with effective `noindex` and no
+conflicting `index, follow`; unmatched routes remain `404`. Valid-page title,
+description, canonical, and indexing metadata remain intact. The restrained
+public not-found UI, published-only draft protection, lifecycle/provenance/date
+semantics, Telugu content, source links, and Related Orders are unchanged.
+
+Client navigation passes at mobile and desktop viewports with no console,
+hydration, database, or RSC errors. The initial RSC failures were caused by an
+unavailable configured Postgres service and disappeared once it was restored.
+Next.js was not upgraded: the behavior is documented streaming semantics, not
+an upgrade defect. Middleware/preflight was rejected as unnecessary duplicated
+data-access complexity. The deliberate trade-off is loss of detail-route
+skeletons in exchange for correct HTTP semantics; no replacement skeleton was
+introduced.
+
+`npx next build` is the passing production build path. If reproducible, the
+only `npm run build` limitation is the known local Windows Prisma DLL lock while
+an existing `next dev` process holds the engine; it is not a product failure.
