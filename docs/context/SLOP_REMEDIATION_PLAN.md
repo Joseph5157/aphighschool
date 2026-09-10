@@ -81,8 +81,51 @@ SLOP-STATES-1    ✅ complete — A17
       ↓
 SLOP-ACCEPTANCE-1   browser before/after compare, mobile + desktop
       ↓
-SLOP-CLOSE
+SLOP-CLOSE          ✅ complete — closure recorded at `3b29118`
 ```
+
+## `SLOP-CLOSE` — closure record
+
+**Program disposition: CLOSED — AI SLOP REMEDIATION ACCEPTED.**
+
+The program began from the immutable `SLOP-AUDIT-1` record (`54efa2a`) and
+closed only after the accepted production Chromium rerun at `3b29118`. Its
+governing approach held: subtract generated/dashboard furniture while retaining
+the purpose-built gazette system and the facts that make a public document
+trustworthy.
+
+| Findings | Final disposition |
+| --- | --- |
+| A01–A02 | Closed — document-first homepage density and one quiet desktop index rail |
+| A03–A05 | Closed — no decorative public emoji, 12px screen floor, mono reserved for data/status |
+| A06–A08 | Closed — proportional document discovery, category filters, and Search |
+| A09–A10 | Closed — one document header and proportional TOC |
+| A11–A15 | Closed — generic recirculation, promotional utility/pension furniture, and unsupported widgets removed/simplified |
+| A17 | Closed — loading states describe retained page structures |
+| A18–A19 | Protected and retained — restraint, lifecycle, provenance, dates, Telugu, sources, references, Related Orders, and draft boundary |
+| A20 | Closed — dead queries/imports/components removed |
+
+### Explicit non-outcome
+
+**A16 remains deferred.** Service Desk (task-first) and Topics (subject-first) are
+different reader mental models. This closure neither merges nor removes them; a
+future product decision needs real entry-path evidence.
+
+### Acceptance evidence at closure
+
+- Production Chromium at 390×844 and 1440×1000: zero unjustified decorative
+  emoji, zero visible sub-12px screen UI, zero page-level horizontal overflow,
+  clean console; homepage shows three document rows in the phone first viewport;
+  short TOC suppresses and long TOC retains.
+- Full Vitest: **69 files / 489 tests passed**. The new imported-template emoji
+  and table-scroller guards were both mutation-checked.
+- TypeScript and `git diff --check` clean. `npm run build` still encounters the
+  environment-specific Prisma Windows DLL rename lock held by the local Next dev
+  listener; `prisma/` was unchanged and `npx next build` passed.
+
+No source PDFs were transcribed into product text, no unsupported authority claim
+was introduced, no new icon library was added, and no scope-expanding IA work was
+smuggled into the program.
 
 ## `SLOP-ACCEPTANCE-1` — record
 
