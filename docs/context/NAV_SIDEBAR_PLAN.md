@@ -108,10 +108,11 @@ expanded) plus 390×844 for the mobile drawer, on an isolated production server 
 
 ### Follow-up
 
-**`NAV-SIDEBAR-WIDTH-1`** — the 1024–1280px header collision remains, unchanged by this gate as
-instructed. It's a width-allocation problem (the panel still claims 256px regardless of how much
-content it holds) needing its own scoped decision: shrink the expanded width, make the header
-responsive to the sidebar's presence, or something else — not decided here.
+**`NAV-SIDEBAR-WIDTH-1`** — CLOSED. Replaced the push panel with a compact, non-modal header
+popover (`docs/context/NAV_SIDEBAR_WIDTH_PLAN.md`): zero header collision, zero page overflow,
+zero reading-width cost at any width, verified in real Chromium at 1024/1280/1440/1920px. The
+admin CMS's own push sidebar (`AdminSidebar`, `collapsible="icon"`) is unaffected — the push
+container is still there, just no longer used by the public layout.
 
 ### Deliberately not done here
 

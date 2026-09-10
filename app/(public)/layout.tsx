@@ -79,7 +79,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
       </a>
 
       {/* Sliding Sidebar Drawer for Public Navigation & Tools */}
-      <Sidebar side="left" collapsible="offcanvas">
+      <Sidebar side="left" desktopVariant="popover">
         <SidebarHeader>
           <div className="flex items-center gap-2">
             <div className="w-7 h-7 rounded-lg bg-tamarind text-paper font-mono font-bold flex items-center justify-center text-xs">
