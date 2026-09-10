@@ -23,6 +23,7 @@ import {
   SidebarCollapsible,
   SidebarMenuSubItem,
   SidebarMenuSubButton,
+  SidebarMobileOnly,
 } from "@/app/(public)/_components/Sidebar";
 
 /** jsdom reports 1024 by default, which is desktop. Below NAV_BREAKPOINT. */
@@ -332,5 +333,45 @@ describe("SidebarCollapsible disclosure semantics", () => {
     render(<CollapsibleShell />);
     const svg = toggle().querySelector("svg");
     expect(svg).toHaveAttribute("aria-hidden", "true");
+  });
+});
+
+// NAV-SIDEBAR-2: DesktopNav already owns Home/Orders/Tools/Service
+// Desk/Pensioners/Search — the desktop persistent sidebar rendered a verbatim
+// duplicate of them, visible in the same viewport at once (NAV-SIDEBAR-1).
+// SidebarMobileOnly is the mechanism that keeps them in the drawer (the only
+// surface where they're a phone's *sole* navigation) without also duplicating
+// them into the desktop panel. This proves the mechanism itself; layout.tsx's
+// actual placement of the real six links inside it is a separate source-level
+// guard in nav.test.tsx — together they prove both "the switch works" and
+// "the switch is actually wired to the right content".
+describe("SidebarMobileOnly", () => {
+  function Shell() {
+    return (
+      <SidebarProvider defaultOpen={false}>
+        <Sidebar side="left" collapsible="offcanvas">
+          <SidebarContent>
+            <SidebarMobileOnly>
+              <a href="/mobile-only-destination">Mobile-only destination</a>
+            </SidebarMobileOnly>
+            <a href="/always-there">Always-there destination</a>
+          </SidebarContent>
+        </Sidebar>
+      </SidebarProvider>
+    );
+  }
+
+  it("renders its children on a phone-width viewport", () => {
+    setViewport(390);
+    render(<Shell />);
+    expect(screen.getByRole("link", { name: "Mobile-only destination" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Always-there destination" })).toBeInTheDocument();
+  });
+
+  it("renders nothing at desktop width, leaving unwrapped content untouched", () => {
+    setViewport(1280);
+    render(<Shell />);
+    expect(screen.queryByRole("link", { name: "Mobile-only destination" })).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Always-there destination" })).toBeInTheDocument();
   });
 });
