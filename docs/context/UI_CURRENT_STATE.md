@@ -32,6 +32,10 @@
   standing boundary). `UI-DEVICE-1` remains BLOCKED, not converted to PASS.
 - Next planned gate: none. The program is closed; see `UI_SYSTEM_CLOSURE.md` §7 for
   recommended follow-up work, none of which is a live gate.
+- Post-UI-System status: the later AI slop remediation program is CLOSED, merged, and verified
+  on `main` (`335e278`; closure `3b29118`). Its resolution of screen sub-12px typography and
+  decorative emoji supersedes only the older, historical backlog references below; it does not
+  alter `UI-DEVICE-1`'s BLOCKED status or the dynamic-route soft-404/robots limitation.
 
 ### Gate history
 
