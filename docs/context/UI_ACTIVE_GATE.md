@@ -11,13 +11,12 @@ known limitations, final verification evidence, and the merge-readiness verdict 
 `docs/context/UI_SYSTEM_CLOSURE.md`. `docs/context/UI_CURRENT_STATE.md` remains the detailed
 gate-by-gate history underneath it.
 
-## Separate, currently-active program
+## Later program resolution
 
-A different program is live on branch `ai-slop-audit`: the AI slop remediation gates
-(`SLOP-AUDIT-1` → `SLOP-CLOSE`), tracked in `docs/context/SLOP_REMEDIATION_PLAN.md` against the
-audit at `docs/ui/AI_SLOP_AUDIT.md`. It does **not** reopen the UI System program, adopt its
-phase numbering, or change any of its dispositions below — including `UI-DEVICE-1`, which stays
-BLOCKED.
+The separate AI slop remediation program subsequently closed, was merged, and was verified on
+`main` (`335e278`; closure record `3b29118`). There is no active UI or slop gate. Its closure
+remains recorded in `docs/context/SLOP_REMEDIATION_PLAN.md`; it did not reopen the UI System
+program or change any UI System disposition, including `UI-DEVICE-1`, which stays BLOCKED.
 
 ## Last gate
 
@@ -56,9 +55,9 @@ verdict. No new features, redesigns, or speculative cleanup were introduced.
 
 ## Next step
 
-None owned by this program. See `UI_SYSTEM_CLOSURE.md` §7 for recommended follow-up work
-(a founder decision on the contact/legal surface, real-device acceptance whenever access
-becomes available, the dynamic-route soft-404 investigation, the sub-12px typography sweep,
-emoji-icon replacement, a full contrast sweep, and two small documentation-lag corrections in
-`PRODUCT.md`/`DESIGN_SYSTEM.md`) — none of it is a live gate, and no document should invent one
-without a new explicit instruction to reopen the program.
+None owned by this program. The later slop program resolved the earlier sub-12px screen
+typography, decorative-emoji, and documentation-lag follow-ups. The genuinely open items are
+a founder decision on the contact/legal surface, real-device acceptance whenever access becomes
+available, the dynamic-route soft-404/robots investigation, final domain/branding, and any
+separately authorized contrast work. None is a live gate, and no document should invent one
+without a new explicit instruction.

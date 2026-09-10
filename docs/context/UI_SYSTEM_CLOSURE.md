@@ -194,6 +194,15 @@ No limitation above has been silently resolved or silently dropped; every item w
 against current source or a live command during this gate, not carried forward from memory of
 an earlier gate's text.
 
+### Resolved later on `main`
+
+This is a historical closure record. After this gate, the AI slop remediation program closed,
+was merged, and was verified on `main` (`335e278`; closure `3b29118`). It resolved the
+deferred screen sub-12px typography and decorative-emoji work, and this documentation sync
+resolved the then-noted `PRODUCT.md` and `DESIGN_SYSTEM.md` lag. Those later resolutions do
+not change the open `UI-DEVICE-1` limitation, the dynamic-route soft-404/conflicting-robots
+limitation, the contact/legal decision, or the final domain/branding decision.
+
 ## 5. Impeccable / 21st.dev disposition
 
 - **Impeccable was unavailable at both intended review points** (`UI-DESIGN-1` and

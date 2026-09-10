@@ -695,8 +695,10 @@ Non-negotiable, and the definition of done for `UI-A11Y-1`:
 
 ## 15. Implementation status
 
-`UI-SYSTEM-1` closed the foundation items below. Component migration is `UI-SYSTEM-2`;
-responsive repair is `UI-RESPONSIVE-1`; navigation behaviour is `UI-MOBILE-NAV-1`.
+The table below is the historical `UI-SYSTEM-1` implementation record. The UI System program
+later closed, and the subsequent AI slop remediation closure on merged `main` resolved the
+screen typography and decorative-emoji backlog noted below. See
+`docs/context/UI_SYSTEM_CLOSURE.md` and `docs/context/SLOP_REMEDIATION_PLAN.md`.
 
 | # | Item | Status |
 |---|---|---|
@@ -721,18 +723,18 @@ responsive repair is `UI-RESPONSIVE-1`; navigation behaviour is `UI-MOBILE-NAV-1
   is still `UI-MOBILE-NAV-1`.
 - **Sub-12px type.** None remains in `app/(public)/_components`.
 
-### Still carried forward
+### Historical backlog resolved later
 
-- **Sub-12px type in route-local components** — roughly 100 occurrences across 42 files.
-  Per-component work with a visible density effect that cannot be checked without a browser:
-  `UI-A11Y-1` with `UI-ACCEPTANCE-1`.
-- **Emoji used as iconography** (`DESIGN.md`) — sidebar menu, `DesktopLeftNav`,
-  search chips, `ThumbZoneBar`, `WhatsAppBanner`. `ThemeToggle`'s were replaced here because
-  it was already being rebuilt for `aria-pressed`; the rest are page-level edits.
+- **Sub-12px type in route-local components** — this `UI-SYSTEM-1` backlog (then roughly
+  100 occurrences across 42 files) was resolved by `SLOP-VISUAL-1`; closure acceptance records
+  a 12px floor for screen UI, with only the documented print-form carve-out retained.
+- **Emoji used as iconography** (`DESIGN.md`) — the then-listed sidebar menu,
+  `DesktopLeftNav`, search chips, `ThumbZoneBar`, and deleted `WhatsAppBanner` were resolved
+  by the later AI slop remediation program. The no-emoji rule in §13 remains binding.
 - **The recurring tinted-callout pattern** — `rounded-lg border border-<token>/30
   bg-<token>/10` appears as guidance, disclaimer and status panels in at least five places.
   It is a genuine duplicate, but the three uses carry different meanings and consolidating
-  them needs the semantic decision that `UI-PATTERNS-1` owns.
+  them needs a separate semantic decision; it was not silently closed by the later work.
 
 ### Primitives deliberately NOT created
 

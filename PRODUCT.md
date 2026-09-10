@@ -95,10 +95,5 @@ Recorded here so later gates do not silently resolve them:
   genuine contact details anywhere. Two production-readiness checklist items (clickable email,
   clickable phone) cannot be satisfied without a product decision, and nothing may be
   fabricated to close them.
-- **Telangana in metadata.** Three tool routes advertise "AP and TS" / "Telangana" in their
-  meta descriptions, against the AP-only scope lock. Whether the calculators genuinely serve
-  TS users, or the copy is wrong, is a product call.
-- **The WhatsApp banner.** It currently claims a channel that does not exist and violates the
-  standing no-WhatsApp decision. Removal is the default; repointing requires a real channel.
 - **Domain and branding.** "AP Teacher Desk" is still placeholder branding pending a final
   domain.

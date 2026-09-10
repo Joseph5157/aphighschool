@@ -2,10 +2,12 @@
 
 Defined in gate `UI-DESIGN-1`. Read `PRODUCT.md` first; this document turns the product into
 a visual and interaction direction. `docs/ui/DESIGN_SYSTEM.md` turns this direction into the
-implementable spec that `UI-SYSTEM-1` builds.
+implementable spec.
 
-Nothing here is implemented in this gate. This is the target, not the current state — the
-current state is `docs/ui/UI_AUDIT.md`.
+This was the target at `UI-DESIGN-1`, not a claim about that gate's then-current state. The UI
+System program and the later AI slop remediation program are now closed and merged on `main`;
+their closure records are `docs/context/UI_SYSTEM_CLOSURE.md` and
+`docs/context/SLOP_REMEDIATION_PLAN.md`.
 
 ## The direction, in one line
 
@@ -37,10 +39,11 @@ That is the right call for three reasons:
    never paints, two bars stacked on top of each other. None of them is "the aesthetic is
    wrong". Redesigning in response to build bugs would be treating the wrong problem.
 
-**What this gate does change** is the parts of the current UI that contradict the direction:
-perpetual animation, emoji standing in for icons, raw framework colours leaking into the most
-trust-bearing badge on the site, and a document state that renders green when it means
-"replaced".
+**What this gate targeted** were the parts of the then-current UI that contradicted the
+direction: perpetual animation, emoji standing in for icons, raw framework colours leaking into
+the most trust-bearing badge on the site, and a document state that rendered green when it meant
+"replaced". Those targeted corrections have since been completed in the closed UI System and
+AI slop remediation programs.
 
 ## Target character
 
@@ -129,9 +132,10 @@ Both kinds are listed because both make the product worse.
   each, used as a substitute for hierarchy.
 - Large hero panels on a reference product.
 - Decorative statistics, counters, or icons that carry no information.
-- Emoji used as iconography. (Currently in the sidebar, theme toggle, left nav, search chips,
-  thumb bar and WhatsApp banner — including the string `"SD"` used as an icon.) Emoji render
-  differently per platform, cannot be recoloured, and read as informal.
+- Emoji used as iconography. Emoji render differently per platform, cannot be recoloured, and
+  read as informal. The listed `UI-DESIGN-1` instances, including the WhatsApp banner and
+  `"SD"` mark, were removed in later closed work; this remains a prohibition, not an active
+  remediation item.
 - Fake device chrome: no drawn iOS status bar, no drawn keyboard.
 - Any visual that implies official government endorsement.
 
@@ -205,9 +209,9 @@ single navigation breakpoint and requires the JS and CSS to agree on it.
 
 ### D7. Typography floors are set, and the label scale inversion is resolved
 
-The product currently renders 9px badge text and 10px helper text, and `--label-*` custom
-properties both shrink at `md` *and* are swapped for the next size down at `md` in
-`TaxCalculatorUI`, double-stepping labels to 11px on desktop. `--label-helper` is declared and
+At `UI-DESIGN-1`, the product rendered 9px badge text and 10px helper text, and `--label-*`
+custom properties both shrank at `md` *and* were swapped for the next size down at `md` in
+`TaxCalculatorUI`, double-stepping labels to 11px on desktop. `--label-helper` was declared and
 never used.
 
 The system sets absolute minimum sizes and replaces the `--label-*` mechanism with a single
