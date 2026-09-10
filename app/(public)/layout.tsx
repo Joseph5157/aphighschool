@@ -105,7 +105,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
                   <SidebarMenuButton href="/tools">Utility Tools</SidebarMenuButton>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                  <SidebarMenuButton href="/service-desk">Teacher Service Desk</SidebarMenuButton>
+                  <SidebarMenuButton href="/service-desk">Service Desk</SidebarMenuButton>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
                   <SidebarMenuButton href="/pensioners">Pensioners Hub</SidebarMenuButton>

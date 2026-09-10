@@ -485,6 +485,8 @@ export function SidebarCollapsible({
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         title={collapsed ? title : undefined}
+        aria-label={collapsed ? title : undefined}
+        aria-expanded={isOpen}
         className={`w-full flex min-h-[44px] items-center justify-between gap-2.5 px-3 py-2 rounded-lg font-mono text-xs font-medium text-inkSoft hover:text-ink hover:bg-hair/30 transition-colors duration-150 ${
           collapsed ? "justify-center px-0" : ""
         }`}
@@ -497,6 +499,7 @@ export function SidebarCollapsible({
           <div className="flex items-center gap-1 shrink-0">
             {badge && <span>{badge}</span>}
             <svg
+              aria-hidden="true"
               className={`w-3.5 h-3.5 text-inkSoft/70 transition-transform duration-200 ${
                 isOpen ? "rotate-90 text-ink" : ""
               }`}

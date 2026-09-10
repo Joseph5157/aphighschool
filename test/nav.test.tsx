@@ -40,9 +40,23 @@ describe("public navigation scope", () => {
     expect(new Set(found)).toEqual(new Set(DESKTOP_ALLOWED));
   });
 
-  it("drawer navigation includes the Teacher Service Desk", () => {
+  it("drawer navigation includes Service Desk", () => {
     const layout = fs.readFileSync(path.join(process.cwd(), "app/(public)/layout.tsx"), "utf8");
     expect(layout).toContain('href="/service-desk"');
-    expect(layout).toContain("Teacher Service Desk");
+    expect(layout).toContain("Service Desk");
+  });
+
+  // NAV-FIX-1: DesktopNav and the drawer previously labelled the same
+  // /service-desk destination differently ("Service Desk" vs "Teacher Service
+  // Desk"). Asserting both label strings directly, on both surfaces, is what
+  // actually guards consistency — checking only one surface would pass even if
+  // they drifted apart again.
+  it("labels the Service Desk destination identically on the desktop nav and the drawer", () => {
+    render(<DesktopNav />);
+    const desktopLabel = screen.getByRole("link", { name: "Service Desk" });
+    expect(desktopLabel).toHaveAttribute("href", "/service-desk");
+
+    const layout = fs.readFileSync(path.join(process.cwd(), "app/(public)/layout.tsx"), "utf8");
+    expect(layout).not.toContain("Teacher Service Desk");
   });
 });
