@@ -354,7 +354,11 @@ html.dark {
   font-size: 0.9375rem;
   background: var(--color-paperRaised);
   border-radius: 10px;
-  overflow: hidden;
+  /* Keep the table's intentional horizontal scroller. `overflow: hidden`
+     overrode `overflow-x: auto` above and let its intrinsic width escape the
+     imported article wrapper into the page. */
+  overflow-x: auto;
+  overflow-y: hidden;
   border: 1px solid var(--color-hair);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }

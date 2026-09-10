@@ -11,6 +11,7 @@ import ActionSummary from "../_components/ActionSummary";
 import Badge from "@/app/(public)/_components/Badge";
 import { Card } from "@/app/(public)/_components/Card";
 import { formatDate } from "@/lib/dates";
+import { stripDecorativeTemplateEmoji } from "@/lib/posts/strip-decorative-template-emoji";
 
 /**
  * The document detail shell, shared by every published document.
@@ -55,6 +56,9 @@ export default function DocumentTemplate({
   lifecycleView,
 }: DocumentTemplateProps) {
   const labels = SECTION_LABELS[lifecycleView.kind as keyof typeof SECTION_LABELS] ?? SECTION_LABELS.state;
+  // Imported HTML may contain the source site's sharing/recirculation furniture.
+  // Strip only class-bound decorative markers; do not rewrite quoted document text.
+  const renderedContent = stripDecorativeTemplateEmoji(String(post.content ?? ""));
 
   // An action deadline is orthogonal to the lifecycle KIND — lib/posts/lifecycle.ts
   // says so explicitly, and isLifecycleClosed() already treats a passed deadline
@@ -72,7 +76,7 @@ export default function DocumentTemplate({
   // document was left with a quarter of the desktop width held empty beside its
   // text. Counted from the stored HTML rather than the DOM because this decides
   // server-rendered markup; the component still owns whether it draws anything.
-  const headingCount = (String(post.content ?? "").match(/<h[23][\s>]/gi) || []).length;
+  const headingCount = (renderedContent.match(/<h[23][\s>]/gi) || []).length;
   const showToc = headingCount >= MIN_TOC_HEADINGS;
 
   return (
@@ -171,7 +175,7 @@ export default function DocumentTemplate({
               <div className="font-mono font-bold text-xs tracking-wider text-inkSoft border-b border-hair pb-3">
                 {labels.content}
               </div>
-              <div className="prose-gazette" dangerouslySetInnerHTML={{ __html: post.content }} />
+              <div className="prose-gazette" dangerouslySetInnerHTML={{ __html: renderedContent }} />
             </section>
           )}
 

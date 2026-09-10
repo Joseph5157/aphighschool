@@ -167,6 +167,46 @@ Vite config startup by the sandbox's denied parent-directory read. Both outcomes
 recorded as incomplete test evidence, not represented as green full-suite or guard
 results.
 
+### A03 follow-up and acceptance rerun
+
+**Final disposition: ACCEPTED.** The acceptance blocker was not authored official
+document text, a React template icon, or seed/demo data. It was persisted, imported
+HTML from the external WordPress source page, rendered unchanged through
+`dangerouslySetInnerHTML`:
+
+| Marker | Exact imported context | Classification | Resolution |
+| --- | --- | --- | --- |
+| `💬` | `alnat-wa-icon` share button | third-party sharing furniture | removed |
+| `📢` | `alnat-wa-icon` WhatsApp-channel button | third-party promotional furniture | removed |
+| `📥` | `at-important-links` heading | third-party decorative heading prefix | removed |
+| `📰` | `alnat-box-heading` Related Posts block | third-party recirculation furniture | removed |
+| `🔔` ×2 | `atchc-post-bottom-icon` news/software boxes | third-party recirculation furniture | removed |
+
+`stripDecorativeTemplateEmoji()` is deliberately class-bound rather than a blanket
+emoji removal. It preserves any emoji in actual quoted/source text and does not touch
+the stored legal/numeric tables. `test/decorative-content-emoji.test.ts` asserts all
+six template markers are absent from rendered content while labels, quoted text, and a
+table value remain. Mutation-check: changing the legacy-news class matcher made the
+test fail on both retained `🔔` markers; restoring it returned the test to green.
+
+The full rerun passed: **69 test files / 489 tests**. Chromium at 390×844 and
+1440×1000 re-confirmed zero unjustified decorative emoji on all acceptance routes,
+three homepage document rows in the mobile first viewport, proportional category
+filters, no duplicate detail metadata, short-TOC suppression/long-TOC retention,
+zero screen sub-12px text, no page-level horizontal overflow, clean console, and
+unchanged A18/A19 semantics. A16 remains deferred.
+
+The production rerun also made the historical APPSC overflow reproducible (20px at
+390px) and finally identified the exact root cause: `.prose-gazette table` declared
+`overflow-x: auto`, then later overrode it with `overflow: hidden`. Its wide table
+intrinsic width propagated through an imported `.container` wrapper to the page.
+This pre-existing, shared CSS defect was not caused by A03, but it was a trivial,
+low-risk in-scope exception necessary for honest acceptance. The shorthand is now
+explicit `overflow-x: auto; overflow-y: hidden;`, so the table remains its own
+intentional scroll region and page-level overflow is zero. The new
+`article-table-overflow` guard was mutation-checked by corrupting `overflow-y`;
+it failed as intended and passed after restoration.
+
 ## `SLOP-REMOVE-1` — record
 
 Scope: A11, A12, A13, A20. Chosen first because all four are high-confidence subtractions with
