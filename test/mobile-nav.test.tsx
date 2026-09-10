@@ -5,7 +5,7 @@
 // One test per behaviour the gate checklist names, so a regression says which
 // behaviour broke rather than "the drawer test failed".
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
-import { render, screen, act } from "@testing-library/react";
+import { render, screen, act, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
 
@@ -141,13 +141,22 @@ describe("dismissal", () => {
 });
 
 describe("focus handling", () => {
-  it("moves focus into the drawer on open", async () => {
+  // NAV-DRAWER-FOCUS-1: on real Chromium the panel's slide-in `transform`
+  // meant a synchronous `.focus()` call in the opening effect was silently
+  // dropped, so the fix defers the call to `transitionend` (with a
+  // duration-derived fallback). jsdom doesn't run real CSS transitions, so
+  // the fallback timer is what actually resolves this in tests — `waitFor`
+  // tolerates that without asserting on the exact mechanism. Real-Chromium
+  // acceptance (not this suite) is what proves the timing fix itself.
+  it("moves focus to the drawer's first focusable element on open", async () => {
     const user = userEvent.setup();
     render(<Shell />);
 
     await user.click(trigger());
 
-    expect(drawer().contains(document.activeElement)).toBe(true);
+    await waitFor(() => {
+      expect(document.activeElement).toBe(screen.getByRole("link", { name: "Home" }));
+    });
   });
 
   it("returns focus to the trigger on close", async () => {
@@ -165,11 +174,28 @@ describe("focus handling", () => {
     const user = userEvent.setup();
     render(<Shell />);
     await user.click(trigger());
+    await waitFor(() => expect(drawer().contains(document.activeElement)).toBe(true));
 
     for (let i = 0; i < 5; i++) {
       await user.tab();
       expect(drawer().contains(document.activeElement)).toBe(true);
     }
+  });
+
+  it("does not steal focus if the user has already moved it elsewhere before the initial-focus fallback fires", async () => {
+    const user = userEvent.setup();
+    render(<Shell />);
+
+    await user.click(trigger());
+    // Beat the fallback timer to it — simulates a user (or assistive tech)
+    // who has already moved focus by the time the deferred initial-focus
+    // call would otherwise fire.
+    const orders = screen.getByRole("link", { name: "Orders" });
+    orders.focus();
+
+    await new Promise((r) => setTimeout(r, 120));
+
+    expect(document.activeElement).toBe(orders);
   });
 });
 

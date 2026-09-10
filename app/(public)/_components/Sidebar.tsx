@@ -217,13 +217,64 @@ const MobileDrawer = React.forwardRef<HTMLDivElement, SidebarProps>(
       else node.setAttribute("inert", "");
     }, [openMobile]);
 
+    // NAV-DRAWER-FOCUS-1: calling `.focus()` synchronously in this effect — the
+    // instant the panel's slide-in `transform` starts — is silently dropped by
+    // Chromium: an element mid-transform doesn't accept focus even though
+    // transform has no effect on focusability per spec (the same class of bug
+    // documented for the desktop overlay prototype in
+    // docs/context/NAV_SIDEBAR_WIDTH_PLAN.md). Verified in real Chromium that
+    // this reproduces even under `prefers-reduced-motion` — the transition's
+    // duration collapses to ~0 but doesn't disappear, so a synchronous call
+    // still lands before the browser has flushed the resulting layout. Waiting
+    // for `transitionend` on the panel's own `transform` property is the
+    // deterministic fix. The timeout is a fallback, not the mechanism: it only
+    // fires if `transitionend` never does (the panel was already at its open
+    // transform, so no value actually changed to transition), and its length
+    // is read from the panel's own declared transition-duration rather than a
+    // guessed constant, so it collapses to near-zero right alongside
+    // reduced-motion.
     useEffect(() => {
       if (!openMobile) return;
 
-      returnFocusRef.current = document.activeElement as HTMLElement | null;
-      (focusable()[0] ?? panelRef.current)?.focus();
+      const openedFrom = document.activeElement as HTMLElement | null;
+      returnFocusRef.current = openedFrom;
+      const panel = panelRef.current;
+      // If the user has already moved focus themselves by the time the
+      // deferred call below fires — into the panel, or anywhere else — don't
+      // yank it back to the first item.
+      const moveFocus = () => {
+        if (document.activeElement !== openedFrom && document.activeElement !== document.body) return;
+        (focusable()[0] ?? panel)?.focus();
+      };
+
+      if (!panel) {
+        moveFocus();
+        return () => {
+          returnFocusRef.current?.focus?.();
+        };
+      }
+
+      let settled = false;
+      const settle = () => {
+        if (settled) return;
+        settled = true;
+        panel.removeEventListener("transitionend", onTransitionEnd);
+        window.clearTimeout(fallback);
+        moveFocus();
+      };
+
+      const onTransitionEnd = (event: TransitionEvent) => {
+        if (event.target === panel && event.propertyName === "transform") settle();
+      };
+      panel.addEventListener("transitionend", onTransitionEnd);
+
+      const declaredSeconds = parseFloat(getComputedStyle(panel).transitionDuration || "") || 0;
+      const fallback = window.setTimeout(settle, declaredSeconds * 1000 + 50);
 
       return () => {
+        panel.removeEventListener("transitionend", onTransitionEnd);
+        window.clearTimeout(fallback);
+        settled = true;
         // Back to the trigger, not to the top of the document.
         returnFocusRef.current?.focus?.();
       };
