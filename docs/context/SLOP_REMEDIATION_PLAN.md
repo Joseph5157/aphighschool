@@ -126,8 +126,9 @@ a new redesign or alter the protected document/trust system.
 
 The remediated shell, index routes, tools, and pension routes have no emoji iconography
 and no visible screen text below 12px. However the required long-document route,
-`/posts/appsc-departmental-tests-notification-material`, still renders decorative
-article-content emoji: `💬`, `📢`, `📥`, `📰`, and `🔔` (plus directional link glyphs).
+`/posts/appsc-departmental-tests-notification-material`, still renders six decorative
+article-content emoji occurrences: `💬`, `📢`, `📥`, `📰`, and `🔔` twice (plus directional
+link glyphs).
 They are visible below the masthead in the document body. This is outside the prior
 route-component source guard, but it is inside the actual public product and conflicts
 with `DESIGN.md`/`DESIGN_SYSTEM.md`'s no-emoji product-content rule. The prior
@@ -146,7 +147,7 @@ transcribing or changing the document's numeric/tabular source material.
 | Detail duplicated facts | 4 (`A09`) | 0 |
 | Short / long TOC | both rendered (`A10`) | 2-heading suppressed / 26-heading retained |
 | Visible sub-12px screen text | 69 before / 0 after in `SLOP-VISUAL-1` | 0 on all acceptance first viewports (print-only carve-out not counted) |
-| Visible emoji | 104 before / 0 after in `SLOP-VISUAL-1` | 0 on major index first viewports; **5 decorative emoji in the required long document body** |
+| Visible emoji | 104 before / 0 after in `SLOP-VISUAL-1` | 0 on major index first viewports; **6 decorative emoji occurrences in the required long document body** |
 | Horizontal overflow | none after earlier gates | none on all required route/viewport pairs; historical 35px defect not reproduced |
 | CLS | 0.0000–0.0008 before and after (`SLOP-STATES-1`) | no improvement claimed |
 
