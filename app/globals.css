@@ -338,6 +338,13 @@ html.dark {
   line-height: 1.75;
 }
 
+/* Imported WordPress-style wrappers report a table's intrinsic width to their
+   ancestors even when the table itself scrolls.  Clip that reporting at the
+   article boundary; the table remains the keyboard-reachable scrollport. */
+.prose-gazette {
+  overflow-x: clip;
+}
+
 /* `display: block` + `overflow-x: auto` scopes horizontal scrolling to the
    TABLE. Post content arrives through dangerouslySetInnerHTML, so a table
    cannot be wrapped in a scroll container from JSX; the templates instead put
