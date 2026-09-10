@@ -1,6 +1,18 @@
 import DesktopLeftNav from "./_components/DesktopLeftNav";
 import Skeleton from "./_components/Skeleton";
 
+/**
+ * SLOP-STATES-1 (AI_SLOP_AUDIT.md A17) finishes what SLOP-DENSITY-1 started
+ * here. The shape was already right — no hero block, no right rail, one list of
+ * document rows — but the rows were `h-28` (112px) against real rows measured at
+ * 172–187px on a 390px viewport and 124px at 1440px. A skeleton that is 60px per
+ * row short of the content is still reserving the wrong page; it just fails less
+ * obviously than reserving the wrong widgets.
+ *
+ * Four rows, because three is what actually fits the first viewport at 390x844
+ * (SLOP-DENSITY-1's measured acceptance) and reserving the whole list would push
+ * grey blocks far below the fold.
+ */
 export default function HomeLoading() {
   return (
     <div
@@ -15,12 +27,6 @@ export default function HomeLoading() {
         <DesktopLeftNav />
       </div>
 
-      {/*
-        Tracks the loaded page's shape after SLOP-DENSITY-1: no hero block, no
-        right rail, one list of document rows. A full skeleton pass across every
-        route belongs to SLOP-STATES-1 (A17); this is the minimum that keeps the
-        placeholder honest about what actually arrives.
-      */}
       <div className="lg:col-span-9 space-y-6">
         <div className="border-b border-hair pb-4 space-y-2">
           <Skeleton className="h-7 w-64 max-w-full" />
@@ -28,8 +34,8 @@ export default function HomeLoading() {
         </div>
 
         <div className="space-y-4">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <Skeleton key={i} className="h-28 w-full rounded-xl" />
+          {Array.from({ length: 4 }).map((_, i) => (
+            <Skeleton key={i} className="h-[180px] lg:h-[124px] w-full rounded-xl" />
           ))}
         </div>
       </div>

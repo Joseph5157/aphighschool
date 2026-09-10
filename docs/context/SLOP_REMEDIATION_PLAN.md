@@ -38,7 +38,7 @@ document wins.
 | A14 calculator card steppers/badges | Clear slop — simplify | `SLOP-DENSITY-1` ✅ |
 | A15 pension "suite" template | Clear slop — simplify | `SLOP-DENSITY-1` ✅ |
 | A16 Service Desk vs Topics | Product/IA question — **do not touch yet** | none |
-| A17 skeleton excess | Downstream symptom — fix after pages simplify | `SLOP-STATES-1` |
+| A17 skeleton excess | Downstream symptom — fix after pages simplify | `SLOP-STATES-1` ✅ |
 | A18 empty/error/404 states | Good design — **KEEP** | protected |
 | A19 gazette/trust system | Core identity — **KEEP** | protected |
 | A20 dead query/imports/Pagination | Technical debt — clean up | `SLOP-REMOVE-1` ✅ |
@@ -77,7 +77,7 @@ SLOP-DETAIL-1    ✅ complete — A07 + A08 + A09 + A10
       ↓
 SLOP-VISUAL-1    ✅ complete — A03 + A04 + A05
       ↓
-SLOP-STATES-1       A17
+SLOP-STATES-1    ✅ complete — A17
       ↓
 SLOP-ACCEPTANCE-1   browser before/after compare, mobile + desktop
       ↓
@@ -596,3 +596,112 @@ against it, exactly as in `SLOP-DETAIL-1`.
 - **A Telugu typo, left for the founder.** The mobile TOC reads `విశయ సూచిక`; the word for
   "contents" is `విషయ` (ష, not శ). It sits on a line this gate edited, but correcting product
   Telugu is a content decision and is not silently folded into a visual pass.
+
+## `SLOP-STATES-1` — record
+
+Scope: A17. The audit's classification is SIMPLIFY at MEDIUM confidence, and its direction is
+precise: "After simplifying the loaded routes, reduce skeletons to the minimum stable shape of the
+retained heading, controls and first content rows. Do not create decorative placeholder cards for
+widgets that should be removed."
+
+Three of the five `loading.tsx` files had not been touched since the audit baseline `1a32e62`
+(`category`, `search`, `posts/[slug]`); `/` and `/orders` were partly updated by the gates that
+changed those pages, and both carried a comment deferring the rest to this gate.
+
+### The two real defects: placeholders for widgets that no longer exist
+
+- **`/category/[slug]` reserved six filter pills.** After SLOP-DETAIL-1 (A07) a category renders
+  a filter bar only when it holds more than `FILTER_MIN_DOCUMENTS` documents *and* at least one
+  derived facet would narrow the list. **No category in the dataset qualifies**, so this
+  placeholder promised a control that then never arrived — on every category load, without
+  exception. Removed.
+
+- **`/posts/[slug]` reserved `grid grid-cols-1 md:grid-cols-2 gap-4` holding two cards.** That is
+  the exact shape of `PostNavCards` (Previous/Next Post), which SLOP-REMOVE-1 deleted under A11.
+  Checked against history rather than assumed: `git show 1a32e62:…/PostNavCards.tsx` opens with
+  that same class string. This is the literal case A17 names — a decorative placeholder card for a
+  widget that should be removed. Replaced with the one thing that does follow the document body
+  now: a single back link to its category.
+
+### Sizes corrected against the rendered page
+
+Every block was measured in Chromium rather than estimated, at 390×844 and 1440×1000:
+
+| Block | Reserved | Actually renders |
+| --- | --- | --- |
+| Home / orders document row | `h-28` (112px) | **187 / 124px** |
+| Orders category row | `h-12` (48px) | **74 / 77px** |
+| Orders masthead | `h-44` (176px) | **239 / 246px** |
+| Orders closing GOIR note | *nothing* | **132 / 87px** |
+| Category masthead | `h-40` (160px) | **248 / 247px** |
+| Category log row | `h-28` (112px) | **232 / 177px** |
+| Category gazette footer | *nothing* | **49 / 33px** |
+| Search recent row | `h-16` (64px) | **88 / 73px** |
+
+Row counts were cut to what the first viewport actually needs (four on the homepage, three on a
+category) rather than a full page of documents: reserving the whole list would put a screen and a
+half of grey blocks below the fold, which is its own kind of dishonesty about what is arriving.
+
+`/search` keeps its pill row, and that is deliberate — unlike the category page's, it stands for
+the document-type control (All · GO · Circular · Memo · Proceeding · Notification · Other) which
+renders on every visit. It was six chips for a seven-option control, so `TYPE_FILTERS` is now
+exported from `SearchUI` and the skeleton derives its count from the control itself. A number
+copied by hand is what let it drift in the first place.
+
+### A negative result, reported as such
+
+The working assumption behind the size corrections was that they would reduce layout shift. **They
+do not, and the measurement says so.** Cumulative Layout Shift was captured with a
+`PerformanceObserver` across the skeleton→content transition, on a client-side navigation with
+1200ms of emulated latency so `loading.tsx` was genuinely on screen:
+
+| Route | Before | After |
+| --- | --- | --- |
+| `/orders` @390 | 0.0004 | **0.0004** |
+| `/category/*` @390 | 0.0000 | **0.0000** |
+| `/posts/*` @390 | 0.0000 | **0.0000** |
+| `/search` @390 | 0.0000 | **0.0000** |
+| `/category/*` @1440 | 0.0008 | **0.0008** |
+| `/posts/*` @1440 | 0.0008 | **0.0008** |
+
+Identical, and already far below the 0.1 "good" threshold. (One run showed 0.0011 on `/orders`;
+re-running returned 0.0004, so that was noise, not a regression.) The reason is structural: Next
+swaps the entire `loading.tsx` subtree for the entire page subtree in one commit, so there is no
+sequence of visible elements being pushed down the screen — which is what the metric counts.
+
+So the size corrections are justified on the narrower ground that a placeholder reserving 112px
+for a 187px row is simply wrong about the page it stands for, and a reader watching a phone screen
+sees a shape that does not become the shape that arrives. That is worth fixing. It is not worth
+claiming a performance win for, and this gate does not.
+
+### Test changes
+
+- New `test/loading-states.test.tsx` (7 cases). The rule they encode: **a skeleton may only
+  reserve a structure the loaded page can actually render.** Each is paired against a case in the
+  second describe block, because "the category skeleton has no pills" and "the detail skeleton has
+  no card grid" would both pass on an empty component.
+- The search chip count is asserted as `TYPE_FILTERS.length + 1` rather than `7`, so the
+  placeholder cannot drift from the control again without failing.
+- The block-count guard asserts **exact** per-route counts, not a floor. The first version used
+  "at least four blocks" and a mutation that deleted a block sailed through it — the skeleton *is*
+  the geometry, so losing one is the defect.
+- **Mutation-checked, 8 of 8 caught** after that fix: category pills reintroduced, the
+  PostNavCards grid reintroduced, the search chip count drifted to six, home rows returned to
+  `h-28`, orders rows returned to `h-28`, `role="status"` removed, a block deleted, and a block
+  added.
+
+### Verification
+
+`tsc --noEmit` clean · **67 files / 487 tests pass** (from 66/480) · `git diff --check` clean ·
+real-Chromium measurement of every skeleton's geometry and of CLS across the skeleton→content
+transition at 390×844 and 1440×1000.
+
+### Deliberately not done here
+
+- **`/` and `/orders` keep rendering real chrome in their skeletons** — `DesktopLeftNav` and
+  `Breadcrumb` respectively. Both are static and need no route data, so showing them immediately
+  is better than grey blocks, and A17 never asked otherwise.
+- **The detail skeleton deliberately under-reserves the document body.** Body length is unknowable
+  before the document arrives, and over-reserving would create a scrollbar that then collapses.
+- **A16 stays deferred.** A18's empty/error/404 states remain untouched and protected — this gate
+  covered loading states only, which is what A17 is about.

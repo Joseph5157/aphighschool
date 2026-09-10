@@ -27,7 +27,13 @@ type SearchUIProps = {
   suggestedSearches: string[];
 };
 
-const TYPE_FILTERS: { value: string; label: string }[] = [
+/**
+ * Exported so `search/loading.tsx`'s placeholder cannot drift away from the
+ * control it stands for — SLOP-STATES-1 derives its pill count from this list
+ * plus the leading "All" rather than hard-coding a number, which is how it came
+ * to reserve six chips for a seven-option control in the first place.
+ */
+export const TYPE_FILTERS: { value: string; label: string }[] = [
   { value: "go", label: "GO" },
   { value: "circular", label: "Circular" },
   { value: "memo", label: "Memo" },
