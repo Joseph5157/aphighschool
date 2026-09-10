@@ -1,10 +1,23 @@
 import React from "react";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
-import { Card, CardHeader, CardTitle, CardContent } from "./Card";
-import Badge from "./Badge";
 import { optionalQuery } from "@/lib/db-safe";
 
+/**
+ * The desktop category index.
+ *
+ * SLOP-DENSITY-1 (AI_SLOP_AUDIT.md A02) flattened this. It was a bordered Card
+ * containing five separately bordered, rounded rows, a pill counting the
+ * categories, a per-category count pill, a line of microcopy under the heading,
+ * and an "Explore All Categories" action pointing at a destination the primary
+ * navigation already carries. Card-inside-card with pills on both ends made
+ * ordinary navigation look like analytics.
+ *
+ * What survives is what a reader actually uses: the category name in both
+ * scripts, how many published documents are in it, and the category's own
+ * colour as its identity. A count of zero renders nothing rather than "0" — the
+ * absence of a number is the same information without the false precision.
+ */
 export default async function DesktopLeftNav() {
   const categories = await optionalQuery(
     "nav-categories",
@@ -18,70 +31,38 @@ export default async function DesktopLeftNav() {
   );
 
   return (
-    <aside className="space-y-6 sticky top-20 hidden lg:block font-sans">
-      {/* 1. Department Navigation Rail */}
-      <Card className="border-hair">
-        <CardHeader className="pb-3 border-b border-hair/50">
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle className="text-xs font-mono font-bold uppercase tracking-wider text-ink flex items-center gap-1.5">
-                <span>🏛️</span> Document Categories
-              </CardTitle>
-              <p className="text-xs font-mono text-inkSoft/80 mt-0.5">
-                AP School Education
-              </p>
-            </div>
-            <Badge variant="neutral" size="sm" shape="pill">
-              {categories.length}
-            </Badge>
-          </div>
-        </CardHeader>
-        <CardContent className="space-y-2 pt-3">
-          {categories.map((cat) => (
+    <aside className="sticky top-20 hidden lg:block font-sans" aria-label="Document categories">
+      <h2 className="text-xs font-semibold text-inkSoft border-b border-hair pb-2">
+        Categories
+      </h2>
+
+      <ul className="mt-1">
+        {categories.map((cat) => (
+          <li key={cat.slug}>
             <Link
-              key={cat.slug}
               href={`/category/${cat.slug}`}
-              className="group flex items-center justify-between p-3 rounded-xl border border-hair/60 hover:border-tamarind/50 bg-paper/30 hover:bg-paperRaised transition-all"
-              style={
-                cat.color
-                  ? { borderLeftWidth: "4px", borderLeftColor: cat.color }
-                  : undefined
-              }
+              className="group flex items-baseline justify-between gap-3 py-2.5 border-b border-hair/50"
+              style={cat.color ? { borderLeftWidth: "3px", borderLeftColor: cat.color, paddingLeft: "0.625rem" } : undefined}
             >
-              <div className="min-w-0 flex-1 pr-2">
-                <div className="font-bold text-xs text-ink group-hover:text-tamarind transition-colors truncate">
+              <span className="min-w-0">
+                <span className="block text-sm font-semibold text-ink group-hover:text-tamarind transition-colors truncate">
                   {cat.nameEn}
-                </div>
-                <div
-                  lang="te"
-                  className="font-telugu text-xs text-inkSoft leading-relaxed truncate mt-0.5"
-                >
+                </span>
+                <span lang="te" className="block font-telugu text-xs text-inkSoft truncate">
                   {cat.nameTe}
-                </div>
-              </div>
-              <Badge variant="neutral" size="sm" shape="pill">
-                {cat._count.posts}
-              </Badge>
+                </span>
+              </span>
+              {cat._count.posts > 0 && (
+                <span className="font-mono text-meta text-inkSoft shrink-0">{cat._count.posts}</span>
+              )}
             </Link>
-          ))}
+          </li>
+        ))}
+      </ul>
 
-          {categories.length === 0 && (
-            <p className="text-xs font-mono text-inkSoft/80 px-1 py-2">
-              No categories available.
-            </p>
-          )}
-
-          <div className="pt-2">
-            <Link
-              href="/orders"
-              className="text-xs font-mono font-bold text-tamarind hover:text-ink flex items-center justify-between p-2 rounded-lg hover:bg-hair/20 transition-all"
-            >
-              <span>Explore All Categories</span>
-              <span aria-hidden="true">→</span>
-            </Link>
-          </div>
-        </CardContent>
-      </Card>
+      {categories.length === 0 && (
+        <p className="text-meta font-mono text-inkSoft/80 py-2">No categories available.</p>
+      )}
     </aside>
   );
 }

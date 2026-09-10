@@ -53,11 +53,11 @@ const GPF_FAQ_ITEMS: AccordionItemData[] = [
           APGLI (Andhra Pradesh Government Life Insurance) is mandatory for all AP state employees up to 55 years of age. Minimum monthly premium is fixed as per Basic Pay slabs:
         </p>
         <div className="bg-paper border border-hair rounded-lg p-3 font-mono text-xs space-y-1">
-          <div>• Basic Pay up to ₹25,220 ➔ Min Premium: ₹500</div>
-          <div>• Basic Pay ₹25,221 to ₹35,570 ➔ Min Premium: ₹750</div>
-          <div>• Basic Pay ₹35,571 to ₹48,440 ➔ Min Premium: ₹1,000</div>
-          <div>• Basic Pay ₹48,441 to ₹67,980 ➔ Min Premium: ₹1,400</div>
-          <div>• Basic Pay ₹67,981 & above ➔ Min Premium: ₹2,000</div>
+          <div>• Basic Pay up to ₹25,220 — Min Premium: ₹500</div>
+          <div>• Basic Pay ₹25,221 to ₹35,570 — Min Premium: ₹750</div>
+          <div>• Basic Pay ₹35,571 to ₹48,440 — Min Premium: ₹1,000</div>
+          <div>• Basic Pay ₹48,441 to ₹67,980 — Min Premium: ₹1,400</div>
+          <div>• Basic Pay ₹67,981 & above — Min Premium: ₹2,000</div>
         </div>
       </div>
     ),
@@ -131,7 +131,7 @@ export default function GpfApgliUI() {
           ← Back to Utility Tools / ఇతర సాధనాలు
         </Link>
         <Badge variant="tamarind" size="sm" shape="pill" dot>
-          Runs 100% On Device
+          Runs in your browser
         </Badge>
       </div>
 
@@ -189,7 +189,7 @@ export default function GpfApgliUI() {
                 <span className="text-sm text-ink">{formatCurrency(closingBalance1Yr)}</span>
               </div>
 
-              <div className="mt-4 p-3 bg-hair/30 rounded-lg space-y-1 text-[11px]">
+              <div className="mt-4 p-3 bg-hair/30 rounded-lg space-y-1 text-xs">
                 <div className="font-bold text-ink font-sans">Part-Final Loan Limits / విత్‌డ్రావల్ పరిమితులు:</div>
                 <div className="flex justify-between text-inkSoft">
                   <span>75% Max Part-Final Limit:</span>
@@ -224,9 +224,9 @@ export default function GpfApgliUI() {
 
             <div className="space-y-3">
               <div className="p-3 bg-hair/30 rounded-lg space-y-1 text-xs">
-                <div className="text-inkSoft font-mono text-[11px]">Recommended Min Premium:</div>
+                <div className="text-inkSoft font-mono text-xs">Recommended Min Premium:</div>
                 <div className="text-xl font-bold text-ink font-mono">{formatCurrency(recommendedApgliPremium)} / month</div>
-                <div className="text-[11px] text-inkSoft/80 font-sans mt-1 leading-snug">
+                <div className="text-xs text-inkSoft/80 font-sans mt-1 leading-snug">
                   As per AP Government revised pay scale slabs, employees with Basic Pay ₹{basicNum.toLocaleString("en-IN")} must deduct at least {formatCurrency(recommendedApgliPremium)}.
                 </div>
               </div>
@@ -251,7 +251,7 @@ export default function GpfApgliUI() {
       {/* Accordion Rules & FAQs */}
       <div className="space-y-4 pt-6 border-t border-hair">
         <h2 className="text-lg font-bold text-ink tracking-tight flex items-center gap-2">
-          <span>📘</span> GPF & APGLI Guidelines & FAQs (నిబంధనలు & వివరణలు)
+          GPF & APGLI Guidelines & FAQs (నిబంధనలు & వివరణలు)
         </h2>
         <Accordion items={GPF_FAQ_ITEMS} allowMultiple={true} />
       </div>

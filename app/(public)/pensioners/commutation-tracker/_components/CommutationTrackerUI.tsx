@@ -42,7 +42,7 @@ export default function CommutationTrackerUI() {
           size="sm"
           onClick={() => setIsPrintApplication(!isPrintApplication)}
         >
-          {isPrintApplication ? "📄 Back to Tracker" : "🖨️ STO Restoration Application"}
+          {isPrintApplication ? "Back to Tracker" : "STO Restoration Application"}
         </Button>
       </div>
 

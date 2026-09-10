@@ -1,14 +1,10 @@
 import { prisma } from "@/lib/prisma";
-import Link from "next/link";
-import HeroCard from "./_components/HeroCard";
 import PostCard from "./_components/PostCard";
 import DesktopLeftNav from "./_components/DesktopLeftNav";
-import DesktopSidebar from "./_components/DesktopSidebar";
 import UpcomingActionDates from "./_components/UpcomingActionDates";
 import EmptyState from "./_components/EmptyState";
 import { ORDER_BY_OFFICIAL_DATE, startOfTodayIST } from "@/lib/dates";
-import { quickSearchChips } from "@/lib/posts/query";
-import { safeQuery, optionalQuery } from "@/lib/db-safe";
+import { safeQuery } from "@/lib/db-safe";
 
 import type { Metadata } from "next";
 
@@ -22,23 +18,6 @@ export const metadata: Metadata = {
     "The latest published AP School Education government orders, circulars, and notifications, with lifecycle status and provenance shown for each.",
   alternates: { canonical: "/" },
 };
-
-// Verified against real content before render (lib/posts/query.ts's
-// quickSearchChips) — see DesktopSidebar's quickSearchTags prop.
-const QUICK_SEARCH_QUERY_CANDIDATES = [
-  { label: "#DAArrears", query: "DA Arrears" },
-  { label: "#MegaDSC2026", query: "Mega DSC" },
-  { label: "#APTET", query: "TET" },
-  { label: "#TransferRules", query: "Transfers" },
-  { label: "#PRC", query: "PRC" },
-];
-
-// These point at static tool pages, not a search — always real, no verification needed.
-const QUICK_SEARCH_STATIC_LINKS = [
-  { label: "#Form16Tax", href: "/tools/tax-calculator" },
-  { label: "#GPFInterest", href: "/tools/gpf-apgli" },
-  { label: "#EHSMedical", href: "/tools/cfms-checker" },
-];
 
 export const dynamic = 'force-dynamic';
 
@@ -58,7 +37,6 @@ export default async function HomePage() {
           slug: true,
           titleEn: true,
           titleTe: true,
-          summaryTe: true,
           englishAbstract: true,
           statusBadge: true,
           documentType: true,
@@ -93,41 +71,27 @@ export default async function HomePage() {
     ),
   ]);
 
-  const heroPost = posts[0];
-  const listingPosts = posts.slice(1);
-
-  const verifiedQueries = await optionalQuery(
-    "home-quick-search-chips",
-    () => quickSearchChips(QUICK_SEARCH_QUERY_CANDIDATES.map((c) => c.query)),
-    []
-  );
-  const quickSearchTags = [
-    ...QUICK_SEARCH_QUERY_CANDIDATES.filter((c) => verifiedQueries.includes(c.query)).map((c) => ({
-      label: c.label,
-      href: `/search?q=${encodeURIComponent(c.query)}`,
-    })),
-    ...QUICK_SEARCH_STATIC_LINKS,
-  ];
-
   return (
-    <div className="lg:grid lg:grid-cols-12 lg:gap-6 xl:gap-8 space-y-8 lg:space-y-0">
-      {/* 1. Left Navigation Rail (3 Cols / ~25% Width on Desktop) */}
+    <div className="lg:grid lg:grid-cols-12 lg:gap-8 space-y-8 lg:space-y-0">
+      {/*
+        SLOP-DENSITY-1 (AI_SLOP_AUDIT.md A02): one quiet category rail, not two
+        card-kit rails. The right rail duplicated four calculators that the
+        primary navigation already reaches, then repeated a "Quick Searches" chip
+        set that /search owns — so the document feed was given half the page
+        while its two rails competed with it. The feed now takes three quarters.
+      */}
       <div className="lg:col-span-3">
         <DesktopLeftNav />
       </div>
 
-      {/* 2. Center Feed Column (6 Cols / ~50% Width on Desktop) */}
-      <div className="lg:col-span-6 space-y-8">
-        {/* Section Header */}
-        <div className="flex items-center justify-between border-b border-hair pb-4">
-          <div>
-            <h1 className="text-display tracking-tight text-ink">
-              Latest Orders & Living Documents
-            </h1>
-            <p className="text-body text-inkSoft mt-1">
-              AP School Education Department · Government Orders & Guidance
-            </p>
-          </div>
+      <div className="lg:col-span-9 space-y-6">
+        <div className="border-b border-hair pb-4">
+          <h1 className="text-display tracking-tight text-ink">
+            Latest Orders & Living Documents
+          </h1>
+          <p className="text-body text-inkSoft mt-1">
+            AP School Education Department · Government Orders & Guidance
+          </p>
         </div>
 
         <UpcomingActionDates
@@ -136,34 +100,27 @@ export default async function HomePage() {
           )}
         />
 
-        {/* Hero Card: Most Recent Post */}
-        {heroPost ? (
-          <section aria-label="Featured Order">
-            <HeroCard post={heroPost} />
+        {/*
+          A01: every document is an ordinary row. `posts[0]` used to be promoted
+          into a gradient-framed HeroCard purely because it sorted first — an
+          editorial decision the data never made — and at 390px that card filled
+          the rest of the first viewport, so the document index this product is
+          promised to be was not visible on a phone at all.
+
+          The section label the feed used to carry ("Recent Government Orders &
+          Circulars") went with the hero: it existed to separate the promoted
+          document from "the rest", and with one list it sat directly beneath an
+          h1 that already says the same thing (DESIGN.md §1.3).
+        */}
+        {posts.length > 0 ? (
+          <section aria-label="Latest documents" className="space-y-4">
+            {posts.map((post) => (
+              <PostCard key={post.id} post={post} />
+            ))}
           </section>
         ) : (
           <EmptyState title="No published orders found." />
         )}
-
-        {/* Remaining Listing Cards & Reserved Ad Placement */}
-        {listingPosts.length > 0 && (
-          <section aria-label="Recent Orders Feed" className="space-y-4">
-            <h2 className="text-sm font-mono uppercase text-inkSoft tracking-wider font-semibold">
-              Recent Government Orders & Circulars
-            </h2>
-
-            <div className="space-y-4">
-              {listingPosts.map((post) => (
-                <PostCard key={post.id} post={post} />
-              ))}
-            </div>
-          </section>
-        )}
-      </div>
-
-      {/* 3. Right Sidebar Rail (3 Cols / ~25% Width on Desktop) */}
-      <div className="lg:col-span-3">
-        <DesktopSidebar quickSearchTags={quickSearchTags} />
       </div>
     </div>
   );

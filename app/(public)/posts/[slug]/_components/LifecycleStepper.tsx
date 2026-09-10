@@ -9,8 +9,11 @@ type StepperProps = {
 
 export default function LifecycleStepper({ stages, currentStage, isExpired }: StepperProps) {
   return (
-    <div className="w-full bg-paperRaised border border-hair rounded-xl p-4 md:p-5 mb-6">
-      <div className="text-[10px] font-mono tracking-wider text-inkSoft mb-3">
+    // Border, radius and margin removed by SLOP-DETAIL-1 (AI_SLOP_AUDIT.md
+    // A09): this is now the opening strip of the document header rather than a
+    // free-standing card above it, and the header wrapper owns the frame.
+    <div className="w-full bg-paperRaised p-4 md:px-6 md:py-5">
+      <div className="text-meta font-mono tracking-wider text-inkSoft mb-3">
         Lifecycle Stage
       </div>
 
@@ -40,7 +43,7 @@ export default function LifecycleStepper({ stages, currentStage, isExpired }: St
                 {isDone ? "✓" : id}
               </div>
               <span
-                className={`font-mono text-[11px] mt-2 font-medium ${
+                className={`font-mono text-xs mt-2 font-medium ${
                   isCurrent
                     ? "text-ink font-bold"
                     : isDone

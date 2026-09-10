@@ -9,6 +9,12 @@
 // PostDetailPage is an async Server Component, so Testing Library cannot mount
 // it. Calling it and handing the resolved tree to renderToStaticMarkup is the
 // pattern already used by test/category-links.test.ts.
+// SLOP-DETAIL-1 (AI_SLOP_AUDIT.md A09) folded the state indicator into the
+// document header and dropped its "Document Status" heading: the state word
+// plus its plain-language sentence say what it is, and a label above them named
+// the concept without adding anything. These assertions moved onto that
+// sentence — which is the part DESIGN_SYSTEM.md §2.4 actually requires, since
+// it is what keeps the status from being carried by colour alone.
 import { describe, it, expect, beforeEach } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
 import PostDetailPage from "@/app/(public)/posts/[slug]/page";
@@ -36,7 +42,7 @@ describe("post detail lifecycle rendering", () => {
 
     const html = await renderPost("da-arrears-circular");
 
-    expect(html).toContain("Document Status");
+    expect(html).toMatch(/This order is in force|amended by a later order|replaced by a later order|Historical record/);
     expect(html).toContain("Current");
     expect(html).not.toMatch(/Hall ticket/i);
     expect(html).not.toMatch(/Results/i);
@@ -55,7 +61,7 @@ describe("post detail lifecycle rendering", () => {
 
     const html = await renderPost("go-129-allocation");
 
-    expect(html).toContain("Document Status");
+    expect(html).toMatch(/This order is in force|amended by a later order|replaced by a later order|Historical record/);
     expect(html).toContain("Superseded");
     expect(html).not.toMatch(/Hall ticket/i);
     expect(html).not.toContain("Lifecycle Stage");
@@ -77,7 +83,7 @@ describe("post detail lifecycle rendering", () => {
     for (const stage of ["Notified", "Apply open", "Hall ticket", "Results"]) {
       expect(html).toContain(stage);
     }
-    expect(html).not.toContain("Document Status");
+    expect(html).not.toMatch(/This order is in force|amended by a later order|replaced by a later order|Historical record/);
   });
 
   it("marks the notification's current stage, not simply every stage", async () => {
@@ -131,7 +137,7 @@ describe("post detail lifecycle rendering", () => {
 
     const html = await renderPost("untyped-order");
 
-    expect(html).toContain("Document Status");
+    expect(html).toMatch(/This order is in force|amended by a later order|replaced by a later order|Historical record/);
     expect(html).toContain("Archived");
     expect(html).not.toContain("Lifecycle Stage");
   });

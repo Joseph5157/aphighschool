@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Breadcrumb from "@/app/(public)/_components/Breadcrumb";
-import PensionersSidebar from "@/app/(public)/pensioners/_components/PensionersSidebar";
+import OfficialPensionPortals from "@/app/(public)/pensioners/_components/OfficialPensionPortals";
 import { Card } from "@/app/(public)/_components/Card";
 import Badge from "@/app/(public)/_components/Badge";
 
@@ -133,7 +133,7 @@ export default function OfficePipelinePage() {
         </div>
 
         <div className="lg:col-span-4">
-          <PensionersSidebar />
+          <OfficialPensionPortals />
         </div>
       </div>
     </div>

@@ -10,9 +10,10 @@ import SearchUI from "./_components/SearchUI";
 import TopicTagBar, { FEATURED_TOPICS } from "@/app/(public)/_components/TopicTagBar";
 import type { Metadata } from "next";
 
-// Curated candidates for the discovery view's "Quick Searches" chips — only
-// the ones verified against real content (quickSearchChips) are ever shown.
-const QUICK_SEARCH_CANDIDATES = [
+// Curated candidates for the discovery view's suggested searches — only the
+// ones verified against real content (quickSearchChips) are ever shown, so a
+// suggestion can never lead to "no matching documents" (UI_AUDIT.md F30).
+const SUGGESTED_SEARCH_CANDIDATES = [
   "TET 2026",
   "DA Arrears",
   "Mega DSC",
@@ -51,8 +52,8 @@ export default async function SearchPage({
     () => tagsWithPublishedContent(FEATURED_TOPICS.map((topic) => topic.tag)),
     []
   );
-  const chips = isDiscovery
-    ? await optionalQuery("search-quick-chips", () => quickSearchChips(QUICK_SEARCH_CANDIDATES), [])
+  const suggestions = isDiscovery
+    ? await optionalQuery("search-suggestions", () => quickSearchChips(SUGGESTED_SEARCH_CANDIDATES), [])
     : [];
 
   return (
@@ -73,7 +74,7 @@ export default async function SearchPage({
         activeType={searchParams.type ?? null}
         isDiscovery={isDiscovery}
         recentDocuments={recentDocuments}
-        quickSearchChips={chips}
+        suggestedSearches={suggestions}
       />
     </div>
   );

@@ -66,13 +66,16 @@ export default function ServiceDeskPage() {
       <section className="relative overflow-hidden rounded-2xl border border-mastheadText/35 on-masthead bg-masthead p-6 text-mastheadText shadow-md md:p-8">
         <div className="absolute inset-y-0 right-0 w-1/3 bg-turmeric/10" aria-hidden="true" />
         <div className="relative max-w-3xl space-y-4">
+          {/* SLOP-VISUAL-1 (A04/A05): "Service guide" was a 10px mono uppercase
+              caption sitting immediately after an uppercase badge — two tracked
+              labels in sequence, which DESIGN_SYSTEM.md §1.3 forbids outright —
+              and it said less than the h1 and the sentence directly below it.
+              A04's direction is to remove a low-value label rather than enlarge
+              it, so it is gone rather than promoted to 12px. */}
           <div className="flex items-center gap-2">
             <Badge variant="turmeric" size="sm" shape="pill" dot>
               AP School Education
             </Badge>
-            <span className="font-mono text-[10px] uppercase tracking-wider text-mastheadText/65">
-              Service guide
-            </span>
           </div>
           <div>
             <h1 className="text-display tracking-tight text-mastheadText">
@@ -93,9 +96,9 @@ export default function ServiceDeskPage() {
             </h2>
             <p className="mt-1 text-body text-inkSoft">Six common starting points for AP teacher services.</p>
           </div>
-          <span className="hidden font-mono text-[10px] uppercase tracking-wider text-inkSoft sm:block">
-            Internal portal guide
-          </span>
+          {/* "Internal portal guide" removed for the same reason: a 10px tracked
+              caption beside a heading and a subtitle that already say what this
+              section is. */}
         </div>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">

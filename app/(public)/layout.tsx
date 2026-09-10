@@ -96,22 +96,22 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
             <SidebarGroupContent>
               <SidebarMenu>
                 <SidebarMenuItem>
-                  <SidebarMenuButton href="/" icon="🏠">Home</SidebarMenuButton>
+                  <SidebarMenuButton href="/">Home</SidebarMenuButton>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                  <SidebarMenuButton href="/orders" icon="📋">Orders & Circulars</SidebarMenuButton>
+                  <SidebarMenuButton href="/orders">Orders & Circulars</SidebarMenuButton>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                  <SidebarMenuButton href="/tools" icon="🧮">Utility Tools</SidebarMenuButton>
+                  <SidebarMenuButton href="/tools">Utility Tools</SidebarMenuButton>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                  <SidebarMenuButton href="/service-desk" icon="SD">Teacher Service Desk</SidebarMenuButton>
+                  <SidebarMenuButton href="/service-desk">Teacher Service Desk</SidebarMenuButton>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                  <SidebarMenuButton href="/pensioners" icon="👵">Pensioners Hub</SidebarMenuButton>
+                  <SidebarMenuButton href="/pensioners">Pensioners Hub</SidebarMenuButton>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                  <SidebarMenuButton href="/search" icon="🔍">Search</SidebarMenuButton>
+                  <SidebarMenuButton href="/search">Search</SidebarMenuButton>
                 </SidebarMenuItem>
               </SidebarMenu>
             </SidebarGroupContent>
@@ -122,7 +122,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
             <SidebarGroupLabel>Teacher Utilities</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                <SidebarCollapsible title="Calculators & Bills" icon="⚡" defaultOpen>
+                <SidebarCollapsible title="Calculators & Bills" defaultOpen>
                   <SidebarMenuSubItem>
                     <SidebarMenuSubButton href="/tools/tax-calculator">Income Tax Calculator</SidebarMenuSubButton>
                   </SidebarMenuSubItem>
@@ -140,7 +140,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
                   </SidebarMenuSubItem>
                 </SidebarCollapsible>
 
-                <SidebarCollapsible title="Pension Services" icon="🏖️">
+                <SidebarCollapsible title="Pension Services">
                   <SidebarMenuSubItem>
                     <SidebarMenuSubButton href="/pensioners/pension-calculator">Pension Calculator</SidebarMenuSubButton>
                   </SidebarMenuSubItem>
@@ -157,7 +157,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
         </SidebarContent>
 
         <SidebarFooter>
-          <div className="text-[10px] font-mono text-inkSoft/80">
+          <div className="text-xs font-mono text-inkSoft/80">
             AP Teacher Desk — Independent &amp; Unofficial
           </div>
         </SidebarFooter>
@@ -177,7 +177,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
                   <div className="font-bold text-sm tracking-tight text-ink group-hover:text-inkSoft transition-colors">
                     AP Teacher Desk
                   </div>
-                  <div className="text-[10px] font-mono text-inkSoft uppercase tracking-wider">
+                  <div className="text-xs font-mono text-inkSoft uppercase tracking-wider">
                     AP School Education
                   </div>
                 </div>

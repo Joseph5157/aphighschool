@@ -1,7 +1,7 @@
 import { describe, expect, it, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { renderToStaticMarkup } from "react-dom/server";
-import OrdersFilterTabs from "@/app/(public)/orders/_components/OrdersFilterTabs";
+import PostCard from "@/app/(public)/_components/PostCard";
 import CategoryLogList from "@/app/(public)/category/[slug]/_components/CategoryLogList";
 import PostDetailPage from "@/app/(public)/posts/[slug]/page";
 import { makePost, resetDb } from "./db";
@@ -10,29 +10,38 @@ const createdAt = new Date("2026-09-01T00:00:00.000Z");
 const documentDate = new Date("2026-08-15T00:00:00.000Z");
 
 describe("FRESHNESS-1 rendered per-document trust presentation", () => {
-  it("shows GOIR status only on verified document previews in the Orders listing", () => {
-    render(
-      <OrdersFilterTabs
-        categories={[
-          {
-            id: "orders",
-            nameEn: "Government Orders",
-            nameTe: "ప్రభుత్వ ఉత్తర్వులు",
-            slug: "govt-orders",
-            icon: null,
-            color: null,
-            _count: { posts: 2 },
-            posts: [
-              { id: "verified", slug: "verified-order", titleEn: "Verified order", goReference: null, verifiedAgainstGoir: true, createdAt },
-              { id: "unverified", slug: "unverified-order", titleEn: "Unverified order", goReference: null, verifiedAgainstGoir: false, createdAt },
-            ],
-          },
-        ]}
-      />
+  // SLOP-DENSITY-1 (AI_SLOP_AUDIT.md A06) deleted OrdersFilterTabs and its
+  // category cards; /orders and the homepage now share PostCard as their one
+  // document row, so the per-document GOIR rule is asserted on that surface.
+  it("shows GOIR status only on verified rows in the shared document row", () => {
+    const row = (id: string, titleEn: string, verifiedAgainstGoir: boolean) => ({
+      id,
+      slug: id,
+      titleEn,
+      titleTe: "ఉత్తర్వు",
+      summaryTe: [],
+      statusBadge: "notification",
+      documentType: "go" as const,
+      orderState: "current" as const,
+      goReference: null,
+      sourceDept: null,
+      verifiedAgainstGoir,
+      createdAt,
+      documentDate,
+      category: null,
+    });
+
+    const { container } = render(
+      <>
+        <PostCard post={row("verified", "Verified order", true)} />
+        <PostCard post={row("unverified", "Unverified order", false)} />
+      </>
     );
 
-    expect(screen.getByText("Verified order").parentElement).toHaveTextContent("GOIR Verified");
-    expect(screen.getByText("Unverified order").parentElement).not.toHaveTextContent("GOIR Verified");
+    const cards = container.querySelectorAll(":scope > div");
+    expect(cards).toHaveLength(2);
+    expect(cards[0]).toHaveTextContent("GOIR Verified");
+    expect(cards[1]).not.toHaveTextContent("GOIR Verified");
     expect(screen.queryByText(/GOIR Verified Repository|all documents verified/i)).not.toBeInTheDocument();
   });
 

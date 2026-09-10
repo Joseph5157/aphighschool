@@ -61,7 +61,7 @@ export default function PensionCalculatorUI() {
           size="sm"
           onClick={() => setIsPrintMode(!isPrintMode)}
         >
-          {isPrintMode ? "📄 Back to Calculator" : "🖨️ Print Pension Statement"}
+          {isPrintMode ? "Back to Calculator" : "Print Pension Statement"}
         </Button>
       </div>
 
@@ -256,16 +256,16 @@ export default function PensionCalculatorUI() {
             </Card>
 
             <Card className="p-5 space-y-3 bg-paperRaised border-hair">
-              <h3 className="text-xs font-bold font-mono text-ink uppercase tracking-wide">
+              <h3 className="text-xs font-bold text-ink">
                 Lump Sum Retirement Benefits
               </h3>
               <div className="grid grid-cols-2 gap-3 text-xs font-mono">
                 <div className="p-3 bg-ink/5 border border-hair rounded-lg space-y-1">
-                  <span className="text-inkSoft text-[10px]">Commutation Lump Sum</span>
+                  <span className="text-inkSoft text-xs">Commutation Lump Sum</span>
                   <p className="font-bold text-ink text-sm">₹{fmt(result.lumpSumCommutationValue)}</p>
                 </div>
                 <div className="p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-lg space-y-1">
-                  <span className="text-emerald-800 text-[10px]">DCRG Gratuity Payout</span>
+                  <span className="text-emerald-800 text-xs">DCRG Gratuity Payout</span>
                   <p className="font-bold text-ink text-sm">₹{fmt(result.dcrgGratuity)}</p>
                 </div>
               </div>
@@ -276,7 +276,7 @@ export default function PensionCalculatorUI() {
 
       <div className="pt-4 border-t border-hair space-y-3">
         <h2 className="text-section text-ink flex items-center gap-2">
-          <span>❓</span> Pension Calculation Rules & FAQ
+          Pension Calculation Rules & FAQ
         </h2>
         <Accordion
           allowMultiple

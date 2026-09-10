@@ -4,7 +4,8 @@ import { tsxFiles, readSource } from "./class-source";
 // UI-LINKS-1: every hardcoded external government-portal URL in app/(public) was
 // checked with a live fetch. Three domains no longer resolve at all (verified twice,
 // both via WebFetch and curl, not a transient blip):
-//   - agap.cas.nic.in   (AG AP pension portal — PensionersSidebar)
+//   - agap.cas.nic.in   (AG AP pension portal — PensionersSidebar, since renamed
+//                        OfficialPensionPortals by SLOP-DENSITY-1)
 //   - agap.ap.nic.in    (AG AP GPF portal — CfmsCheckerUI)
 //   - esr.ap.gov.in     (e-SR portal — CfmsCheckerUI; no working replacement could be
 //                         found either, despite AP having recently relaunched "e-SR 2.0"
@@ -44,14 +45,14 @@ describe("no known-broken government portal links in the public UI", () => {
   });
 
   it("points the AG AP pension and GPF links at the verified agaeap.cag.gov.in domain", () => {
-    const pensionersSidebar = readSource(
-      "app/(public)/pensioners/_components/PensionersSidebar.tsx"
+    const pensionPortals = readSource(
+      "app/(public)/pensioners/_components/OfficialPensionPortals.tsx"
     );
     const cfmsChecker = readSource(
       "app/(public)/tools/cfms-checker/_components/CfmsCheckerUI.tsx"
     );
 
-    expect(pensionersSidebar).toContain("https://agaeap.cag.gov.in/Pension/Home");
+    expect(pensionPortals).toContain("https://agaeap.cag.gov.in/Pension/Home");
     expect(cfmsChecker).toContain("https://agaeap.cag.gov.in/gpf/");
   });
 });

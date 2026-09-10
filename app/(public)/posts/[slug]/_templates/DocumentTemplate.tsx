@@ -6,13 +6,12 @@ import GoirBadge from "@/app/(public)/_components/GoirBadge";
 import DocumentDate from "@/app/(public)/_components/DocumentDate";
 import LifecycleStepper from "../_components/LifecycleStepper";
 import ThumbZoneBar from "../_components/ThumbZoneBar";
-import PostNavCards from "../_components/PostNavCards";
-import CategoryStacksGrid from "../_components/CategoryStacksGrid";
-import TableOfContents from "../_components/TableOfContents";
+import TableOfContents, { MIN_TOC_HEADINGS } from "../_components/TableOfContents";
 import ActionSummary from "../_components/ActionSummary";
 import Badge from "@/app/(public)/_components/Badge";
 import { Card } from "@/app/(public)/_components/Card";
 import { formatDate } from "@/lib/dates";
+import { stripDecorativeTemplateEmoji } from "@/lib/posts/strip-decorative-template-emoji";
 
 /**
  * The document detail shell, shared by every published document.
@@ -35,9 +34,6 @@ import { formatDate } from "@/lib/dates";
 interface DocumentTemplateProps {
   post: any;
   lifecycleView: any;
-  prevPost: any;
-  nextPost: any;
-  categoryStacks: any[];
 }
 
 /**
@@ -58,11 +54,11 @@ const SECTION_LABELS = {
 export default function DocumentTemplate({
   post,
   lifecycleView,
-  prevPost,
-  nextPost,
-  categoryStacks,
 }: DocumentTemplateProps) {
   const labels = SECTION_LABELS[lifecycleView.kind as keyof typeof SECTION_LABELS] ?? SECTION_LABELS.state;
+  // Imported HTML may contain the source site's sharing/recirculation furniture.
+  // Strip only class-bound decorative markers; do not rewrite quoted document text.
+  const renderedContent = stripDecorativeTemplateEmoji(String(post.content ?? ""));
 
   // An action deadline is orthogonal to the lifecycle KIND — lib/posts/lifecycle.ts
   // says so explicitly, and isLifecycleClosed() already treats a passed deadline
@@ -73,6 +69,15 @@ export default function DocumentTemplate({
   // is what makes the page agree with the filter.
   const formattedDeadline = post.actionDeadline ? formatDate(post.actionDeadline) : null;
   const isPastDeadline = Boolean(post.actionDeadline) && new Date(post.actionDeadline) < new Date();
+
+  // The same threshold TableOfContents applies, decided here as well so the
+  // LAYOUT can follow it. TableOfContents renders nothing below the threshold,
+  // but the grid column reserved for it does not disappear on its own — a short
+  // document was left with a quarter of the desktop width held empty beside its
+  // text. Counted from the stored HTML rather than the DOM because this decides
+  // server-rendered markup; the component still owns whether it draws anything.
+  const headingCount = (renderedContent.match(/<h[23][\s>]/gi) || []).length;
+  const showToc = headingCount >= MIN_TOC_HEADINGS;
 
   return (
     <div className="w-full max-w-[1700px] mx-auto space-y-8 pb-24 font-sans">
@@ -86,17 +91,27 @@ export default function DocumentTemplate({
         ]}
       />
 
-      {lifecycleView.kind === "recruitment" ? (
-        <LifecycleStepper
-          stages={lifecycleView.stages}
-          currentStage={lifecycleView.currentStage}
-          isExpired={lifecycleView.isExpired}
-        />
-      ) : (
-        <OrderStateBadge state={lifecycleView.state} label={lifecycleView.label} />
-      )}
+      {/*
+        One document header (AI_SLOP_AUDIT.md A09). The state indicator, the
+        masthead and the At a Glance card used to be three consecutive
+        full-width bordered panels before the order text, and between them the
+        reference, department, date, deadline and GOIR check each appeared
+        twice. The indicator is now the strip that opens this block — state
+        first, still the first thing on the page — and the facts appear once,
+        here, where the document identifies itself.
+      */}
+      <header className="rounded-2xl border border-hair overflow-hidden">
+        {lifecycleView.kind === "recruitment" ? (
+          <LifecycleStepper
+            stages={lifecycleView.stages}
+            currentStage={lifecycleView.currentStage}
+            isExpired={lifecycleView.isExpired}
+          />
+        ) : (
+          <OrderStateBadge state={lifecycleView.state} label={lifecycleView.label} />
+        )}
 
-      <div className="on-masthead bg-masthead text-mastheadText border border-mastheadText/40 rounded-2xl p-6 md:p-8 lg:p-10 space-y-5 shadow-md relative overflow-hidden">
+        <div className="on-masthead bg-masthead text-mastheadText p-6 md:p-8 lg:p-10 space-y-5 relative">
         <div className="flex items-center justify-between gap-3 flex-wrap border-b border-mastheadText/20 pb-4">
           <div className="flex items-center gap-2 flex-wrap">
             <GoirBadge verified={post.verifiedAgainstGoir} />
@@ -139,22 +154,28 @@ export default function DocumentTemplate({
           {post.sourceDept && <span>{post.sourceDept}</span>}
           <DocumentDate post={post} separator=": " />
         </div>
-      </div>
+        </div>
+      </header>
 
       <ActionSummary post={post} />
 
-      <div className="lg:grid lg:grid-cols-12 lg:gap-8 xl:gap-10 space-y-8 lg:space-y-0 items-start">
-        <div className="lg:col-span-8 xl:col-span-9 space-y-8 min-w-0">
+      <div className={showToc ? "lg:grid lg:grid-cols-12 lg:gap-8 xl:gap-10 space-y-8 lg:space-y-0 items-start" : "space-y-8"}>
+        <div className={showToc ? "lg:col-span-8 xl:col-span-9 space-y-8 min-w-0" : "space-y-8 min-w-0"}>
           {post.content && (
             <section
               aria-label="Full Article & Guidelines"
               className="bg-paperRaised border border-hair/80 rounded-xl p-6 md:p-8 space-y-4"
             >
-              <div className="font-mono font-bold text-xs tracking-wider text-inkSoft border-b border-hair pb-3 flex items-center justify-between gap-2">
-                <span>{labels.content}</span>
-                <span className="text-xs text-inkSoft/80">Structured Document</span>
+              {/*
+                "Structured Document" sat opposite this label and said nothing
+                actionable about the document, the section or what to do next —
+                generic filler beside a heading that already names the content
+                (AI_SLOP_AUDIT.md A10).
+              */}
+              <div className="font-mono font-bold text-xs tracking-wider text-inkSoft border-b border-hair pb-3">
+                {labels.content}
               </div>
-              <div className="prose-gazette" dangerouslySetInnerHTML={{ __html: post.content }} />
+              <div className="prose-gazette" dangerouslySetInnerHTML={{ __html: renderedContent }} />
             </section>
           )}
 
@@ -187,13 +208,38 @@ export default function DocumentTemplate({
           )}
         </div>
 
-        <div className="lg:col-span-4 xl:col-span-3">
+        {/*
+          Mounted either way: below the threshold it draws nothing, but its
+          effect still assigns the heading ids that make a direct link to a
+          section work on a document with no contents list.
+        */}
+        {showToc ? (
+          <div className="lg:col-span-4 xl:col-span-3">
+            <TableOfContents />
+          </div>
+        ) : (
           <TableOfContents />
-        </div>
+        )}
       </div>
 
-      <PostNavCards prevPost={prevPost} nextPost={nextPost} />
-      <CategoryStacksGrid stacks={categoryStacks} />
+      {/*
+        One quiet way back to the index this document belongs to. It replaces
+        Previous/Next Post cards and the two "Latest Updates & Softwares"
+        Category Stacks (AI_SLOP_AUDIT.md A11): chronological adjacency and
+        site-wide recency are not relationships between documents, and they
+        competed for space with the Related Orders above, which are.
+      */}
+      <div className="border-t border-hair pt-4">
+        <Link
+          href={post.category ? `/category/${post.category.slug}` : "/orders"}
+          className="inline-flex items-center gap-2 min-h-[44px] text-sm font-semibold text-tamarind hover:underline"
+        >
+          <span aria-hidden="true">←</span>
+          <span>
+            {post.category ? `All ${post.category.nameEn}` : "All orders & documents"}
+          </span>
+        </Link>
+      </div>
 
       <footer className="border-t border-hair pt-4 text-center text-xs text-inkSoft/80 font-sans leading-relaxed">
         <p>

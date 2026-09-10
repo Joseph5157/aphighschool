@@ -145,7 +145,9 @@ export function Dialog({
               (falls back to the body's sans default); size/case/weight kept
               exactly as-is, since this is an in-context title, not a page
               heading, and there's no rendering available to verify a resize. */}
-          <h2 id={titleId} className="text-sm font-semibold uppercase text-ink">
+          {/* SLOP-VISUAL-1 (A05): a dialog title is section identity, not a
+              tracked label — DESIGN_SYSTEM.md §13 is sentence case for headings. */}
+          <h2 id={titleId} className="text-sm font-semibold text-ink">
             {title}
           </h2>
           <IconButton

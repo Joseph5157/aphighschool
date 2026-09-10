@@ -31,13 +31,23 @@ export const FieldLabel = React.forwardRef<HTMLLabelElement, FieldLabelProps>(
   ({ children, required, labelTe, className = "", ...props }, ref) => (
     <label
       ref={ref}
-      className={`block font-mono text-xs uppercase font-bold text-inkSoft tracking-wider ${className}`}
+      // SLOP-VISUAL-1 (AI_SLOP_AUDIT.md A05). Every form label in the product
+      // came through here, so a single calculator column rendered eight tracked
+      // ALL-CAPS mono labels at once — DESIGN_SYSTEM.md §1.3 allows at most one
+      // uppercase label per region, and §13 asks for sentence case on labels
+      // outright. A05 reserves mono for dates, GO/reference numbers, status and
+      // calculator figures; a field label is none of those.
+      //
+      // The Telugu span's `lowercase` went with it: it existed only to undo this
+      // element's `uppercase` on the parenthetical, which is a good sign the
+      // transform was fighting the content rather than serving it.
+      className={`block text-xs font-bold text-inkSoft ${className}`}
       {...props}
     >
       {children}
       {required && <span className="text-kumkum ml-0.5">*</span>}
       {labelTe && (
-        <span lang="te" className="font-telugu text-inkSoft/80 font-normal lowercase ml-1">
+        <span lang="te" className="font-telugu text-inkSoft/80 font-normal ml-1">
           ({labelTe})
         </span>
       )}

@@ -23,15 +23,29 @@ describe("draft leak guards", () => {
     expect(detailBlock).not.toMatch(/where:\s*\{\s*slug:\s*params\.slug\s*\}/);
   });
 
-  it("all public detail navigation queries exclude drafts", () => {
-    const siblingBlock = detail.slice(detail.indexOf('"post-siblings"'), detail.indexOf("// Query previous"));
-    const previousBlock = detail.slice(detail.indexOf('"prev-post"'), detail.indexOf('"next-post"'));
-    const nextBlock = detail.slice(detail.indexOf('"next-post"'), detail.indexOf("// Query latest"));
-    const latestBlock = detail.slice(detail.indexOf('"latest-news-stack"'), detail.indexOf("const categoryStacks"));
+  it("every post query on the public detail route excludes drafts", () => {
+    // This used to name the four navigation queries individually. SLOP-REMOVE-1
+    // deleted all four (AI_SLOP_AUDIT.md A11/A20), and a test that slices out
+    // queries by name silently stops guarding anything once they are gone — so
+    // it now enumerates whatever `prisma.post.find*` calls the file actually
+    // contains and requires each one to filter drafts. A reintroduced feed is
+    // covered automatically instead of being missed.
+    const queries = [...detail.matchAll(/prisma\.post\.find\w+\(\{/g)];
+    expect(queries.length).toBeGreaterThan(0);
 
-    for (const block of [siblingBlock, previousBlock, nextBlock, latestBlock]) {
-      expect(block).toMatch(/isDraft:\s*false/);
-    }
+    const unguarded = queries
+      .map((match) => {
+        // Stop at `include:` — the detail query's relation filter carries its
+        // own `relatedPost: { isDraft: false }`, which would otherwise satisfy
+        // this assertion for a top-level `where` that filters nothing. The
+        // query's OWN where clause has to do the work.
+        const window = detail.slice(match.index!, match.index! + 600);
+        const includeAt = window.indexOf("include:");
+        return includeAt === -1 ? window : window.slice(0, includeAt);
+      })
+      .filter((block) => !/isDraft:\s*false/.test(block));
+
+    expect(unguarded.map((block) => block.replace(/\s+/g, " ").slice(0, 120))).toEqual([]);
   });
 
   it("generateMetadata filters out drafts", () => {

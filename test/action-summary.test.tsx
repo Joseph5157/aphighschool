@@ -9,15 +9,15 @@ const templates = ["DocumentTemplate.tsx"].map((file) =>
   fs.readFileSync(path.join(process.cwd(), "app", "(public)", "posts", "[slug]", "_templates", file), "utf8")
 );
 
+// SLOP-DETAIL-1 (AI_SLOP_AUDIT.md A09) removed this card's fact table. Its five
+// rows — reference, department, the labelled date, the deadline and the GOIR
+// check — were all already in the document header a few hundred pixels above.
+// The rules those rows were guarded by did not go anywhere: they are asserted
+// on the header now, in test/detail-header.test.tsx, which renders the real
+// DocumentTemplate rather than this card.
 const basePost = {
   summaryTe: ["ఇది రచయిత అందించిన తెలుగు సారాంశం."],
   englishAbstract: "An authored English brief.",
-  goReference: "G.O.Ms.No.129",
-  sourceDept: "School Education, AP",
-  documentDate: new Date("2024-02-08T00:00:00.000Z"),
-  createdAt: new Date("2026-08-24T10:00:00.000Z"),
-  actionDeadline: new Date("2026-08-30T00:00:00.000Z"),
-  verifiedAgainstGoir: true,
   actionUrl: "https://example.com/action",
   pdfUrl: "https://example.com/document.pdf",
   sourceUrl: "https://example.com/source",
@@ -36,22 +36,28 @@ describe("ActionSummary", () => {
     expect(screen.queryByText(basePost.englishAbstract)).not.toBeInTheDocument();
   });
 
-  it("renders optional facts only when explicit and labels a fallback date honestly", () => {
-    render(<ActionSummary post={{ ...basePost, goReference: null, sourceDept: null, documentDate: null, actionDeadline: null, verifiedAgainstGoir: false }} />);
-    expect(screen.queryByText("G.O. / Reference")).not.toBeInTheDocument();
-    expect(screen.queryByText("Department")).not.toBeInTheDocument();
-    expect(screen.getByText("Added to portal")).toBeInTheDocument();
-    expect(screen.queryByText("Important date")).not.toBeInTheDocument();
-    expect(screen.queryByText("GOIR verification")).not.toBeInTheDocument();
-    expect(screen.queryByText("Official Date")).not.toBeInTheDocument();
-    expect(screen.queryByText(/goir\.ap\.gov\.in/i)).not.toBeInTheDocument();
+  it("renders nothing at all when there is no summary, abstract or link", () => {
+    const { container } = render(
+      <ActionSummary
+        post={{ summaryTe: [], englishAbstract: null, actionUrl: null, pdfUrl: null, sourceUrl: null }}
+      />
+    );
+    // An empty bordered card announcing "At a Glance" over nothing is the
+    // filler this gate exists to remove.
+    expect(container).toBeEmptyDOMElement();
   });
 
-  it("renders explicit deadline and GOIR verification", () => {
+  it("no longer repeats facts the document header already states", () => {
     render(<ActionSummary post={basePost} />);
-    expect(screen.getByText("Important date")).toBeInTheDocument();
-    expect(screen.getByText("GOIR verification")).toBeInTheDocument();
-    expect(screen.getByText("Verified")).toBeInTheDocument();
+    for (const label of [
+      "G.O. / Reference",
+      "Department",
+      "Important date",
+      "GOIR verification",
+      "Author-provided summary and document facts",
+    ]) {
+      expect(screen.queryByText(label), label).not.toBeInTheDocument();
+    }
   });
 
   it("uses neutral safe links without nested controls", () => {
@@ -64,6 +70,15 @@ describe("ActionSummary", () => {
       expect(link).toHaveAttribute("rel", "noopener noreferrer");
     }
     expect(container.querySelector("a button")).toBeNull();
+  });
+
+  it("keeps a document's own source route when it has one and no summary", () => {
+    render(
+      <ActionSummary
+        post={{ summaryTe: [], englishAbstract: null, actionUrl: null, pdfUrl: null, sourceUrl: "https://example.com/source" }}
+      />
+    );
+    expect(screen.getByRole("link", { name: /Source link/i })).toBeInTheDocument();
   });
 
   it("does not expose unsupported questions or generic notification procedures", () => {

@@ -356,7 +356,7 @@ export default function TaxCalculatorUI() {
   };
 
   const TABS: { id: DocumentView; label: string }[] = [
-    { id: "calculator", label: "🧮 Calculator" },
+    { id: "calculator", label: "Calculator" },
     { id: "annexure1", label: "Annexure-I" },
     { id: "annexure2", label: "Annexure-II" },
     { id: "form16a", label: "Form 16 Pt-A" },
@@ -364,7 +364,7 @@ export default function TaxCalculatorUI() {
     { id: "form12bb", label: "Form 12BB" },
     { id: "form12ba", label: "Form 12BA" },
     { id: "rentReceipt", label: "HRA Receipt" },
-    { id: "printAll", label: "🖨️ Print All" },
+    { id: "printAll", label: "Print All" },
   ];
 
   return (
@@ -405,9 +405,9 @@ export default function TaxCalculatorUI() {
         <div className="bg-ink text-paper rounded-xl p-3 px-4 flex flex-wrap items-center justify-between gap-3 shadow-md print:hidden border-l-4 border-paper sticky top-[76px] z-30">
           <div className="flex items-center gap-2">
             <span className="font-mono text-xs font-bold text-paper uppercase">
-              📄 {activeTab === "printAll" ? "Full Print Suite (All 7 Documents)" : TABS.find((t) => t.id === activeTab)?.label}
+              {activeTab === "printAll" ? "Full Print Suite (All 7 Documents)" : TABS.find((t) => t.id === activeTab)?.label}
             </span>
-            <span className="text-[11px] text-paper/70 hidden sm:inline">
+            <span className="text-xs text-paper/70 hidden sm:inline">
               — Official Monochrome A4 Layout
             </span>
           </div>
@@ -417,7 +417,6 @@ export default function TaxCalculatorUI() {
               onClick={handlePrint}
               className="bg-turmeric text-masthead font-mono font-bold text-xs px-4 py-2 rounded-lg hover:bg-turmeric/90 shadow-sm flex items-center gap-1.5 transition-all cursor-pointer active:scale-95"
             >
-              <span>🖨️</span>
               <span>Print Now (Ctrl+P)</span>
             </button>
             {activeTab !== "printAll" && (
@@ -741,7 +740,7 @@ export default function TaxCalculatorUI() {
             {/* Right Summary Panel */}
             <div className="space-y-4">
               <div className="bg-ink text-paper rounded-xl p-6 shadow-md border-l-4 border-paper space-y-3 sticky top-[76px]">
-                <div className="font-mono text-[9px] text-paper/60 uppercase font-bold tracking-wider">
+                <div className="font-mono text-xs text-paper/60 uppercase font-bold tracking-wider">
                   Tax Payable ({regime === "old" ? "Old Regime" : "New Regime"})
                 </div>
                 <div className="text-3xl font-bold text-paper font-mono">₹{fmt(taxPayable)}</div>
@@ -787,16 +786,16 @@ export default function TaxCalculatorUI() {
               </div>
 
               <div className="bg-paperRaised border border-hair rounded-xl p-4 text-xs font-mono space-y-1.5">
-                <div className="font-bold text-ink border-b border-hair pb-2 mb-2">📂 Official Documents to Print</div>
+                <div className="font-bold text-ink border-b border-hair pb-2 mb-2">Official Documents to Print</div>
                 {(
                   [
-                    ["annexure1", "📄 ANNEXURE - I (Salary Statement)"],
-                    ["annexure2", "📄 ANNEXURE - II (Tax Calculation)"],
-                    ["form16a", "📄 FORM 16 — Part A (TDS Cert)"],
-                    ["form16b", "📄 FORM 16 — Part B (Annexure)"],
-                    ["form12bb", "📄 FORM 12BB (Investment Claims)"],
-                    ["form12ba", "📄 FORM 12BA (Perquisites)"],
-                    ["rentReceipt", "📄 HRA Rent Receipt (u/s 10(13A))"],
+                    ["annexure1", "ANNEXURE - I (Salary Statement)"],
+                    ["annexure2", "ANNEXURE - II (Tax Calculation)"],
+                    ["form16a", "FORM 16 — Part A (TDS Cert)"],
+                    ["form16b", "FORM 16 — Part B (Annexure)"],
+                    ["form12bb", "FORM 12BB (Investment Claims)"],
+                    ["form12ba", "FORM 12BA (Perquisites)"],
+                    ["rentReceipt", "HRA Rent Receipt (u/s 10(13A))"],
                   ] as [DocumentView, string][]
                 ).map(([id, label]) => (
                   <button
@@ -813,7 +812,7 @@ export default function TaxCalculatorUI() {
                   onClick={handlePrintAll}
                   className="w-full text-center bg-tamarind text-paper p-2.5 rounded-lg font-bold hover:bg-tamarindDark transition-colors shadow-sm"
                 >
-                  🖨️ Print All 7 Official Documents
+                  Print All 7 Official Documents
                 </button>
               </div>
             </div>
@@ -822,7 +821,7 @@ export default function TaxCalculatorUI() {
           {/* Accordion FAQs Section */}
           <div className="pt-8 border-t border-hair space-y-4 print:hidden">
             <h2 className="text-lg font-bold text-ink tracking-tight flex items-center gap-2">
-              <span>📘</span> Income Tax Guidelines & FAQs (ఆదాయపు పన్ను మార్గదర్శకాలు)
+              Income Tax Guidelines & FAQs (ఆదాయపు పన్ను మార్గదర్శకాలు)
             </h2>
             <Accordion
               items={[

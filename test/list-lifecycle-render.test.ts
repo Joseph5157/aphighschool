@@ -18,12 +18,9 @@ import { resetDb, seedCategory, makePost } from "./db";
 // HomePage embeds DesktopLeftNav, itself an async Server Component, which
 // React 18's renderToStaticMarkup cannot await (it throws "Objects are not
 // valid as a React child (found: [object Promise])"). Only the two navigation
-// rails are stubbed out; the post query, HeroCard and PostCard under test are
-// all the real thing.
+// rail is stubbed out; the post query and the PostCard rows under test are all
+// the real thing.
 vi.mock("@/app/(public)/_components/DesktopLeftNav", () => ({
-  default: () => null,
-}));
-vi.mock("@/app/(public)/_components/DesktopSidebar", () => ({
   default: () => null,
 }));
 
@@ -95,10 +92,11 @@ describe("category page lifecycle pills", () => {
 describe("home page lifecycle pills", () => {
   beforeEach(resetDb);
 
-  // HomePage renders posts[0] through HeroCard and the rest through PostCard,
-  // so two posts with different order states cover both components at once
-  // whichever way ORDER_BY_OFFICIAL_DATE happens to sort them.
-  it("gives state documents their order state on both the hero and the cards", async () => {
+  // Since SLOP-DENSITY-1 (AI_SLOP_AUDIT.md A01) every document on the homepage
+  // is an ordinary PostCard row, including the newest one that used to be
+  // promoted into a HeroCard. Two posts with different order states still cover
+  // the mapping in both directions.
+  it("gives state documents their order state on every row", async () => {
     await makePost({
       isDraft: false,
       titleEn: "Dearness Allowance Arrears Installments Release",

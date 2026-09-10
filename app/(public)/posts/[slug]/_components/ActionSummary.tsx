@@ -1,42 +1,46 @@
 import React from "react";
-import { dateLabel, formatDate, officialDate } from "@/lib/dates";
 
 type ActionSummaryPost = {
   summaryTe: string[];
   englishAbstract: string | null;
-  goReference: string | null;
-  sourceDept: string | null;
-  documentDate: Date | null;
-  createdAt: Date;
-  actionDeadline: Date | null;
-  verifiedAgainstGoir: boolean;
   actionUrl: string | null;
   pdfUrl: string | null;
   sourceUrl: string | null;
 };
 
-function FactRow({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <div className="grid grid-cols-[minmax(7.5rem,0.85fr)_minmax(0,1.5fr)] gap-3 border-b border-hair/60 py-2.5 last:border-b-0 sm:gap-5">
-      <dt className="font-mono text-[10px] font-bold uppercase tracking-wide text-inkSoft">{label}</dt>
-      <dd className="min-w-0 text-sm font-medium text-ink">{children}</dd>
-    </div>
-  );
-}
-
+/**
+ * The document's authored summary and its routes to the source.
+ *
+ * SLOP-DETAIL-1 (AI_SLOP_AUDIT.md A09) removed the fact table that used to sit
+ * under the summary. Every row in it — G.O. / Reference, Department, the
+ * labelled date, the deadline, the GOIR verification — was already rendered a
+ * few hundred pixels above in the document header, so the table added an aura
+ * of completeness rather than information. The facts themselves are untouched;
+ * they are stated once, in the header, where the document identifies itself.
+ *
+ * The subtitle "Author-provided summary and document facts" went too: the
+ * heading already says At a Glance, and the sentence described the section
+ * rather than telling the reader anything about the document.
+ *
+ * What is left is what only this section carries: the authored Telugu summary,
+ * the English abstract when one exists, and the action/PDF/source links. None
+ * of it is synthesized — an absent summary renders nothing rather than a
+ * generated one.
+ */
 export default function ActionSummary({ post }: { post: ActionSummaryPost }) {
   const hasTeluguSummary = post.summaryTe?.length > 0;
   const hasLinks = post.actionUrl || post.pdfUrl || post.sourceUrl;
+
+  if (!hasTeluguSummary && !post.englishAbstract && !hasLinks) return null;
 
   return (
     <section
       aria-label="At a glance"
       className="bg-paperRaised border border-hair/80 border-l-4 border-l-kumkum rounded-xl p-5 md:p-6 space-y-5"
     >
-      <div className="border-b border-hair pb-3">
-        <h2 className="font-mono font-bold text-xs tracking-wider text-kumkum"><span lang="te">సంక్షిప్తంగా</span> — At a Glance</h2>
-        <p className="mt-1 text-xs text-inkSoft">Author-provided summary and document facts.</p>
-      </div>
+      <h2 className="font-mono font-bold text-xs tracking-wider text-kumkum border-b border-hair pb-3">
+        <span lang="te">సంక్షిప్తంగా</span> — At a Glance
+      </h2>
 
       {(hasTeluguSummary || post.englishAbstract) && (
         <div className="space-y-4">
@@ -52,34 +56,12 @@ export default function ActionSummary({ post }: { post: ActionSummaryPost }) {
 
           {post.englishAbstract && (
             <div className={`${hasTeluguSummary ? "border-t border-dashed border-hair pt-4" : ""} text-body text-inkSoft italic`}>
-              <strong className="mb-1 block font-mono text-[10px] font-bold not-italic text-inkSoft">English abstract</strong>
+              <strong className="mb-1 block font-mono text-xs font-bold not-italic text-inkSoft">English abstract</strong>
               {post.englishAbstract}
             </div>
           )}
         </div>
       )}
-
-      <dl className="border-y border-hair/70">
-        {post.goReference && (
-          <FactRow label="G.O. / Reference">
-            <span className="font-mono font-bold text-tamarind break-words">{post.goReference}</span>
-          </FactRow>
-        )}
-        {post.sourceDept && <FactRow label="Department">{post.sourceDept}</FactRow>}
-        <FactRow label={dateLabel(post)}>
-          <span className="font-mono">{formatDate(officialDate(post))}</span>
-        </FactRow>
-        {post.actionDeadline && (
-          <FactRow label="Important date">
-            <span className="font-mono font-bold text-kumkum">{formatDate(post.actionDeadline)}</span>
-          </FactRow>
-        )}
-        {post.verifiedAgainstGoir && (
-          <FactRow label="GOIR verification">
-            <span className="font-mono font-semibold text-tamarind">Verified</span>
-          </FactRow>
-        )}
-      </dl>
 
       {hasLinks && (
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">

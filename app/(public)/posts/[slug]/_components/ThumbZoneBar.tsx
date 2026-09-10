@@ -37,7 +37,11 @@ export default function ThumbZoneBar({ pdfUrl, sourceUrl }: ThumbZoneProps) {
         {/* Primary Action Button */}
         <button
           onClick={scrollToPdf}
-          className="flex-1 min-w-0 h-[48px] min-h-[48px] bg-ink hover:bg-inkSoft text-paper font-mono font-bold text-sm tracking-wider uppercase rounded-xl flex items-center justify-center gap-2 shadow-md transition-all active:scale-[0.99]"
+          // SLOP-VISUAL-1 (A05): this was the product's only ALL-CAPS mono
+          // button. DESIGN_SYSTEM.md §13 is sentence case for buttons, and §1.3
+          // reserves uppercase tracking for section labels — which a primary
+          // action is not.
+          className="flex-1 min-w-0 h-[48px] min-h-[48px] bg-ink hover:bg-inkSoft text-paper font-bold text-sm rounded-xl flex items-center justify-center gap-2 shadow-md transition-all active:scale-[0.99]"
         >
           {/* truncate + min-w-0: at 320px the label would otherwise push the
               secondary link off the right edge of the bar. */}
@@ -54,7 +58,19 @@ export default function ThumbZoneBar({ pdfUrl, sourceUrl }: ThumbZoneProps) {
             title="Open source link"
             aria-label="Open source link"
           >
-            ↗
+            {/* SLOP-VISUAL-1 (A03): was a bare ↗ character — the whole visible
+                content of an icon-only control, at whatever weight the platform
+                font happened to give it. DESIGN_SYSTEM.md §13: inline SVG on
+                currentColor, aria-hidden, with the name on the control. */}
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
           </a>
         )}
       </div>

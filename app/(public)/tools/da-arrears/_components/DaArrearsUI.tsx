@@ -211,7 +211,7 @@ export default function DaArrearsUI() {
           ← Back to Utility Tools / ఇతర సాధనాలు
         </Link>
         <Badge variant="tamarind" size="sm" shape="pill" dot>
-          Runs 100% On Device
+          Runs in your browser
         </Badge>
       </div>
 
@@ -272,7 +272,7 @@ export default function DaArrearsUI() {
             <Separator />
 
             <div className="space-y-1">
-              <div className="font-mono text-[10px] sm:text-xs uppercase font-bold text-inkSoft tracking-wider">
+              <div className="text-xs font-bold text-inkSoft">
                 Arrears Period / బకాయిల కాలం
               </div>
               <div className="grid grid-cols-2 gap-3">
@@ -358,7 +358,7 @@ export default function DaArrearsUI() {
           <CardContent className="space-y-4">
             {result.error ? (
               <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-xs text-red-600 font-medium leading-relaxed">
-                ⚠️ {result.error}
+                {result.error}
               </div>
             ) : (
               <>
@@ -368,7 +368,7 @@ export default function DaArrearsUI() {
                   </div>
                 ) : (
                   <div className="p-3 bg-hair/30 rounded-lg space-y-1">
-                    <div className="text-inkSoft font-mono text-[11px]">
+                    <div className="text-inkSoft font-mono text-xs">
                       {hasNoArrears ? "Result:" : "Total Estimated Arrears:"}
                     </div>
                     {hasNoArrears ? (
@@ -380,13 +380,13 @@ export default function DaArrearsUI() {
                         {formatCurrency(result.totalArrears)}
                       </div>
                     )}
-                    <div className="text-[11px] text-inkSoft/80 font-sans mt-1">
+                    <div className="text-xs text-inkSoft/80 font-sans mt-1">
                       Across {result.monthCount} month{result.monthCount === 1 ? "" : "s"}
                     </div>
                   </div>
                 )}
 
-                <div className="p-3 bg-tamarind/5 border border-tamarind/20 rounded-lg text-[11px] text-inkSoft leading-relaxed">
+                <div className="p-3 bg-tamarind/5 border border-tamarind/20 rounded-lg text-xs text-inkSoft leading-relaxed">
                   {pensionScheme === "OPS" ? (
                     <>
                       As an <b>OPS</b> employee, DA arrears are typically credited to your
@@ -445,7 +445,7 @@ export default function DaArrearsUI() {
       {/* Accordion FAQs */}
       <div className="space-y-4 pt-6 border-t border-hair">
         <h2 className="text-lg font-bold text-ink tracking-tight flex items-center gap-2">
-          <span>📘</span> DA Arrears Guidelines & FAQs (నిబంధనలు & వివరణలు)
+          DA Arrears Guidelines & FAQs (నిబంధనలు & వివరణలు)
         </h2>
         <Accordion items={DA_FAQ_ITEMS} allowMultiple={true} />
       </div>

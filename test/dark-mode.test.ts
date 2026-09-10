@@ -2,6 +2,7 @@
 import { describe, it, expect } from "vitest";
 import fs from "node:fs";
 import path from "node:path";
+import { tsxFiles } from "./class-source";
 
 const read = (p: string) => fs.readFileSync(path.join(process.cwd(), p), "utf8");
 const config = () => read("tailwind.config.js");
@@ -83,8 +84,12 @@ describe("colour token discipline", () => {
 describe("no engagement-oriented UI", () => {
   it("uses no streak, trending-count, or nudge language in the sidebars", () => {
     const banned = /streak|don't miss|hurry|trending now|\d+ people|viewers|most popular/i;
-    for (const file of ["app/(public)/_components/DesktopLeftNav.tsx", "app/(public)/_components/DesktopSidebar.tsx"]) {
-      expect(read(file)).not.toMatch(banned);
+    // Widened past the two rails when SLOP-DENSITY-1 deleted DesktopSidebar
+    // (AI_SLOP_AUDIT.md A02): the rule is a product one (PRODUCT.md's "not an
+    // engagement product"), so it is asserted over every public surface rather
+    // than over whichever two files happened to hold a sidebar.
+    for (const file of tsxFiles("app/(public)")) {
+      expect(read(file), file).not.toMatch(banned);
     }
   });
 });

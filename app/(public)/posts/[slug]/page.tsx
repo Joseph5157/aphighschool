@@ -1,19 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
-import Link from "next/link";
 import type { Metadata } from "next";
-import Breadcrumb from "@/app/(public)/_components/Breadcrumb";
-import LifecycleStepper from "./_components/LifecycleStepper";
-import ThumbZoneBar from "./_components/ThumbZoneBar";
-import PostNavCards from "./_components/PostNavCards";
-import CategoryStacksGrid from "./_components/CategoryStacksGrid";
-import Badge from "@/app/(public)/_components/Badge";
-import OrderStateBadge from "@/app/(public)/_components/OrderStateBadge";
 import { resolveLifecycle } from "@/lib/posts/lifecycle";
-import Button from "@/app/(public)/_components/Button";
-import { Card } from "@/app/(public)/_components/Card";
-import { officialDate, dateLabel, formatDate, ORDER_BY_OFFICIAL_DATE } from "@/lib/dates";
-import { safeQuery, optionalQuery } from "@/lib/db-safe";
+import { safeQuery } from "@/lib/db-safe";
 
 export const revalidate = 3600; // ISR revalidation (1 hour)
 
@@ -101,99 +90,13 @@ export default async function PostDetailPage({
     notFound();
   }
 
-  const postCategory = post.category;
-  const siblingPosts = postCategory
-    ? await optionalQuery(
-        "post-siblings",
-        () =>
-          prisma.post.findMany({
-            where: {
-              categoryId: postCategory.id,
-              id: { not: post.id },
-              isDraft: false,
-            },
-            orderBy: ORDER_BY_OFFICIAL_DATE,
-            take: 3,
-            select: { id: true, slug: true, titleEn: true, goReference: true, createdAt: true, documentDate: true },
-          }),
-        []
-      )
-    : [];
-
-  // Query previous and next posts timeline
-  const prevPost = await optionalQuery("prev-post", () =>
-    prisma.post.findFirst({
-      where: {
-        createdAt: { lt: post.createdAt },
-        id: { not: post.id },
-        isDraft: false,
-      },
-      orderBy: { createdAt: "desc" },
-      select: { slug: true, titleEn: true, goReference: true },
-    }),
-    null
-  );
-
-  const nextPost = await optionalQuery("next-post", () =>
-    prisma.post.findFirst({
-      where: {
-        createdAt: { gt: post.createdAt },
-        id: { not: post.id },
-        isDraft: false,
-      },
-      orderBy: { createdAt: "asc" },
-      select: { slug: true, titleEn: true, goReference: true },
-    }),
-    null
-  );
-
-  // Query latest posts for Category Stacks
-  const latestNewsItems = await optionalQuery(
-    "latest-news-stack",
-    () =>
-      prisma.post.findMany({
-        where: { id: { not: post.id }, isDraft: false },
-        orderBy: { createdAt: "desc" },
-        take: 6,
-        select: { id: true, slug: true, titleEn: true },
-      }),
-    []
-  );
-
-  // A real Category, unlike the two invented slugs this replaced
-  // ("ap-teachers-latest-news", "teachers-softwares") that matched no row in
-  // the Category table and made "View More" 404 on every post page.
-  const toolsCategoryItems = await optionalQuery(
-    "tools-category-stack",
-    () =>
-      prisma.post.findMany({
-        where: { id: { not: post.id }, isDraft: false, category: { slug: "tools" } },
-        orderBy: { createdAt: "desc" },
-        take: 6,
-        select: { id: true, slug: true, titleEn: true },
-      }),
-    []
-  );
-
-  const categoryStacks = [
-    {
-      title: "AP Teachers Latest Updates",
-      // Site-wide, not category-scoped — links to the real "browse everything" hub.
-      href: "/orders",
-      icon: "🔔",
-      items: latestNewsItems,
-    },
-    ...(toolsCategoryItems.length > 0
-      ? [
-          {
-            title: "School Apps & Teacher Utilities",
-            href: "/category/tools",
-            icon: "📱",
-            items: toolsCategoryItems,
-          },
-        ]
-      : []),
-  ];
+  // SLOP-REMOVE-1 (AI_SLOP_AUDIT.md A11, A20) deleted four navigation queries
+  // that ran on every document request: `post-siblings` (whose result was never
+  // read at all), `prev-post`/`next-post` (chronological adjacency), and the two
+  // "Category Stacks" latest/tools feeds. Related Orders — an approved, curated
+  // relationship the main query already includes — is the document's
+  // continuation; recency and publication order are not relationships between
+  // documents, and a reference product does not need recirculation furniture.
 
   // One shell for every document. The branch that used to live here picked
   // between two 95%-identical templates to express a distinction
@@ -203,13 +106,5 @@ export default async function PostDetailPage({
   // DocumentTemplate reads the view instead.
   const lifecycleView = resolveLifecycle(post);
 
-  return (
-    <DocumentTemplate
-      post={post}
-      lifecycleView={lifecycleView}
-      prevPost={prevPost}
-      nextPost={nextPost}
-      categoryStacks={categoryStacks}
-    />
-  );
+  return <DocumentTemplate post={post} lifecycleView={lifecycleView} />;
 }
