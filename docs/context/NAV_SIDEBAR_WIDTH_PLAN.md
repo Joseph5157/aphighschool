@@ -125,6 +125,18 @@ gate's explicit instruction was "do not modify the mobile drawer," so it is reco
 fixed. A future gate (e.g. `NAV-DRAWER-FOCUS-1`) should apply the same `transitionend`-based fix
 proven here to `MobileDrawer`'s equivalent effect.
 
+**Fixed in `NAV-DRAWER-FOCUS-1`** (branch `nav-drawer-focus-1`, commit `889d866`). One correction
+to the assumption above: a `transitionend` listener turned out to be the *whole* fix, not just the
+primary path with an "immediate call" fallback for `prefers-reduced-motion` — direct measurement
+found the immediate-call fallback still hits this exact bug under reduced motion, because the
+global override collapses `transition-duration` to ~0.01ms rather than exactly 0, so a transition
+still nominally runs and a synchronous call still lands before the browser flushes the resulting
+layout. `MobileDrawer` instead always waits for `transitionend` on the panel's own `transform`
+property, with a timeout fallback (derived from the panel's declared transition-duration, not a
+guessed constant) only for the case where `transitionend` never fires at all — e.g. the panel was
+already at its open transform, so no value changed to transition. See the commit message for full
+verification detail (real-Chromium acceptance at all four required widths, both motion settings).
+
 ## Implementation
 
 - `app/(public)/_components/Sidebar.tsx`: `Sidebar` gained a `desktopVariant?: "push" | "popover"`
