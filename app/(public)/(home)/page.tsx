@@ -1,19 +1,18 @@
 import { prisma } from "@/lib/prisma";
-import PostCard from "./_components/PostCard";
-import DesktopLeftNav from "./_components/DesktopLeftNav";
-import UpcomingActionDates from "./_components/UpcomingActionDates";
-import EmptyState from "./_components/EmptyState";
+import PostCard from "@/app/(public)/_components/PostCard";
+import DesktopLeftNav from "@/app/(public)/_components/DesktopLeftNav";
+import UpcomingActionDates from "@/app/(public)/_components/UpcomingActionDates";
+import EmptyState from "@/app/(public)/_components/EmptyState";
 import { ORDER_BY_OFFICIAL_DATE, startOfTodayIST } from "@/lib/dates";
 import { safeQuery } from "@/lib/db-safe";
 
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  // The home page's page.tsx sits in the SAME segment folder as
-  // app/(public)/layout.tsx, whose title.template only formats descendant
-  // routes' titles, never its own segment's page — so unlike every other
-  // route in this program, the home page must spell out the full title itself.
-  title: "Latest AP Teacher Orders — AP Teacher Desk",
+  // `(home)` is a descendant segment of app/(public)/layout.tsx, so the
+  // layout title template appends the site name once, like every other public
+  // route.
+  title: "Latest AP Teacher Orders",
   description:
     "The latest published AP School Education government orders, circulars, and notifications, with lifecycle status and provenance shown for each.",
   alternates: { canonical: "/" },

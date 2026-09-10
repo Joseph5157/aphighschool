@@ -1,8 +1,10 @@
 // UI-STATES-1: deliberate loading, empty and error presentation.
 //
-// Loading treatment is proven structurally (every DB-backed public route has
-// a `loading.tsx`, and each one announces itself for assistive tech) rather
-// than by rendering Suspense timing, which jsdom cannot observe. Empty states
+// Loading treatment is proven structurally for the routes that keep it (each
+// announces itself for assistive tech) rather than by rendering Suspense timing,
+// which jsdom cannot observe. Detail routes deliberately have no route-level
+// loading boundary: `SOFT-404-2` keeps their notFound() response unstreamed so
+// it can retain HTTP 404 semantics. Empty states
 // are proven behaviourally wherever a real component owns the branch — see
 // test/search-ui.test.tsx for SearchUI's own cases. test/category-filter.test.tsx
 // only ever exercises non-empty filter results, so the empty branch is covered
@@ -29,7 +31,7 @@ vi.mock("@/lib/prisma", () => ({
 }));
 vi.mock("@/app/(public)/_components/DesktopLeftNav", () => ({ default: () => null }));
 
-const HomePage = (await import("@/app/(public)/page")).default;
+const HomePage = (await import("@/app/(public)/(home)/page")).default;
 const OrdersPage = (await import("@/app/(public)/orders/page")).default;
 
 afterEach(cleanup);
@@ -79,14 +81,11 @@ describe("EmptyState", () => {
 });
 
 describe("loading.tsx coverage for DB-backed public routes", () => {
-  // UI-AUDIT-1 / UI_CURRENT_STATE.md recorded this as the gap this gate
-  // closes: "no route has a loading.tsx". Deleting any one of these files
-  // fails this test for the right reason.
+  // The routes that retain loading UI own list/search work where a streamed
+  // response cannot turn a missing detail record into a false success.
   const routes = [
-    "loading.tsx",
+    "(home)/loading.tsx",
     "orders/loading.tsx",
-    "category/[slug]/loading.tsx",
-    "posts/[slug]/loading.tsx",
     "search/loading.tsx",
   ];
 
@@ -108,6 +107,17 @@ describe("loading.tsx coverage for DB-backed public routes", () => {
     for (const staticRoute of ["topics", "service-desk", "tools", "pensioners"]) {
       expect(fs.existsSync(path.join(PUBLIC_DIR, staticRoute, "loading.tsx"))).toBe(false);
     }
+  });
+
+  it("keeps missing dynamic documents and categories outside a route-level streaming boundary", () => {
+    for (const dynamicRoute of ["posts/[slug]", "category/[slug]"]) {
+      expect(fs.existsSync(path.join(PUBLIC_DIR, dynamicRoute, "loading.tsx"))).toBe(false);
+      expect(read(`${dynamicRoute}/page.tsx`)).toMatch(/notFound\(\)/);
+    }
+  });
+
+  it("does not restore a public-layout loading boundary that would stream detail routes", () => {
+    expect(fs.existsSync(path.join(PUBLIC_DIR, "loading.tsx"))).toBe(false);
   });
 });
 

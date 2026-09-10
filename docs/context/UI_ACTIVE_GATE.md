@@ -58,6 +58,6 @@ verdict. No new features, redesigns, or speculative cleanup were introduced.
 None owned by this program. The later slop program resolved the earlier sub-12px screen
 typography, decorative-emoji, and documentation-lag follow-ups. The genuinely open items are
 a founder decision on the contact/legal surface, real-device acceptance whenever access becomes
-available, the dynamic-route soft-404/robots investigation, final domain/branding, and any
+available, final domain/branding, and any
 separately authorized contrast work. None is a live gate, and no document should invent one
 without a new explicit instruction.

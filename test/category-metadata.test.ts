@@ -35,6 +35,6 @@ describe("category page generateMetadata", () => {
 
   it("falls through to the layout default rather than a literal title for an unknown slug", async () => {
     const metadata = await generateMetadata({ params: { slug: "does-not-exist" } });
-    expect(metadata.title).toBe("Category Not Found");
+    expect(metadata.title).toBe("Page Not Found");
   });
 });

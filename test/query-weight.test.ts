@@ -14,7 +14,7 @@ const categoryDetail = fs.readFileSync(
   "utf8"
 );
 const home = fs.readFileSync(
-  path.join(process.cwd(), "app", "(public)", "page.tsx"),
+  path.join(process.cwd(), "app", "(public)", "(home)", "page.tsx"),
   "utf8"
 );
 

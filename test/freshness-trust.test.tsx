@@ -8,7 +8,7 @@ const read = (file: string) => fs.readFileSync(path.join(process.cwd(), file), "
 
 const ordersPage = read("app/(public)/orders/page.tsx");
 const categoryPage = read("app/(public)/category/[slug]/page.tsx");
-const homePage = read("app/(public)/page.tsx");
+const homePage = read("app/(public)/(home)/page.tsx");
 const searchUi = read("app/(public)/search/_components/SearchUI.tsx");
 const documentTemplate = read("app/(public)/posts/[slug]/_templates/DocumentTemplate.tsx");
 const postPage = read("app/(public)/posts/[slug]/page.tsx");

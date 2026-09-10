@@ -25,7 +25,7 @@ vi.mock("@/app/(public)/_components/DesktopLeftNav", () => ({
 }));
 
 const CategoryDetailPage = (await import("@/app/(public)/category/[slug]/page")).default;
-const HomePage = (await import("@/app/(public)/page")).default;
+const HomePage = (await import("@/app/(public)/(home)/page")).default;
 
 describe("category page lifecycle pills", () => {
   beforeEach(resetDb);

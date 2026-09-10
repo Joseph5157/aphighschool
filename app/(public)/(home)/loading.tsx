@@ -1,5 +1,5 @@
-import DesktopLeftNav from "./_components/DesktopLeftNav";
-import Skeleton from "./_components/Skeleton";
+import DesktopLeftNav from "@/app/(public)/_components/DesktopLeftNav";
+import Skeleton from "@/app/(public)/_components/Skeleton";
 
 /**
  * SLOP-STATES-1 (AI_SLOP_AUDIT.md A17) finishes what SLOP-DENSITY-1 started

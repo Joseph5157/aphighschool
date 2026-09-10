@@ -7,11 +7,9 @@ import { render, screen } from "@testing-library/react";
 // stubbed exactly as density-regressions.test.tsx does.
 vi.mock("@/app/(public)/_components/DesktopLeftNav", () => ({ default: () => null }));
 
-import HomeLoading from "@/app/(public)/loading";
+import HomeLoading from "@/app/(public)/(home)/loading";
 import OrdersLoading from "@/app/(public)/orders/loading";
-import CategoryLoading from "@/app/(public)/category/[slug]/loading";
 import SearchLoading from "@/app/(public)/search/loading";
-import PostDetailLoading from "@/app/(public)/posts/[slug]/loading";
 import { TYPE_FILTERS } from "@/app/(public)/search/_components/SearchUI";
 
 // SLOP-STATES-1 — AI_SLOP_AUDIT.md A17. The finding is that skeletons "faithfully
@@ -26,22 +24,6 @@ const pills = (c: HTMLElement) => c.querySelectorAll('[class*="rounded-full"]');
 const blocks = (c: HTMLElement) => c.querySelectorAll(".animate-pulse");
 
 describe("A17 — skeletons reserve only what the page renders", () => {
-  it("does not reserve a category filter bar that a category will not render", () => {
-    // SLOP-DETAIL-1 (A07): the bar needs more than FILTER_MIN_DOCUMENTS documents
-    // AND a facet that would narrow the list. Reserving six pills unconditionally
-    // guaranteed a shift on every category load.
-    const { container } = render(<CategoryLoading />);
-    expect(pills(container)).toHaveLength(0);
-  });
-
-  it("does not reserve the Previous/Next cards that A11 deleted", () => {
-    // PostNavCards was `grid grid-cols-1 md:grid-cols-2 gap-4` holding two cards.
-    // Nothing renders in that position now but a single back link.
-    const { container } = render(<PostDetailLoading />);
-    expect(container.querySelectorAll('[class*="md:grid-cols-2"]')).toHaveLength(0);
-    expect(container.querySelectorAll('[class*="grid-cols-2"]')).toHaveLength(0);
-  });
-
   it("reserves one chip per option the search type control actually has", () => {
     // Derived from the control, not copied: TYPE_FILTERS plus the leading "All".
     const { container } = render(<SearchLoading />);
@@ -73,9 +55,7 @@ describe("A17 — the placeholders still do their job", () => {
   const CASES = [
     ["home", <HomeLoading key="h" />, "Loading latest orders"],
     ["orders", <OrdersLoading key="o" />, "Loading orders index"],
-    ["category", <CategoryLoading key="c" />, "Loading category"],
     ["search", <SearchLoading key="s" />, "Loading search"],
-    ["detail", <PostDetailLoading key="d" />, "Loading document"],
   ] as const;
 
   it("announces every loading state to assistive technology", () => {
@@ -95,9 +75,7 @@ describe("A17 — the placeholders still do their job", () => {
     const EXPECTED: Record<string, number> = {
       home: 6, // heading + subtitle + 4 document rows
       orders: 10, // masthead + 5 category rows + 3 document rows + footer
-      category: 6, // breadcrumb + masthead + 3 log rows + gazette footer
       search: 15, // heading + 2 subtitle lines + field + 7 type chips + 4 rows
-      detail: 11, // breadcrumb + header + At a Glance + 7 body lines + back link
     };
 
     for (const [name, ui] of CASES) {
@@ -107,12 +85,9 @@ describe("A17 — the placeholders still do their job", () => {
     }
   });
 
-  it("keeps the search field and the category masthead the reader is waiting for", () => {
+  it("keeps the search field the reader is waiting for", () => {
     const search = render(<SearchLoading />);
     expect(search.container.querySelectorAll('[class*="h-12"]').length).toBeGreaterThan(0);
     search.unmount();
-
-    const category = render(<CategoryLoading />);
-    expect(category.container.querySelectorAll('[class*="rounded-2xl"]').length).toBeGreaterThan(0);
   });
 });
