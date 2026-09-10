@@ -16,7 +16,7 @@ HOME-21ST-AUDIT-1   audit only — no application code changed
       ↓
 HOME-POLISH-1       CLOSED — this record
       ↓
-HOME-TELUGU-1       not started
+HOME-TELUGU-1       CLOSED — measured, no application change (docs/context/HOME_TELUGU_PLAN.md)
 ```
 
 ## `HOME-21ST-AUDIT-1` — record
