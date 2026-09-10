@@ -22,6 +22,7 @@ import {
   SidebarCollapsible,
   SidebarMenuSubItem,
   SidebarMenuSubButton,
+  SidebarMobileOnly,
 } from "@/app/(public)/_components/Sidebar";
 
 const siteUrl = getSiteUrl();
@@ -90,32 +91,39 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
         </SidebarHeader>
 
         <SidebarContent>
-          {/* Quick Navigation Group */}
-          <SidebarGroup>
-            <SidebarGroupLabel>Navigation</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton href="/">Home</SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <SidebarMenuButton href="/orders">Orders & Circulars</SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <SidebarMenuButton href="/tools">Utility Tools</SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <SidebarMenuButton href="/service-desk">Service Desk</SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <SidebarMenuButton href="/pensioners">Pensioners Hub</SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <SidebarMenuButton href="/search">Search</SidebarMenuButton>
-                </SidebarMenuItem>
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
+          {/* Quick Navigation Group — mobile drawer only (NAV-SIDEBAR-2).
+              DesktopNav already owns these six destinations; on the desktop
+              persistent sidebar they rendered as a verbatim duplicate of the
+              header nav, visible in the same viewport at once
+              (NAV-SIDEBAR-1). The drawer is the only surface where this group
+              is a phone's sole navigation, so it stays there unchanged. */}
+          <SidebarMobileOnly>
+            <SidebarGroup>
+              <SidebarGroupLabel>Navigation</SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton href="/">Home</SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton href="/orders">Orders & Circulars</SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton href="/tools">Utility Tools</SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton href="/service-desk">Service Desk</SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton href="/pensioners">Pensioners Hub</SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton href="/search">Search</SidebarMenuButton>
+                  </SidebarMenuItem>
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+          </SidebarMobileOnly>
 
           {/* Calculators & Utilities Collapsible Submenu */}
           <SidebarGroup>

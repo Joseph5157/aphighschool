@@ -29,6 +29,21 @@ export function useSidebar() {
   return context;
 }
 
+/**
+ * NAV-SIDEBAR-2: the drawer and the desktop persistent sidebar render the same
+ * children (`Sidebar` picks `MobileDrawer` vs. the desktop `<aside>` based on
+ * `isMobile`, but doesn't fork its `children` prop) — so the only way to keep
+ * a section in one and drop it from the other is to self-hide from inside,
+ * the same pattern `SidebarGroupLabel` already uses for its own open/collapsed
+ * check. This drops a whole subtree (not just visually), so it carries none of
+ * the dead-space risk a CSS-only `hidden` class would (HOME-POLISH-1).
+ */
+export function SidebarMobileOnly({ children }: { children: React.ReactNode }) {
+  const { isMobile } = useSidebar();
+  if (!isMobile) return null;
+  return <>{children}</>;
+}
+
 export interface SidebarProviderProps {
   defaultOpen?: boolean;
   open?: boolean;
