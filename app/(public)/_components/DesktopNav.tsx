@@ -18,7 +18,17 @@ export default function DesktopNav() {
   return (
     <nav
       aria-label="Main"
-      className="hidden lg:flex items-center gap-6 font-mono text-xs font-semibold text-inkSoft"
+      // NAV-1024-1: at 1024px the row has ~122px less room than the six
+      // labels' natural single-line width needs (measured in real Chromium,
+      // docs/context/NAV_1024_PLAN.md) — nothing here had `whitespace-nowrap`,
+      // so multi-word labels ("Orders & Circulars", "Utility Tools", "Service
+      // Desk", "Pensioners Hub") silently wrapped to two lines to absorb the
+      // deficit instead of the row ever visibly running out of space.
+      // `gap-2` (vs. the base `gap-6`) recovers most of that deficit in the
+      // 1024–1199px band specifically; `min-[1200px]:gap-6` restores the
+      // original spacing from the point real Chromium measurement confirmed
+      // it's no longer needed, so wider desktops aren't left over-compressed.
+      className="hidden lg:flex items-center gap-2 min-[1200px]:gap-6 font-mono text-xs font-semibold text-inkSoft whitespace-nowrap"
     >
       {NAV_LINKS.map((link) => {
         const isActive = link.exact ? pathname === link.href : pathname.startsWith(link.href);

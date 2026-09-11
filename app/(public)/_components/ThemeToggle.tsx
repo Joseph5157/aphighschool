@@ -76,7 +76,17 @@ export default function ThemeToggle() {
           </svg>
         )}
       </span>
-      <span className="hidden sm:inline">{isDark ? "Day mode" : "Night mode"}</span>
+      {/* NAV-1024-1: this label already hides below `sm` (icon-only, same
+          accessible name via aria-label) — the same established pattern
+          closes part of the real ~122px space deficit DesktopNav has at
+          1024–1199px (docs/context/NAV_1024_PLAN.md) without touching any
+          destination, typography, or touch target. `min-[1024px]:max-
+          [1199px]` is a disjoint, non-overlapping range from `sm:` and
+          `min-[1200px]:`, so it never fights either rule for cascade order —
+          each of the three visibility rules owns an exclusive width band. */}
+      <span className="hidden sm:inline min-[1024px]:max-[1199px]:hidden min-[1200px]:inline">
+        {isDark ? "Day mode" : "Night mode"}
+      </span>
     </button>
   );
 }
