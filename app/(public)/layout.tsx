@@ -175,17 +175,30 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
         {/* Top Header with Navigation & Sidebar Trigger */}
         <header className="bg-paperRaised/95 backdrop-blur-md border-b border-hair sticky top-0 z-40 print:hidden">
           <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 py-3 flex items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 min-w-0 lg:shrink-0">
+              {/* lg:shrink-0 reinstates this gate's pre-fix (baseline) pinned
+                  width once DesktopNav appears at the 1024px breakpoint —
+                  that width is already fully committed there (DesktopNav's
+                  six links plus the CMS button and full-text ThemeToggle
+                  leave no slack), so letting this group shrink too would
+                  truncate the subtitle at desktop widths, a regression this
+                  gate (narrow-phone only) is not scoped to fix. */}
               <SidebarTrigger />
-              <Link href="/" className="group flex items-center gap-3 shrink-0">
-                <div className="w-9 h-9 rounded-lg on-masthead bg-masthead text-turmeric font-mono font-bold flex items-center justify-center border border-mastheadText/30 shadow-sm">
+              <Link href="/" className="group flex items-center gap-3 min-w-0">
+                <div className="w-9 h-9 rounded-lg on-masthead bg-masthead text-turmeric font-mono font-bold flex items-center justify-center border border-mastheadText/30 shadow-sm shrink-0">
                   AP
                 </div>
-                <div>
-                  <div className="font-bold text-sm tracking-tight text-ink group-hover:text-inkSoft transition-colors">
+                {/* min-w-0 lets this stack compress below its content width at
+                    narrow phone sizes (NAV-HEADER-320-1) — the previous
+                    `shrink-0` sat on the whole Link above, which fixed this
+                    group at its full natural width (driven by the subtitle
+                    line, 148.2px vs the wordmark's 104.8px) at every
+                    viewport, overlapping the theme toggle at 320px. */}
+                <div className="min-w-0">
+                  <div className="font-bold text-sm tracking-tight text-ink group-hover:text-inkSoft transition-colors whitespace-nowrap">
                     AP Teacher Desk
                   </div>
-                  <div className="text-xs font-mono text-inkSoft uppercase tracking-wider">
+                  <div className="text-xs font-mono text-inkSoft uppercase tracking-wider truncate">
                     AP School Education
                   </div>
                 </div>
