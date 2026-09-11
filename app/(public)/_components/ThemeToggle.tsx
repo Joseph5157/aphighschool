@@ -53,7 +53,16 @@ export default function ThemeToggle() {
       aria-pressed={isDark}
       aria-label="Dark theme"
       title={isDark ? "Switch to day mode" : "Switch to night mode"}
-      className="inline-flex min-h-[44px] items-center gap-1.5 rounded-lg border border-hair/80 bg-paperRaised/80 px-3 font-mono text-xs font-semibold text-ink transition-colors duration-150 hover:bg-paper"
+      // DESIGN_SYSTEM.md §8.1: 44px minimum touch target, measured on the hit
+      // area rather than the painted box — the same pattern Button.tsx's `sm`
+      // size already uses (there extended vertically; here extended
+      // horizontally, since below `sm` this control's "Night mode"/"Day mode"
+      // label is hidden and its painted width, icon + padding only, measured
+      // 42px, 2px short of the floor). The transparent ::after overlay grows
+      // the hit area without adding to this element's own flex-layout width,
+      // so it carries zero risk to the 320px header clearance NAV-HEADER-320-1
+      // fixed (docs/context/NAV_HEADER_320_PLAN.md).
+      className="relative inline-flex min-h-[44px] items-center gap-1.5 rounded-lg border border-hair/80 bg-paperRaised/80 px-3 font-mono text-xs font-semibold text-ink transition-colors duration-150 hover:bg-paper after:absolute after:inset-y-0 after:-inset-x-1 after:content-['']"
     >
       <span aria-hidden="true">
         {isDark ? (
