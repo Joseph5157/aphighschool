@@ -22,8 +22,13 @@ function pngSize(file: string): { width: number; height: number } {
 describe("PWA manifest", () => {
   it("is installable: standalone display, scope and start_url", () => {
     expect(m.display).toBe("standalone");
-    expect(m.start_url).toBe("/");
+    // PWA-SW-1: "/" is NETWORK_ONLY and unreachable offline. "/tools" is
+    // STATIC_SAFE, precached, and reaches every OFFLINE_SAFE calculator —
+    // see docs/context/PWA_SW_DESIGN.md.
+    expect(m.start_url).toBe("/tools");
     expect(m.scope).toBe("/");
+    // id stays "/" across the start_url change so this reads as an update
+    // to the installed app, not a new install.
     expect(m.id).toBe("/");
   });
 

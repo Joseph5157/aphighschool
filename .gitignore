@@ -52,3 +52,8 @@ __pycache__/
 # Next.js build output at any depth
 **/.next/
 
+# PWA-SW-1: Serwist-generated service worker, rebuilt on every `next build`
+# from next.config.js + lib/pwa/precache-config.js — build output, not source.
+/public/sw.js
+/public/sw.js.map
+

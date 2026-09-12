@@ -13,6 +13,15 @@ import { SITE_NAME } from "@/lib/site";
  * lifecycle state and GOIR verification, and `revalidatePath()` cannot reach a
  * cache living on a reader's device. Installability is safe on its own because
  * it changes no request handling.
+ *
+ * PWA-SW-1 correction: `start_url` was originally "/", but "/" is
+ * NETWORK_ONLY (docs/context/PWA_SW_DESIGN.md) — a cold offline launch of
+ * the installed app from "/" would have nothing to render. `/tools` is
+ * STATIC_SAFE, precached by PWA-SW-1, and is the shell that reaches every
+ * OFFLINE_SAFE calculator, so it is the correct offline entry point.
+ * `scope` stays "/" — this only changes where the app opens, not what the
+ * service worker controls. `id` stays "/" on purpose (see below) so this
+ * is read as an update to the existing installed app, not a new one.
  */
 export default function manifest(): MetadataRoute.Manifest {
   return {
@@ -25,7 +34,7 @@ export default function manifest(): MetadataRoute.Manifest {
       "Telugu-first summaries of AP School Education government orders, circulars and " +
       "teacher notifications, with lifecycle status and provenance shown for each, plus " +
       "pay, tax, pension and leave calculators. Independent and unofficial.",
-    start_url: "/",
+    start_url: "/tools",
     scope: "/",
     display: "standalone",
     // Matches the light-mode `viewport.themeColor` already declared in
