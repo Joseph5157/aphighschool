@@ -6,6 +6,7 @@ import { BottomBarProvider } from "@/app/(public)/_components/BottomBarSlot";
 import { buttonClassName } from "@/app/(public)/_components/Button";
 import DesktopNav from "@/app/(public)/_components/DesktopNav";
 import ThemeToggle from "@/app/(public)/_components/ThemeToggle";
+import PwaUpdateManager from "@/app/(public)/_components/PwaUpdateManager";
 import {
   SidebarProvider,
   SidebarTrigger,
@@ -236,6 +237,10 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
         <BottomNav />
       </div>
       </SidebarProvider>
+      {/* PWA-UPDATE-1. Registered here, once, so it survives every
+          client-side navigation under this layout. Renders nothing until a
+          new version is genuinely waiting. */}
+      <PwaUpdateManager />
     </BottomBarProvider>
   );
 }

@@ -15,12 +15,24 @@ const withSerwist = withSerwistInit({
   scope: "/",
 
   // Design §11 / §12: no proactive <Link>-navigation caching, no reload
-  // storm when connectivity returns. Automatic registration is kept
-  // (register defaults to true) because it is the integration @serwist/next
-  // is built around; a custom registration component would add nothing a
-  // concrete requirement calls for.
+  // storm when connectivity returns.
   cacheOnNavigation: false,
   reloadOnOnline: false,
+
+  // PWA-UPDATE-1: registration is now manual (app/(public)/_components/
+  // PwaUpdateManager.tsx), not this plugin's own auto-injected client
+  // script. Inspected the injected sw-entry.mjs directly: it constructs
+  // `window.serwist` and calls `.register()` synchronously, prepended into
+  // the "main-app" entry — before any React component has mounted. Its
+  // .register() itself defers the actual navigator.serviceWorker.register()
+  // call until the window "load" event, which usually gives React time to
+  // attach listeners first, but "usually" is exactly the race the update UI
+  // cannot afford: a client-side navigation where main-app is already
+  // parsed and document.readyState is already "complete" skips that wait
+  // and registers immediately. Manual registration removes the dependency
+  // on that timing entirely by attaching every listener before register()
+  // is ever called, in code this project owns and can test directly.
+  register: false,
 
   // Disabled in dev so a developer is never fighting a stale production
   // worker while iterating with `npm run dev`. See PWA-SW-1 report §13 for
