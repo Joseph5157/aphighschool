@@ -268,6 +268,12 @@ html.dark {
   color: var(--color-ink);
   line-height: 1.8;
   font-size: 1rem;
+  /* Caps continuous-prose reading at a comfortable line length regardless of
+     the surrounding column width (full-width for a short document with no
+     TOC, or the 8-9/12 split for a long one with a TOC). A wide imported
+     table now scrolls within this narrower box instead of the old wider
+     one, via the overflow-x: auto it already carries below. */
+  max-width: 75ch;
 }
 
 .prose-gazette h1,
