@@ -6,7 +6,7 @@
 import { describe, expect, it } from "vitest";
 import fs from "node:fs";
 import path from "node:path";
-import { OFFLINE_SAFE_ROUTES, STATIC_SHELL_ROUTES } from "../lib/pwa/precache-config";
+import { OFFLINE_SAFE_ROUTES, STATIC_SHELL_ROUTES, OFFLINE_FALLBACK_ROUTE } from "../lib/pwa/precache-config";
 
 const SW_PATH = path.join(process.cwd(), "public", "sw.js");
 const hasBuild = fs.existsSync(SW_PATH);
@@ -43,6 +43,18 @@ describe.skipIf(!hasBuild)("PWA-SW-1 built service worker (public/sw.js)", () =>
     }
   });
 
+  it("precaches the offline fallback page, revisioned", () => {
+    const entry = manifest.find((m) => m.url === OFFLINE_FALLBACK_ROUTE);
+    expect(entry, `missing precache entry for ${OFFLINE_FALLBACK_ROUTE}`).toBeDefined();
+    expect(entry!.revision).not.toBeNull();
+  });
+
+  it("only grows by the offline page's own document + chunk, not by anything else", () => {
+    // 55 approved entries from PWA-SW-1, plus exactly one new document
+    // (/offline) and its one route-specific JS chunk.
+    expect(manifest.length).toBe(57);
+  });
+
   it("contains no freshness-sensitive route as a cached document", () => {
     // Matches the bare route or any query-string/RSC variant of it —
     // "/orders?_rsc=x" is exactly as forbidden as "/orders".
@@ -68,9 +80,20 @@ describe.skipIf(!hasBuild)("PWA-SW-1 built service worker (public/sw.js)", () =>
   });
 
   it("registers no runtime caching strategy classes (dead-code eliminated)", () => {
-    for (const cls of ["NetworkFirst", "CacheFirst", "StaleWhileRevalidate"]) {
+    for (const cls of ["NetworkFirst", "CacheFirst", "StaleWhileRevalidate", "defaultCache"]) {
       expect(source).not.toContain(cls);
     }
+  });
+
+  it("wires the navigation fallback through a real precache read, not a hand-rolled cache write", () => {
+    // "navigate"===x.mode alone is not distinctive — Serwist's own internal
+    // Request-cloning workaround contains the identical pattern regardless
+    // of anything this project registers. registerCapture + /admin together
+    // can only come from this project's own fallback route (Serwist's
+    // source never mentions /admin), so that combination is the real proof.
+    expect(source).toContain("matchPrecache");
+    expect(source).toContain("registerCapture");
+    expect(source).toContain("/admin");
   });
 
   it("never references Google's font origins", () => {

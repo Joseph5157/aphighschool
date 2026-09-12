@@ -9,6 +9,7 @@ import path from "node:path";
 import {
   OFFLINE_SAFE_ROUTES,
   STATIC_SHELL_ROUTES,
+  OFFLINE_FALLBACK_ROUTE,
   OFFLINE_CHUNKS,
   getBuildRevision,
 } from "../lib/pwa/precache-config";
@@ -107,5 +108,46 @@ describe("PWA-SW-1 app/sw.ts", () => {
 
   it("precaches from the injected manifest, not a hand-written list", () => {
     expect(swSource).toMatch(/precacheEntries:\s*self\.__SW_MANIFEST/);
+  });
+});
+
+describe("PWA-OFFLINE-UX-1 offline fallback route", () => {
+  it("names /offline as the single fallback target", () => {
+    expect(OFFLINE_FALLBACK_ROUTE).toBe("/offline");
+  });
+
+  it("includes the offline page's own chunk in the precache allowlist", () => {
+    expect(OFFLINE_CHUNKS).toContain("app/(public)/offline/page");
+  });
+
+  it("registers the fallback as a NetworkOnly + PrecacheFallbackPlugin route, not a caching strategy", () => {
+    expect(swSource).toMatch(/import\s*\{[^}]*\bNetworkOnly\b[^}]*\}\s*from\s*["']serwist["']/);
+    expect(swSource).toMatch(/import\s*\{[^}]*\bPrecacheFallbackPlugin\b[^}]*\}\s*from\s*["']serwist["']/);
+    expect(swSource).toMatch(/new NetworkOnly\(/);
+    expect(swSource).toMatch(/new PrecacheFallbackPlugin\(/);
+    expect(swSource).toMatch(/fallbackUrls:\s*\[OFFLINE_FALLBACK_URL\]/);
+  });
+
+  it("still declares an empty runtimeCaching list — the fallback is a route added after construction, not a strategy in it", () => {
+    expect(swSource).toMatch(/runtimeCaching:\s*\[\s*\]/);
+  });
+
+  it("scopes the fallback to real document navigations, matching request.mode", () => {
+    expect(swSource).toMatch(/request\.mode\s*===\s*["']navigate["']/);
+  });
+
+  it("excludes admin and API/auth paths from the navigation fallback", () => {
+    expect(swSource).toMatch(/pathname\s*===\s*["']\/admin["']/);
+    expect(swSource).toMatch(/pathname\.startsWith\(["']\/admin\/["']\)/);
+    expect(swSource).toMatch(/pathname\.startsWith\(["']\/api\/["']\)/);
+  });
+
+  it("never widens the calculator/shell allowlist to add the fallback", () => {
+    // The fallback route lives outside precacheEntries/chunks scoping
+    // entirely — registered separately, matched by request shape, not by
+    // adding /offline to OFFLINE_SAFE_ROUTES or STATIC_SHELL_ROUTES.
+    expect(OFFLINE_SAFE_ROUTES).not.toContain(OFFLINE_FALLBACK_ROUTE);
+    expect(STATIC_SHELL_ROUTES).not.toContain(OFFLINE_FALLBACK_ROUTE);
+    expect(OFFLINE_SAFE_ROUTES).toHaveLength(7);
   });
 });
