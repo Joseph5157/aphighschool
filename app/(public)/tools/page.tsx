@@ -35,6 +35,10 @@ const TOOLS = [
     desc: "Compare New Tax Regime vs Old Tax Regime with HRA, 80C, 80D deductions and instant Annexure-I tax statement export.",
     // Verified against TaxCalculatorUI.tsx: window.print() drives a real export.
     exportsStatement: true,
+    // Service Desk's "Pay, Tax & DA" card links to /tools#pay-tax-da; this is
+    // the first of that group's three tools (with PRC and DA Arrears below),
+    // so it carries the scroll target rather than a new grouped section.
+    anchorId: "pay-tax-da",
   },
   {
     href: "/tools/leave-encashment",
@@ -80,7 +84,7 @@ const TOOLS = [
 
 export default function ToolsIndexPage() {
   return (
-    <div className="space-y-6 font-sans">
+    <div className="mx-auto max-w-5xl space-y-6 font-sans">
       <Breadcrumb items={[{ label: "Utility Tools" }]} />
 
       <div className="space-y-6">
@@ -113,7 +117,12 @@ export default function ToolsIndexPage() {
           {/* Option C Card Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
             {TOOLS.map((tool) => (
-              <Card key={tool.href} hoverable className="p-5 space-y-3 bg-paperRaised border-hair flex flex-col justify-between">
+              <Card
+                key={tool.href}
+                id={tool.anchorId}
+                hoverable
+                className={`p-5 space-y-3 bg-paperRaised border-hair flex flex-col justify-between${tool.anchorId ? " scroll-mt-20" : ""}`}
+              >
                 <div className="space-y-2">
                   <h3 className="text-card-title text-ink">
                     <span>{tool.title}</span>

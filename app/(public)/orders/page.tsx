@@ -60,7 +60,7 @@ export default async function OrdersPage() {
   );
 
   return (
-    <div className="space-y-8 pb-24 font-sans">
+    <div className="mx-auto max-w-5xl space-y-8 pb-24 font-sans">
       <Breadcrumb items={[{ label: "Orders & Circulars" }]} />
 
       {/*

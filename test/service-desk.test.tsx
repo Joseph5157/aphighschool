@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react";
 import ServiceDeskPage from "@/app/(public)/service-desk/page";
 
 const TASKS = [
-  ["Pay, Tax & DA", "/tools"],
+  ["Pay, Tax & DA", "/tools#pay-tax-da"],
   ["Leave & Encashment", "/tools/leave-encashment"],
   ["CFMS, Payslip, EHS & e-SR", "/tools/cfms-checker"],
   ["GPF & APGLI", "/tools/gpf-apgli"],

@@ -13,13 +13,23 @@ export const metadata: Metadata = {
   alternates: { canonical: "/service-desk" },
 };
 
-const TASKS = [
+type ServiceTask = {
+  href: string;
+  title: string;
+  detail: string;
+  icon: string;
+  category: string;
+  cta?: string;
+};
+
+const TASKS: ServiceTask[] = [
   {
-    href: "/tools",
+    href: "/tools#pay-tax-da",
     title: "Pay, Tax & DA",
     detail: "Salary, income tax, PRC pay fixation, and DA arrears calculators.",
     icon: "₹",
     category: "Pay services",
+    cta: "View tools",
   },
   {
     href: "/tools/leave-encashment",
@@ -56,7 +66,7 @@ const TASKS = [
     icon: "GO",
     category: "Document services",
   },
-] as const;
+];
 
 export default function ServiceDeskPage() {
   return (
@@ -126,7 +136,7 @@ export default function ServiceDeskPage() {
                 <p className="mt-2 min-h-12 text-body text-inkSoft">{task.detail}</p>
 
                 <span className={`${buttonClassName({ variant: "outline", size: "sm" })} mt-5`}>
-                  Open guide <span aria-hidden="true">→</span>
+                  {task.cta ?? "Open guide"} <span aria-hidden="true">→</span>
                 </span>
               </Link>
             </Card>
