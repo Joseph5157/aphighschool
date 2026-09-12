@@ -87,7 +87,11 @@ describe("ActionSummary", () => {
       expect(screen.queryByText(text)).not.toBeInTheDocument();
     }
     for (const template of templates) {
-      expect(template).toContain("<ActionSummary post={post} />");
+      // COMPETITOR-LINKS-1: post is passed through with actionUrl/sourceUrl
+      // overridden to the render-time-sanitized values, not the raw fields.
+      expect(template).toContain(
+        "<ActionSummary post={{ ...post, actionUrl: safeActionUrl, sourceUrl: safeSourceUrl }} />"
+      );
       expect(template).not.toContain("Step-by-Step Procedure Guide");
       expect(template).not.toContain("Executive Order Brief");
       expect(template).not.toContain("Quick Fact");

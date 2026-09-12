@@ -12,6 +12,7 @@ import Badge from "@/app/(public)/_components/Badge";
 import { Card } from "@/app/(public)/_components/Card";
 import { formatDate } from "@/lib/dates";
 import { stripDecorativeTemplateEmoji } from "@/lib/posts/strip-decorative-template-emoji";
+import { dropCompetitorLink } from "@/lib/posts/competitor-domains";
 
 /**
  * The document detail shell, shared by every published document.
@@ -78,6 +79,12 @@ export default function DocumentTemplate({
   // server-rendered markup; the component still owns whether it draws anything.
   const headingCount = (renderedContent.match(/<h[23][\s>]/gi) || []).length;
   const showToc = headingCount >= MIN_TOC_HEADINGS;
+
+  // A document imported from a competitor's page can carry that page's own
+  // URL in actionUrl/sourceUrl instead of an official source or nothing at
+  // all — a reader should never be sent to a rival product from here.
+  const safeActionUrl = dropCompetitorLink(post.actionUrl);
+  const safeSourceUrl = dropCompetitorLink(post.sourceUrl);
 
   return (
     <div className="w-full max-w-[1700px] mx-auto space-y-8 pb-24 font-sans">
@@ -157,7 +164,7 @@ export default function DocumentTemplate({
         </div>
       </header>
 
-      <ActionSummary post={post} />
+      <ActionSummary post={{ ...post, actionUrl: safeActionUrl, sourceUrl: safeSourceUrl }} />
 
       <div className={showToc ? "lg:grid lg:grid-cols-12 lg:gap-8 xl:gap-10 space-y-8 lg:space-y-0 items-start" : "space-y-8"}>
         <div className={showToc ? "lg:col-span-8 xl:col-span-9 space-y-8 min-w-0" : "space-y-8 min-w-0"}>
@@ -248,7 +255,7 @@ export default function DocumentTemplate({
         </p>
       </footer>
 
-      {post.pdfUrl && <ThumbZoneBar pdfUrl={post.pdfUrl} sourceUrl={post.sourceUrl} />}
+      {post.pdfUrl && <ThumbZoneBar pdfUrl={post.pdfUrl} sourceUrl={safeSourceUrl} />}
     </div>
   );
 }
