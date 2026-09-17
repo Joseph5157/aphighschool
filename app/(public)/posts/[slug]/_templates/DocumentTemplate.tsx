@@ -7,6 +7,7 @@ import DocumentDate from "@/app/(public)/_components/DocumentDate";
 import LifecycleStepper from "../_components/LifecycleStepper";
 import ThumbZoneBar from "../_components/ThumbZoneBar";
 import TableOfContents, { MIN_TOC_HEADINGS } from "../_components/TableOfContents";
+import RelatedOrdersTimeline from "@/app/(public)/_components/RelatedOrdersTimeline";
 import ActionSummary from "../_components/ActionSummary";
 import Badge from "@/app/(public)/_components/Badge";
 import { Card } from "@/app/(public)/_components/Card";
@@ -186,33 +187,10 @@ export default function DocumentTemplate({
             </section>
           )}
 
-          {post.relatedFrom && post.relatedFrom.length > 0 && (
-            <section aria-label="Related Background Orders" className="space-y-4">
-              <div className="font-mono font-bold text-xs tracking-wider text-inkSoft flex items-center gap-2">
-                <span>{labels.related}</span>
-                <Badge variant="neutral" size="sm" shape="pill">
-                  {post.relatedFrom.length}
-                </Badge>
-              </div>
-              <div className="space-y-3">
-                {post.relatedFrom.map((rel: any) => (
-                  <Card key={rel.relatedPost.id} hoverable className="p-4 bg-paperRaised">
-                    <Link href={`/posts/${rel.relatedPost.slug}`} className="block group space-y-1">
-                      <div className="flex items-center justify-between gap-2 text-meta text-inkSoft">
-                        <span className="font-bold text-tamarind min-w-0 break-words">
-                          {rel.relatedPost.goReference || "Background G.O."}
-                        </span>
-                        <DocumentDate post={rel.relatedPost} className="shrink-0" />
-                      </div>
-                      <div className="text-card-title text-ink group-hover:text-tamarind transition-colors">
-                        {rel.relatedPost.titleEn}
-                      </div>
-                    </Link>
-                  </Card>
-                ))}
-              </div>
-            </section>
-          )}
+          <RelatedOrdersTimeline
+            relatedOrders={post.relatedFrom}
+            label={labels.related}
+          />
         </div>
 
         {/*
