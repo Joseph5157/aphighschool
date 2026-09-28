@@ -19,7 +19,7 @@ const STATIC_ROUTES = new Set([
   "/tools/cfms-checker", "/tools/da-arrears", "/tools/gpf-apgli",
   "/tools/leave-encashment", "/tools/tax-calculator", "/tools/prc-calculator",
   "/pensioners", "/pensioners/pension-calculator", "/pensioners/commutation-tracker",
-  "/pensioners/office-pipeline",
+  "/pensioners/office-pipeline", "/about", "/contact", "/privacy", "/terms", "/disclaimer",
 ]);
 
 let postSlugs: Set<string>;

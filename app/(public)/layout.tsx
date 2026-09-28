@@ -7,6 +7,7 @@ import { buttonClassName } from "@/app/(public)/_components/Button";
 import DesktopNav from "@/app/(public)/_components/DesktopNav";
 import ThemeToggle from "@/app/(public)/_components/ThemeToggle";
 import PwaUpdateManager from "@/app/(public)/_components/PwaUpdateManager";
+import Footer from "@/app/(public)/_components/Footer";
 import {
   SidebarProvider,
   SidebarTrigger,
@@ -232,6 +233,8 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
         >
           {children}
         </main>
+
+        <Footer />
 
         {/* Sticky Bottom Tab Bar. Yields to a page-level bar via BottomBarSlot. */}
         <BottomNav />

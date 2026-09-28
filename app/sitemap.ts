@@ -19,6 +19,11 @@ const STATIC_ROUTES = [
   "/pensioners/commutation-tracker",
   "/pensioners/office-pipeline",
   "/pensioners/pension-calculator",
+  "/about",
+  "/contact",
+  "/privacy",
+  "/terms",
+  "/disclaimer",
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
