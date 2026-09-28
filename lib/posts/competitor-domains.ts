@@ -11,7 +11,16 @@
  * also covers rows already in the database and any future one that repeats
  * the same gap.
  */
-const BLOCKED_LINK_HOSTS = ["apteachers.in", "amaravathiteacher.com"];
+const BLOCKED_LINK_HOSTS = [
+  "apteachers.in",
+  "amaravathiteacher.com",
+  "apteachers.net",
+  "apteachers.org",
+  "aptf.in",
+  "manabadi.co.in",
+  "sakshieducation.com",
+  "eenadu.net",
+];
 
 export function isCompetitorUrl(url: string | null | undefined): boolean {
   if (!url) return false;

@@ -11,6 +11,27 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("create_draft")
 
 VALID_STATUSES = {"notification", "apply_link", "hall_ticket", "results", "expired"}
+COMPETITOR_DOMAINS = [
+    "apteachers.in",
+    "amaravathiteacher.com",
+    "apteachers.net",
+    "apteachers.org",
+    "aptf.in",
+    "manabadi.co.in",
+    "sakshieducation.com",
+    "eenadu.net",
+]
+
+def sanitize_source_url(url: str) -> str:
+    if not url:
+        return None
+    try:
+        hostname = urlparse(url).hostname.lower().replace("www.", "")
+        if any(hostname == d or hostname.endswith(f".{d}") for d in COMPETITOR_DOMAINS):
+            return None
+    except Exception:
+        pass
+    return url
 
 def slugify(text: str) -> str:
   return re.sub(r'[^a-z0-9]+', '-', text.lower()).strip('-')
@@ -105,7 +126,7 @@ def insert_draft(post_data: dict, pdf_url: str) -> bool:
           category_id,
           post_data.get("goReference"),
           post_data.get("sourceDept", "School Education, AP"),
-          post_data.get("sourceUrl"),
+          sanitize_source_url(post_data.get("sourceUrl")),
           post_data.get("contentHtml") or post_data.get("content"),
           False, # verifiedAgainstGoir
           True  # isDraft
