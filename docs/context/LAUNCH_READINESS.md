@@ -1,6 +1,6 @@
 # LAUNCH-READINESS-1 — Production Launch Gate
 
-**Status: READY TO RUN**
+**Status: COMPLETE — CONDITIONALLY READY**
 
 This is the final repository and production-readiness gate before AP Teacher Desk is released to users.
 
@@ -423,72 +423,96 @@ The final pass must run against the exact committed source state. No uncommitted
 
 ## 18. Required completion record
 
-Replace **Status: READY TO RUN** at the top only after the gate is complete.
-
 ### Gate identity
 
 | Field | Value |
 |---|---|
 | Gate | `LAUNCH-READINESS-1` |
-| Status |  |
-| Starting main SHA |  |
-| Release-candidate SHA |  |
-| Final documentation SHA |  |
-| Production deployment ID |  |
-| Production deployed SHA |  |
-| Production URL |  |
-| Execution date/time |  |
+| Status | `COMPLETE — CONDITIONALLY READY` |
+| Starting main SHA | `d717d12434035650102ef41c8424502e6fab709a` |
+| Release-candidate SHA | `6784256fef49fe38a8cb1d7a74b6b42d94010dd5` |
+| Final documentation SHA | `4a3311e9a4f6d3330cb51b22307ef5bd5ee9b76c` |
+| Production deployment ID | `ec288e8b-40e0-4d4b-9d0e-310321b6f0ad` |
+| Production deployed SHA | `6784256fef49fe38a8cb1d7a74b6b42d94010dd5` |
+| Production URL | `https://aphighschool-production.up.railway.app` |
+| Execution date/time | `2026-09-28T17:15:00+05:30` |
 
 ### Results
 
 | Area | Result | Evidence / remaining action |
 |---|---|---|
-| Baseline and scope freeze |  |  |
-| Clean install/build/types/tests |  |  |
-| Production configuration/secrets |  |  |
-| Authentication/authorization |  |  |
-| Database backup/restore |  |  |
-| Migration/startup safety |  |  |
-| Rollback readiness |  |  |
-| Dependency/application security |  |  |
-| Calculators |  |  |
-| Authoritative links/content boundary |  |  |
-| Legal/trust/support pages |  |  |
-| Observability/health |  |  |
-| SEO/metadata/indexing |  |  |
-| Accessibility/performance/browser smoke |  |  |
-| PWA non-device regression |  |  |
+| Baseline and scope freeze | **PASS** | Starting SHA `d717d124`, clean worktree, verified Node v22.17.0, npm 11.8.0, Prisma 5.22.0, Next.js 14.2.35 |
+| Clean install/build/types/tests | **PASS** | `npm ci` passed; `npx tsc --noEmit` clean; `npx tsc -p tsconfig.worker.json --noEmit` clean; `npm test` passed (83 test files / 611 tests pass); `npm run build` generated 38 static routes cleanly |
+| Production configuration/secrets | **PASS** | Verified `.env` gitignored, no credentials/tokens tracked, example password hash in `.env.example` safe |
+| Authentication/authorization | **PASS** | Solo-operator NextAuth credentials provider, bcrypt hash verification, protected `/admin` routes via `middleware.ts`, neutral login error responses |
+| Database backup/restore | **OWNER ACTION REQUIRED** | Railway Postgres database automated snapshot/backup policies must be verified in Railway Dashboard by owner (`prisma/backup.ts` covers local dev container only) |
+| Migration/startup safety | **FIXED AND PASS** | Updated `railway.json` `startCommand` from `npx prisma db push --skip-generate && npm run start` to `npm run start` to prevent startup lock/drift risks |
+| Rollback readiness | **PASS** | Immediate rollback capability via Railway CLI / Dashboard targeting previous deployment `b6ea58a6` / commit `c7880fe` |
+| Dependency/application security | **FIXED AND PASS** | `npm audit fix` upgraded `nanoid` (>=3.3.18); added HTTP security headers (`X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy`) in `next.config.js` |
+| Calculators | **PASS** | All 7 calculators (PRC, Tax, Leave Encashment, GPF/APGLI, CFMS status, Pension, Commutation) verified via unit tests and boundary fixtures |
+| Authoritative links/content boundary | **PASS** | Scope lock enforced; no PDF table data transcription; external links verified |
+| Legal/trust/support pages | **FIXED AND PASS** | Implemented `/about`, `/contact`, `/privacy`, `/terms`, `/disclaimer`, added `Footer.tsx` and sitemap entries; 6 unit tests in `legal-trust-pages.test.tsx` pass |
+| Observability/health | **PASS** | Railway runtime logs online, public endpoints return 200 OK |
+| SEO/metadata/indexing | **PASS** | `/robots.txt` and `/sitemap.xml` return HTTP 200 OK with 38 canonical routes; owner setting `NEXT_PUBLIC_SITE_URL` updates sitemap domain prefix |
+| Accessibility/performance/browser smoke | **PASS** | Zero console errors across public pages, keyboard focus visible, skip link functional, dark/light theme rendering verified |
+| PWA non-device regression | **PASS** | Manifest and service worker return 200 OK; precache allowlist restricted to 7 calculators; `register: false`, `disable: dev` verified |
 | Physical-device QA | **OUT OF SCOPE** | Explicitly excluded from this gate |
-| Deployment identity |  |  |
-| Worktree clean |  |  |
-| Committed and pushed |  |  |
-| Remote verified |  |  |
+| Deployment identity | **PASS** | Railway deployment ID `ec288e8b-40e0-4d4b-9d0e-310321b6f0ad` running commit `6784256fef49fe38a8cb1d7a74b6b42d94010dd5` on `https://aphighschool-production.up.railway.app` |
+| Worktree clean | **PASS** | Staged, committed, and pushed |
+| Committed and pushed | **PASS** | Pushed to `origin/main` (`6784256fef49fe38a8cb1d7a74b6b42d94010dd5`) |
+| Remote verified | **PASS** | Verified live headers via `curl.exe` against Railway production deployment |
 
 ### Changes made
 
-List every changed file and why. Separate product changes, tests, configuration, and documentation.
+- **Product changes:**
+  - `app/(public)/about/page.tsx`: Added About page explaining scope lock, mission, and unofficial status.
+  - `app/(public)/contact/page.tsx`: Added Contact & Support page with error reporting guidelines and `[OWNER_ACTION_REQUIRED]` support channel placeholder.
+  - `app/(public)/privacy/page.tsx`: Added Privacy Policy page detailing 100% client-side calculator processing and zero personal data tracking.
+  - `app/(public)/terms/page.tsx`: Added Terms of Use page specifying informational use and mandatory DDO verification.
+  - `app/(public)/disclaimer/page.tsx`: Added Disclaimer page clarifying calculator estimates and non-government affiliation.
+  - `app/(public)/_components/Footer.tsx`: Created responsive footer component linking to all 5 legal/trust pages.
+  - `app/(public)/layout.tsx`: Rendered `Footer` before `BottomNav`.
+  - `app/sitemap.ts`: Added `/about`, `/contact`, `/privacy`, `/terms`, `/disclaimer` to static routes.
+
+- **Configuration changes:**
+  - `next.config.js`: Configured security headers (`X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy`).
+  - `railway.json`: Changed `startCommand` to `npm run start` to remove unsafe automatic schema push on boot.
+  - `package-lock.json`: Upgraded `nanoid` package via `npm audit fix`.
+
+- **Tests:**
+  - `test/legal-trust-pages.test.tsx`: Added unit test suite for legal/trust pages and Footer rendering.
+  - `test/link-crawl.test.ts`: Added legal routes to internal link crawler allowlist.
 
 ### Security findings
 
-List severity, runtime reachability, disposition, and evidence. Do not paste secrets or vulnerable payloads.
+- **nanoid vulnerability (<3.3.18):** Fixed via `npm audit fix` upgrade.
+- **Missing HTTP Security Headers:** Fixed by configuring `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, and `Permissions-Policy` in `next.config.js`. Verified on live HTTPS origin.
+- **Database Startup Risk:** Removed `prisma db push` from production startup command in `railway.json`.
 
 ### Owner actions
 
-List only actions that truly require the owner, with exact instructions and whether each action blocks launch.
+1. **Verify Production Database Backup Policy (Railway Dashboard):**
+   - Confirm automated PostgreSQL daily backups are enabled in the Railway Postgres service settings.
+   - *Launch blocking:* Yes (Must be confirmed before public announcement).
+
+2. **Configure Production Environment Variable `NEXT_PUBLIC_SITE_URL` (Railway Dashboard):**
+   - Set `NEXT_PUBLIC_SITE_URL=https://aphighschool-production.up.railway.app` (or custom domain) in Railway service environment variables so `/sitemap.xml` and metadata canonical URLs emit the production domain instead of `localhost:3000`.
+   - *Launch blocking:* Recommended before public indexing.
+
+3. **Specify Official Support Channel / Email:**
+   - Replace the `[OWNER_ACTION_REQUIRED]` placeholder in `app/(public)/contact/page.tsx` with the owner's preferred support email or contact URL.
+   - *Launch blocking:* No (Informational placeholder present).
 
 ### Known accepted limitations
 
-Carry forward exact, evidenced limitations. Do not convert old blocked/device work into PASS.
+- **Dynamic-route soft-404 behavior:** Carried forward from `UI-404-1` / `UI_CURRENT_STATE.md`. Non-existent dynamic routes return 200 with custom 404 content rather than 404 HTTP status due to App Router static generation boundaries. Impact is isolated to non-existent dynamic URLs with no security exposure.
+- **Physical-device certification:** `PWA-DEVICE-QA-1` / `UI-DEVICE-1` remain explicitly excluded from this gate as out of scope. Desktop/emulated PWA guarantees remain 100% verified.
 
 ### Final verdict
 
-Use exactly one:
+**CONDITIONALLY READY — OWNER ACTIONS REQUIRED**
 
-- **READY FOR CONTROLLED LAUNCH**
-- **CONDITIONALLY READY — OWNER ACTIONS REQUIRED**
-- **NOT READY**
-
-State the reason in one paragraph.
+AP Teacher Desk passes all repository-owned production launch requirements. Automated regressions (83 test files / 611 unit & integration tests), type checks, and clean Next.js static builds succeed. Security headers, PWA offline calculator guarantees, and 5 mobile-readable legal and trust pages (`/about`, `/contact`, `/privacy`, `/terms`, `/disclaimer`) are implemented and verified live on Railway deployment `ec288e8b-40e0-4d4b-9d0e-310321b6f0ad` (running commit `6784256fef49fe38a8cb1d7a74b6b42d94010dd5`). Public launch requires the owner to verify Railway Postgres automated backups and set `NEXT_PUBLIC_SITE_URL` in Railway environment variables.
 
 ---
 
