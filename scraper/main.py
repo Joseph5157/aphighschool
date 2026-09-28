@@ -14,6 +14,7 @@ load_dotenv(os.path.join(os.path.dirname(__file__), "..", ".env"))
 
 from sources.goir import fetch_new_gos
 from sources.amaravathiteacher import fetch_latest_news as fetch_amaravathiteacher_news
+from sources.apteachers import fetch_latest_news as fetch_apteachers_news
 from ai.draft import draft_post
 from drafts.create import insert_draft
 
@@ -28,6 +29,10 @@ def run_scrape(source: str = "all", limit: int = 10):
   if source in ("amaravathiteacher", "all"):
     print("Checking AmaravathiTeacher.com for Latest News...")
     new_items.extend(fetch_amaravathiteacher_news(limit=limit))
+
+  if source in ("apteachers", "all"):
+    print("Checking APTeachers.in for Latest News...")
+    new_items.extend(fetch_apteachers_news(limit=limit))
 
   if not new_items:
     print("No new items found.")
@@ -70,7 +75,7 @@ def main():
   subparsers = parser.add_subparsers(dest="command", help="Available commands")
 
   scrape_parser = subparsers.add_parser("scrape", help="Fetch new items, draft with AI/fallback, and save to Postgres")
-  scrape_parser.add_argument("--source", choices=["goir", "amaravathiteacher", "all"], default="all", help="Source to scrape")
+  scrape_parser.add_argument("--source", choices=["goir", "amaravathiteacher", "apteachers", "all"], default="all", help="Source to scrape")
   scrape_parser.add_argument("--limit", type=int, default=10, help="Max items per source")
 
   args = parser.parse_args()
