@@ -176,7 +176,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
       <div className="min-h-screen bg-paper text-ink flex flex-col antialiased w-full min-w-0">
         {/* Top Header with Navigation & Sidebar Trigger */}
         <header className="bg-paperRaised/95 backdrop-blur-md border-b border-hair sticky top-0 z-40 print:hidden">
-          <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 py-3 flex items-center justify-between gap-4">
+          <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 py-2 sm:py-3 flex items-center justify-between gap-3 sm:gap-4">
             <div className="flex items-center gap-3 min-w-0 lg:shrink-0">
               {/* lg:shrink-0 reinstates this gate's pre-fix (baseline) pinned
                   width once DesktopNav appears at the 1024px breakpoint —
@@ -186,8 +186,8 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
                   truncate the subtitle at desktop widths, a regression this
                   gate (narrow-phone only) is not scoped to fix. */}
               <SidebarTrigger />
-              <Link href="/" className="group flex items-center gap-3 min-w-0">
-                <div className="w-9 h-9 rounded-lg on-masthead bg-masthead text-turmeric font-mono font-bold flex items-center justify-center border border-mastheadText/30 shadow-sm shrink-0">
+              <Link href="/" className="group flex items-center gap-2.5 sm:gap-3 min-w-0">
+                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg on-masthead bg-masthead text-turmeric font-mono font-bold flex items-center justify-center border border-mastheadText/30 shadow-sm shrink-0 text-xs sm:text-sm">
                   AP
                 </div>
                 {/* min-w-0 lets this stack compress below its content width at
@@ -197,7 +197,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
                     line, 148.2px vs the wordmark's 104.8px) at every
                     viewport, overlapping the theme toggle at 320px. */}
                 <div className="min-w-0">
-                  <div className="font-bold text-sm tracking-tight text-ink group-hover:text-inkSoft transition-colors whitespace-nowrap">
+                  <div className="font-bold text-xs sm:text-sm tracking-tight text-ink group-hover:text-inkSoft transition-colors whitespace-nowrap">
                     AP Teacher Desk
                   </div>
                   <div className="text-xs font-mono text-inkSoft uppercase tracking-wider truncate">
@@ -229,7 +229,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
             clears the bar plus the iOS home indicator. */}
         <main
           id="main-content"
-          className="flex-1 w-full max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 py-8 pb-[calc(76px+env(safe-area-inset-bottom))] lg:pb-8 print:p-0 print:m-0 print:max-w-none print:w-full"
+          className="flex-1 w-full max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 py-4 sm:py-8 pb-[calc(76px+env(safe-area-inset-bottom))] lg:pb-8 print:p-0 print:m-0 print:max-w-none print:w-full"
         >
           {children}
         </main>

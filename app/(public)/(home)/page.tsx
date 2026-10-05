@@ -1,17 +1,13 @@
 import { prisma } from "@/lib/prisma";
-import PostCard from "@/app/(public)/_components/PostCard";
 import DesktopLeftNav from "@/app/(public)/_components/DesktopLeftNav";
 import UpcomingActionDates from "@/app/(public)/_components/UpcomingActionDates";
-import EmptyState from "@/app/(public)/_components/EmptyState";
+import DateGroupedFeed from "@/app/(public)/_components/DateGroupedFeed";
 import { ORDER_BY_OFFICIAL_DATE, startOfTodayIST } from "@/lib/dates";
 import { safeQuery } from "@/lib/db-safe";
 
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  // `(home)` is a descendant segment of app/(public)/layout.tsx, so the
-  // layout title template appends the site name once, like every other public
-  // route.
   title: "Latest AP Teacher Orders",
   description:
     "The latest published AP School Education government orders, circulars, and notifications, with lifecycle status and provenance shown for each.",
@@ -27,10 +23,6 @@ export default async function HomePage() {
         where: { isDraft: false },
         orderBy: ORDER_BY_OFFICIAL_DATE,
         take: 6,
-        // Scoped to exactly what HeroCard/PostCard render — neither reads
-        // relatedFrom, so it's dropped rather than fetched and discarded
-        // (it previously pulled each related post's full row, content
-        // field included, for every one of these 6 posts on every load).
         select: {
           id: true,
           slug: true,
@@ -72,37 +64,24 @@ export default async function HomePage() {
 
   return (
     <div className="lg:grid lg:grid-cols-12 lg:gap-8">
-      {/*
-        SLOP-DENSITY-1 (AI_SLOP_AUDIT.md A02): one quiet category rail, not two
-        card-kit rails. The right rail duplicated four calculators that the
-        primary navigation already reaches, then repeated a "Quick Searches" chip
-        set that /search owns — so the document feed was given half the page
-        while its two rails competed with it. The feed now takes three quarters.
-      */}
-      {/*
-        HOME-POLISH-1 (HOME-21ST-AUDIT-1 finding): this container previously
-        carried `space-y-8 lg:space-y-0` to space the rail column from the feed
-        column when they stack. They never actually stack: DesktopLeftNav's own
-        root is `hidden lg:block`, so below `lg` this column renders empty every
-        time. Tailwind's `space-y-*` margin lands on the feed column regardless
-        — it's a `:not([hidden])` sibling-attribute selector, not a computed-
-        display check, so an empty-but-present sibling still triggers it. The
-        result was an unexplained ~32px gap above the heading on every phone
-        width. `lg:gap-8` alone is correct: it only ever applies once this
-        becomes a two-column grid at `lg`, where both columns are real.
-      */}
       <div className="lg:col-span-3">
         <DesktopLeftNav />
       </div>
 
       <div className="lg:col-span-9 space-y-6">
-        <div className="border-b border-hair pb-4">
-          <h1 className="text-display tracking-tight text-ink">
-            Latest Orders & Living Documents
-          </h1>
-          <p className="text-body text-inkSoft mt-1">
-            AP School Education Department · Government Orders & Guidance
-          </p>
+        <div className="border-b border-hair pb-4 flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <h1 className="text-display tracking-tight text-ink">
+              Latest Orders & Living Documents
+            </h1>
+            <p className="text-body text-inkSoft mt-1">
+              AP School Education Department · Government Orders & Guidance
+            </p>
+          </div>
+          <div className="hidden sm:flex items-center gap-2 text-xs font-mono text-inkSoft bg-paperRaised px-3 py-1.5 rounded-lg border border-hair">
+            <span className="w-2 h-2 rounded-full bg-turmeric animate-pulse" />
+            <span>Official Gazette Stream</span>
+          </div>
         </div>
 
         <UpcomingActionDates
@@ -111,28 +90,9 @@ export default async function HomePage() {
           )}
         />
 
-        {/*
-          A01: every document is an ordinary row. `posts[0]` used to be promoted
-          into a gradient-framed HeroCard purely because it sorted first — an
-          editorial decision the data never made — and at 390px that card filled
-          the rest of the first viewport, so the document index this product is
-          promised to be was not visible on a phone at all.
-
-          The section label the feed used to carry ("Recent Government Orders &
-          Circulars") went with the hero: it existed to separate the promoted
-          document from "the rest", and with one list it sat directly beneath an
-          h1 that already says the same thing (DESIGN.md §1.3).
-        */}
-        {posts.length > 0 ? (
-          <section aria-label="Latest documents" className="space-y-4">
-            {posts.map((post) => (
-              <PostCard key={post.id} post={post} />
-            ))}
-          </section>
-        ) : (
-          <EmptyState title="No published orders found." />
-        )}
+        <DateGroupedFeed posts={posts} />
       </div>
     </div>
   );
 }
+

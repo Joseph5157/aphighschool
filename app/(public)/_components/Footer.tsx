@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-hair bg-paperRaised/60 py-8 text-xs text-inkSoft print:hidden">
+    <footer className="border-t border-hair bg-paperRaised/60 pt-8 pb-[calc(84px+env(safe-area-inset-bottom))] lg:pb-8 text-xs text-inkSoft print:hidden">
       <div className="mx-auto max-w-[1800px] px-4 sm:px-6 lg:px-8 xl:px-10 flex flex-col md:flex-row items-center justify-between gap-4">
         <div className="space-y-1 text-center md:text-left">
           <div className="font-bold text-ink">AP Teacher Desk</div>

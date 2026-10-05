@@ -28,7 +28,7 @@ export type AccordionProps = {
 
 export const AccordionRoot = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className = "", ...props }, ref) => (
-    <div ref={ref} className={`space-y-3 ${className}`} {...props} />
+    <div ref={ref} className={`space-y-2.5 sm:space-y-3 ${className}`} {...props} />
   )
 );
 AccordionRoot.displayName = "AccordionRoot";
@@ -54,16 +54,16 @@ export const AccordionTriggerPrimitive = React.forwardRef<HTMLButtonElement, Acc
       ref={ref}
       type="button"
       aria-expanded={isOpen}
-      className={`w-full text-left p-4 flex items-center justify-between gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-tamarind focus-visible:ring-inset hover:bg-hair/10 transition-colors ${className}`}
+      className={`w-full text-left p-3 sm:p-4 flex items-center justify-between gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-tamarind focus-visible:ring-inset hover:bg-hair/10 transition-colors ${className}`}
       {...props}
     >
       {children}
       <div
-        className={`w-7 h-7 rounded-full bg-paper flex items-center justify-center border border-hair text-inkSoft shrink-0 transition-transform duration-200 ${
+        className={`w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-paper flex items-center justify-center border border-hair text-inkSoft shrink-0 transition-transform duration-200 ${
           isOpen ? "rotate-180 text-tamarind border-tamarind/30 bg-tamarind/5" : ""
         }`}
       >
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
       </div>
@@ -92,7 +92,7 @@ export const AccordionContentPrimitive = React.forwardRef<HTMLDivElement, Accord
           transition still animates; closing snaps, which is the trade the
           correctness is worth. */}
       <div className="overflow-hidden" hidden={!isOpen}>
-        <div className="p-4 pt-1 border-t border-hair/50 text-body text-inkSoft space-y-2 font-sans">
+        <div className="p-3 sm:p-4 pt-1 sm:pt-1 border-t border-hair/50 text-xs sm:text-body text-inkSoft space-y-2 font-sans">
           {children}
         </div>
       </div>

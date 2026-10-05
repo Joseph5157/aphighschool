@@ -23,7 +23,7 @@ describe("Tools index — the export claim matches what each tool actually does"
       "Income Tax Calculator (FY 2025-26)",
       "PRC Pay Fixation & Arrears Calculator",
     ]) {
-      const card = screen.getByText(title).closest(".p-5") as HTMLElement;
+      const card = screen.getByText(title).closest(".bg-paperRaised") as HTMLElement;
       expect(card, title).not.toBeNull();
       expect(within(card).getByText("Exports a printable statement")).toBeInTheDocument();
     }
@@ -37,7 +37,7 @@ describe("Tools index — the export claim matches what each tool actually does"
       "GPF & APGLI Balance Estimator",
       "DA Arrears Calculator",
     ]) {
-      const card = screen.getByText(title).closest(".p-5") as HTMLElement;
+      const card = screen.getByText(title).closest(".bg-paperRaised") as HTMLElement;
       expect(card, title).not.toBeNull();
       expect(within(card).queryByText("Exports a printable statement")).not.toBeInTheDocument();
     }

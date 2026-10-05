@@ -84,10 +84,10 @@ const TOOLS = [
 
 export default function ToolsIndexPage() {
   return (
-    <div className="mx-auto max-w-5xl space-y-6 font-sans">
+    <div className="mx-auto max-w-5xl space-y-4 sm:space-y-6 font-sans">
       <Breadcrumb items={[{ label: "Utility Tools" }]} />
 
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
           {/*
             SLOP-REMOVE-1 (AI_SLOP_AUDIT.md A12): the client-side privacy fact is
             stated once, plainly, above the calculators. It previously appeared
@@ -97,17 +97,17 @@ export default function ToolsIndexPage() {
             implementation fact in five voices reads as marketing, not accuracy.
             "Heritage Craft Utility Suite" was ornamental brand copy and is gone.
           */}
-          <div className="on-masthead bg-masthead text-mastheadText border border-mastheadText/40 rounded-2xl p-6 md:p-8 space-y-3 shadow-md relative overflow-hidden">
+          <div className="on-masthead bg-masthead text-mastheadText border border-mastheadText/40 rounded-2xl p-4 sm:p-6 md:p-8 space-y-2 sm:space-y-3 shadow-md relative overflow-hidden">
             <div>
-              <h1 className="text-display text-mastheadText tracking-tight">
+              <h1 className="text-xl sm:text-display text-mastheadText tracking-tight">
                 Teacher Utility Calculators
               </h1>
-              <p className="text-telugu-title text-turmeric font-medium mt-1">
+              <p className="text-telugu-body sm:text-telugu-title text-turmeric font-medium mt-0.5 sm:mt-1">
                 ఉపాధ్యాయుల వేతన, పన్ను మరియు బిల్లుల లెక్కింపు సాధనాలు
               </p>
             </div>
 
-            <p className="text-body text-mastheadText/70">
+            <p className="text-xs sm:text-body text-mastheadText/80">
               Income tax, DA arrears, leave encashment, GPF/APGLI and PRC pay fixation
               calculations for AP teachers. Every calculation runs inside your browser —
               no pay or personal detail you enter is sent to a server.
@@ -115,34 +115,34 @@ export default function ToolsIndexPage() {
           </div>
 
           {/* Option C Card Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3.5 sm:gap-4">
             {TOOLS.map((tool) => (
               <Card
                 key={tool.href}
                 id={tool.anchorId}
                 hoverable
-                className={`p-5 space-y-3 bg-paperRaised border-hair flex flex-col justify-between${tool.anchorId ? " scroll-mt-20" : ""}`}
+                className={`p-3.5 sm:p-5 space-y-2.5 sm:space-y-3 bg-paperRaised border-hair flex flex-col justify-between${tool.anchorId ? " scroll-mt-20" : ""}`}
               >
-                <div className="space-y-2">
-                  <h3 className="text-card-title text-ink">
+                <div className="space-y-1.5 sm:space-y-2">
+                  <h3 className="text-card-title text-ink font-bold text-sm sm:text-base">
                     <span>{tool.title}</span>
                   </h3>
-                  <div className="text-telugu-body text-inkSoft">
+                  <div className="text-telugu-body text-inkSoft text-xs sm:text-sm">
                     {tool.titleTe}
                   </div>
 
-                  <p className="text-body text-inkSoft">
+                  <p className="text-xs sm:text-body text-inkSoft">
                     {tool.desc}
                   </p>
 
                   {tool.exportsStatement && (
-                    <p className="text-meta font-mono text-inkSoft/90">
+                    <p className="text-meta font-mono text-inkSoft/90 text-xs">
                       Exports a printable statement
                     </p>
                   )}
                 </div>
 
-                <div className="pt-3 flex justify-end">
+                <div className="pt-2 sm:pt-3 flex justify-end">
                   <Link
                     href={tool.href}
                     className={buttonClassName({ variant: "tamarind", size: "sm" })}
