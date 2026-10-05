@@ -76,7 +76,7 @@ export default function DateGroupedFeed({ posts }: { posts: FeedPost[] }) {
   return (
     <div className="space-y-6">
       {/* Category & Document Type Pill Bar */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none border-b border-hair/50 pt-1">
+      <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 pb-2 border-b border-hair/50 pt-1">
         {FILTER_OPTIONS.map((opt) => {
           const isActive = selectedFilter === opt.id;
           return (

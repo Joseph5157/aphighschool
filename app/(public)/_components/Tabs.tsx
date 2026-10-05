@@ -38,7 +38,7 @@ export function Tabs({ defaultValue, value, onValueChange, children, className =
 export function TabsList({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
     <div
-      className={`flex items-center gap-1.5 p-1 bg-paperRaised border border-hair rounded-xl overflow-x-auto no-scrollbar font-mono text-xs font-bold ${className}`}
+      className={`flex flex-wrap items-center gap-1.5 p-1 bg-paperRaised border border-hair rounded-xl font-mono text-xs font-bold ${className}`}
       role="tablist"
     >
       {children}

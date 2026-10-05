@@ -44,7 +44,7 @@ export default function TopicTagBar({ baseUrl = "/search", availableTags }: Topi
         </div>
       </div>
 
-      <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
+      <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 pb-1">
         {topics.map((topic) => {
           const isActive = currentTag?.toLowerCase() === topic.tag.toLowerCase();
           return (
