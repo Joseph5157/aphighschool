@@ -70,35 +70,30 @@ const TASKS: ServiceTask[] = [
 
 export default function ServiceDeskPage() {
   return (
-    <div className="mx-auto max-w-5xl space-y-6 pb-12 font-sans">
+    <div className="mx-auto max-w-5xl space-y-4 sm:space-y-6 pb-12 font-sans">
       <Breadcrumb items={[{ label: "Teacher Service Desk" }]} />
 
-      <section className="relative overflow-hidden rounded-2xl border border-mastheadText/35 on-masthead bg-masthead p-6 text-mastheadText shadow-md md:p-8">
+      <section className="relative overflow-hidden rounded-2xl border border-mastheadText/35 on-masthead bg-masthead p-4 sm:p-6 text-mastheadText shadow-md md:p-8">
         <div className="absolute inset-y-0 right-0 w-1/3 bg-turmeric/10" aria-hidden="true" />
-        <div className="relative max-w-3xl space-y-4">
-          {/* SLOP-VISUAL-1 (A04/A05): "Service guide" was a 10px mono uppercase
-              caption sitting immediately after an uppercase badge — two tracked
-              labels in sequence, which DESIGN_SYSTEM.md §1.3 forbids outright —
-              and it said less than the h1 and the sentence directly below it.
-              A04's direction is to remove a low-value label rather than enlarge
-              it, so it is gone rather than promoted to 12px. */}
+        <div className="relative max-w-3xl space-y-2 sm:space-y-4">
+          {/* SLOP-VISUAL-1 */}
           <div className="flex items-center gap-2">
             <Badge variant="turmeric" size="sm" shape="pill" dot>
               AP School Education
             </Badge>
           </div>
           <div>
-            <h1 className="text-display tracking-tight text-mastheadText">
+            <h1 className="text-xl sm:text-display tracking-tight text-mastheadText">
               What do you need help with?
             </h1>
-            <p className="mt-2 max-w-2xl text-body text-mastheadText/75">
+            <p className="mt-1 sm:mt-2 max-w-2xl text-xs sm:text-body text-mastheadText/75">
               Start with the task you need to complete. This desk brings together AP teacher and School Education employee guidance already available in the portal.
             </p>
           </div>
         </div>
       </section>
 
-      <section aria-labelledby="service-tasks-heading" className="space-y-4">
+      <section aria-labelledby="service-tasks-heading" className="space-y-3 sm:space-y-4">
         <div className="flex items-end justify-between gap-4 border-b border-hair pb-3">
           <div>
             <h2 id="service-tasks-heading" className="text-section text-ink">
@@ -106,17 +101,14 @@ export default function ServiceDeskPage() {
             </h2>
             <p className="mt-1 text-body text-inkSoft">Six common starting points for AP teacher services.</p>
           </div>
-          {/* "Internal portal guide" removed for the same reason: a 10px tracked
-              caption beside a heading and a subtitle that already say what this
-              section is. */}
         </div>
 
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-3.5 sm:gap-4 md:grid-cols-2">
           {TASKS.map((task, index) => (
             <Card key={task.href} hoverable className="group overflow-hidden border-hair bg-paperRaised">
               <Link
                 href={task.href}
-                className="block h-full p-5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-tamarind focus-visible:ring-inset"
+                className="block h-full p-3.5 sm:p-5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-tamarind focus-visible:ring-inset"
               >
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex min-w-0 items-center gap-3">

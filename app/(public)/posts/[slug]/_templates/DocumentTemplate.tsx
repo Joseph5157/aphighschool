@@ -88,7 +88,7 @@ export default function DocumentTemplate({
   const safeSourceUrl = dropCompetitorLink(post.sourceUrl);
 
   return (
-    <div className="w-full max-w-[1700px] mx-auto space-y-8 pb-24 font-sans">
+    <div className="w-full max-w-[1700px] mx-auto space-y-4 sm:space-y-6 md:space-y-8 pb-24 font-sans">
       <Breadcrumb
         items={[
           { label: "Orders", href: "/orders" },
@@ -119,7 +119,7 @@ export default function DocumentTemplate({
           <OrderStateBadge state={lifecycleView.state} label={lifecycleView.label} />
         )}
 
-        <div className="on-masthead bg-masthead text-mastheadText p-6 md:p-8 lg:p-10 space-y-5 relative">
+        <div className="on-masthead bg-masthead text-mastheadText p-4 sm:p-6 md:p-8 lg:p-10 space-y-3 sm:space-y-5 relative">
         <div className="flex items-center justify-between gap-3 flex-wrap border-b border-mastheadText/20 pb-4">
           <div className="flex items-center gap-2 flex-wrap">
             <GoirBadge verified={post.verifiedAgainstGoir} />
@@ -149,8 +149,8 @@ export default function DocumentTemplate({
           )}
         </div>
 
-        <div className="space-y-3">
-          <h1 className="text-display text-mastheadText tracking-tight leading-snug md:text-3xl lg:text-4xl font-extrabold">
+        <div className="space-y-2 sm:space-y-3">
+          <h1 className="text-xl sm:text-display text-mastheadText tracking-tight leading-snug md:text-3xl lg:text-4xl font-extrabold">
             {post.titleEn}
           </h1>
           <div lang="te" className="text-telugu-title text-turmeric font-semibold leading-relaxed text-lg md:text-xl">

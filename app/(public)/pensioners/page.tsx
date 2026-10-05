@@ -51,10 +51,10 @@ const PENSIONER_TOOLS = [
 
 export default function PensionersHubPage() {
   return (
-    <div className="mx-auto max-w-5xl space-y-6 font-sans">
+    <div className="mx-auto max-w-5xl space-y-4 sm:space-y-6 font-sans">
       <Breadcrumb items={[{ label: "Pensioners Hub" }]} />
 
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
           {/*
             A15: "Emerald Treasury Care Suite" was invented brand copy layered
             over four concrete pension tasks, and the "care hub" sentence beneath
@@ -63,17 +63,17 @@ export default function PensionersHubPage() {
             AND listed as one of the four tasks below — the same destination three
             times. The page now names itself and shows the tasks.
           */}
-          <div className="on-masthead bg-masthead text-mastheadText border border-mastheadText/40 rounded-2xl p-6 md:p-8 space-y-3 shadow-md relative overflow-hidden">
+          <div className="on-masthead bg-masthead text-mastheadText border border-mastheadText/40 rounded-2xl p-4 sm:p-6 md:p-8 space-y-2 sm:space-y-3 shadow-md relative overflow-hidden">
             <div>
-              <h1 className="text-display text-mastheadText tracking-tight">
+              <h1 className="text-xl sm:text-display text-mastheadText tracking-tight">
                 Pensioners & Retired Employee Care Hub
               </h1>
-              <p className="text-telugu-title text-turmeric font-medium mt-1">
+              <p className="text-telugu-body sm:text-telugu-title text-turmeric font-medium mt-0.5 sm:mt-1">
                 నివృత్త ఉద్యోగుల మరియు పింఛనుదారుల మార్గదర్శక కేంద్రం
               </p>
             </div>
 
-            <p className="text-body text-mastheadText/70">
+            <p className="text-xs sm:text-body text-mastheadText/80">
               Pension and gratuity calculations, the 180-month commutation
               restoration timeline, and the office-by-office retirement file route,
               under AP Revised Pension Rules.
@@ -81,9 +81,9 @@ export default function PensionersHubPage() {
           </div>
 
           {/* Utility Tool Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 sm:gap-4">
             {PENSIONER_TOOLS.map((tool) => (
-              <Card key={tool.href} hoverable className="p-5 space-y-3 bg-paperRaised border-hair flex flex-col justify-between">
+              <Card key={tool.href} hoverable className="p-3.5 sm:p-5 space-y-2.5 sm:space-y-3 bg-paperRaised border-hair flex flex-col justify-between">
                 <div className="space-y-2">
                   <h3 className="text-card-title text-ink">
                     <span>{tool.title}</span>

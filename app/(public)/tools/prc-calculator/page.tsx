@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function PrcCalculatorPage() {
   return (
-    <div className="space-y-6 font-sans">
+    <div className="space-y-4 sm:space-y-6 font-sans">
       <Breadcrumb
         items={[
           { label: "Utility Tools", href: "/tools" },

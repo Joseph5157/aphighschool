@@ -90,32 +90,32 @@ function TopicCard({ topic, kind }: { topic: Topic; kind: "Document topic" | "Se
 
 export default function TopicsPage() {
   return (
-    <div className="mx-auto max-w-5xl space-y-8 pb-12 font-sans">
+    <div className="mx-auto max-w-5xl space-y-4 sm:space-y-6 md:space-y-8 pb-12 font-sans">
       <Breadcrumb items={[{ label: "Teacher Topics" }]} />
 
-      <section className="relative overflow-hidden rounded-2xl border border-mastheadText/35 on-masthead bg-masthead p-6 text-mastheadText shadow-md md:p-8">
+      <section className="relative overflow-hidden rounded-2xl border border-mastheadText/35 on-masthead bg-masthead p-4 sm:p-6 text-mastheadText shadow-md md:p-8">
         <div className="absolute inset-y-0 right-0 w-1/3 bg-turmeric/10" aria-hidden="true" />
-        <div className="relative max-w-3xl space-y-4">
+        <div className="relative max-w-3xl space-y-2 sm:space-y-4">
           <Badge variant="turmeric" size="sm" shape="pill" dot>
             AP School Education
           </Badge>
           <div>
-            <h1 className="text-display tracking-tight text-mastheadText">Browse teacher topics</h1>
-            <p className="mt-2 max-w-2xl text-body text-mastheadText/75">
+            <h1 className="text-xl sm:text-display tracking-tight text-mastheadText">Browse teacher topics</h1>
+            <p className="mt-1 sm:mt-2 max-w-2xl text-xs sm:text-body text-mastheadText/75">
               Find published AP School Education documents by topic, or open a practical guide for a common service task.
             </p>
           </div>
         </div>
       </section>
 
-      <section aria-labelledby="document-topics-heading" className="space-y-4">
+      <section aria-labelledby="document-topics-heading" className="space-y-3 sm:space-y-4">
         <div className="border-b border-hair pb-3">
           <h2 id="document-topics-heading" className="text-section text-ink">Document topics</h2>
           <p className="mt-1 text-body text-inkSoft">
             These links filter published AP School Education documents by their topic tags.
           </p>
         </div>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-3.5 sm:gap-4 md:grid-cols-2">
           {DOCUMENT_TOPICS.map((topic) => (
             <TopicCard key={topic.title} topic={topic} kind="Document topic" />
           ))}

@@ -79,7 +79,7 @@ const OFFICES = [
 
 export default function OfficePipelinePage() {
   return (
-    <div className="space-y-6 font-sans">
+    <div className="space-y-4 sm:space-y-6 font-sans">
       <Breadcrumb
         items={[
           { label: "Pensioners Hub", href: "/pensioners" },
@@ -87,26 +87,26 @@ export default function OfficePipelinePage() {
         ]}
       />
 
-      <div className="lg:grid lg:grid-cols-12 lg:gap-6 xl:gap-8 space-y-8 lg:space-y-0">
-        <div className="lg:col-span-8 space-y-6">
-          <div className="on-masthead bg-masthead text-mastheadText border border-mastheadText/40 rounded-2xl p-6 md:p-8 space-y-3 shadow-md">
+      <div className="lg:grid lg:grid-cols-12 lg:gap-6 xl:gap-8 space-y-6 lg:space-y-0">
+        <div className="lg:col-span-8 space-y-4 sm:space-y-6">
+          <div className="on-masthead bg-masthead text-mastheadText border border-mastheadText/40 rounded-2xl p-4 sm:p-6 md:p-8 space-y-2 sm:space-y-3 shadow-md">
             <Badge variant="turmeric" size="sm" shape="pill" dot>
               Retirement Roadmap & Office Clearance
             </Badge>
-            <h1 className="text-display text-mastheadText tracking-tight">
+            <h1 className="text-xl sm:text-display text-mastheadText tracking-tight">
               AP Teacher Retirement 6-Office File Clearance Guide
             </h1>
-            <p className="text-telugu-title text-turmeric font-medium mt-1">
+            <p className="text-telugu-body sm:text-telugu-title text-turmeric font-medium mt-0.5 sm:mt-1">
               విశ్రాంత ఉద్యోగుల పెన్షన్ ఫైలు ఆమోదం మరియు కార్యాలయాల మార్గదర్శి
             </p>
-            <p className="text-body text-mastheadText/70">
+            <p className="text-xs sm:text-body text-mastheadText/80">
               Step-by-step guide explaining where your pension proposal moves, which office handles audit objections, and how final bills are credited.
             </p>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {OFFICES.map((item) => (
-              <Card key={item.step} className="p-5 space-y-3 bg-paperRaised border-hair">
+              <Card key={item.step} className="p-3.5 sm:p-5 space-y-2.5 sm:space-y-3 bg-paperRaised border-hair">
                 <div className="flex items-center justify-between flex-wrap gap-2">
                   <div className="flex items-center gap-2">
                     <span className="w-8 h-8 rounded-lg bg-ink text-turmeric flex items-center justify-center font-mono font-bold text-sm">

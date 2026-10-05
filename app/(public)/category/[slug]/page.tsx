@@ -92,7 +92,7 @@ export default async function CategoryDetailPage({
   const postCount = category._count?.posts || 0;
 
   return (
-    <div className="max-w-5xl mx-auto space-y-7 pb-24 font-sans">
+    <div className="max-w-5xl mx-auto space-y-4 sm:space-y-6 md:space-y-7 pb-24 font-sans">
 
       {/* Breadcrumb */}
       <Breadcrumb
@@ -104,21 +104,9 @@ export default async function CategoryDetailPage({
 
       {/* ── Option A: Imperial Gazette Category Masthead ─────────────────── */}
       <div className="on-masthead bg-masthead text-mastheadText rounded-2xl overflow-hidden shadow-md">
-        {/* Top classification ribbon.
-
-            SLOP-VISUAL-1 (A04/A05). The band is gazette identity and is
-            protected (A19), so it stays. Only the duplicated half of the left
-            label goes: "AP School Education" already sits in the site header two
-            rows above this. "Document Category" classifies the page, and
-            "Published documents" is a FRESHNESS-1 trust boundary — it bounds what
-            the feed below is claiming to be, which is why freshness-trust asserts
-            it here — so both stay.
-
-            It was 10px at 40% opacity on navy: under the §1.2 type floor and the
-            §14 contrast floor at once. A classification line nobody can read is
-            not classifying anything. */}
+        {/* Top classification ribbon */}
         <div
-          className="border-b border-mastheadText/20 px-6 py-2 flex items-center justify-between text-xs font-mono text-mastheadText/70 tracking-widest uppercase"
+          className="border-b border-mastheadText/20 px-4 sm:px-6 py-2 flex items-center justify-between text-xs font-mono text-mastheadText/70 tracking-widest uppercase"
           style={{ backgroundColor: "color-mix(in srgb, var(--color-masthead) 85%, black)" }}
         >
           <span>Document Category</span>
@@ -127,7 +115,7 @@ export default async function CategoryDetailPage({
 
         {/* Main Header */}
         <div
-          className="px-6 py-7 md:px-10 md:py-8 space-y-4 border-l-4"
+          className="px-4 py-5 sm:px-6 sm:py-7 md:px-10 md:py-8 space-y-3 sm:space-y-4 border-l-4"
           style={{ borderLeftColor: category.color || "var(--color-turmeric)" }}
         >
           <div className="flex items-center gap-3 flex-wrap">
@@ -137,12 +125,8 @@ export default async function CategoryDetailPage({
           </div>
 
           <div>
-            {/* UI-IMPECCABLE-1: was a raw text-2xl/md:text-3xl size, an unexplained
-                drift from .text-display — the token every other page-header h1
-                (pensioners, tools, service-desk, topics, office-pipeline) already
-                uses. Sizes are close (24→30px vs 22→28px); this just removes the
-                unjustified inconsistency. */}
-            <h1 className="text-display text-mastheadText tracking-tight">
+            {/* UI-IMPECCABLE-1 */}
+            <h1 className="text-xl sm:text-display text-mastheadText tracking-tight">
               {category.nameEn}
             </h1>
             {category.nameTe && (

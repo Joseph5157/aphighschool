@@ -12,19 +12,19 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <div className="mx-auto max-w-4xl space-y-6 pb-12 font-sans">
+    <div className="mx-auto max-w-4xl space-y-4 sm:space-y-6 pb-12 font-sans">
       <Breadcrumb items={[{ label: "About" }]} />
 
-      <section className="space-y-4">
-        <h1 className="text-display text-ink font-bold tracking-tight">
+      <section className="space-y-2 sm:space-y-4">
+        <h1 className="text-xl sm:text-display text-ink font-bold tracking-tight">
           About AP Teacher Desk
         </h1>
-        <p className="text-body text-inkSoft text-lg leading-relaxed">
+        <p className="text-xs sm:text-body text-inkSoft text-base sm:text-lg leading-relaxed">
           AP Teacher Desk is a dedicated, independent information portal and utility toolkit created for teachers, School Education employees, and pensioners in Andhra Pradesh.
         </p>
       </section>
 
-      <Card className="p-6 md:p-8 space-y-6 border-hair bg-paperRaised">
+      <Card className="p-4 sm:p-6 md:p-8 space-y-4 sm:space-y-6 border-hair bg-paperRaised">
         <div className="space-y-3">
           <h2 className="text-card-title text-ink font-bold">Our Mission & Purpose</h2>
           <p className="text-body text-inkSoft">

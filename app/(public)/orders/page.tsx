@@ -60,7 +60,7 @@ export default async function OrdersPage() {
   );
 
   return (
-    <div className="mx-auto max-w-5xl space-y-8 pb-24 font-sans">
+    <div className="mx-auto max-w-5xl space-y-4 sm:space-y-6 md:space-y-8 pb-24 font-sans">
       <Breadcrumb items={[{ label: "Orders & Circulars" }]} />
 
       {/*
@@ -77,14 +77,14 @@ export default async function OrdersPage() {
         topic bar and the verified quick-search chips still live on /search,
         which owns that job.
       */}
-      <div className="on-masthead bg-masthead text-mastheadText rounded-2xl px-6 py-7 md:px-10 md:py-9 space-y-3">
-        <h1 className="text-display text-mastheadText tracking-tight">
+      <div className="on-masthead bg-masthead text-mastheadText rounded-2xl px-4 py-5 sm:px-6 sm:py-7 md:px-10 md:py-9 space-y-2 sm:space-y-3">
+        <h1 className="text-xl sm:text-display text-mastheadText tracking-tight">
           Orders &amp; Circulars Hub
         </h1>
-        <p lang="te" className="text-telugu-title text-turmeric font-medium">
+        <p lang="te" className="text-telugu-body sm:text-telugu-title text-turmeric font-medium mt-0.5 sm:mt-1">
           ఉత్తర్వులు &amp; సర్క్యులర్లు — వర్గాల వారీగా
         </p>
-        <p className="text-body text-mastheadText/70 max-w-xl">
+        <p className="text-xs sm:text-body text-mastheadText/70 max-w-xl">
           AP School Education Document Index — government orders, department memos,
           proceedings, circulars and notifications.
         </p>
