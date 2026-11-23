@@ -56,7 +56,7 @@ describe("reusable post introduction", () => {
       "Official source",
       "Open document PDF",
       "Open action link",
-      "View source",
+      "Source link",
       "Department",
       "GOIR verification",
     ]) {
@@ -80,7 +80,7 @@ describe("reusable post introduction", () => {
       "href",
       sourcePost.actionUrl,
     );
-    expect(screen.getByRole("link", { name: /View source/i })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /Source link/i })).toHaveAttribute(
       "href",
       sourcePost.sourceUrl,
     );

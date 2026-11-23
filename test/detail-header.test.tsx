@@ -132,7 +132,7 @@ describe("A09 — one document header instead of three stacked panels", () => {
       "href",
       "https://example.com/doc.pdf",
     );
-    expect(source.getByRole("link", { name: /View source/i })).toHaveAttribute(
+    expect(source.getByRole("link", { name: /Source link/i })).toHaveAttribute(
       "href",
       "https://example.com/source",
     );

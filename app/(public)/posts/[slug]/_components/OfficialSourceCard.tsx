@@ -35,7 +35,7 @@ export default function OfficialSourceCard({ post }: { post: OfficialSourcePost 
       ? [{ href: post.actionUrl, label: "Open action link", tone: "primary" as const }]
       : []),
     ...(post.sourceUrl
-      ? [{ href: post.sourceUrl, label: "View source", tone: "secondary" as const }]
+      ? [{ href: post.sourceUrl, label: "Source link", tone: "secondary" as const }]
       : []),
   ];
 
