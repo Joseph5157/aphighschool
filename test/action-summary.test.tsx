@@ -3,68 +3,88 @@ import { render, screen } from "@testing-library/react";
 import fs from "node:fs";
 import path from "node:path";
 import ActionSummary from "@/app/(public)/posts/[slug]/_components/ActionSummary";
+import OfficialSourceCard from "@/app/(public)/posts/[slug]/_components/OfficialSourceCard";
 
-// UI-PATTERNS-1 merged the two 95%-identical templates into one shell.
-const templates = ["DocumentTemplate.tsx"].map((file) =>
-  fs.readFileSync(path.join(process.cwd(), "app", "(public)", "posts", "[slug]", "_templates", file), "utf8")
+const template = fs.readFileSync(
+  path.join(
+    process.cwd(),
+    "app",
+    "(public)",
+    "posts",
+    "[slug]",
+    "_templates",
+    "DocumentTemplate.tsx",
+  ),
+  "utf8",
 );
 
-// SLOP-DETAIL-1 (AI_SLOP_AUDIT.md A09) removed this card's fact table. Its five
-// rows — reference, department, the labelled date, the deadline and the GOIR
-// check — were all already in the document header a few hundred pixels above.
-// The rules those rows were guarded by did not go anywhere: they are asserted
-// on the header now, in test/detail-header.test.tsx, which renders the real
-// DocumentTemplate rather than this card.
-const basePost = {
+const summaryPost = {
   summaryTe: ["ఇది రచయిత అందించిన తెలుగు సారాంశం."],
   englishAbstract: "An authored English brief.",
+};
+
+const sourcePost = {
+  sourceDept: "School Education Department",
+  documentDate: new Date("2026-03-12T00:00:00Z"),
+  createdAt: new Date("2026-04-01T00:00:00Z"),
+  verifiedAgainstGoir: true,
   actionUrl: "https://example.com/action",
   pdfUrl: "https://example.com/document.pdf",
   sourceUrl: "https://example.com/source",
 };
 
-describe("ActionSummary", () => {
+describe("reusable post introduction", () => {
   it("renders authored Telugu with lang=te and the English abstract", () => {
-    render(<ActionSummary post={basePost} />);
-    expect(screen.getByText(basePost.summaryTe[0]).closest("ul")).toHaveAttribute("lang", "te");
-    expect(screen.getByText(basePost.englishAbstract)).toBeInTheDocument();
-  });
-
-  it("does not synthesize a summary when authored summary fields are absent", () => {
-    render(<ActionSummary post={{ ...basePost, summaryTe: [], englishAbstract: null }} />);
-    expect(screen.queryByText(basePost.summaryTe[0])).not.toBeInTheDocument();
-    expect(screen.queryByText(basePost.englishAbstract)).not.toBeInTheDocument();
-  });
-
-  it("renders nothing at all when there is no summary, abstract or link", () => {
-    const { container } = render(
-      <ActionSummary
-        post={{ summaryTe: [], englishAbstract: null, actionUrl: null, pdfUrl: null, sourceUrl: null }}
-      />
+    render(<ActionSummary post={summaryPost} />);
+    expect(screen.getByText(summaryPost.summaryTe[0]).closest("ul")).toHaveAttribute(
+      "lang",
+      "te",
     );
-    // An empty bordered card announcing "At a Glance" over nothing is the
-    // filler this gate exists to remove.
+    expect(screen.getByText(summaryPost.englishAbstract)).toBeInTheDocument();
+  });
+
+  it("renders no empty At a Glance card when authored summary fields are absent", () => {
+    const { container } = render(
+      <ActionSummary post={{ summaryTe: [], englishAbstract: null }} />,
+    );
     expect(container).toBeEmptyDOMElement();
   });
 
-  it("no longer repeats facts the document header already states", () => {
-    render(<ActionSummary post={basePost} />);
+  it("keeps provenance and actions out of the authored summary", () => {
+    render(<ActionSummary post={summaryPost} />);
     for (const label of [
-      "G.O. / Reference",
+      "Official source",
+      "Open document PDF",
+      "Open action link",
+      "View source",
       "Department",
-      "Important date",
       "GOIR verification",
-      "Author-provided summary and document facts",
     ]) {
       expect(screen.queryByText(label), label).not.toBeInTheDocument();
     }
   });
 
-  it("uses neutral safe links without nested controls", () => {
-    const { container } = render(<ActionSummary post={basePost} />);
-    expect(screen.getByRole("link", { name: /Open action link/i })).toHaveAttribute("href", basePost.actionUrl);
-    expect(screen.getByRole("link", { name: /Open PDF/i })).toHaveAttribute("href", basePost.pdfUrl);
-    expect(screen.getByRole("link", { name: /Source link/i })).toHaveAttribute("href", basePost.sourceUrl);
+  it("renders source facts and outbound actions together", () => {
+    const { container } = render(<OfficialSourceCard post={sourcePost} />);
+
+    expect(screen.getByRole("heading", { name: "Official source" })).toBeInTheDocument();
+    expect(screen.getByText("School Education Department")).toBeInTheDocument();
+    expect(screen.getByText(/Issued/)).toBeInTheDocument();
+    expect(screen.getByText("GOIR Verified")).toBeInTheDocument();
+
+    expect(screen.getByRole("link", { name: /Open document PDF/i })).toHaveAttribute(
+      "href",
+      sourcePost.pdfUrl,
+    );
+    expect(screen.getByRole("link", { name: /Open action link/i })).toHaveAttribute(
+      "href",
+      sourcePost.actionUrl,
+    );
+    expect(screen.getByRole("link", { name: /View source/i })).toHaveAttribute(
+      "href",
+      sourcePost.sourceUrl,
+    );
+
     for (const link of screen.getAllByRole("link")) {
       expect(link).toHaveAttribute("target", "_blank");
       expect(link).toHaveAttribute("rel", "noopener noreferrer");
@@ -72,47 +92,40 @@ describe("ActionSummary", () => {
     expect(container.querySelector("a button")).toBeNull();
   });
 
-  it("keeps a document's own source route when it has one and no summary", () => {
+  it("keeps the source card useful when no outbound link exists", () => {
     render(
-      <ActionSummary
-        post={{ summaryTe: [], englishAbstract: null, actionUrl: null, pdfUrl: null, sourceUrl: "https://example.com/source" }}
-      />
+      <OfficialSourceCard
+        post={{
+          ...sourcePost,
+          actionUrl: null,
+          pdfUrl: null,
+          sourceUrl: null,
+        }}
+      />,
     );
-    expect(screen.getByRole("link", { name: /Source link/i })).toBeInTheDocument();
+    expect(screen.getByText("School Education Department")).toBeInTheDocument();
+    expect(screen.queryByRole("link")).not.toBeInTheDocument();
   });
 
-  it("does not expose unsupported questions or generic notification procedures", () => {
-    render(<ActionSummary post={basePost} />);
-    for (const text of ["Who is affected?", "What changed?", "What should I do?"]) {
-      expect(screen.queryByText(text)).not.toBeInTheDocument();
-    }
-    for (const template of templates) {
-      // COMPETITOR-LINKS-1: post is passed through with actionUrl/sourceUrl
-      // overridden to the render-time-sanitized values, not the raw fields.
-      expect(template).toContain(
-        "<ActionSummary post={{ ...post, actionUrl: safeActionUrl, sourceUrl: safeSourceUrl }} />"
-      );
-      expect(template).not.toContain("Step-by-Step Procedure Guide");
-      expect(template).not.toContain("Executive Order Brief");
-      expect(template).not.toContain("Quick Fact");
-      expect(template).not.toContain("goir.ap.gov.in (Verified)");
-    }
+  it("passes only sanitized competitor-sensitive URLs to the source card", () => {
+    expect(template).toContain("const safeActionUrl = dropCompetitorLink(post.actionUrl)");
+    expect(template).toContain("const safeSourceUrl = dropCompetitorLink(post.sourceUrl)");
+    expect(template).toContain("<OfficialSourceCard post={sourcePost} />");
+    expect(template).not.toContain("Step-by-Step Procedure Guide");
+    expect(template).not.toContain("Executive Order Brief");
+    expect(template).not.toContain("Quick Fact");
   });
 
-  it("removes unsupported official-source and procedure claims from the templates", () => {
-    // One template now serves both document kinds, so every banned phrase is
-    // checked against it rather than split by which template used to render it.
-    const BANNED = [
+  it("does not introduce unsupported official-source claims", () => {
+    for (const text of [
       "Official Gazette PDF Attachment",
       "Verified PDF source",
       "Open Original GO PDF",
       "Apply Online / Official Portal",
       "Download Official Notification PDF",
       "Official Repository",
-    ];
-
-    for (const template of templates) {
-      for (const text of BANNED) expect(template).not.toContain(text);
+    ]) {
+      expect(template).not.toContain(text);
     }
   });
 });

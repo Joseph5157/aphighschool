@@ -60,35 +60,41 @@ function renderDocument(overrides: Record<string, unknown> = {}) {
 }
 
 describe("A09 — one document header instead of three stacked panels", () => {
-  it("states each fact once in the header and never again below it", () => {
+  it("states each protected fact once in its intended region", () => {
     const { container } = renderDocument();
     const header = container.querySelector("header")!;
     const glance = container.querySelector('section[aria-label="At a glance"]')!;
-    const count = (root: Element, needle: string) => root.innerHTML.split(needle).length - 1;
+    const source = container.querySelector('section[aria-label="Official source"]')!;
+    const count = (root: Element, needle: string) =>
+      root.innerHTML.split(needle).length - 1;
 
-    // Counted, not merely present: a presence check passes just as well on the
-    // duplicated version this gate removed. Scoped to these two panels, which
-    // are the finding — the breadcrumb trail above them legitimately names the
-    // document by its reference, and does so in its schema.org JSON-LD too.
-    for (const fact of ["G.O.Ms.No.129", "School Education", "Issued", "GOIR Verified"]) {
-      expect(count(header, fact), `header: ${fact}`).toBe(1);
+    expect(count(header, "G.O.Ms.No.129")).toBe(1);
+    for (const fact of ["School Education", "Issued", "GOIR Verified"]) {
+      expect(count(header, fact), `header: ${fact}`).toBe(0);
       expect(count(glance, fact), `at a glance: ${fact}`).toBe(0);
+      expect(count(source, fact), `official source: ${fact}`).toBe(1);
     }
   });
 
-  it("keeps every protected fact in the header", () => {
+  it("keeps identity in the header and provenance in the source card", () => {
     const { container } = renderDocument();
-    const header = container.querySelector("header")!;
+    const header = within(container.querySelector("header")!);
+    const source = within(
+      container.querySelector('section[aria-label="Official source"]')!,
+    );
 
-    expect(within(header).getByText("Current")).toBeInTheDocument();
-    expect(within(header).getByText(/This order is in force/)).toBeInTheDocument();
-    expect(within(header).getByText("G.O.Ms.No.129")).toBeInTheDocument();
-    expect(within(header).getByText("Government Orders")).toBeInTheDocument();
-    expect(within(header).getByText("School Education")).toBeInTheDocument();
-    expect(within(header).getByText(/Issued/)).toBeInTheDocument();
-    expect(within(header).getByText("GOIR Verified")).toBeInTheDocument();
-    expect(within(header).getByRole("heading", { level: 1 })).toHaveTextContent("Sanction of DA arrears");
-    expect(within(header).getByText("డిఏ బకాయిల మంజూరు")).toBeInTheDocument();
+    expect(header.getByText("Current")).toBeInTheDocument();
+    expect(header.getByText(/This order is in force/)).toBeInTheDocument();
+    expect(header.getByText("G.O.Ms.No.129")).toBeInTheDocument();
+    expect(header.getByText("Government Orders")).toBeInTheDocument();
+    expect(header.getByRole("heading", { level: 1 })).toHaveTextContent(
+      "Sanction of DA arrears",
+    );
+    expect(header.getByText("డిఏ బకాయిల మంజూరు")).toBeInTheDocument();
+
+    expect(source.getByText("School Education")).toBeInTheDocument();
+    expect(source.getByText(/Issued/)).toBeInTheDocument();
+    expect(source.getByText("GOIR Verified")).toBeInTheDocument();
   });
 
   it("puts the lifecycle state before the title, not after it", () => {
@@ -109,15 +115,27 @@ describe("A09 — one document header instead of three stacked panels", () => {
     expect(header.textContent).toContain("Sanction of DA arrears");
   });
 
-  it("keeps the summary and the source links, which only At a Glance carries", () => {
+  it("keeps the summary and source actions in their separate cards", () => {
     const { container } = renderDocument();
-    // Scoped to the section: the mobile thumb-zone action bar also links to the
-    // source, and that bar is a separate surface this gate does not touch.
-    const glance = within(container.querySelector('section[aria-label="At a glance"]')!);
+    const glance = within(
+      container.querySelector('section[aria-label="At a glance"]')!,
+    );
+    const source = within(
+      container.querySelector('section[aria-label="Official source"]')!,
+    );
 
-    expect(glance.getByText("ఉపాధ్యాయులకు డీఏ బకాయిలు చెల్లించబడతాయి.")).toBeInTheDocument();
-    expect(glance.getByRole("link", { name: /Open PDF/i })).toHaveAttribute("href", "https://example.com/doc.pdf");
-    expect(glance.getByRole("link", { name: /Source link/i })).toHaveAttribute("href", "https://example.com/source");
+    expect(
+      glance.getByText("ఉపాధ్యాయులకు డీఏ బకాయిలు చెల్లించబడతాయి."),
+    ).toBeInTheDocument();
+    expect(glance.queryByRole("link")).not.toBeInTheDocument();
+    expect(source.getByRole("link", { name: /Open document PDF/i })).toHaveAttribute(
+      "href",
+      "https://example.com/doc.pdf",
+    );
+    expect(source.getByRole("link", { name: /View source/i })).toHaveAttribute(
+      "href",
+      "https://example.com/source",
+    );
   });
 
   it("drops the filler subtitle and the section's duplicated fact labels", () => {
@@ -291,3 +309,4 @@ describe("A07 — category filters proportional to the result set", () => {
     expect(screen.getByText("Superseded")).toBeInTheDocument();
   });
 });
+
