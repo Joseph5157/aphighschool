@@ -11,6 +11,7 @@ const categoryPage = read("app/(public)/category/[slug]/page.tsx");
 const homePage = read("app/(public)/(home)/page.tsx");
 const searchUi = read("app/(public)/search/_components/SearchUI.tsx");
 const documentTemplate = read("app/(public)/posts/[slug]/_templates/DocumentTemplate.tsx");
+const officialSourceCard = read("app/(public)/posts/[slug]/_components/OfficialSourceCard.tsx");
 const postPage = read("app/(public)/posts/[slug]/page.tsx");
 const thumbZoneBar = read("app/(public)/posts/[slug]/_components/ThumbZoneBar.tsx");
 const actionSummary = read("app/(public)/posts/[slug]/_components/ActionSummary.tsx");
@@ -41,7 +42,7 @@ describe("FRESHNESS-1 public trust language", () => {
   });
 
   it("retains individual GOIR badges only behind their recorded boolean and uses the bounded label", () => {
-    for (const template of [documentTemplate]) {
+    for (const template of [officialSourceCard]) {
       // The guard now goes through GoirBadge, which takes the recorded boolean
       // and can only return the positive marker or nothing — a stronger form of
       // the same rule than the inline conditional this used to match.
