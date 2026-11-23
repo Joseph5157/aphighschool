@@ -62,7 +62,7 @@ export default function ThemeToggle() {
       // the hit area without adding to this element's own flex-layout width,
       // so it carries zero risk to the 320px header clearance NAV-HEADER-320-1
       // fixed (docs/context/NAV_HEADER_320_PLAN.md).
-      className="relative inline-flex min-h-[44px] items-center gap-1.5 rounded-lg border border-hair/80 bg-paperRaised/80 px-3 font-mono text-xs font-semibold text-ink transition-colors duration-150 hover:bg-paper after:absolute after:inset-y-0 after:-inset-x-1 after:content-['']"
+      className="relative inline-flex min-h-[44px] items-center gap-1.5 rounded-lg border border-hair/80 bg-paperRaised/80 px-3 font-sans text-xs font-semibold text-ink transition-colors duration-150 hover:bg-paper after:absolute after:inset-y-0 after:-inset-x-1 after:content-['']"
     >
       <span aria-hidden="true">
         {isDark ? (

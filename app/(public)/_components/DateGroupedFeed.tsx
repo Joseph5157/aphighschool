@@ -24,13 +24,13 @@ export type FeedPost = {
 
 type FilterDocType = "all" | "go" | "circular" | "memo" | "proceeding" | "notification";
 
-const FILTER_OPTIONS: { id: FilterDocType; label: string }[] = [
-  { id: "all", label: "All Documents" },
-  { id: "go", label: "Government Orders (GOs)" },
-  { id: "circular", label: "Circulars" },
-  { id: "memo", label: "Memos" },
-  { id: "proceeding", label: "Proceedings" },
-  { id: "notification", label: "Notifications" },
+const FILTER_OPTIONS: { id: FilterDocType; label: string; shortLabel: string }[] = [
+  { id: "all", label: "All Documents", shortLabel: "All" },
+  { id: "go", label: "Government Orders (GOs)", shortLabel: "GOs" },
+  { id: "circular", label: "Circulars", shortLabel: "Circulars" },
+  { id: "memo", label: "Memos", shortLabel: "Memos" },
+  { id: "proceeding", label: "Proceedings", shortLabel: "Proceedings" },
+  { id: "notification", label: "Notifications", shortLabel: "Notifications" },
 ];
 
 export default function DateGroupedFeed({ posts }: { posts: FeedPost[] }) {
@@ -51,14 +51,13 @@ export default function DateGroupedFeed({ posts }: { posts: FeedPost[] }) {
 
     for (const post of filteredPosts) {
       const dateObj = officialDate(post);
-      // Format as Month Year (e.g. "OCTOBER 2026") or Date
+      // Format as Month Year (e.g. "October 2026"). Sentence case is easier
+      // to scan than a tracked, all-caps data label on a narrow screen.
       const monthYear = new Intl.DateTimeFormat("en-IN", {
         month: "long",
         year: "numeric",
         timeZone: "Asia/Kolkata",
-      })
-        .format(dateObj)
-        .toUpperCase();
+      }).format(dateObj);
 
       if (!map.has(monthYear)) {
         map.set(monthYear, []);
@@ -74,22 +73,29 @@ export default function DateGroupedFeed({ posts }: { posts: FeedPost[] }) {
   }, [filteredPosts]);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Category & Document Type Pill Bar */}
-      <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 pb-2 border-b border-hair/50 pt-1">
+      <div
+        role="group"
+        aria-label="Filter documents by type"
+        className="no-scrollbar flex flex-nowrap items-center gap-2 overflow-x-auto border-b border-hair/50 pb-3 pt-0.5"
+      >
         {FILTER_OPTIONS.map((opt) => {
           const isActive = selectedFilter === opt.id;
           return (
             <button
               key={opt.id}
               onClick={() => setSelectedFilter(opt.id)}
-              className={`px-3 py-1.5 rounded-full text-xs font-mono font-medium transition-all whitespace-nowrap border shrink-0 ${
+              aria-pressed={isActive}
+              aria-label={opt.label}
+              className={`min-h-[44px] px-4 py-2 rounded-full text-sm font-sans font-semibold transition-all whitespace-nowrap border shrink-0 ${
                 isActive
                   ? "bg-masthead text-turmeric border-mastheadText/40 shadow-sm font-semibold"
                   : "bg-paperRaised text-inkSoft hover:text-ink hover:bg-paper border-hair"
               }`}
             >
-              {opt.label}
+              <span className="sm:hidden">{opt.shortLabel}</span>
+              <span className="hidden sm:inline">{opt.label}</span>
             </button>
           );
         })}
@@ -97,25 +103,25 @@ export default function DateGroupedFeed({ posts }: { posts: FeedPost[] }) {
 
       {/* Date-Grouped Timeline Stream */}
       {groupedPosts.length > 0 ? (
-        <div className="space-y-6 relative">
+        <div className="space-y-4 sm:space-y-6 relative">
           {/* Subtle Vertical Timeline Hairline (Desktop Stream) */}
           <div className="hidden sm:block absolute left-3.5 top-3 bottom-3 w-px bg-hair/60 -z-10" />
 
           {groupedPosts.map((group) => (
-            <section key={group.dateGroupLabel} className="space-y-3">
-              {/* Monospace Timeline Date Header */}
-              <div className="flex items-center gap-3">
-                <div className="w-6 h-6 rounded-full bg-paperRaised border border-hair flex items-center justify-center font-mono text-xs font-bold text-tamarind shrink-0">
+            <section key={group.dateGroupLabel} className="space-y-2 sm:space-y-3">
+              {/* Compact timeline date header */}
+              <div className="flex items-center gap-2.5 sm:gap-3">
+                <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-paperRaised border border-hair flex items-center justify-center font-mono text-xs font-bold text-tamarind shrink-0">
                   ◆
                 </div>
-                <div className="font-mono text-xs font-semibold tracking-wider text-inkSoft uppercase bg-paper pr-2">
+                <div className="font-sans text-sm font-bold tracking-tight text-inkSoft bg-paper pr-2">
                   {group.dateGroupLabel}
                 </div>
                 <div className="flex-1 h-px bg-hair/40" />
               </div>
 
               {/* Document Rows under this Date Group */}
-              <div className="space-y-3 pl-0 sm:pl-7">
+              <div className="space-y-2.5 sm:space-y-3 pl-0 sm:pl-7">
                 {group.items.map((post) => (
                   <PostCard key={post.id} post={post} />
                 ))}

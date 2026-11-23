@@ -47,9 +47,9 @@ export default function ActionSummary({ post }: { post: ActionSummaryPost }) {
           <div
             className={`${
               hasTeluguSummary ? "border-t border-dashed border-hair pt-4" : ""
-            } text-body italic text-inkSoft`}
+            } text-body text-inkSoft`}
           >
-            <strong className="mb-1 block font-sans text-sm font-bold not-italic text-ink">
+            <strong className="mb-1 block font-sans text-sm font-bold text-ink">
               English abstract
             </strong>
             {post.englishAbstract}

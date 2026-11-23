@@ -1,11 +1,10 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { Space_Grotesk, Noto_Sans_Telugu, IBM_Plex_Mono } from "next/font/google";
+import { Noto_Sans, Noto_Sans_Telugu, IBM_Plex_Mono } from "next/font/google";
 
-const spaceGrotesk = Space_Grotesk({
+const notoSans = Noto_Sans({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-space-grotesk",
+  variable: "--font-noto-sans",
   display: "swap",
 });
 
@@ -32,7 +31,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
-      className={`${spaceGrotesk.variable} ${notoTelugu.variable} ${plexMono.variable}`}
+      className={`${notoSans.variable} ${notoTelugu.variable} ${plexMono.variable}`}
       // The inline script below adds `dark` to this element before React
       // hydrates, so a returning dark-mode visitor's server HTML (which has
       // no localStorage access) never matches the client's first paint. That

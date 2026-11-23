@@ -47,12 +47,13 @@ Three families, fixed by `AGENTS.md`. Do not add a fourth.
 
 | Family | Role | Variable |
 |---|---|---|
-| Space Grotesk | All English UI and body text. The default; needs no class. | `--font-space-grotesk` |
+| Noto Sans | All English UI and body text. The default; needs no class. Its proportions pair cleanly with Telugu on compact screens. | `--font-noto-sans` |
 | Noto Sans Telugu | **All** Telugu text, always. Never substituted, never auto-transliterated. | `--font-noto-telugu` |
-| IBM Plex Mono | Data only: dates, GO numbers, document/status labels, reference codes, figures in calculator output. | `--font-plex-mono` |
+| IBM Plex Mono | Data only: dates, GO numbers, document codes, reference codes, figures in calculator output. | `--font-plex-mono` |
 
 Mono is **not** for body copy, headings, navigation labels, or button text. Its job is to
-mark a value as machine-readable data.
+mark a value as machine-readable data. Status, navigation, filter and button labels use
+Noto Sans because they are interface language, not data.
 
 ### 1.1 Scale
 
@@ -65,11 +66,11 @@ and never consumed, and `TaxCalculatorUI` applies the responsive step twice, lan
 |---|---|---|---|---|
 | `display` | 22px / 1.3 | 28px | 700 | Page `h1`. One per route. |
 | `section` | 18px / 1.35 | 20px | 700 | `h2` section headings. |
-| `card-title` | 15px / 1.4 | 16px | 700 | Document titles in cards and rows. |
+| `card-title` | 17px / 1.35 | 18px | 700 | Document titles in cards and rows. |
 | `body` | 15px / 1.6 | 16px | 400 | English prose. |
 | `telugu-title` | 18px / 1.75 | 20px | 600 | Telugu document titles. |
 | `telugu-body` | 16px / 1.75 | 17px | 500 | Telugu prose. |
-| `meta` | 12px / 1.25 | 12px | 600 | Mono metadata: dates, GO numbers, state labels. |
+| `meta` | 12px / 1.25 | 12px | 600 | Compact metadata; apply mono only to dates and document/reference data. |
 | `label` | 12px / 1.3 | 12px | 600 | Form labels. |
 
 Telugu keeps a larger line-height than Latin at every step; the script's ascenders and

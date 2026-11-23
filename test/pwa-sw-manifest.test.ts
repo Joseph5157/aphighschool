@@ -49,10 +49,13 @@ describe.skipIf(!hasBuild)("PWA-SW-1 built service worker (public/sw.js)", () =>
     expect(entry!.revision).not.toBeNull();
   });
 
-  it("only grows by the offline page's own document + chunk, not by anything else", () => {
-    // 55 approved entries from PWA-SW-1, plus exactly one new document
-    // (/offline) and its one route-specific JS chunk.
-    expect(manifest.length).toBe(57);
+  it("contains only the reviewed offline assets and Noto Sans shards", () => {
+    // 55 approved entries from PWA-SW-1, the offline page's document + route
+    // chunk, and the eight unicode-range shards emitted by next/font for the
+    // Noto Sans variable family. The typography gate intentionally replaced
+    // Space Grotesk; keeping this exact count prevents unrelated routes or
+    // assets from silently joining the offline package later.
+    expect(manifest.length).toBe(65);
   });
 
   it("contains no freshness-sensitive route as a cached document", () => {

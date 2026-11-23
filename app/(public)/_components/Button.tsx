@@ -39,9 +39,9 @@ const VARIANT_MAP: Record<ButtonVariant, string> = {
 // the floor through a transparent ::after overlay that extends the hit area
 // without affecting layout. `md` and `lg` meet it directly.
 const SIZE_MAP: Record<ButtonSize, string> = {
-  sm: "text-xs px-2.5 min-h-[36px] rounded-md gap-1.5 font-mono relative after:absolute after:inset-x-0 after:-inset-y-1 after:content-['']",
-  md: "text-xs sm:text-sm px-4 min-h-[44px] rounded-lg gap-2 font-mono",
-  lg: "text-sm sm:text-base px-5 min-h-[48px] rounded-xl gap-2.5 font-mono",
+  sm: "text-xs px-2.5 min-h-[36px] rounded-md gap-1.5 font-sans relative after:absolute after:inset-x-0 after:-inset-y-1 after:content-['']",
+  md: "text-xs sm:text-sm px-4 min-h-[44px] rounded-lg gap-2 font-sans",
+  lg: "text-sm sm:text-base px-5 min-h-[48px] rounded-xl gap-2.5 font-sans",
 };
 
 export interface ButtonClassNameOptions {

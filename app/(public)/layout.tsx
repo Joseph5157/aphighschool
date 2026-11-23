@@ -200,7 +200,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
                   <div className="font-bold text-xs sm:text-sm tracking-tight text-ink group-hover:text-inkSoft transition-colors whitespace-nowrap">
                     AP Teacher Desk
                   </div>
-                  <div className="text-xs font-mono text-inkSoft uppercase tracking-wider truncate">
+                  <div className="text-xs font-sans font-medium text-inkSoft tracking-wide truncate">
                     AP School Education
                   </div>
                 </div>
