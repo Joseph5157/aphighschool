@@ -12,7 +12,7 @@ import { describe, it, expect, beforeEach, beforeAll, afterAll, vi } from "vites
 import { cloneElement, isValidElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import EditPostPage from "@/app/admin/posts/[id]/page";
-import { resetDb, makePost } from "./db";
+import { resetDb, makePost, testDb } from "./db";
 
 /**
  * renderToStaticMarkup cannot descend into an async Server Component, and the
@@ -165,5 +165,35 @@ describe("edit form prefill", () => {
       "&lt;h2&gt;Verified section&lt;/h2&gt;&lt;p&gt;Existing article body.&lt;/p&gt;"
     );
     expect(html).toMatch(/<textarea[^>]*name="content"/);
+  });
+
+  it("shows whether each related-order candidate is draft or publicly visible", async () => {
+    const category = await testDb.category.create({
+      data: { nameEn: "Government Orders", nameTe: "\u0C24\u0C46\u0C32\u0C41\u0C17\u0C41", slug: "govt-orders" },
+    });
+    const current = await makePost({ slug: "current-post", isDraft: true });
+    await makePost({
+      slug: "draft-background",
+      titleEn: "Draft Background Order",
+      goReference: "G.O.Ms.No.21",
+      isDraft: true,
+      categoryId: category.id,
+    });
+    await makePost({
+      slug: "published-background",
+      titleEn: "Published Background Order",
+      goReference: "G.O.Ms.No.45",
+      isDraft: false,
+      categoryId: category.id,
+    });
+
+    const html = await renderEdit(current.id);
+
+    expect(html).toContain("Draft Background Order");
+    expect(html).toContain("Draft — hidden until published");
+    expect(html).toContain("Published Background Order");
+    expect(html).toContain("Published");
+    expect(html).toContain("Government Orders");
+    expect(html).toContain("G.O.Ms.No.21");
   });
 });

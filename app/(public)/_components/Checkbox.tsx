@@ -47,7 +47,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
           className="flex min-h-[44px] items-center gap-2.5 text-sm text-ink cursor-pointer"
         >
           {control}
-          <span>{label}</span>
+          <span className="min-w-0 flex-1">{label}</span>
         </label>
         {description && (
           <p id={descriptionId} className="pl-[26px] text-xs text-inkSoft leading-relaxed">

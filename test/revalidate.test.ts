@@ -37,4 +37,25 @@ describe("revalidatePostPaths", () => {
     revalidatePostPaths({ slug: "x", categorySlug: null });
     expect(paths()).toContain("/search");
   });
+
+  it("revalidates every detail page whose category count changed", () => {
+    revalidatePostPaths(
+      { slug: "new-order", categorySlug: "govt-orders" },
+      { affectedPostSlugs: ["older-order", "new-order"] },
+    );
+
+    expect(paths()).toContain("/posts/new-order");
+    expect(paths()).toContain("/posts/older-order");
+    expect(paths().filter((path) => path === "/posts/new-order")).toHaveLength(1);
+  });
+
+  it("revalidates both category indexes when a published post moves", () => {
+    revalidatePostPaths(
+      { slug: "moved-order", categorySlug: "circulars" },
+      { previousCategorySlug: "govt-orders" },
+    );
+
+    expect(paths()).toContain("/category/circulars");
+    expect(paths()).toContain("/category/govt-orders");
+  });
 });

@@ -10,6 +10,7 @@ vi.mock("@/app/(public)/_components/DesktopLeftNav", () => ({ default: () => nul
 import HomeLoading from "@/app/(public)/(home)/loading";
 import OrdersLoading from "@/app/(public)/orders/loading";
 import SearchLoading from "@/app/(public)/search/loading";
+import CategoryLoading from "@/app/(public)/category/[slug]/loading";
 import { TYPE_FILTERS } from "@/app/(public)/search/_components/SearchUI";
 
 // SLOP-STATES-1 — AI_SLOP_AUDIT.md A17. The finding is that skeletons "faithfully
@@ -56,6 +57,7 @@ describe("A17 — the placeholders still do their job", () => {
     ["home", <HomeLoading key="h" />, "Loading latest orders"],
     ["orders", <OrdersLoading key="o" />, "Loading orders index"],
     ["search", <SearchLoading key="s" />, "Loading search"],
+    ["category", <CategoryLoading key="c" />, "Loading category documents"],
   ] as const;
 
   it("announces every loading state to assistive technology", () => {
@@ -76,6 +78,7 @@ describe("A17 — the placeholders still do their job", () => {
       home: 6, // heading + subtitle + 4 document rows
       orders: 10, // masthead + 5 category rows + 3 document rows + footer
       search: 15, // heading + 2 subtitle lines + field + 7 type chips + 4 rows
+      category: 4, // masthead + 2 document rows + closing GOIR note
     };
 
     for (const [name, ui] of CASES) {

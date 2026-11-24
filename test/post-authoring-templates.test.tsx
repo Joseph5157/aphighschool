@@ -58,5 +58,39 @@ describe("post authoring templates", () => {
     expect(container.querySelector('select[name="authoringTemplate"]')).toBeNull();
     expect(container.querySelector('textarea[name="content"]')).not.toBeNull();
   });
+
+  it("explains why a draft related order will not appear publicly", () => {
+    render(
+      <PostFormClient
+        action={testAction}
+        categories={[]}
+        candidatePosts={[
+          {
+            id: "draft-order",
+            titleEn: "Draft Background Order",
+            goReference: "G.O.Ms.No.21",
+            isDraft: true,
+            category: { nameEn: "Government Orders" },
+          },
+          {
+            id: "published-order",
+            titleEn: "Published Background Order",
+            goReference: "G.O.Ms.No.45",
+            isDraft: false,
+            category: { nameEn: "Government Orders" },
+          },
+        ]}
+      />
+    );
+
+    expect(screen.getByText("Draft — hidden until published")).toBeInTheDocument();
+    expect(screen.getByText("Published")).toBeInTheDocument();
+    expect(
+      screen.getByRole("checkbox", { name: /Draft Background Order/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("checkbox", { name: /Published Background Order/i }),
+    ).toBeInTheDocument();
+  });
 });
 

@@ -43,7 +43,7 @@ function post(overrides: Record<string, unknown> = {}) {
     actionUrl: null,
     summaryTe: ["ప్రధాన సమాచారం తెలుగు సారాంశంగా ఇక్కడ కనిపిస్తుంది."],
     englishAbstract: "A short authored English abstract.",
-    category: { nameEn: "Circulars", slug: "circulars" },
+    category: { nameEn: "Circulars", slug: "circulars", _count: { posts: 1 } },
     relatedFrom: [],
     ...overrides,
   };
@@ -61,7 +61,28 @@ describe("reusable post template", () => {
     expect(screen.queryByLabelText("Full Article & Guidelines")).not.toBeInTheDocument();
     expect(screen.getByRole("heading", { name: /At a Glance/i })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Official source" })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "All Circulars" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: "Browse Orders & Circulars" }),
+    ).toHaveAttribute("href", "/orders");
+  });
+
+  it("offers a counted category browse action when another document exists", () => {
+    render(
+      <DocumentTemplate
+        post={post({
+          category: {
+            nameEn: "Circulars",
+            slug: "circulars",
+            _count: { posts: 2 },
+          },
+        })}
+        lifecycleView={STATE_VIEW}
+      />,
+    );
+
+    expect(
+      screen.getByRole("link", { name: "Browse Circulars 2 documents" }),
+    ).toHaveAttribute("href", "/category/circulars");
   });
 
   it("does not treat empty imported markup as article content", () => {
