@@ -1,6 +1,10 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+// The threshold lives in a plain module because DocumentTemplate (a server
+// component) needs it too; a value exported from this "use client" file
+// reaches server code only as a client reference (test/client-boundary.test.ts).
+import { MIN_TOC_HEADINGS } from "@/lib/posts/toc";
 
 interface TocItem {
   id: string;
@@ -12,21 +16,6 @@ interface TableOfContentsProps {
   contentSelector?: string;
 }
 
-/**
- * How many headings a document needs before it gets a table of contents.
- *
- * SLOP-DETAIL-1 (AI_SLOP_AUDIT.md A10). The inspected document had two
- * sections and still got the full apparatus: a collapsible bordered widget on
- * mobile announcing "(2 sections)", a sticky desktop rail, generated ids, an
- * IntersectionObserver scroll-spy and an active state — interface ceremony for
- * a document a reader can take in by scrolling.
- *
- * Four is where the list stops being a restatement of what is already on screen
- * and starts being faster than scrolling. Long official orders — the ones with
- * numbered clauses and annexures, which are exactly the documents a TOC is for
- * — clear it easily, so the capability is intact where it earns its space.
- */
-export const MIN_TOC_HEADINGS = 4;
 
 export default function TableOfContents({ contentSelector = ".prose-gazette" }: TableOfContentsProps) {
   const [items, setItems] = useState<TocItem[]>([]);
