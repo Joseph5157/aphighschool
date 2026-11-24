@@ -68,20 +68,34 @@ export default function DocumentTemplate({
     sourceUrl: safeSourceUrl,
   };
 
-  const indexHref = post.category
+  // A category index containing only this document sends the reader straight
+  // back to the same page. Keep the category breadcrumb for context, but make
+  // this prominent closing action useful: only offer the category when it has
+  // another published document to discover. Drafts are deliberately excluded
+  // by the detail query's filtered category count.
+  const categoryPostCount = post.category?._count?.posts ?? 0;
+  const hasCategoryAlternatives = Boolean(post.category) && categoryPostCount > 1;
+  const indexHref = hasCategoryAlternatives
     ? `/category/${post.category.slug}`
     : "/orders";
-  const indexLabel = post.category
-    ? `All ${post.category.nameEn}`
-    : "All orders & documents";
+  const indexLabel = hasCategoryAlternatives
+    ? `Browse ${post.category.nameEn}`
+    : "Browse Orders & Circulars";
 
   const backLink = (
     <Link
       href={indexHref}
-      className="flex min-h-[44px] items-center gap-2 rounded-xl border border-hair bg-paperRaised px-4 py-3 text-sm font-bold text-tamarind transition-colors hover:border-tamarind/50 hover:bg-tamarind/10"
+      className="flex min-h-[44px] items-center justify-between gap-3 rounded-xl border border-hair bg-paperRaised px-4 py-3 text-sm font-bold text-tamarind transition-colors hover:border-tamarind/50 hover:bg-tamarind/10"
     >
-      <span aria-hidden="true">←</span>
-      <span>{indexLabel}</span>
+      <span className="min-w-0">{indexLabel}</span>
+      <span className="flex shrink-0 items-center gap-2">
+        {hasCategoryAlternatives && (
+          <span className="font-mono text-xs font-semibold text-inkSoft">
+            {categoryPostCount} documents
+          </span>
+        )}
+        <span aria-hidden="true">→</span>
+      </span>
     </Link>
   );
 

@@ -32,7 +32,13 @@ export default async function PostForm({ action, postId, initial }: PostFormProp
   const candidatePosts = await prisma.post.findMany({
     where: postId ? { id: { not: postId } } : {},
     orderBy: { createdAt: "desc" },
-    select: { id: true, titleEn: true, goReference: true },
+    select: {
+      id: true,
+      titleEn: true,
+      goReference: true,
+      isDraft: true,
+      category: { select: { nameEn: true } },
+    },
     take: 100,
   });
 

@@ -15,6 +15,19 @@ function slugify(text: string) {
     .replace(/(^-|-$)/g, "");
 }
 
+async function publishedPostSlugsForCategories(
+  categoryIds: Array<string | null | undefined>,
+): Promise<string[]> {
+  const ids = [...new Set(categoryIds.filter((id): id is string => Boolean(id)))];
+  if (ids.length === 0) return [];
+
+  const posts = await prisma.post.findMany({
+    where: { isDraft: false, categoryId: { in: ids } },
+    select: { slug: true },
+  });
+  return posts.map((post) => post.slug);
+}
+
 export async function createPost(formData: FormData) {
   await requireAdmin();
 
@@ -85,9 +98,13 @@ export async function publishPost(postId: string) {
   const post = await prisma.post.update({
     where: { id: postId },
     data: { isDraft: false },
-    include: { category: { select: { slug: true } } },
+    include: { category: { select: { id: true, slug: true } } },
   });
-  revalidatePostPaths({ slug: post.slug, categorySlug: post.category?.slug ?? null });
+  const affectedPostSlugs = await publishedPostSlugsForCategories([post.categoryId]);
+  revalidatePostPaths(
+    { slug: post.slug, categorySlug: post.category?.slug ?? null },
+    { affectedPostSlugs },
+  );
 }
 
 export async function updatePost(postId: string, formData: FormData) {
@@ -111,7 +128,12 @@ export async function updatePost(postId: string, formData: FormData) {
   // back to this post's own original createdAt, not "now".
   const existing = await prisma.post.findUniqueOrThrow({
     where: { id: postId },
-    select: { createdAt: true },
+    select: {
+      createdAt: true,
+      isDraft: true,
+      categoryId: true,
+      category: { select: { slug: true } },
+    },
   });
 
   const post = await prisma.post.update({
@@ -137,7 +159,7 @@ export async function updatePost(postId: string, formData: FormData) {
       tags: input.tags,
       verifiedAgainstGoir: input.verifiedAgainstGoir,
     },
-    include: { category: { select: { slug: true } } },
+    include: { category: { select: { id: true, slug: true } } },
   });
 
   // Simplest correct approach for a solo-admin CMS: replace the related-orders set
@@ -150,7 +172,17 @@ export async function updatePost(postId: string, formData: FormData) {
     });
   }
 
-  revalidatePostPaths({ slug: post.slug, categorySlug: post.category?.slug ?? null });
+  const categoryChanged = existing.categoryId !== post.categoryId;
+  const affectedPostSlugs = !existing.isDraft && categoryChanged
+    ? await publishedPostSlugsForCategories([existing.categoryId, post.categoryId])
+    : [];
+  revalidatePostPaths(
+    { slug: post.slug, categorySlug: post.category?.slug ?? null },
+    {
+      previousCategorySlug: categoryChanged ? existing.category?.slug ?? null : null,
+      affectedPostSlugs,
+    },
+  );
   redirect("/admin/posts");
 }
 
@@ -159,12 +191,23 @@ export async function deletePost(postId: string) {
 
   const post = await prisma.post.findUnique({
     where: { id: postId },
-    select: { slug: true, category: { select: { slug: true } } },
+    select: {
+      slug: true,
+      isDraft: true,
+      categoryId: true,
+      category: { select: { slug: true } },
+    },
   });
 
   await prisma.post.delete({ where: { id: postId } });
 
   if (post) {
-    revalidatePostPaths({ slug: post.slug, categorySlug: post.category?.slug ?? null });
+    const affectedPostSlugs = post.isDraft
+      ? []
+      : await publishedPostSlugsForCategories([post.categoryId]);
+    revalidatePostPaths(
+      { slug: post.slug, categorySlug: post.category?.slug ?? null },
+      { affectedPostSlugs },
+    );
   }
 }

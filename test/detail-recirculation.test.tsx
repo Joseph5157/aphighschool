@@ -8,8 +8,9 @@ import { resetDb, makePost, testDb } from "./db";
 // recirculation surface from the document detail page: Previous/Next Post
 // cards, the site-wide "Latest Updates & Softwares" stack, and the
 // tools-category stack. Related Orders — approved, explicitly curated
-// relationships — is the document's only continuation, plus one quiet link back
-// to the index it belongs to.
+// relationships — is the document's only continuation, plus one quiet browse
+// action. A one-document category falls back to the useful orders hub instead
+// of looping back to the current document.
 //
 // These tests are written so they FAIL if any of that comes back. Each one
 // seeds posts that the removed queries would have surfaced (a chronologically
@@ -99,7 +100,7 @@ describe("document detail carries no generic recirculation", () => {
     expect(html).not.toContain("Chronologically Newer Neighbour");
   });
 
-  it("offers one quiet link back to the index the document belongs to", async () => {
+  it("falls back to the orders hub when its category contains only this document", async () => {
     const category = await testDb.category.create({
       data: { nameEn: "Government Orders", nameTe: "ప్రభుత్వ ఉత్తర్వులు", slug: "govt-orders" },
     });
@@ -112,8 +113,47 @@ describe("document detail carries no generic recirculation", () => {
 
     const html = renderToStaticMarkup(await PostDetailPage({ params: { slug: "main-post" } }));
 
+    expect(html).toContain('href="/orders"');
+    expect(html).toContain("Browse Orders &amp; Circulars");
+    expect(html).not.toContain("All Government Orders");
+  });
+
+  it("offers the category and published count when another document is available", async () => {
+    const category = await testDb.category.create({
+      data: { nameEn: "Government Orders", nameTe: "\u0C24\u0C46\u0C32\u0C41\u0C17\u0C41", slug: "govt-orders" },
+    });
+    await makePost({
+      slug: "main-post",
+      titleEn: "Main Post",
+      isDraft: false,
+      categoryId: category.id,
+    });
+    await makePost({
+      slug: "another-published-order",
+      titleEn: "Another Published Order",
+      isDraft: false,
+      categoryId: category.id,
+    });
+
+    const html = renderToStaticMarkup(await PostDetailPage({ params: { slug: "main-post" } }));
+
     expect(html).toContain('href="/category/govt-orders"');
-    expect(html).toContain("All Government Orders");
+    expect(html).toContain("Browse Government Orders");
+    expect(html).toContain("2 documents");
+  });
+
+  it("does not count a draft sibling as a category alternative", async () => {
+    const category = await testDb.category.create({
+      data: { nameEn: "Circulars", nameTe: "\u0C24\u0C46\u0C32\u0C41\u0C17\u0C41", slug: "circulars" },
+    });
+    await makePost({ slug: "main-post", isDraft: false, categoryId: category.id });
+    await makePost({ slug: "draft-sibling", isDraft: true, categoryId: category.id });
+
+    const html = renderToStaticMarkup(await PostDetailPage({ params: { slug: "main-post" } }));
+
+    expect(html).toContain("Browse Orders &amp; Circulars");
+    expect(html).not.toContain("Browse Circulars");
+    expect(html).not.toContain("2 documents");
   });
 
   it("falls back to the orders hub when a document has no category", async () => {
@@ -122,6 +162,6 @@ describe("document detail carries no generic recirculation", () => {
     const html = renderToStaticMarkup(await PostDetailPage({ params: { slug: "orphan-post" } }));
 
     expect(html).toContain('href="/orders"');
-    expect(html).toContain("All orders &amp; documents");
+    expect(html).toContain("Browse Orders &amp; Circulars");
   });
 });

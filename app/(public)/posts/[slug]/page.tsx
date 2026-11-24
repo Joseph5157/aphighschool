@@ -65,7 +65,13 @@ export default async function PostDetailPage({
     return prisma.post.findFirst({
       where: { slug: params.slug, isDraft: false },
       include: {
-        category: true,
+        category: {
+          include: {
+            _count: {
+              select: { posts: { where: { isDraft: false } } },
+            },
+          },
+        },
         relatedFrom: {
           where: { approved: true, relatedPost: { isDraft: false } },
           include: {

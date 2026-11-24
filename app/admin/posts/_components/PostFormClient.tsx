@@ -13,7 +13,13 @@ import {
 } from "@/lib/posts/authoring-templates";
 
 type Category = { id: string; nameEn: string };
-type CandidatePost = { id: string; titleEn: string; goReference: string | null };
+type CandidatePost = {
+  id: string;
+  titleEn: string;
+  goReference: string | null;
+  isDraft: boolean;
+  category: { nameEn: string } | null;
+};
 
 type PostFormClientProps = {
   action: (formData: FormData) => Promise<void>;
@@ -582,7 +588,7 @@ export default function PostFormClient({
           <label className="block text-xs font-mono uppercase text-inkSoft mb-2">
             Related Orders — background context (completeness priority)
           </label>
-          <div className="border border-hair rounded-lg max-h-48 overflow-y-auto bg-white">
+          <div className="max-h-64 overflow-y-auto rounded-lg border border-hair bg-paperRaised">
             {candidatePosts.length === 0 && (
               <p className="text-xs text-inkSoft p-3">
                 No other posts yet to link as background.
@@ -596,11 +602,23 @@ export default function PostFormClient({
                 defaultChecked={relatedSet.has(p.id)}
                 className="border-b border-hair px-3 last:border-b-0"
                 label={
-                  <span className="truncate">
-                    {p.titleEn}{" "}
-                    {p.goReference && (
-                      <span className="font-mono text-xs text-inkSoft">· {p.goReference}</span>
-                    )}
+                  <span className="block min-w-0 py-1">
+                    <span className="block truncate font-medium">{p.titleEn}</span>
+                    <span className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-inkSoft">
+                      <span
+                        className={`rounded-full border px-2 py-0.5 font-semibold ${
+                          p.isDraft
+                            ? "border-hair bg-paper text-inkSoft"
+                            : "border-tamarind/30 bg-tamarind/10 text-tamarind"
+                        }`}
+                      >
+                        {p.isDraft ? "Draft — hidden until published" : "Published"}
+                      </span>
+                      {p.category && <span>{p.category.nameEn}</span>}
+                      {p.goReference && (
+                        <span className="font-mono">{p.goReference}</span>
+                      )}
+                    </span>
                   </span>
                 }
               />
