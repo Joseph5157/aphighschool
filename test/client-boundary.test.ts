@@ -12,15 +12,8 @@ import path from "node:path";
 
 const ROOT = process.cwd();
 
-// Known, verified instance of the same bug, deliberately not fixed in
-// TERM-TOPICS-1 (outside its scope): DocumentTemplate (server) compares
-// against MIN_TOC_HEADINGS from the client TableOfContents module, so the
-// comparison is always false in a production build and the desktop table of
-// contents renders below the article instead of in the sticky sidebar.
-// Remove this entry in the fix that moves the constant to a shared module.
-const KNOWN_EXCEPTIONS = new Set([
-  "app/(public)/posts/[slug]/_templates/DocumentTemplate.tsx imports MIN_TOC_HEADINGS from ../_components/TableOfContents",
-]);
+// No known exceptions: the last one (MIN_TOC_HEADINGS) moved to lib/posts/toc.ts.
+const KNOWN_EXCEPTIONS = new Set<string>();
 
 function walk(dir: string): string[] {
   return fs.readdirSync(dir, { withFileTypes: true }).flatMap((e) => {

@@ -21,7 +21,8 @@ class NoopIntersectionObserver {
 vi.stubGlobal("IntersectionObserver", NoopIntersectionObserver);
 
 import DocumentTemplate from "@/app/(public)/posts/[slug]/_templates/DocumentTemplate";
-import TableOfContents, { MIN_TOC_HEADINGS } from "@/app/(public)/posts/[slug]/_components/TableOfContents";
+import TableOfContents from "@/app/(public)/posts/[slug]/_components/TableOfContents";
+import { MIN_TOC_HEADINGS } from "@/lib/posts/toc";
 import CategoryLogList, { FILTER_MIN_DOCUMENTS } from "@/app/(public)/category/[slug]/_components/CategoryLogList";
 
 afterEach(cleanup);
