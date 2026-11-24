@@ -99,6 +99,19 @@ describe("public navigation scope", () => {
       expect(pairs).toEqual(DESKTOP_ORDER);
     });
 
+    // PR #5 review: site-wide metadata still carried "Living Document Portal"
+    // and "Orders & Circulars". The PWA manifest name is deliberately not
+    // covered — renaming an installed app is a separate decision.
+    it("site-wide metadata uses the teacher terminology, not the retired phrases", () => {
+      const root = fs.readFileSync(path.join(process.cwd(), "app/layout.tsx"), "utf8");
+      const publicLayout = fs.readFileSync(path.join(process.cwd(), "app/(public)/layout.tsx"), "utf8");
+      expect(root).toContain('description: "AP School Education GOs, Proceedings and teacher updates"');
+      expect(publicLayout).toContain('default: "AP Teacher Desk — AP School Education GOs & Proceedings"');
+      for (const src of [root, publicLayout]) {
+        expect(src).not.toMatch(/Living Document|Orders & Circulars/);
+      }
+    });
+
     it("drawer uses the same long labels in the same order as the desktop nav", () => {
       const layout = fs.readFileSync(path.join(process.cwd(), "app/(public)/layout.tsx"), "utf8");
       const block = layout.slice(layout.indexOf("<SidebarMobileOnly>"), layout.indexOf("</SidebarMobileOnly>"));

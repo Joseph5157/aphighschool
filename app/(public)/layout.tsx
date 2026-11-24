@@ -34,7 +34,7 @@ const siteDescription =
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "AP Teacher Desk — AP School Education Orders & Circulars",
+    default: "AP Teacher Desk — AP School Education GOs & Proceedings",
     // Every route below supplies its own bare title; this is what actually
     // appends the site name once instead of each route hand-writing it
     // (UI_AUDIT.md F23 — the previous "%s" template did nothing).

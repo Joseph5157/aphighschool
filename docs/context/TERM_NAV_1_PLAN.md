@@ -1,9 +1,9 @@
 # TERM-NAV-1 — Teacher terminology and navigation audit
 
-Date: 24 November 2026  
-Status: **AUDIT COMPLETE — IMPLEMENTATION NOT STARTED**  
-Branch: `audit/term-nav-1`  
-Application changes in this gate: **none**
+- Date: 24 November 2026
+- Status: **AUDIT COMPLETE — sections 5–7 approved by founder; `TERM-LABELS-1` implemented in PR #5**
+- Branch: `audit/term-nav-1`
+- Application changes in this gate: **none**
 
 ## 1. Purpose
 
@@ -435,4 +435,3 @@ changes are:
 3. add teacher-topic coverage without mixing it with document types;
 4. make Telugu/English/abbreviation searches equivalent;
 5. replace generic action links only after the action meaning is explicitly stored.
-
