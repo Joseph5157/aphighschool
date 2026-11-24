@@ -28,7 +28,7 @@ export default function DesktopNav() {
       // 1024–1199px band specifically; `min-[1200px]:gap-6` restores the
       // original spacing from the point real Chromium measurement confirmed
       // it's no longer needed, so wider desktops aren't left over-compressed.
-      className="hidden lg:flex items-center gap-2 min-[1200px]:gap-6 font-mono text-xs font-semibold text-inkSoft whitespace-nowrap"
+      className="hidden lg:flex items-center gap-2 min-[1200px]:gap-6 font-sans text-xs font-semibold text-inkSoft whitespace-nowrap"
     >
       {NAV_LINKS.map((link) => {
         const isActive = link.exact ? pathname === link.href : pathname.startsWith(link.href);

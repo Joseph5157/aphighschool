@@ -25,7 +25,7 @@ module.exports = {
       // chrome and must not borrow a document-status colour. See
       // docs/ui/DESIGN_SYSTEM.md §4.
       fontFamily: {
-        sans: ["var(--font-space-grotesk)", "system-ui", "sans-serif"],
+        sans: ["var(--font-noto-sans)", "system-ui", "sans-serif"],
         telugu: ["var(--font-noto-telugu)", "sans-serif"],
         mono: ["var(--font-plex-mono)", "monospace"],
       },

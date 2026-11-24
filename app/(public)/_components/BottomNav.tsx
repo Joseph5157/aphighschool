@@ -96,7 +96,7 @@ export default function BottomNav() {
               }`}
             >
               <div className="relative mb-0.5">{item.icon}</div>
-              <span className="text-xs font-mono tracking-tight">{item.label}</span>
+              <span className="text-xs font-sans font-medium tracking-tight">{item.label}</span>
             </Link>
           );
         })}

@@ -68,8 +68,8 @@ export default async function HomePage() {
         <DesktopLeftNav />
       </div>
 
-      <div className="lg:col-span-9 space-y-6">
-        <div className="border-b border-hair pb-4 flex flex-wrap items-end justify-between gap-4">
+      <div className="lg:col-span-9 space-y-4 sm:space-y-6">
+        <div className="border-b border-hair pb-3 sm:pb-4 flex flex-wrap items-end justify-between gap-2 sm:gap-4">
           <div>
             <h1 className="text-display tracking-tight text-ink">
               Latest Orders & Living Documents
@@ -78,7 +78,7 @@ export default async function HomePage() {
               AP School Education Department · Government Orders & Guidance
             </p>
           </div>
-          <div className="hidden sm:flex items-center gap-2 text-xs font-mono text-inkSoft bg-paperRaised px-3 py-1.5 rounded-lg border border-hair">
+          <div className="hidden sm:flex items-center gap-2 text-xs font-sans font-semibold text-inkSoft bg-paperRaised px-3 py-1.5 rounded-lg border border-hair">
             <span className="w-2 h-2 rounded-full bg-turmeric animate-pulse" />
             <span>Official Gazette Stream</span>
           </div>

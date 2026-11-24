@@ -64,10 +64,10 @@ export default function PostCard({ post }: PostCardProps) {
   const pill = resolveLifecyclePill(post, RECRUITMENT);
 
   return (
-    <Card hoverable className="p-4 sm:p-5 flex items-start gap-4 transition-all">
+    <Card hoverable className="p-3.5 sm:p-5 flex items-start gap-3 sm:gap-4 transition-all">
       {/* Category Abbreviation Icon Block */}
       <div
-        className="w-12 h-12 rounded-lg bg-paper border border-hair font-mono font-bold text-xs text-ink flex items-center justify-center flex-shrink-0 shadow-inner"
+        className="hidden sm:flex w-12 h-12 rounded-lg bg-paper border border-hair font-mono font-bold text-xs text-ink items-center justify-center flex-shrink-0 shadow-inner"
         style={
           post.category?.color
             ? {
@@ -92,13 +92,26 @@ export default function PostCard({ post }: PostCardProps) {
           so it belongs on the row, not on a promoted card.
         */}
         <div className="flex items-center gap-x-2 gap-y-1 mb-1.5 flex-wrap text-meta text-inkSoft">
+          <span
+            className="sm:hidden inline-flex min-h-6 items-center rounded border border-hair bg-paper px-1.5 font-mono text-xs font-bold text-ink"
+            style={post.category?.color ? { color: post.category.color } : undefined}
+          >
+            {abbr}
+          </span>
+
           <Badge variant={pill.variant} size="sm" shape="pill">
             {pill.label}
           </Badge>
 
-          {(post.category || post.goReference) && (
+          {post.category && (
+            <span className="font-sans font-semibold break-words">
+              {post.category.nameEn}
+            </span>
+          )}
+
+          {post.goReference && (
             <span className="font-mono tracking-wide break-words">
-              {[post.category?.nameEn, post.goReference].filter(Boolean).join(" · ")}
+              {post.goReference}
             </span>
           )}
 
@@ -111,7 +124,7 @@ export default function PostCard({ post }: PostCardProps) {
           <h3 className="text-card-title text-ink group-hover:text-turmericDeep transition-colors line-clamp-2">
             {post.titleEn}
           </h3>
-          <div className="text-telugu-body text-inkSoft truncate mt-0.5">
+          <div lang="te" className="text-telugu-body text-inkSoft truncate mt-0.5">
             {post.titleTe}
           </div>
         </Link>

@@ -6,15 +6,17 @@ import path from "node:path";
 const read = (p: string) => fs.readFileSync(path.join(process.cwd(), p), "utf8");
 
 describe("typography configuration", () => {
-  it("loads Space Grotesk", () => {
-    expect(read("app/layout.tsx")).toContain("Space_Grotesk");
+  it("loads Noto Sans for English UI", () => {
+    const layout = read("app/layout.tsx");
+    expect(layout).toContain("Noto_Sans");
+    expect(layout).not.toContain("Space_Grotesk");
   });
 
-  it("maps font-sans to Space Grotesk, not Noto Sans", () => {
+  it("maps font-sans to Noto Sans", () => {
     const config = read("tailwind.config.js");
     const sansLine = config.split("\n").find((l) => l.includes("sans:")) ?? "";
-    expect(sansLine).toContain("space-grotesk");
-    expect(sansLine).not.toContain("Noto Sans\"");
+    expect(sansLine).toContain("noto-sans");
+    expect(sansLine).not.toContain("space-grotesk");
   });
 
   it("keeps Noto Sans Telugu for the telugu family", () => {
