@@ -128,7 +128,7 @@ export default function GpfApgliUI() {
           href="/tools"
           className="text-xs font-mono text-inkSoft hover:text-ink transition-colors inline-flex items-center gap-1.5 font-semibold"
         >
-          ← Back to Utility Tools / ఇతర సాధనాలు
+          ← Back to Teacher Tools / ఇతర సాధనాలు
         </Link>
         <Badge variant="tamarind" size="sm" shape="pill" dot>
           Runs in your browser

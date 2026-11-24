@@ -25,7 +25,7 @@ export type FeedPost = {
 type FilterDocType = "all" | "go" | "circular" | "memo" | "proceeding" | "notification";
 
 const FILTER_OPTIONS: { id: FilterDocType; label: string; shortLabel: string }[] = [
-  { id: "all", label: "All Documents", shortLabel: "All" },
+  { id: "all", label: "All Updates", shortLabel: "All" },
   { id: "go", label: "Government Orders (GOs)", shortLabel: "GOs" },
   { id: "circular", label: "Circulars", shortLabel: "Circulars" },
   { id: "memo", label: "Memos", shortLabel: "Memos" },

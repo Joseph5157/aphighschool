@@ -8,7 +8,7 @@ import { safeQuery } from "@/lib/db-safe";
 import EmptyState from "@/app/(public)/_components/EmptyState";
 
 export const metadata: Metadata = {
-  title: "Orders & Circulars",
+  title: "GOs & Proceedings",
   description:
     "Browse AP School Education government orders, memos, proceedings, and notifications.",
   alternates: { canonical: "/orders" },
@@ -61,7 +61,7 @@ export default async function OrdersPage() {
 
   return (
     <div className="mx-auto max-w-5xl space-y-4 sm:space-y-6 md:space-y-8 pb-24 font-sans">
-      <Breadcrumb items={[{ label: "Orders & Circulars" }]} />
+      <Breadcrumb items={[{ label: "GOs & Proceedings" }]} />
 
       {/*
         SLOP-DENSITY-1 (AI_SLOP_AUDIT.md A06). This page ran six discovery
@@ -79,10 +79,10 @@ export default async function OrdersPage() {
       */}
       <div className="on-masthead bg-masthead text-mastheadText rounded-2xl px-4 py-5 sm:px-6 sm:py-7 md:px-10 md:py-9 space-y-2 sm:space-y-3">
         <h1 className="text-xl sm:text-display text-mastheadText tracking-tight">
-          Orders &amp; Circulars Hub
+          GOs &amp; Proceedings
         </h1>
         <p lang="te" className="text-telugu-body sm:text-telugu-title text-turmeric font-medium mt-0.5 sm:mt-1">
-          ఉత్తర్వులు &amp; సర్క్యులర్లు — వర్గాల వారీగా
+          జీవోలు, ప్రొసీడింగ్స్ &amp; మెమోలు
         </p>
         <p className="text-xs sm:text-body text-mastheadText/70 max-w-xl">
           AP School Education Document Index — government orders, department memos,
@@ -131,8 +131,8 @@ export default async function OrdersPage() {
         )}
       </section>
 
-      <section aria-label="Latest documents" className="space-y-4">
-        <h2 className="text-section text-ink">Latest documents</h2>
+      <section aria-label="Latest Updates" className="space-y-4">
+        <h2 className="text-section text-ink">Latest Updates</h2>
         {recentPosts.length > 0 ? (
           <div className="space-y-4">
             {recentPosts.map((post) => (

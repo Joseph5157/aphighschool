@@ -34,7 +34,7 @@ const siteDescription =
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "AP Teacher Desk — AP School Education Orders & Circulars",
+    default: "AP Teacher Desk — AP School Education GOs & Proceedings",
     // Every route below supplies its own bare title; this is what actually
     // appends the site name once instead of each route hand-writing it
     // (UI_AUDIT.md F23 — the previous "%s" template did nothing).
@@ -108,16 +108,16 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
                     <SidebarMenuButton href="/">Home</SidebarMenuButton>
                   </SidebarMenuItem>
                   <SidebarMenuItem>
-                    <SidebarMenuButton href="/orders">Orders & Circulars</SidebarMenuButton>
+                    <SidebarMenuButton href="/orders">GOs & Proceedings</SidebarMenuButton>
                   </SidebarMenuItem>
                   <SidebarMenuItem>
-                    <SidebarMenuButton href="/tools">Utility Tools</SidebarMenuButton>
+                    <SidebarMenuButton href="/tools">Teacher Tools</SidebarMenuButton>
                   </SidebarMenuItem>
                   <SidebarMenuItem>
-                    <SidebarMenuButton href="/service-desk">Service Desk</SidebarMenuButton>
+                    <SidebarMenuButton href="/service-desk">Teacher Services</SidebarMenuButton>
                   </SidebarMenuItem>
                   <SidebarMenuItem>
-                    <SidebarMenuButton href="/pensioners">Pensioners Hub</SidebarMenuButton>
+                    <SidebarMenuButton href="/pensioners">Pension & Retirement</SidebarMenuButton>
                   </SidebarMenuItem>
                   <SidebarMenuItem>
                     <SidebarMenuButton href="/search">Search</SidebarMenuButton>

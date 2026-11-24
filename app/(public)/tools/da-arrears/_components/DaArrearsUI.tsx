@@ -90,7 +90,7 @@ const DA_FAQ_ITEMS: AccordionItemData[] = [
         subsequent months, rather than paid in full at once. The exact split changes with
         every revision, so check your specific G.O. (browse{" "}
         <Link href="/orders" className="text-tamarind underline">
-          Orders &amp; Circulars
+          GOs &amp; Proceedings
         </Link>
         ) for the current disbursal schedule rather than assuming a fixed pattern.
       </p>
@@ -123,7 +123,7 @@ const DA_FAQ_ITEMS: AccordionItemData[] = [
         This calculator does not pre-fill DA rates, since they change with every G.O. —
         enter the exact old and new percentages from your specific order. Browse{" "}
         <Link href="/orders" className="text-tamarind underline">
-          Orders &amp; Circulars
+          GOs &amp; Proceedings
         </Link>{" "}
         for the latest verified DA G.O.s.
       </p>
@@ -208,7 +208,7 @@ export default function DaArrearsUI() {
           href="/tools"
           className="text-xs font-mono text-inkSoft hover:text-ink transition-colors inline-flex items-center gap-1.5 font-semibold"
         >
-          ← Back to Utility Tools / ఇతర సాధనాలు
+          ← Back to Teacher Tools / ఇతర సాధనాలు
         </Link>
         <Badge variant="tamarind" size="sm" shape="pill" dot>
           Runs in your browser

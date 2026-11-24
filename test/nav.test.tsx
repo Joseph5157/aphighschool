@@ -33,31 +33,93 @@ describe("public navigation scope", () => {
     expect(hrefs()).not.toContain("/education");
   });
 
-  it("desktop nav includes the Service Desk among in-scope destinations", () => {
+  it("desktop nav includes Teacher Services among in-scope destinations", () => {
     render(<DesktopNav />);
     const found = hrefs();
     expect(found).toHaveLength(6);
     expect(new Set(found)).toEqual(new Set(DESKTOP_ALLOWED));
   });
 
-  it("drawer navigation includes Service Desk", () => {
+  it("drawer navigation includes Teacher Services", () => {
     const layout = fs.readFileSync(path.join(process.cwd(), "app/(public)/layout.tsx"), "utf8");
-    expect(layout).toContain('href="/service-desk"');
-    expect(layout).toContain("Service Desk");
+    expect(layout).toContain('<SidebarMenuButton href="/service-desk">Teacher Services</SidebarMenuButton>');
   });
 
   // NAV-FIX-1: DesktopNav and the drawer previously labelled the same
-  // /service-desk destination differently ("Service Desk" vs "Teacher Service
-  // Desk"). Asserting both label strings directly, on both surfaces, is what
-  // actually guards consistency — checking only one surface would pass even if
-  // they drifted apart again.
-  it("labels the Service Desk destination identically on the desktop nav and the drawer", () => {
+  // /service-desk destination differently. Asserting the label on both
+  // surfaces is what actually guards consistency — checking only one surface
+  // would pass even if they drifted apart again.
+  it("labels the Teacher Services destination identically on the desktop nav and the drawer", () => {
     render(<DesktopNav />);
-    const desktopLabel = screen.getByRole("link", { name: "Service Desk" });
+    const desktopLabel = screen.getByRole("link", { name: "Teacher Services" });
     expect(desktopLabel).toHaveAttribute("href", "/service-desk");
 
     const layout = fs.readFileSync(path.join(process.cwd(), "app/(public)/layout.tsx"), "utf8");
-    expect(layout).not.toContain("Teacher Service Desk");
+    expect(layout).toContain('<SidebarMenuButton href="/service-desk">Teacher Services</SidebarMenuButton>');
+    expect(layout).not.toMatch(/Teacher Service Desk|>Service Desk</);
+  });
+
+  // TERM-LABELS-1 (docs/context/TERM_NAV_1_PLAN.md §5): routes and order are
+  // fixed; only the visible words changed. Each surface is checked as an
+  // ordered [href, label] list so a renamed, reordered or re-routed entry
+  // fails rather than slipping through a set comparison.
+  describe("TERM-LABELS-1 teacher terminology", () => {
+    it("bottom nav reads Home · GOs · Search · Tools · Pension in that order", () => {
+      render(<BottomNav />);
+      const pairs = screen.getAllByRole("link").map((a) => [a.getAttribute("href"), a.textContent]);
+      expect(pairs).toEqual([
+        ["/", "Home"],
+        ["/orders", "GOs"],
+        ["/search", "Search"],
+        ["/tools", "Tools"],
+        ["/pensioners", "Pension"],
+      ]);
+    });
+
+    it("gives the compact GOs item a full accessible name that starts with its visible word", () => {
+      render(<BottomNav />);
+      const gos = screen.getByRole("link", { name: "GOs, Proceedings and Memos" });
+      expect(gos).toHaveAttribute("href", "/orders");
+      // Only GOs is abbreviated; the other four keep their visible text as name.
+      expect(screen.getAllByRole("link").filter((a) => a.hasAttribute("aria-label"))).toHaveLength(1);
+    });
+
+    const DESKTOP_ORDER = [
+      ["/", "Home"],
+      ["/orders", "GOs & Proceedings"],
+      ["/tools", "Teacher Tools"],
+      ["/service-desk", "Teacher Services"],
+      ["/pensioners", "Pension & Retirement"],
+      ["/search", "Search"],
+    ];
+
+    it("desktop nav uses the long labels in the unchanged order", () => {
+      render(<DesktopNav />);
+      const pairs = screen.getAllByRole("link").map((a) => [a.getAttribute("href"), a.textContent]);
+      expect(pairs).toEqual(DESKTOP_ORDER);
+    });
+
+    // PR #5 review: site-wide metadata still carried "Living Document Portal"
+    // and "Orders & Circulars". The PWA manifest name is deliberately not
+    // covered — renaming an installed app is a separate decision.
+    it("site-wide metadata uses the teacher terminology, not the retired phrases", () => {
+      const root = fs.readFileSync(path.join(process.cwd(), "app/layout.tsx"), "utf8");
+      const publicLayout = fs.readFileSync(path.join(process.cwd(), "app/(public)/layout.tsx"), "utf8");
+      expect(root).toContain('description: "AP School Education GOs, Proceedings and teacher updates"');
+      expect(publicLayout).toContain('default: "AP Teacher Desk — AP School Education GOs & Proceedings"');
+      for (const src of [root, publicLayout]) {
+        expect(src).not.toMatch(/Living Document|Orders & Circulars/);
+      }
+    });
+
+    it("drawer uses the same long labels in the same order as the desktop nav", () => {
+      const layout = fs.readFileSync(path.join(process.cwd(), "app/(public)/layout.tsx"), "utf8");
+      const block = layout.slice(layout.indexOf("<SidebarMobileOnly>"), layout.indexOf("</SidebarMobileOnly>"));
+      const pairs = [...block.matchAll(/<SidebarMenuButton href="([^"]+)">([^<]+)<\/SidebarMenuButton>/g)].map(
+        (m) => [m[1], m[2]],
+      );
+      expect(pairs).toEqual(DESKTOP_ORDER);
+    });
   });
 
   // NAV-SIDEBAR-2: the desktop persistent sidebar duplicated all six primary

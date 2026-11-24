@@ -35,9 +35,9 @@ export default function AboutPage() {
         <div className="space-y-3">
           <h2 className="text-card-title text-ink font-bold">What We Provide</h2>
           <ul className="list-disc pl-5 text-body text-inkSoft space-y-2">
-            <li><strong>Living Document Hub:</strong> Categorized AP Government Orders (GOs), Circulars, Memos, and Proceedings with lifecycle tracking (Effective, Superseded, Amended).</li>
-            <li><strong>Teacher Utility Tools:</strong> Client-side calculators for PRC 2022 pay fixation, Income Tax regime comparisons (FY 2025-26), Earned Leave (EL) & HPL encashment, and GPF/APGLI projections.</li>
-            <li><strong>Pensioners Hub:</strong> Service pension, 40% commutation, DCRG gratuity calculators, 180-month commutation restoration countdown, and 6-office clearance pipeline guidance.</li>
+            <li><strong>GOs &amp; Proceedings:</strong> Categorized AP Government Orders (GOs), Circulars, Memos, and Proceedings with lifecycle tracking (Effective, Superseded, Amended).</li>
+            <li><strong>Teacher Tools:</strong> Client-side calculators for PRC 2022 pay fixation, Income Tax regime comparisons (FY 2025-26), Earned Leave (EL) & HPL encashment, and GPF/APGLI projections.</li>
+            <li><strong>Pension & Retirement:</strong> Service pension, 40% commutation, DCRG gratuity calculators, 180-month commutation restoration countdown, and 6-office clearance pipeline guidance.</li>
           </ul>
         </div>
 

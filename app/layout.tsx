@@ -24,7 +24,7 @@ const plexMono = IBM_Plex_Mono({
 
 export const metadata: Metadata = {
   title: "AP Teacher Desk",
-  description: "AP Teachers Living Document Portal",
+  description: "AP School Education GOs, Proceedings and teacher updates",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

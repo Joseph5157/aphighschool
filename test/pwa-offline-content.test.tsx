@@ -36,7 +36,7 @@ describe("OfflineContent", () => {
 
   it("offers a direct, real navigation to /tools rather than a client-side transition", () => {
     render(<OfflineContent />);
-    const link = screen.getByRole("link", { name: /open utility tools/i });
+    const link = screen.getByRole("link", { name: /open teacher tools/i });
     expect(link).toHaveAttribute("href", "/tools");
   });
 
@@ -80,7 +80,7 @@ describe("OfflineContent", () => {
 
   it("the two actions are distinguishable by more than colour (different variants/roles)", () => {
     render(<OfflineContent />);
-    const link = screen.getByRole("link", { name: /open utility tools/i });
+    const link = screen.getByRole("link", { name: /open teacher tools/i });
     const button = screen.getByRole("button", { name: /try again/i });
     // Different element types/roles is itself a non-colour distinction; also
     // confirm they don't share an identical className (i.e. one isn't just a

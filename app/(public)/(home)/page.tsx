@@ -72,10 +72,10 @@ export default async function HomePage() {
         <div className="border-b border-hair pb-3 sm:pb-4 flex flex-wrap items-end justify-between gap-2 sm:gap-4">
           <div>
             <h1 className="text-display tracking-tight text-ink">
-              Latest Orders & Living Documents
+              Latest Teacher Updates
             </h1>
             <p className="text-body text-inkSoft mt-1">
-              AP School Education Department · Government Orders & Guidance
+              GOs, Proceedings, Memos and important deadlines
             </p>
           </div>
           <div className="hidden sm:flex items-center gap-2 text-xs font-sans font-semibold text-inkSoft bg-paperRaised px-3 py-1.5 rounded-lg border border-hair">

@@ -5,10 +5,10 @@ import { usePathname } from "next/navigation";
 
 const NAV_LINKS = [
   { href: "/", label: "Home", exact: true },
-  { href: "/orders", label: "Orders & Circulars", exact: false },
-  { href: "/tools", label: "Utility Tools", exact: false },
-  { href: "/service-desk", label: "Service Desk", exact: false },
-  { href: "/pensioners", label: "Pensioners Hub", exact: false },
+  { href: "/orders", label: "GOs & Proceedings", exact: false },
+  { href: "/tools", label: "Teacher Tools", exact: false },
+  { href: "/service-desk", label: "Teacher Services", exact: false },
+  { href: "/pensioners", label: "Pension & Retirement", exact: false },
   { href: "/search", label: "Search", exact: false },
 ];
 
@@ -21,7 +21,7 @@ export default function DesktopNav() {
       // NAV-1024-1: at 1024px the row has ~122px less room than the six
       // labels' natural single-line width needs (measured in real Chromium,
       // docs/context/NAV_1024_PLAN.md) — nothing here had `whitespace-nowrap`,
-      // so multi-word labels ("Orders & Circulars", "Utility Tools", "Service
+      // so multi-word labels (then "Orders & Circulars", "Utility Tools", "Service
       // Desk", "Pensioners Hub") silently wrapped to two lines to absorb the
       // deficit instead of the row ever visibly running out of space.
       // `gap-2` (vs. the base `gap-6`) recovers most of that deficit in the

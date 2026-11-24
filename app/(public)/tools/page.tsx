@@ -85,7 +85,7 @@ const TOOLS = [
 export default function ToolsIndexPage() {
   return (
     <div className="mx-auto max-w-5xl space-y-4 sm:space-y-6 font-sans">
-      <Breadcrumb items={[{ label: "Utility Tools" }]} />
+      <Breadcrumb items={[{ label: "Teacher Tools" }]} />
 
       <div className="space-y-4 sm:space-y-6">
           {/*

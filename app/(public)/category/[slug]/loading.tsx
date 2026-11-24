@@ -12,7 +12,7 @@ export default function CategoryLoading() {
     <div className="mx-auto max-w-5xl space-y-4 pb-24 font-sans sm:space-y-6 md:space-y-7">
       <Breadcrumb
         items={[
-          { label: "Orders", href: "/orders" },
+          { label: "GOs & Proceedings", href: "/orders" },
           { label: "Loading category" },
         ]}
       />

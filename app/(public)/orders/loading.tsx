@@ -16,7 +16,7 @@ import Skeleton from "@/app/(public)/_components/Skeleton";
 export default function OrdersLoading() {
   return (
     <div className="mx-auto max-w-5xl space-y-8 pb-24 font-sans">
-      <Breadcrumb items={[{ label: "Orders & Circulars" }]} />
+      <Breadcrumb items={[{ label: "GOs & Proceedings" }]} />
 
       <div role="status" aria-label="Loading orders index" className="space-y-8">
         <span className="sr-only">Loading orders index…</span>

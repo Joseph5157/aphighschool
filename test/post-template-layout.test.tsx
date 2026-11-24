@@ -62,7 +62,7 @@ describe("reusable post template", () => {
     expect(screen.getByRole("heading", { name: /At a Glance/i })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Official source" })).toBeInTheDocument();
     expect(
-      screen.getByRole("link", { name: "Browse Orders & Circulars" }),
+      screen.getByRole("link", { name: "Browse GOs & Proceedings" }),
     ).toHaveAttribute("href", "/orders");
   });
 
