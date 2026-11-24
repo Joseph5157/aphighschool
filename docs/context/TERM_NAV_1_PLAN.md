@@ -379,6 +379,39 @@ Do not combine all terminology work into one large PR.
 - add English, Telugu, abbreviation and punctuation tests;
 - preserve the existing published-content checks for suggestions and topic chips.
 
+Implementation record (branch `term/search-1`):
+
+- Module: `lib/terminology.ts`. Aliases are exactly the §6 and §7 tables plus the two §10
+  examples (`జీవో`, `ఆర్జిత సెలవు`). §8 role terms (SGT, SA, MEO…) are **not** aliased; they
+  remain literal words until §8 is approved.
+- Additive, never replacing: `searchPosts` keeps the literal match and ORs in the alias match,
+  so no query returns fewer results than before. Text with no known term is literal-only.
+- Alias match: document types are any-of; each topic term must hold; unrecognised numbers must
+  appear as whole numbers (so `GO 22` ≠ No.122); unrecognised words must appear as substrings.
+- Search aliases and stored tags are separate concepts. Aliases (`aliases`) only interpret what
+  a teacher types. A stored tag counts as evidence of a topic only when it is the canonical tag
+  or an explicitly reviewed `legacyTags` entry; comparison is case-insensitive on the whole tag
+  (`FA-1` is not `FA`). This is temporary compatibility until `TERM-TOPICS-1` retags content,
+  not a second tagging scheme. Production on 24 Nov 2026 (read-only audit, 5 published posts,
+  0 with `documentType = null`):
+
+  Allowed legacy tags — proposed for automatic retagging in `TERM-TOPICS-1`:
+
+  | Post | Legacy tag | Answers topic |
+  | --- | --- | --- |
+  | `ap-teachers-transfers-seniority-rules-guidelines` | `PTR` | Rationalisation |
+  | `aptet-response-sheet-calculator-link-2026` | `APTET` | TET |
+  | `apscert-fa1-question-papers-answer-keys-2026` | `Answer Key` | Exams |
+
+  Manual review only — not topic evidence, not proposed for retagging:
+
+  | Post | Tag | Why |
+  | --- | --- | --- |
+  | `ap-academic-instructors-recruitment-2026-27` | `Recruitment` | `recruitment` is a DSC *search* alias, but this Academic Instructors proceeding is not DSC (PR #6 review). It stays findable by literal search. |
+- Telugu and English reach the same canonical-tag records; each script's literal matches are
+  additional (an English-only title is not found by a Telugu word).
+- Not built: no on-page "showing results for…" explanation of how a query was interpreted.
+
 ### `TERM-TOPICS-1` — topic coverage and content tagging
 
 - add the recommended topic set to discovery surfaces after founder approval;

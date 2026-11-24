@@ -1,6 +1,7 @@
-import type { DocType, Prisma } from "@prisma/client";
+import { Prisma, type DocType } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { ORDER_BY_OFFICIAL_DATE } from "@/lib/dates";
+import { interpretQuery, tagFormsFor, type QueryInterpretation } from "@/lib/terminology";
 
 const DOC_TYPES: DocType[] = ["go", "circular", "memo", "proceeding", "notification", "other"];
 
@@ -63,6 +64,50 @@ function textFilter(q: string): Prisma.PostWhereInput {
   };
 }
 
+function escapeLike(value: string): string {
+  return value.replace(/[\\%_]/g, (c) => `\\${c}`);
+}
+
+/**
+ * Every searchable text field of a post as one string, with the zero-width
+ * joiners Telugu text often carries removed so it compares against the
+ * normalised query tokens. concat_ws puts a space between fields, so a
+ * whitespace-free token can never match across a field boundary.
+ */
+const SEARCH_HAYSTACK = Prisma.sql`regexp_replace(
+  concat_ws(' ', "titleEn", "titleTe", "goReference", "englishAbstract", "sourceDept",
+    array_to_string("summaryTe", ' '), array_to_string("tags", ' ')),
+  '[\\u200B-\\u200D\\uFEFF]', '', 'g')`;
+
+/**
+ * TERM-SEARCH-1: the published posts a recognised teacher term points at.
+ * Every recognised term narrows (document types: any of them; each topic: its
+ * canonical tag or a reviewed `legacyTags` value — never a search alias), and
+ * every unrecognised part of the query must still appear — numbers as whole numbers, so `GO 22` matches
+ * G.O.Ms.No.22 but not No.122, and words as substrings. Callers OR this with
+ * the literal match, so it can only add results a literal search misses.
+ */
+async function idsForInterpretation(meaning: QueryInterpretation): Promise<string[]> {
+  const conditions: Prisma.Sql[] = [Prisma.sql`"isDraft" = false`];
+  if (meaning.documentTypes.length) {
+    conditions.push(Prisma.sql`"documentType"::text = ANY(${meaning.documentTypes})`);
+  }
+  for (const tags of meaning.topicTags) {
+    const forms = tags.flatMap(tagFormsFor);
+    conditions.push(Prisma.sql`EXISTS (SELECT 1 FROM unnest("tags") t WHERE lower(t) = ANY(${forms}))`);
+  }
+  for (const n of meaning.numbers) {
+    conditions.push(Prisma.sql`${SEARCH_HAYSTACK} ~ ${`(^|[^0-9])${n}([^0-9]|$)`}`);
+  }
+  for (const w of meaning.words) {
+    conditions.push(Prisma.sql`${SEARCH_HAYSTACK} ILIKE ${`%${escapeLike(w)}%`}`);
+  }
+  const rows = await prisma.$queryRaw<Array<{ id: string }>>`
+    SELECT id FROM "Post" WHERE ${Prisma.join(conditions, " AND ")}
+  `;
+  return rows.map((row) => row.id);
+}
+
 export async function searchPosts(params: SearchParams): Promise<SearchResult[]> {
   const q = params.q?.trim();
   const hasFilter =
@@ -84,7 +129,12 @@ export async function searchPosts(params: SearchParams): Promise<SearchResult[]>
         )
     `;
     const ids = arrayMatches.map((row) => row.id);
-    and.push({ OR: [textFilter(q), ...(ids.length ? [{ id: { in: ids } }] : [])] });
+    // Literal matching is always kept; a recognised term only adds to it.
+    // interpretQuery returns null for unknown text, which stays literal-only.
+    const meaning = interpretQuery(q);
+    const termIds = meaning ? await idsForInterpretation(meaning) : [];
+    const matchedIds = [...new Set([...ids, ...termIds])];
+    and.push({ OR: [textFilter(q), ...(matchedIds.length ? [{ id: { in: matchedIds } }] : [])] });
   }
 
   if (params.type) {
