@@ -379,6 +379,34 @@ Do not combine all terminology work into one large PR.
 - add English, Telugu, abbreviation and punctuation tests;
 - preserve the existing published-content checks for suggestions and topic chips.
 
+Implementation record (branch `term/search-1`):
+
+- Module: `lib/terminology.ts`. Aliases are exactly the §6 and §7 tables plus the two §10
+  examples (`జీవో`, `ఆర్జిత సెలవు`). §8 role terms (SGT, SA, MEO…) are **not** aliased; they
+  remain literal words until §8 is approved.
+- Additive, never replacing: `searchPosts` keeps the literal match and ORs in the alias match,
+  so no query returns fewer results than before. Text with no known term is literal-only.
+- Alias match: document types are any-of; each topic term must hold; unrecognised numbers must
+  appear as whole numbers (so `GO 22` ≠ No.122); unrecognised words must appear as substrings.
+- A topic term also matches legacy tags equal to one of its aliases (e.g. `PTR`, `MDM`) until
+  `TERM-TOPICS-1` retags content to canonical tags. This is temporary compatibility, not a
+  second tagging scheme. Comparison is case-insensitive on the whole tag (`FA-1` is not `FA`).
+  Production on 24 Nov 2026 (read-only audit, 5 published posts, 0 with `documentType = null`)
+  has these legacy tags that answer a canonical topic:
+
+  | Post | Legacy tag | Answers topic |
+  | --- | --- | --- |
+  | `ap-teachers-transfers-seniority-rules-guidelines` | `PTR` | Rationalisation |
+  | `ap-academic-instructors-recruitment-2026-27` | `Recruitment` | DSC |
+  | `aptet-response-sheet-calculator-link-2026` | `APTET` | TET |
+  | `apscert-fa1-question-papers-answer-keys-2026` | `Answer Key` | Exams |
+
+  The `Recruitment` → DSC row is a consequence of the approved §7 alias list: an Academic
+  Instructors recruitment proceeding is not DSC. Review this when `TERM-TOPICS-1` retags.
+- Telugu and English reach the same canonical-tag records; each script's literal matches are
+  additional (an English-only title is not found by a Telugu word).
+- Not built: no on-page "showing results for…" explanation of how a query was interpreted.
+
 ### `TERM-TOPICS-1` — topic coverage and content tagging
 
 - add the recommended topic set to discovery surfaces after founder approval;
