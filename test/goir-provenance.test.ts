@@ -10,6 +10,7 @@ const basePost: PostInput = {
   titleTe: "సరైన తెలుగు శీర్షిక",
   summaryTe: ["సరైన తెలుగు సారాంశం వివరణ."],
   englishAbstract: "Valid english abstract",
+  content: null,
   statusBadge: "notification",
   pdfUrl: null,
   actionUrl: null,

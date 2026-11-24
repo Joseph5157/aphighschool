@@ -8,6 +8,7 @@ export type PostInput = {
   titleTe: string;
   summaryTe: string[];
   englishAbstract: string | null;
+  content: string | null;
   statusBadge: string;
   pdfUrl: string | null;
   actionUrl: string | null;
@@ -171,6 +172,7 @@ export function parsePostForm(formData: FormData, id?: string): PostInput {
       .map((s) => s.trim())
       .filter(Boolean),
     englishAbstract: orNull("englishAbstract"),
+    content: orNull("content"),
     statusBadge: str("statusBadge") || "notification",
     pdfUrl: orNull("pdfUrl"),
     actionUrl: orNull("actionUrl"),

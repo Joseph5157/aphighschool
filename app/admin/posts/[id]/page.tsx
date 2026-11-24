@@ -29,6 +29,7 @@ export default async function EditPostPage({ params }: { params: { id: string } 
           titleTe: post.titleTe,
           summaryTe: post.summaryTe,
           englishAbstract: post.englishAbstract,
+          content: post.content,
           statusBadge: post.statusBadge,
           pdfUrl: post.pdfUrl,
           actionUrl: post.actionUrl,

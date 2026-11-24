@@ -154,4 +154,16 @@ describe("edit form prefill", () => {
       .map((v) => v.slice(7, -1));
     expect(states).toEqual(["current", "amended", "superseded", "archived"]);
   });
+
+  it("prefills the stored structured article so an edit cannot erase it", async () => {
+    const content = "<h2>Verified section</h2><p>Existing article body.</p>";
+    const post = await makePost({ slug: "structured-article", isDraft: true, content });
+
+    const html = await renderEdit(post.id);
+
+    expect(html).toContain(
+      "&lt;h2&gt;Verified section&lt;/h2&gt;&lt;p&gt;Existing article body.&lt;/p&gt;"
+    );
+    expect(html).toMatch(/<textarea[^>]*name="content"/);
+  });
 });

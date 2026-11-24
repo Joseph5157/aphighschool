@@ -1,13 +1,14 @@
 // @vitest-environment node
 import { describe, it, expect } from "vitest";
 import { DocType, OrderState, PostStatus } from "@prisma/client";
-import { validatePost, type PostInput } from "@/lib/validation/post";
+import { parsePostForm, validatePost, type PostInput } from "@/lib/validation/post";
 
 const base: PostInput = {
   titleEn: "Transfer Guidelines 2026",
   titleTe: "బదిలీ మార్గదర్శకాలు 2026",
   summaryTe: ["అర్హులైన ఉపాధ్యాయులు దరఖాస్తు చేసుకోవాలి."],
   englishAbstract: null,
+  content: null,
   statusBadge: "notification",
   pdfUrl: null,
   actionUrl: null,
@@ -184,6 +185,25 @@ describe("validatePost", () => {
     expect(nonGoirSource).toContain(
       "A GOIR-verified post must carry a valid https://goir.ap.gov.in source URL."
     );
+  });
+});
+
+describe("parsePostForm", () => {
+  it("preserves optional structured article HTML", () => {
+    const formData = new FormData();
+    formData.set("titleEn", base.titleEn);
+    formData.set("titleTe", base.titleTe);
+    formData.set("summaryTe", base.summaryTe.join("\n"));
+    formData.set("content", "  <h2>What changed</h2><p>Verified explanation.</p>  ");
+
+    expect(parsePostForm(formData).content).toBe(
+      "<h2>What changed</h2><p>Verified explanation.</p>"
+    );
+  });
+
+  it("stores an empty article body as null for short posts", () => {
+    const formData = new FormData();
+    expect(parsePostForm(formData).content).toBeNull();
   });
 });
 

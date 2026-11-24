@@ -20,6 +20,7 @@ export type PostOverrides = Partial<{
   titleEn: string;
   titleTe: string;
   summaryTe: string[];
+  content: string | null;
   isDraft: boolean;
   goReference: string;
   categoryId: string | null;
@@ -45,6 +46,7 @@ export async function makePost(overrides: PostOverrides = {}) {
       titleEn: overrides.titleEn ?? `Test Order ${counter}`,
       titleTe: overrides.titleTe ?? `పరీక్ష ఉత్తర్వు ${counter}`,
       summaryTe: overrides.summaryTe ?? ["పరీక్ష సారాంశం."],
+      ...(overrides.content !== undefined && { content: overrides.content }),
       isDraft: overrides.isDraft ?? false,
       goReference: overrides.goReference ?? `G.O.Ms.No.${counter}`,
       categoryId: overrides.categoryId ?? null,
