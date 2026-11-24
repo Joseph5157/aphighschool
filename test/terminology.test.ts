@@ -113,8 +113,17 @@ describe("vocabulary integrity", () => {
     expect(clashes).toEqual([]);
   });
 
-  it("lists legacy tag forms case-insensitively for a canonical topic", () => {
-    expect(tagFormsFor("Rationalisation")).toContain("ptr");
-    expect(tagFormsFor("School Administration")).toContain("mdm");
+  it("treats only the canonical tag and reviewed legacy tags as stored-tag evidence", () => {
+    expect(tagFormsFor("Rationalisation")).toEqual(["rationalisation", "ptr"]);
+    expect(tagFormsFor("TET")).toEqual(["tet", "aptet"]);
+    expect(tagFormsFor("Exams")).toEqual(["exams", "answer key"]);
+    // Search aliases are words a teacher types, not proof of a stored topic.
+    expect(tagFormsFor("DSC")).toEqual(["dsc"]);
+    expect(tagFormsFor("School Administration")).toEqual(["school administration"]);
+  });
+
+  it("allows exactly the three audited legacy tags (PR #6 review)", () => {
+    const legacy = TOPIC_TERMS.flatMap((t) => (t.legacyTags ?? []).map((l) => `${l} -> ${t.tag}`));
+    expect(legacy).toEqual(["PTR -> Rationalisation", "APTET -> TET", "Answer Key -> Exams"]);
   });
 });

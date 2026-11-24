@@ -25,7 +25,16 @@ export type TopicTerm = {
   tag: string;
   display: string;
   telugu: string[];
+  /** Words a teacher may type. Used only to interpret search input. */
   aliases: string[];
+  /**
+   * Stored tag values written before canonical tagging that are reviewed as
+   * safe evidence of this topic. Deliberately separate from `aliases`: a word
+   * a teacher may type (`recruitment`, `policy`, `grants`) is not proof that
+   * a post tagged with it belongs to the topic. Add an entry only after
+   * reviewing the posts that carry it; remove it once TERM-TOPICS-1 retags.
+   */
+  legacyTags?: string[];
 };
 
 export const DOCUMENT_TERMS: DocumentTerm[] = [
@@ -73,6 +82,7 @@ export const TOPIC_TERMS: TopicTerm[] = [
     display: "Rationalisation & Re-apportionment",
     telugu: ["రేషనలైజేషన్", "హేతుబద్ధీకరణ"],
     aliases: ["rationalization", "reapportionment", "re-apportionment", "PTR", "surplus teacher"],
+    legacyTags: ["PTR"],
   },
   {
     tag: "Promotions",
@@ -115,12 +125,14 @@ export const TOPIC_TERMS: TopicTerm[] = [
     display: "AP TET",
     telugu: ["ఏపీ టెట్"],
     aliases: ["APTET", "teacher eligibility test"],
+    legacyTags: ["APTET"],
   },
   {
     tag: "Exams",
     display: "Exams & SCERT",
     telugu: ["పరీక్షలు & ఎస్సీఈఆర్టీ"],
     aliases: ["SA1", "SA2", "FA", "CCE", "answer key", "model paper", "LEAP"],
+    legacyTags: ["Answer Key"],
   },
   {
     tag: "School Administration",
@@ -266,12 +278,13 @@ export function interpretQuery(query: string): QueryInterpretation | null {
 }
 
 /**
- * Every lower-cased form a stored tag may take for a canonical topic: the tag
- * itself plus its aliases, so content tagged before TERM-TOPICS-1 retagging
- * (e.g. a legacy `PTR` or `MDM` tag) still answers its canonical topic.
+ * Every lower-cased stored tag value that counts as evidence of a canonical
+ * topic: the canonical tag itself plus its reviewed `legacyTags`. Search
+ * aliases are intentionally excluded (PR #6 review): a post tagged
+ * `Recruitment` must not answer a DSC search.
  */
 export function tagFormsFor(tag: string): string[] {
   const term = TOPIC_TERMS.find((t) => t.tag === tag);
-  const forms = term ? [term.tag, term.display, ...term.telugu, ...term.aliases] : [tag];
+  const forms = [tag, ...(term?.legacyTags ?? [])];
   return [...new Set(forms.map((f) => f.toLowerCase()))];
 }

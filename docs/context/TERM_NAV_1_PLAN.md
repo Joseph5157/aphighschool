@@ -388,21 +388,26 @@ Implementation record (branch `term/search-1`):
   so no query returns fewer results than before. Text with no known term is literal-only.
 - Alias match: document types are any-of; each topic term must hold; unrecognised numbers must
   appear as whole numbers (so `GO 22` ≠ No.122); unrecognised words must appear as substrings.
-- A topic term also matches legacy tags equal to one of its aliases (e.g. `PTR`, `MDM`) until
-  `TERM-TOPICS-1` retags content to canonical tags. This is temporary compatibility, not a
-  second tagging scheme. Comparison is case-insensitive on the whole tag (`FA-1` is not `FA`).
-  Production on 24 Nov 2026 (read-only audit, 5 published posts, 0 with `documentType = null`)
-  has these legacy tags that answer a canonical topic:
+- Search aliases and stored tags are separate concepts. Aliases (`aliases`) only interpret what
+  a teacher types. A stored tag counts as evidence of a topic only when it is the canonical tag
+  or an explicitly reviewed `legacyTags` entry; comparison is case-insensitive on the whole tag
+  (`FA-1` is not `FA`). This is temporary compatibility until `TERM-TOPICS-1` retags content,
+  not a second tagging scheme. Production on 24 Nov 2026 (read-only audit, 5 published posts,
+  0 with `documentType = null`):
+
+  Allowed legacy tags — proposed for automatic retagging in `TERM-TOPICS-1`:
 
   | Post | Legacy tag | Answers topic |
   | --- | --- | --- |
   | `ap-teachers-transfers-seniority-rules-guidelines` | `PTR` | Rationalisation |
-  | `ap-academic-instructors-recruitment-2026-27` | `Recruitment` | DSC |
   | `aptet-response-sheet-calculator-link-2026` | `APTET` | TET |
   | `apscert-fa1-question-papers-answer-keys-2026` | `Answer Key` | Exams |
 
-  The `Recruitment` → DSC row is a consequence of the approved §7 alias list: an Academic
-  Instructors recruitment proceeding is not DSC. Review this when `TERM-TOPICS-1` retags.
+  Manual review only — not topic evidence, not proposed for retagging:
+
+  | Post | Tag | Why |
+  | --- | --- | --- |
+  | `ap-academic-instructors-recruitment-2026-27` | `Recruitment` | `recruitment` is a DSC *search* alias, but this Academic Instructors proceeding is not DSC (PR #6 review). It stays findable by literal search. |
 - Telugu and English reach the same canonical-tag records; each script's literal matches are
   additional (an English-only title is not found by a Telugu word).
 - Not built: no on-page "showing results for…" explanation of how a query was interpreted.

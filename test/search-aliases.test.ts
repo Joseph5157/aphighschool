@@ -68,6 +68,25 @@ describe("topic aliases (rules 3 and 4)", () => {
   });
 });
 
+// PR #6 review: a search alias is not stored-tag evidence. Production carries
+// a non-DSC Academic Instructors proceeding tagged `Recruitment`; because
+// "recruitment" is a DSC search alias, it used to answer DSC searches.
+describe("search aliases are not stored-tag evidence", () => {
+  beforeEach(async () => {
+    await makePost({ slug: "academic-instructors", titleEn: "Academic Instructors Engagement", goReference: "DSE AP Proceedings 2026", documentType: "proceeding", tags: ["Recruitment"] });
+    await makePost({ slug: "dsc-2026", titleEn: "Mega DSC Schedule", goReference: "Rc.No.700", documentType: "notification", tags: ["DSC"] });
+  });
+
+  it("excludes a post tagged only Recruitment from DSC and TRT searches", async () => {
+    expect(await slugs("DSC")).toEqual(["dsc-2026"]);
+    expect(await slugs("TRT")).toEqual(["dsc-2026"]);
+  });
+
+  it("still finds the Recruitment-tagged post by ordinary literal search", async () => {
+    expect(await slugs("recruitment")).toContain("academic-instructors");
+  });
+});
+
 describe("reference numbers stay literal (rule 6)", () => {
   it("G.O.Ms.No.22 finds No.22, not No.122 or No.220", async () => {
     expect(await slugs("G.O.Ms.No.22")).toEqual(["go-22"]);

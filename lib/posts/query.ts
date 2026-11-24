@@ -82,8 +82,8 @@ const SEARCH_HAYSTACK = Prisma.sql`regexp_replace(
 /**
  * TERM-SEARCH-1: the published posts a recognised teacher term points at.
  * Every recognised term narrows (document types: any of them; each topic: its
- * canonical tag or a legacy alias tag), and every unrecognised part of the
- * query must still appear — numbers as whole numbers, so `GO 22` matches
+ * canonical tag or a reviewed `legacyTags` value — never a search alias), and
+ * every unrecognised part of the query must still appear — numbers as whole numbers, so `GO 22` matches
  * G.O.Ms.No.22 but not No.122, and words as substrings. Callers OR this with
  * the literal match, so it can only add results a literal search misses.
  */
