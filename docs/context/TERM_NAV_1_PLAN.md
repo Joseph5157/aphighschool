@@ -427,7 +427,8 @@ Implementation record (branch `term/topics-1`), founder decisions of 24 Nov 2026
 - `/search` chips are exactly the 15 §7 topics, labelled "Telugu (English)"; the unapproved
   `MDM` and `Textbooks` chips are dropped (both remain searchable).
 - `?tag=` and the topic counts share one query (canonical tag plus reviewed `legacyTags`,
-  published only), so a chip or card count equals its search results exactly. For a canonical
+  published only), so a card count equals its search results exactly, up to the shared
+  `SEARCH_RESULT_LIMIT` (100) that search lists; above it the card shows `100+`. For a canonical
   topic `?tag=` no longer also matches title words (for `DA` that matched "Update",
   "Candidates"); other `?tag=` values keep the title fallback.
 - Found while verifying: the `/search` chip bar had never rendered in production. The server

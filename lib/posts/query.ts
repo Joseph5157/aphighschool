@@ -5,6 +5,13 @@ import { canonicalTopic, interpretQuery, tagFormsFor, type QueryInterpretation }
 
 const DOC_TYPES: DocType[] = ["go", "circular", "memo", "proceeding", "notification", "other"];
 
+/**
+ * The most results one search returns. Shared with the topic counts so a
+ * count above it is shown as `${SEARCH_RESULT_LIMIT}+` rather than a number
+ * the destination search cannot list (PR #7 review).
+ */
+export const SEARCH_RESULT_LIMIT = 100;
+
 export type SearchParams = {
   q?: string;
   type?: string;
@@ -194,7 +201,7 @@ export async function searchPosts(params: SearchParams): Promise<SearchResult[]>
     where: { AND: and },
     select: SELECT,
     orderBy: ORDER_BY_OFFICIAL_DATE as never,
-    take: 100,
+    take: SEARCH_RESULT_LIMIT,
   });
 }
 
@@ -227,9 +234,10 @@ export async function quickSearchChips(candidates: string[]): Promise<string[]> 
 }
 
 /**
- * How many published posts each candidate topic's `?tag=` search returns,
- * computed with the same rule as that search (publishedIdsWithTagForms), so
- * the count on a chip or /topics card is identical to its destination.
+ * How many published posts carry each candidate topic, computed with the
+ * same rule as its `?tag=` search (publishedIdsWithTagForms). The search lists
+ * at most SEARCH_RESULT_LIMIT of them, so display a count through
+ * `formatTopicCount`, which never states a number the search cannot show.
  * Candidates with no published posts are omitted.
  */
 export async function publishedTagCounts(candidates: string[]): Promise<Map<string, number>> {
@@ -250,4 +258,14 @@ export async function publishedTagCounts(candidates: string[]): Promise<Map<stri
 export async function tagsWithPublishedContent(candidates: string[]): Promise<string[]> {
   const counts = await publishedTagCounts(candidates);
   return candidates.filter((tag) => counts.has(tag));
+}
+
+/**
+ * A topic's published count as shown to readers: the exact number up to
+ * SEARCH_RESULT_LIMIT, which is also what its `?tag=` search lists, and
+ * `100+` beyond it, since the search then shows only the first 100.
+ */
+export function formatTopicCount(count: number): string {
+  if (count > SEARCH_RESULT_LIMIT) return `${SEARCH_RESULT_LIMIT}+ published documents`;
+  return `${count} published ${count === 1 ? "document" : "documents"}`;
 }

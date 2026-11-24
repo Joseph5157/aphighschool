@@ -4,7 +4,7 @@ import Breadcrumb from "@/app/(public)/_components/Breadcrumb";
 import Badge from "@/app/(public)/_components/Badge";
 import { Card } from "@/app/(public)/_components/Card";
 import { buttonClassName } from "@/app/(public)/_components/Button";
-import { publishedTagCounts } from "@/lib/posts/query";
+import { formatTopicCount, publishedTagCounts } from "@/lib/posts/query";
 import { safeQuery } from "@/lib/db-safe";
 import { TOPIC_TERMS } from "@/lib/terminology";
 
@@ -90,7 +90,7 @@ export default async function TopicsPage() {
       {
         title: term.display,
         telugu: term.telugu[0],
-        detail: `${count} published ${count === 1 ? "document" : "documents"}`,
+        detail: formatTopicCount(count),
         links: [
           { href: `/search?tag=${encodeURIComponent(term.tag)}`, label: `Search ${term.display} documents` },
         ],

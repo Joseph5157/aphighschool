@@ -4,9 +4,9 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
 import TopicsPage from "@/app/(public)/topics/page";
-import { searchPosts } from "@/lib/posts/query";
+import { publishedTagCounts, searchPosts, SEARCH_RESULT_LIMIT } from "@/lib/posts/query";
 import { TOPIC_TERMS } from "@/lib/terminology";
-import { makePost, resetDb } from "./db";
+import { makePost, resetDb, testDb } from "./db";
 
 const render = async () => renderToStaticMarkup(await TopicsPage());
 const cardHeadings = (html: string) =>
@@ -78,5 +78,34 @@ describe("/topics with no tagged content", () => {
     expect(html).toContain("No topic has published documents yet.");
     expect(html).toContain('href="/search"');
     expect(html.match(/>Service guide</g)).toHaveLength(2);
+  });
+});
+
+// PR #7 review: searchPosts lists at most SEARCH_RESULT_LIMIT results, so a
+// card must not promise a larger number than its destination can show.
+describe("/topics counts at the search result limit", () => {
+  async function seedTransfers(n: number) {
+    await testDb.post.createMany({
+      data: Array.from({ length: n }, (_, i) => ({
+        slug: `bulk-${i}`, titleEn: `Bulk transfer order ${i}`, titleTe: "బదిలీ",
+        summaryTe: ["సారాంశం."], goReference: `G.O.Ms.No.${1000 + i}`, tags: ["Transfers"], isDraft: false,
+      })),
+    });
+  }
+
+  it("shows exactly the limit when the search lists every matching post", async () => {
+    await seedTransfers(SEARCH_RESULT_LIMIT);
+    const html = await render();
+    expect(html).toContain(`${SEARCH_RESULT_LIMIT} published documents`);
+    expect(await searchPosts({ tag: "Transfers" })).toHaveLength(SEARCH_RESULT_LIMIT);
+  });
+
+  it("shows 100+ when more posts match than the search can list", async () => {
+    await seedTransfers(SEARCH_RESULT_LIMIT + 1);
+    expect((await publishedTagCounts(["Transfers"])).get("Transfers")).toBe(SEARCH_RESULT_LIMIT + 1);
+    const html = await render();
+    expect(html).toContain(`${SEARCH_RESULT_LIMIT}+ published documents`);
+    expect(html).not.toContain(`${SEARCH_RESULT_LIMIT + 1} published`);
+    expect(await searchPosts({ tag: "Transfers" })).toHaveLength(SEARCH_RESULT_LIMIT);
   });
 });
