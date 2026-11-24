@@ -419,6 +419,25 @@ Implementation record (branch `term/search-1`):
 - do not display a topic with zero published posts;
 - do not invent new categories for topics.
 
+Implementation record (branch `term/topics-1`), founder decisions of 24 Nov 2026:
+
+- `/topics` document topics are generated from the 15 §7 topics and shown only when published
+  posts carry them (canonical tag or reviewed `legacyTags`), with English name, Telugu name and
+  published count. The page is now database-backed and has a `loading.tsx`.
+- `/search` chips are exactly the 15 §7 topics, labelled "Telugu (English)"; the unapproved
+  `MDM` and `Textbooks` chips are dropped (both remain searchable).
+- `?tag=` and the topic counts share one query (canonical tag plus reviewed `legacyTags`,
+  published only), so a chip or card count equals its search results exactly. For a canonical
+  topic `?tag=` no longer also matches title words (for `DA` that matched "Update",
+  "Candidates"); other `?tag=` values keep the title fallback.
+- Found while verifying: the `/search` chip bar had never rendered in production. The server
+  page called `.map()` on an array exported from a `"use client"` module, which throws in a
+  production build, and `optionalQuery` hid it. Fixed by moving the list to
+  `lib/terminology.ts`; `test/client-boundary.test.ts` now guards the pattern. The same bug
+  affects the post table of contents (`MIN_TOC_HEADINGS`), recorded there as a known exception
+  and left for a separate fix.
+- Proposed retagging: `docs/context/TERM_TOPICS_1_RETAG.md` (proposal only; no content edits).
+
 ### `TERM-ACTIONS-1` — precise action CTAs
 
 - add an authored `actionKind`/validated action label to the CMS;

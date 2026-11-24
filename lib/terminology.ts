@@ -167,6 +167,27 @@ export const TOPIC_TERMS: TopicTerm[] = [
 ];
 
 /**
+ * TERM-TOPICS-1 discovery label, Telugu first: "ఉపాధ్యాయ బదిలీలు (Teacher Transfers)".
+ * The founder chose this pattern for search chips; /topics cards show the two
+ * names on separate lines instead.
+ */
+export function topicChipLabel(term: TopicTerm): string {
+  return `${term.telugu[0]} (${term.display})`;
+}
+
+/**
+ * The topic chips offered on /search: exactly the approved §7 topics, in plan
+ * order. Lives here, not in TopicTagBar.tsx, because that file is a client
+ * module: a value exported from it reaches server code only as a client
+ * reference, so the search page calling `.map()` on it threw in production
+ * and optionalQuery silently hid the chip bar (found in TERM-TOPICS-1).
+ */
+export const TOPIC_CHIPS: ReadonlyArray<{ tag: string; label: string }> = TOPIC_TERMS.map((term) => ({
+  tag: term.tag,
+  label: topicChipLabel(term),
+}));
+
+/**
  * Splits text into comparable tokens. Case, punctuation, `&`/"and" and the
  * zero-width (non-)joiners Telugu text often carries are not meaningful for
  * matching; a run of single Latin letters is an initialism (`G.O.` → `go`).
@@ -284,7 +305,13 @@ export function interpretQuery(query: string): QueryInterpretation | null {
  * `Recruitment` must not answer a DSC search.
  */
 export function tagFormsFor(tag: string): string[] {
-  const term = TOPIC_TERMS.find((t) => t.tag === tag);
+  const term = canonicalTopic(tag);
   const forms = [tag, ...(term?.legacyTags ?? [])];
   return [...new Set(forms.map((f) => f.toLowerCase()))];
+}
+
+/** The approved §7 topic a tag names, compared case-insensitively, or null. */
+export function canonicalTopic(tag: string): TopicTerm | null {
+  const key = tag.trim().toLowerCase();
+  return TOPIC_TERMS.find((t) => t.tag.toLowerCase() === key) ?? null;
 }

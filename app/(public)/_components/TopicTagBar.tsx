@@ -3,17 +3,11 @@
 import React from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-
-export const FEATURED_TOPICS = [
-  { tag: "Transfers", label: " బదిలీలు (Transfers)" },
-  { tag: "TET", label: "టెట్ (TET 2026)" },
-  { tag: "DSC", label: "డీఎస్సీ (DSC Recruitment)" },
-  { tag: "PRC", label: "పీఆర్‌సీ (PRC & Pay)" },
-  { tag: "DA", label: "డీఏ అరియర్స్ (DA Arrears)" },
-  { tag: "Pension", label: "పెన్షన్ (Pensioners)" },
-  { tag: "MDM", label: "మధ్యాహ్న భోజనం (MDM)" },
-  { tag: "Textbooks", label: "పాఠ్యపుస్తకాలు (Textbooks)" },
-];
+// TERM-TOPICS-1: chips are exactly the approved §7 topics, in plan order,
+// labelled Telugu-first. No hand-picked extras (MDM/Textbooks were dropped by
+// founder decision; both stay reachable through search). The list lives in
+// lib/terminology.ts — never export data from this client module for server use.
+import { TOPIC_CHIPS } from "@/lib/terminology";
 
 interface TopicTagBarProps {
   baseUrl?: string;
@@ -29,7 +23,7 @@ interface TopicTagBarProps {
 export default function TopicTagBar({ baseUrl = "/search", availableTags }: TopicTagBarProps) {
   const searchParams = useSearchParams();
   const currentTag = searchParams?.get("tag");
-  const topics = FEATURED_TOPICS.filter((topic) => availableTags.includes(topic.tag));
+  const topics = TOPIC_CHIPS.filter((topic) => availableTags.includes(topic.tag));
 
   if (topics.length === 0) return null;
 
@@ -51,7 +45,10 @@ export default function TopicTagBar({ baseUrl = "/search", availableTags }: Topi
             <Link
               key={topic.tag}
               href={`${baseUrl}?tag=${encodeURIComponent(topic.tag)}`}
-              className={`shrink-0 text-xs font-semibold px-3 py-1.5 rounded-full border transition-all flex items-center gap-1.5 ${
+              // max-w-full, not shrink-0: the longest approved label (GPF, ZPPF & APGLI)
+              // is wider than a 320px screen, so it wraps inside its chip instead
+              // of pushing the page sideways (TERM-TOPICS-1, measured).
+              className={`max-w-full text-xs font-semibold px-3 py-1.5 rounded-2xl border transition-all flex items-center gap-1.5 ${
                 isActive
                   ? "bg-tamarind text-white border-tamarindDark font-bold scale-105"
                   : "bg-paperRaised text-ink border-hair hover:border-tamarind hover:text-tamarind"
