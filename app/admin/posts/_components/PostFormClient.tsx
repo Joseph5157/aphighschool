@@ -6,6 +6,11 @@ import Button from "@/app/(public)/_components/Button";
 import Checkbox from "@/app/(public)/_components/Checkbox";
 import Dialog from "@/app/(public)/_components/Dialog";
 import Textarea from "@/app/(public)/_components/Textarea";
+import {
+  AUTHORING_TEMPLATES,
+  DEFAULT_AUTHORING_TEMPLATE_ID,
+  type AuthoringTemplate,
+} from "@/lib/posts/authoring-templates";
 
 type Category = { id: string; nameEn: string };
 type CandidatePost = { id: string; titleEn: string; goReference: string | null };
@@ -18,6 +23,7 @@ type PostFormClientProps = {
     titleTe: string;
     summaryTe: string[];
     englishAbstract: string | null;
+    content: string | null;
     statusBadge: string;
     pdfUrl: string | null;
     actionUrl: string | null;
@@ -69,6 +75,18 @@ export const STATUS_OPTIONS = [
   ["expired", "Expired"],
 ];
 
+function countArticleWords(html: string): number {
+  const text = html
+    .replace(/<script[\s\S]*?<\/script>/gi, " ")
+    .replace(/<style[\s\S]*?<\/style>/gi, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&(?:nbsp|#160);/gi, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  return text ? text.split(" ").length : 0;
+}
+
 export default function PostFormClient({
   action,
   postId,
@@ -81,6 +99,10 @@ export default function PostFormClient({
   const [titleTe, setTitleTe] = useState(initial?.titleTe || "");
   const [summaryTe, setSummaryTe] = useState(initial?.summaryTe?.join("\n") || "");
   const [englishAbstract, setEnglishAbstract] = useState(initial?.englishAbstract || "");
+  const [content, setContent] = useState(initial?.content || "");
+  const [authoringTemplateId, setAuthoringTemplateId] = useState<AuthoringTemplate["id"]>(
+    initial?.content ? "standard_document" : DEFAULT_AUTHORING_TEMPLATE_ID
+  );
   const [statusBadge, setStatusBadge] = useState(initial?.statusBadge || "notification");
   const [goReference, setGoReference] = useState(initial?.goReference || "");
   const [actionDeadline, setActionDeadline] = useState(
@@ -121,6 +143,10 @@ export default function PostFormClient({
   }, []);
 
   const relatedSet = new Set(initial?.relatedPostIds || []);
+  const authoringTemplate =
+    AUTHORING_TEMPLATES.find((template) => template.id === authoringTemplateId) ??
+    AUTHORING_TEMPLATES[0];
+  const contentWordCount = countArticleWords(content);
 
   const handleLoadJson = () => {
     setErrorMsg(null);
@@ -266,6 +292,90 @@ export default function PostFormClient({
             className="w-full border border-hair rounded-lg px-3 py-2 text-sm"
             placeholder="Applies to: ... · Key rule: ... · Deadline: ..."
           />
+        </div>
+
+        <section
+          aria-labelledby="authoring-guide-heading"
+          className="space-y-4 rounded-xl border border-hair bg-paperRaised p-4"
+        >
+          <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_13rem] sm:items-end">
+            <div>
+              <h2 id="authoring-guide-heading" className="text-sm font-bold text-ink">
+                Article length guide
+              </h2>
+              <p className="mt-1 text-xs leading-relaxed text-inkSoft">
+                Choose the post type to see its writing checklist. This choice is guidance only
+                and is not saved or used to fill the article.
+              </p>
+            </div>
+            <div>
+              <label
+                htmlFor="authoringTemplate"
+                className="mb-1 block text-xs font-semibold text-inkSoft"
+              >
+                Post type
+              </label>
+              <select
+                id="authoringTemplate"
+                value={authoringTemplateId}
+                onChange={(event) =>
+                  setAuthoringTemplateId(event.target.value as AuthoringTemplate["id"])
+                }
+                className="w-full rounded-lg border border-hair bg-white px-3 py-2 text-sm"
+              >
+                {AUTHORING_TEMPLATES.map((template) => (
+                  <option key={template.id} value={template.id}>
+                    {template.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <div className="rounded-lg border border-turmeric/30 bg-turmeric/10 p-3">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <p className="text-sm font-bold text-ink">{authoringTemplate.label}</p>
+              <span className="rounded-full bg-paperRaised px-2.5 py-1 text-xs font-semibold text-turmericDeep">
+                Target: {authoringTemplate.wordTarget}
+              </span>
+            </div>
+            <p className="mt-2 text-xs leading-relaxed text-inkSoft">
+              <strong className="text-ink">Best for:</strong> {authoringTemplate.bestFor}
+            </p>
+            <p className="mt-2 text-xs leading-relaxed text-inkSoft">
+              {authoringTemplate.bodyGuidance}
+            </p>
+            <ul className="mt-3 list-disc space-y-1 pl-5 text-xs leading-relaxed text-inkSoft">
+              {authoringTemplate.checklist.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
+        <div>
+          <div className="mb-1 flex flex-wrap items-baseline justify-between gap-2">
+            <label htmlFor="content" className="block text-xs font-mono uppercase text-inkSoft">
+              Structured article HTML (optional)
+            </label>
+            <span aria-live="polite" className="text-xs text-inkSoft">
+              {contentWordCount.toLocaleString("en-IN")} words
+            </span>
+          </div>
+          <Textarea
+            id="content"
+            name="content"
+            mono
+            value={content}
+            onChange={(event) => setContent(event.target.value)}
+            rows={14}
+            placeholder={'<h2>What changed</h2>\n<p>Verified explanation…</p>\n<ul>\n  <li>Key point</li>\n</ul>'}
+          />
+          <p className="mt-1.5 text-xs leading-relaxed text-inkSoft">
+            Leave blank for a short post. For longer posts, use trusted HTML with headings,
+            paragraphs and lists. Never retype numeric tables, vacancy grids, pay scales or
+            eligibility matrices—link the official PDF instead.
+          </p>
         </div>
 
         <div className="grid grid-cols-2 gap-4">

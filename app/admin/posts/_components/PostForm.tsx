@@ -9,6 +9,7 @@ type PostFormProps = {
     titleTe: string;
     summaryTe: string[];
     englishAbstract: string | null;
+    content: string | null;
     statusBadge: string;
     pdfUrl: string | null;
     actionUrl: string | null;

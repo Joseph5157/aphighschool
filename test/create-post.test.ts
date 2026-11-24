@@ -69,6 +69,13 @@ describe("createPost", () => {
     expect(post.documentType).toBeNull();
     expect(post.orderState).toBe("current");
   });
+
+  it("persists optional structured article content", async () => {
+    const content = "<h2>What changed</h2><p>A verified explanation.</p>";
+    await submit({ ...VALID, content });
+    const post = await testDb.post.findFirstOrThrow();
+    expect(post.content).toBe(content);
+  });
 });
 
 describe("updatePost lifecycle fields", () => {
@@ -94,5 +101,20 @@ describe("updatePost lifecycle fields", () => {
     // This post has no documentDate, so the edit must leave it on createdAt.
     expect(after.documentDate).toBeNull();
     expect(after.effectiveDate.getTime()).toBe(after.createdAt.getTime());
+  });
+
+  it("updates structured article content", async () => {
+    await submit({ ...VALID, content: "<p>Original explanation.</p>" });
+    const created = await testDb.post.findFirstOrThrow();
+    const content = "<h2>Updated</h2><p>Current verified explanation.</p>";
+
+    try {
+      await updatePost(created.id, form({ ...VALID, content }));
+    } catch (e) {
+      if ((e as Error).message !== "NEXT_REDIRECT") throw e;
+    }
+
+    const after = await testDb.post.findUniqueOrThrow({ where: { id: created.id } });
+    expect(after.content).toBe(content);
   });
 });
