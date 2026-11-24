@@ -33,7 +33,7 @@ describe("mobile home density and typography", () => {
     const filters = screen.getByRole("group", { name: "Filter documents by type" });
     expect(filters).toHaveClass("flex-nowrap", "overflow-x-auto", "no-scrollbar");
 
-    const all = screen.getByRole("button", { name: "All Documents" });
+    const all = screen.getByRole("button", { name: "All Updates" });
     expect(all).toHaveClass("min-h-[44px]", "font-sans");
     expect(all).not.toHaveClass("font-mono");
     expect(all).toHaveAttribute("aria-pressed", "true");

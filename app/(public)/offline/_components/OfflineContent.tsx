@@ -40,7 +40,7 @@ export default function OfflineContent() {
       <div className="flex flex-wrap items-center justify-center gap-3 pt-1">
         {/* Full navigation, not next/link — see file comment. */}
         <a href="/tools" className={buttonClassName({ variant: "primary", size: "md" })}>
-          Open Utility Tools
+          Open Teacher Tools
         </a>
         <button
           type="button"

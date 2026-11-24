@@ -32,7 +32,7 @@ export default function NotFoundContent() {
           Go to Home
         </Link>
         <Link href="/orders" className={buttonClassName({ variant: "secondary", size: "sm" })}>
-          Browse Orders &amp; Circulars
+          Browse GOs &amp; Proceedings
         </Link>
         <Link href="/search" className={buttonClassName({ variant: "outline", size: "sm" })}>
           Search the Portal

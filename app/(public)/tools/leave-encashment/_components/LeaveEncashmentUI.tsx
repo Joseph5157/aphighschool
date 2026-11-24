@@ -101,7 +101,7 @@ export default function LeaveEncashmentUI() {
     <div className="mx-auto max-w-4xl space-y-8 pb-12 font-sans">
       <div className="flex items-center justify-between">
         <Link href="/tools" className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-inkSoft transition-colors hover:text-ink">
-          ← Back to Utility Tools
+          ← Back to Teacher Tools
         </Link>
         <Badge variant="tamarind" size="sm" shape="pill" dot>
           Runs in your browser

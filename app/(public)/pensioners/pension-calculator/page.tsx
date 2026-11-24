@@ -15,7 +15,7 @@ export default function PensionCalculatorPage() {
     <div className="space-y-4 sm:space-y-6 font-sans">
       <Breadcrumb
         items={[
-          { label: "Pensioners Hub", href: "/pensioners" },
+          { label: "Pension & Retirement", href: "/pensioners" },
           { label: "Pension & Gratuity Calculator" },
         ]}
       />

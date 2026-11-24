@@ -108,16 +108,16 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
                     <SidebarMenuButton href="/">Home</SidebarMenuButton>
                   </SidebarMenuItem>
                   <SidebarMenuItem>
-                    <SidebarMenuButton href="/orders">Orders & Circulars</SidebarMenuButton>
+                    <SidebarMenuButton href="/orders">GOs & Proceedings</SidebarMenuButton>
                   </SidebarMenuItem>
                   <SidebarMenuItem>
-                    <SidebarMenuButton href="/tools">Utility Tools</SidebarMenuButton>
+                    <SidebarMenuButton href="/tools">Teacher Tools</SidebarMenuButton>
                   </SidebarMenuItem>
                   <SidebarMenuItem>
-                    <SidebarMenuButton href="/service-desk">Service Desk</SidebarMenuButton>
+                    <SidebarMenuButton href="/service-desk">Teacher Services</SidebarMenuButton>
                   </SidebarMenuItem>
                   <SidebarMenuItem>
-                    <SidebarMenuButton href="/pensioners">Pensioners Hub</SidebarMenuButton>
+                    <SidebarMenuButton href="/pensioners">Pension & Retirement</SidebarMenuButton>
                   </SidebarMenuItem>
                   <SidebarMenuItem>
                     <SidebarMenuButton href="/search">Search</SidebarMenuButton>

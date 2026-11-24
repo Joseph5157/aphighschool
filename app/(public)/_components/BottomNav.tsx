@@ -17,7 +17,10 @@ const NAV_ITEMS = [
   },
   {
     href: "/orders",
-    label: "Orders",
+    label: "GOs",
+    // Compact bar label; the accessible name spells out what the route holds
+    // and starts with the visible word so voice control still matches it.
+    ariaLabel: "GOs, Proceedings and Memos",
     exact: false,
     icon: (
       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -48,7 +51,7 @@ const NAV_ITEMS = [
   },
   {
     href: "/pensioners",
-    label: "Pensioners",
+    label: "Pension",
     exact: false,
     icon: (
       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -88,6 +91,7 @@ export default function BottomNav() {
             <Link
               key={item.href}
               href={item.href}
+              aria-label={"ariaLabel" in item ? item.ariaLabel : undefined}
               aria-current={isActive ? "page" : undefined}
               className={`relative flex min-h-[44px] min-w-[44px] flex-col items-center justify-center px-2 py-1.5 transition-colors duration-150 border-t-[3px] ${
                 isActive

@@ -100,7 +100,7 @@ export default function TopicsPage() {
             AP School Education
           </Badge>
           <div>
-            <h1 className="text-xl sm:text-display tracking-tight text-mastheadText">Browse teacher topics</h1>
+            <h1 className="text-xl sm:text-display tracking-tight text-mastheadText">Browse by Teacher Topic</h1>
             <p className="mt-1 sm:mt-2 max-w-2xl text-xs sm:text-body text-mastheadText/75">
               Find published AP School Education documents by topic, or open a practical guide for a common service task.
             </p>

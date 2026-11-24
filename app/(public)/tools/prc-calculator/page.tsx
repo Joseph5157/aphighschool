@@ -14,7 +14,7 @@ export default function PrcCalculatorPage() {
     <div className="space-y-4 sm:space-y-6 font-sans">
       <Breadcrumb
         items={[
-          { label: "Utility Tools", href: "/tools" },
+          { label: "Teacher Tools", href: "/tools" },
           { label: "PRC Pay Fixation Calculator" },
         ]}
       />

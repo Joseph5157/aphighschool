@@ -80,7 +80,7 @@ export default function DocumentTemplate({
     : "/orders";
   const indexLabel = hasCategoryAlternatives
     ? `Browse ${post.category.nameEn}`
-    : "Browse Orders & Circulars";
+    : "Browse GOs & Proceedings";
 
   const backLink = (
     <Link
@@ -110,7 +110,7 @@ export default function DocumentTemplate({
     <div className="mx-auto w-full max-w-[1400px] space-y-4 font-sans sm:space-y-5 md:space-y-6">
       <Breadcrumb
         items={[
-          { label: "Orders", href: "/orders" },
+          { label: "GOs & Proceedings", href: "/orders" },
           ...(post.category
             ? [
                 {

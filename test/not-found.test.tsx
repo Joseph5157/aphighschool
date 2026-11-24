@@ -12,7 +12,7 @@ describe("NotFoundContent", () => {
     render(<NotFoundContent />);
     expect(screen.getByRole("heading", { name: /could not be found/i })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Go to Home" })).toHaveAttribute("href", "/");
-    expect(screen.getByRole("link", { name: /Browse Orders/i })).toHaveAttribute("href", "/orders");
+    expect(screen.getByRole("link", { name: /Browse GOs & Proceedings/i })).toHaveAttribute("href", "/orders");
     expect(screen.getByRole("link", { name: /Search the Portal/i })).toHaveAttribute("href", "/search");
   });
 
@@ -37,6 +37,6 @@ describe("app/not-found.tsx — a genuinely unmatched URL, outside the public la
     render(<RootNotFound />);
     expect(screen.getByRole("link", { name: /AP Teacher Desk/i })).toHaveAttribute("href", "/");
     expect(screen.getByRole("heading", { name: /could not be found/i })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /Browse Orders/i })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /Browse GOs & Proceedings/i })).toBeInTheDocument();
   });
 });

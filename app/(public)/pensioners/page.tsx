@@ -52,7 +52,7 @@ const PENSIONER_TOOLS = [
 export default function PensionersHubPage() {
   return (
     <div className="mx-auto max-w-5xl space-y-4 sm:space-y-6 font-sans">
-      <Breadcrumb items={[{ label: "Pensioners Hub" }]} />
+      <Breadcrumb items={[{ label: "Pension & Retirement" }]} />
 
       <div className="space-y-4 sm:space-y-6">
           {/*

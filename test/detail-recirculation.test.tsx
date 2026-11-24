@@ -114,7 +114,7 @@ describe("document detail carries no generic recirculation", () => {
     const html = renderToStaticMarkup(await PostDetailPage({ params: { slug: "main-post" } }));
 
     expect(html).toContain('href="/orders"');
-    expect(html).toContain("Browse Orders &amp; Circulars");
+    expect(html).toContain("Browse GOs &amp; Proceedings");
     expect(html).not.toContain("All Government Orders");
   });
 
@@ -151,7 +151,7 @@ describe("document detail carries no generic recirculation", () => {
 
     const html = renderToStaticMarkup(await PostDetailPage({ params: { slug: "main-post" } }));
 
-    expect(html).toContain("Browse Orders &amp; Circulars");
+    expect(html).toContain("Browse GOs &amp; Proceedings");
     expect(html).not.toContain("Browse Circulars");
     expect(html).not.toContain("2 documents");
   });
@@ -162,6 +162,6 @@ describe("document detail carries no generic recirculation", () => {
     const html = renderToStaticMarkup(await PostDetailPage({ params: { slug: "orphan-post" } }));
 
     expect(html).toContain('href="/orders"');
-    expect(html).toContain("Browse Orders &amp; Circulars");
+    expect(html).toContain("Browse GOs &amp; Proceedings");
   });
 });

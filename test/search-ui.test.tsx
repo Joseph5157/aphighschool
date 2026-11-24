@@ -139,7 +139,7 @@ describe("SearchUI", () => {
   it("offers a next step out of a no-results state", () => {
     renderSearchUI({ query: "zzzz", isDiscovery: false });
     expect(screen.getByText(/No matching documents found/i)).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /Browse Orders & Circulars/i })).toHaveAttribute("href", "/orders");
+    expect(screen.getByRole("link", { name: /Browse GOs & Proceedings/i })).toHaveAttribute("href", "/orders");
   });
 
   // SLOP-DETAIL-1 (AI_SLOP_AUDIT.md A08) regression guards. Paired: the removed

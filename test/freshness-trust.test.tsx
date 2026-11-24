@@ -37,7 +37,7 @@ describe("FRESHNESS-1 public trust language", () => {
   it("does not describe a category or homepage feed as collection-wide verified", () => {
     expect(categoryPage).toContain("Published documents");
     expect(categoryPage).not.toMatch(/GOIR Verified Category|All G\.O\.s verified|verified repository/i);
-    expect(homePage).toContain("Government Orders & Guidance");
+    expect(homePage).toContain("GOs, Proceedings, Memos and important deadlines");
     expect(homePage).not.toContain("Verified Government Orders & Guidance");
   });
 

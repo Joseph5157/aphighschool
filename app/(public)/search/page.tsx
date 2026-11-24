@@ -23,7 +23,7 @@ const SUGGESTED_SEARCH_CANDIDATES = [
 ];
 
 export const metadata: Metadata = {
-  title: "Search AP Teacher Orders",
+  title: "Search GOs & Updates",
   description:
     "Search AP School Education government orders, circulars, and notifications.",
   // Every ?q=/?type=/?tag= variant is the same page; canonicalize to the bare route.
@@ -59,7 +59,7 @@ export default async function SearchPage({
   return (
     <div className="max-w-4xl mx-auto space-y-6 font-sans">
       <div className="border-b border-hair pb-4">
-        <h1 className="text-display tracking-tight text-ink">Search Portal</h1>
+        <h1 className="text-display tracking-tight text-ink">Search GOs & Updates</h1>
         <p className="text-body text-inkSoft mt-1">
           Search AP Government Orders, Circulars, and Guidance by GO number, Telugu
           phrase, or topic tag

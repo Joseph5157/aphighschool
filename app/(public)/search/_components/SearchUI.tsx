@@ -294,7 +294,7 @@ export default function SearchUI({
           description="Try a different keyword or GO number, or browse documents by category."
           action={
             <Link href="/orders" className="text-sm font-semibold text-tamarind hover:underline">
-              Browse Orders & Circulars →
+              Browse GOs & Proceedings →
             </Link>
           }
         />

@@ -7,7 +7,7 @@ import { buttonClassName } from "@/app/(public)/_components/Button";
 import Callout from "@/app/(public)/_components/Callout";
 
 export const metadata: Metadata = {
-  title: "Teacher Service Desk",
+  title: "Teacher Services",
   description:
     "AP teacher pay, leave, CFMS, GPF, pension, and official-order guidance in one place.",
   alternates: { canonical: "/service-desk" },
@@ -71,7 +71,7 @@ const TASKS: ServiceTask[] = [
 export default function ServiceDeskPage() {
   return (
     <div className="mx-auto max-w-5xl space-y-4 sm:space-y-6 pb-12 font-sans">
-      <Breadcrumb items={[{ label: "Teacher Service Desk" }]} />
+      <Breadcrumb items={[{ label: "Teacher Services" }]} />
 
       <section className="relative overflow-hidden rounded-2xl border border-mastheadText/35 on-masthead bg-masthead p-4 sm:p-6 text-mastheadText shadow-md md:p-8">
         <div className="absolute inset-y-0 right-0 w-1/3 bg-turmeric/10" aria-hidden="true" />

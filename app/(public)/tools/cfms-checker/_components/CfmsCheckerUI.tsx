@@ -158,7 +158,7 @@ export default function CfmsCheckerUI() {
           href="/tools"
           className="text-xs font-mono text-inkSoft hover:text-ink transition-colors inline-flex items-center gap-1.5 font-semibold"
         >
-          ← Back to Utility Tools / ఇతర సాధనాలు
+          ← Back to Teacher Tools / ఇతర సాధనాలు
         </Link>
         <span className="text-xs bg-tamarind/10 text-tamarind border border-tamarind/20 px-2.5 py-0.5 rounded-full font-semibold">
           Interactive Guide Directory
