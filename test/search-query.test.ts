@@ -5,8 +5,9 @@ import {
   searchPosts,
   quickSearchChips,
   tagsWithPublishedContent,
+  publishedTagCounts,
 } from "@/lib/posts/query";
-import { resetDb, seedCategory, testDb } from "./db";
+import { makePost, resetDb, seedCategory, testDb } from "./db";
 
 async function fixture() {
   const cat = await seedCategory("govt-orders");
@@ -184,5 +185,64 @@ describe("tagsWithPublishedContent", () => {
     await testDb.post.update({ where: { slug: "transfers-go-129" }, data: { isDraft: true } });
     const kept = await tagsWithPublishedContent(["Transfers"]);
     expect(kept).toEqual([]);
+  });
+});
+
+// TERM-TOPICS-1: the ?tag= filter and the topic counts agree on what counts as
+// a canonical topic: the canonical tag or a reviewed legacyTags value, never a
+// search alias, whole tag, case-insensitive.
+describe("canonical topic tags", () => {
+  beforeEach(async () => {
+    await resetDb();
+    await makePost({ slug: "ptr-legacy", titleEn: "Staff pattern revision", tags: ["PTR"] });
+    await makePost({ slug: "canonical-lower", titleEn: "Surplus posts list", tags: ["rationalisation"] });
+    await makePost({ slug: "instructors", titleEn: "Academic Instructors engagement", tags: ["Recruitment"] });
+    await makePost({ slug: "aptet", titleEn: "Response sheet link", tags: ["APTET"] });
+    await makePost({ slug: "draft-ptr", titleEn: "Draft pattern", tags: ["PTR"], isDraft: true });
+  });
+
+  it("?tag=Rationalisation finds the legacy PTR post and the canonical tag in any case", async () => {
+    const r = await searchPosts({ tag: "Rationalisation" });
+    expect(r.map((p) => p.slug).sort()).toEqual(["canonical-lower", "ptr-legacy"]);
+  });
+
+  it("?tag=DSC does not treat a Recruitment tag as DSC", async () => {
+    expect(await searchPosts({ tag: "DSC" })).toEqual([]);
+  });
+
+  it("a non-canonical ?tag= still matches itself", async () => {
+    expect((await searchPosts({ tag: "Recruitment" })).map((p) => p.slug)).toEqual(["instructors"]);
+  });
+
+  it("counts published posts per topic the same way, ignoring drafts", async () => {
+    const counts = await publishedTagCounts(["Rationalisation", "TET", "DSC"]);
+    expect(Object.fromEntries(counts)).toEqual({ Rationalisation: 2, TET: 1 });
+  });
+
+  it("counts exactly what each topic's ?tag= search returns", async () => {
+    const counts = await publishedTagCounts(["Rationalisation", "TET"]);
+    for (const [tag, count] of counts) {
+      expect((await searchPosts({ tag })).length, tag).toBe(count);
+    }
+  });
+
+  it("matches a canonical topic by tags only, not by words in a title", async () => {
+    // Before TERM-TOPICS-1, ?tag= also matched titles: ?tag=DA found any title
+    // containing "da" (Update, Candidates), inflating the topic past its count.
+    await makePost({ slug: "untagged-update", titleEn: "Candidates Update on Rationalisation", tags: [] });
+    await makePost({ slug: "da-tagged", titleEn: "Arrears schedule", tags: ["DA"] });
+    expect((await searchPosts({ tag: "Rationalisation" })).map((p) => p.slug)).not.toContain("untagged-update");
+    expect((await searchPosts({ tag: "DA" })).map((p) => p.slug)).toEqual(["da-tagged"]);
+    expect(Object.fromEntries(await publishedTagCounts(["DA"]))).toEqual({ DA: 1 });
+  });
+
+  it("matches a canonical topic tag case-insensitively in the URL too", async () => {
+    expect((await searchPosts({ tag: "rationalisation" })).length).toBe(2);
+  });
+
+  it("keeps the title fallback for a non-canonical ?tag=", async () => {
+    await makePost({ slug: "titled", titleEn: "Recruitment calendar", tags: [] });
+    const r = (await searchPosts({ tag: "Recruitment" })).map((p) => p.slug).sort();
+    expect(r).toEqual(["instructors", "titled"]);
   });
 });

@@ -1,9 +1,16 @@
 import { Prisma, type DocType } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { ORDER_BY_OFFICIAL_DATE } from "@/lib/dates";
-import { interpretQuery, tagFormsFor, type QueryInterpretation } from "@/lib/terminology";
+import { canonicalTopic, interpretQuery, tagFormsFor, type QueryInterpretation } from "@/lib/terminology";
 
 const DOC_TYPES: DocType[] = ["go", "circular", "memo", "proceeding", "notification", "other"];
+
+/**
+ * The most results one search returns. Shared with the topic counts so a
+ * count above it is shown as `${SEARCH_RESULT_LIMIT}+` rather than a number
+ * the destination search cannot list (PR #7 review).
+ */
+export const SEARCH_RESULT_LIMIT = 100;
 
 export type SearchParams = {
   q?: string;
@@ -108,6 +115,21 @@ async function idsForInterpretation(meaning: QueryInterpretation): Promise<strin
   return rows.map((row) => row.id);
 }
 
+/**
+ * Published posts carrying any of the given lower-cased tag forms (whole tag,
+ * case-insensitive). The single rule behind both the `?tag=` filter and the
+ * topic counts, so a chip or card count always equals its search results.
+ */
+async function publishedIdsWithTagForms(forms: string[]): Promise<string[]> {
+  if (forms.length === 0) return [];
+  const rows = await prisma.$queryRaw<Array<{ id: string }>>`
+    SELECT id FROM "Post"
+    WHERE "isDraft" = false
+      AND EXISTS (SELECT 1 FROM unnest("tags") x WHERE lower(x) = ANY(${forms}))
+  `;
+  return rows.map((row) => row.id);
+}
+
 export async function searchPosts(params: SearchParams): Promise<SearchResult[]> {
   const q = params.q?.trim();
   const hasFilter =
@@ -146,13 +168,26 @@ export async function searchPosts(params: SearchParams): Promise<SearchResult[]>
   if (params.category) and.push({ category: { slug: params.category } });
   if (params.tag) {
     const t = params.tag.trim();
-    and.push({
-      OR: [
-        { tags: { has: t } },
-        { titleEn: { contains: t, mode: "insensitive" } },
-        { titleTe: { contains: t, mode: "insensitive" } },
-      ],
-    });
+    // TERM-TOPICS-1: a canonical topic tag also accepts its reviewed
+    // legacyTags (e.g. ?tag=Rationalisation finds a post tagged PTR); any
+    // other tag matches itself. Whole tag, case-insensitive.
+    const tagged = (await publishedIdsWithTagForms(tagFormsFor(t))).map((id) => ({ id }));
+    if (canonicalTopic(t)) {
+      // A canonical topic is matched by tags alone, so the count shown on its
+      // chip or /topics card is exactly what this search returns. The title
+      // fallback below is not applied: for short tags it is noise (`DA`
+      // matches "Update", "Candidates", "Mandal").
+      if (tagged.length === 0) return [];
+      and.push({ OR: tagged });
+    } else {
+      and.push({
+        OR: [
+          ...tagged,
+          { titleEn: { contains: t, mode: "insensitive" } },
+          { titleTe: { contains: t, mode: "insensitive" } },
+        ],
+      });
+    }
   }
 
   if (params.from || params.to) {
@@ -166,7 +201,7 @@ export async function searchPosts(params: SearchParams): Promise<SearchResult[]>
     where: { AND: and },
     select: SELECT,
     orderBy: ORDER_BY_OFFICIAL_DATE as never,
-    take: 100,
+    take: SEARCH_RESULT_LIMIT,
   });
 }
 
@@ -199,17 +234,38 @@ export async function quickSearchChips(candidates: string[]): Promise<string[]> 
 }
 
 /**
+ * How many published posts carry each candidate topic, computed with the
+ * same rule as its `?tag=` search (publishedIdsWithTagForms). The search lists
+ * at most SEARCH_RESULT_LIMIT of them, so display a count through
+ * `formatTopicCount`, which never states a number the search cannot show.
+ * Candidates with no published posts are omitted.
+ */
+export async function publishedTagCounts(candidates: string[]): Promise<Map<string, number>> {
+  const counts = new Map<string, number>();
+  for (const tag of candidates) {
+    const n = (await publishedIdsWithTagForms(tagFormsFor(tag))).length;
+    if (n > 0) counts.set(tag, n);
+  }
+  return counts;
+}
+
+/**
  * Filters a curated topic-tag candidate list down to tags that at least one
  * published post actually carries. Same "no unsupported claim" reasoning as
  * `quickSearchChips`, applied to the `?tag=` filter chips instead of the
  * free-text search chips.
  */
 export async function tagsWithPublishedContent(candidates: string[]): Promise<string[]> {
-  if (candidates.length === 0) return [];
-  const rows = await prisma.post.findMany({
-    where: { isDraft: false, tags: { hasSome: candidates } },
-    select: { tags: true },
-  });
-  const present = new Set(rows.flatMap((row) => row.tags));
-  return candidates.filter((tag) => present.has(tag));
+  const counts = await publishedTagCounts(candidates);
+  return candidates.filter((tag) => counts.has(tag));
+}
+
+/**
+ * A topic's published count as shown to readers: the exact number up to
+ * SEARCH_RESULT_LIMIT, which is also what its `?tag=` search lists, and
+ * `100+` beyond it, since the search then shows only the first 100.
+ */
+export function formatTopicCount(count: number): string {
+  if (count > SEARCH_RESULT_LIMIT) return `${SEARCH_RESULT_LIMIT}+ published documents`;
+  return `${count} published ${count === 1 ? "document" : "documents"}`;
 }

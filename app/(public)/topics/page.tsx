@@ -4,6 +4,9 @@ import Breadcrumb from "@/app/(public)/_components/Breadcrumb";
 import Badge from "@/app/(public)/_components/Badge";
 import { Card } from "@/app/(public)/_components/Card";
 import { buttonClassName } from "@/app/(public)/_components/Button";
+import { formatTopicCount, publishedTagCounts } from "@/lib/posts/query";
+import { safeQuery } from "@/lib/db-safe";
+import { TOPIC_TERMS } from "@/lib/terminology";
 
 export const metadata: Metadata = {
   title: "Teacher Topics",
@@ -11,39 +14,6 @@ export const metadata: Metadata = {
     "AP School Education documents and teacher service guides organized by topic.",
   alternates: { canonical: "/topics" },
 };
-
-const DOCUMENT_TOPICS = [
-  {
-    title: "Transfers & PTR",
-    detail:
-      "Browse published AP School Education documents on teacher transfers and pupil-teacher ratio.",
-    links: [
-      { href: "/search?tag=Transfers", label: "Search Transfers documents" },
-      { href: "/search?tag=PTR", label: "Search PTR documents" },
-    ],
-  },
-  {
-    title: "TET",
-    detail:
-      "Find published AP Teacher Eligibility Test notifications, orders, and related updates.",
-    links: [{ href: "/search?tag=TET", label: "Search TET documents" }],
-  },
-  {
-    title: "DSC Recruitment",
-    detail:
-      "Find published AP DSC recruitment notifications, proceedings, and official updates.",
-    links: [{ href: "/search?tag=DSC", label: "Search DSC documents" }],
-  },
-  {
-    title: "Pay, PRC & DA",
-    detail:
-      "Browse published documents about pay revision, PRC, DA, and related arrears guidance.",
-    links: [
-      { href: "/search?tag=PRC", label: "Search PRC documents" },
-      { href: "/search?tag=DA", label: "Search DA documents" },
-    ],
-  },
-] as const;
 
 const SERVICE_GUIDES = [
   {
@@ -63,7 +33,17 @@ const SERVICE_GUIDES = [
   },
 ] as const;
 
-type Topic = (typeof DOCUMENT_TOPICS)[number] | (typeof SERVICE_GUIDES)[number];
+// TERM-TOPICS-1: document topics are read from the database, so this route is
+// no longer static.
+export const dynamic = "force-dynamic";
+
+type Topic = {
+  title: string;
+  /** Telugu name, shown under the English heading (document topics only). */
+  telugu?: string;
+  detail: string;
+  links: ReadonlyArray<{ href: string; label: string }>;
+};
 
 function TopicCard({ topic, kind }: { topic: Topic; kind: "Document topic" | "Service guide" }) {
   return (
@@ -72,7 +52,14 @@ function TopicCard({ topic, kind }: { topic: Topic; kind: "Document topic" | "Se
         {kind}
       </Badge>
       <h3 className="mt-4 text-card-title text-ink">{topic.title}</h3>
-      <p className="mt-2 flex-1 text-body text-inkSoft">{topic.detail}</p>
+      {topic.telugu && (
+        <p lang="te" className="mt-1 text-telugu-body text-inkSoft">
+          {topic.telugu}
+        </p>
+      )}
+      <p className={`mt-2 flex-1 ${topic.telugu ? "text-meta" : "text-body"} text-inkSoft`}>
+        {topic.detail}
+      </p>
       <nav className="mt-5 flex flex-wrap gap-2" aria-label={`${topic.title} links`}>
         {topic.links.map((link) => (
           <Link
@@ -88,7 +75,29 @@ function TopicCard({ topic, kind }: { topic: Topic; kind: "Document topic" | "Se
   );
 }
 
-export default function TopicsPage() {
+export default async function TopicsPage() {
+  // safeQuery, not optionalQuery: an empty list here would tell teachers no
+  // topic has documents, which is false if the database is merely unreachable.
+  const counts = await safeQuery("topics-tag-counts", () =>
+    publishedTagCounts(TOPIC_TERMS.map((term) => term.tag))
+  );
+  // Only topics with published posts are shown — a card that leads to
+  // "no matching documents" is a dead end (TERM_NAV_1_PLAN.md §7).
+  const documentTopics: Topic[] = TOPIC_TERMS.flatMap((term) => {
+    const count = counts.get(term.tag);
+    if (!count) return [];
+    return [
+      {
+        title: term.display,
+        telugu: term.telugu[0],
+        detail: formatTopicCount(count),
+        links: [
+          { href: `/search?tag=${encodeURIComponent(term.tag)}`, label: `Search ${term.display} documents` },
+        ],
+      },
+    ];
+  });
+
   return (
     <div className="mx-auto max-w-5xl space-y-4 sm:space-y-6 md:space-y-8 pb-12 font-sans">
       <Breadcrumb items={[{ label: "Teacher Topics" }]} />
@@ -115,11 +124,21 @@ export default function TopicsPage() {
             These links filter published AP School Education documents by their topic tags.
           </p>
         </div>
-        <div className="grid grid-cols-1 gap-3.5 sm:gap-4 md:grid-cols-2">
-          {DOCUMENT_TOPICS.map((topic) => (
-            <TopicCard key={topic.title} topic={topic} kind="Document topic" />
-          ))}
-        </div>
+        {documentTopics.length > 0 ? (
+          <div className="grid grid-cols-1 gap-3.5 sm:gap-4 md:grid-cols-2">
+            {documentTopics.map((topic) => (
+              <TopicCard key={topic.title} topic={topic} kind="Document topic" />
+            ))}
+          </div>
+        ) : (
+          <p className="text-body text-inkSoft">
+            No topic has published documents yet. Use{" "}
+            <Link href="/search" className="font-semibold text-tamarind hover:underline">
+              Search
+            </Link>{" "}
+            to find documents by keyword or GO number.
+          </p>
+        )}
       </section>
 
       <section aria-labelledby="service-guides-heading" className="space-y-4">

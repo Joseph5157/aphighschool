@@ -87,6 +87,8 @@ describe("loading.tsx coverage for DB-backed public routes", () => {
     "(home)/loading.tsx",
     "orders/loading.tsx",
     "search/loading.tsx",
+    // TERM-TOPICS-1: /topics reads published tag counts from the database.
+    "topics/loading.tsx",
   ];
 
   it.each(routes)("%s exists", (relativePath) => {
@@ -99,12 +101,13 @@ describe("loading.tsx coverage for DB-backed public routes", () => {
     expect(source).toContain("Skeleton");
   });
 
-  // The routes deliberately left out: /topics, /service-desk, /tools/*, and
+  // The routes deliberately left out: /service-desk, /tools/*, and
   // /pensioners/* render no prisma query at all (confirmed by grep during
   // this gate), so a loading.tsx for them would be decoration with nothing
-  // to cover — see UI_ACTIVE_GATE.md's route classification table.
+  // to cover — see UI_ACTIVE_GATE.md's route classification table. /topics
+  // left this list in TERM-TOPICS-1 when it became database-backed.
   it("does not add a loading.tsx to a static route", () => {
-    for (const staticRoute of ["topics", "service-desk", "tools", "pensioners"]) {
+    for (const staticRoute of ["service-desk", "tools", "pensioners"]) {
       expect(fs.existsSync(path.join(PUBLIC_DIR, staticRoute, "loading.tsx"))).toBe(false);
     }
   });

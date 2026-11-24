@@ -7,7 +7,8 @@ import {
 } from "@/lib/posts/query";
 import { optionalQuery, safeQuery } from "@/lib/db-safe";
 import SearchUI from "./_components/SearchUI";
-import TopicTagBar, { FEATURED_TOPICS } from "@/app/(public)/_components/TopicTagBar";
+import TopicTagBar from "@/app/(public)/_components/TopicTagBar";
+import { TOPIC_CHIPS } from "@/lib/terminology";
 import type { Metadata } from "next";
 
 // Curated candidates for the discovery view's suggested searches — only the
@@ -49,7 +50,7 @@ export default async function SearchPage({
     : [];
   const availableTopicTags = await optionalQuery(
     "search-topic-tags",
-    () => tagsWithPublishedContent(FEATURED_TOPICS.map((topic) => topic.tag)),
+    () => tagsWithPublishedContent(TOPIC_CHIPS.map((topic) => topic.tag)),
     []
   );
   const suggestions = isDiscovery
