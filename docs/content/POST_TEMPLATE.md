@@ -44,6 +44,7 @@ Return this table before the article body.
 | `englishAbstract` | Concise scope and practical effect; no copied table data |
 | `documentType` | `go`, `circular`, `memo`, `proceeding`, `notification`, `other` or `null` |
 | `orderState` | `current`, `amended`, `superseded` or `archived` |
+| `categoryId` | `id` of an existing `Category` row matching the document type, looked up by slug (e.g. `notifications`) and reported with that slug; `null` and flagged if none fits. Never create, rename or guess one |
 | `documentDate` | Official issue date only; never inferred |
 | `statusBadge` | Recruitment notifications only: `notification`, `apply_link`, `hall_ticket`, `results` or `expired` |
 | `tags` | Canonical tags from `lib/terminology.ts` only |
