@@ -33,7 +33,7 @@ on a later day, repeat this check first.
 | --- | --- |
 | `slug` | `ap-dsc-2026-notification-apply-online` |
 | `titleEn` | AP DSC 2026 (APTRT-2026): SA and SGT notification and online application |
-| `titleTe` | ఏపీ డీఎస్సీ 2026 (ఏపీటీఆర్‌టీ-2026): ఎస్‌ఏ, ఎస్‌జీటీ పోస్టుల నోటిఫికేషన్, ఆన్‌లైన్ దరఖాస్తు |
+| `titleTe` | ఏపీ డీఎస్సీ 2026 (ఏపీ టీఆర్‌టీ–2026): ఎస్‌ఏ, ఎస్‌జీటీ పోస్టుల నోటిఫికేషన్ – ఆన్‌లైన్ దరఖాస్తు వివరాలు |
 | `summaryTe` | See "summaryTe lines" below (6 lines) |
 | `englishAbstract` | See "englishAbstract" below |
 | `documentType` | `notification` |
@@ -54,12 +54,12 @@ on a later day, repeat this check first.
 
 ### summaryTe lines
 
-1. పాఠశాల విద్యాశాఖ ప్రభుత్వ, జిల్లా పరిషత్, మండల పరిషత్, మున్సిపల్ పాఠశాలల్లో స్కూల్ అసిస్టెంట్ (ఎస్‌ఏ), సెకండరీ గ్రేడ్ టీచర్ (ఎస్‌జీటీ) పోస్టుల భర్తీకి డీఎస్సీ-2026 నోటిఫికేషన్ (నం.01/DSC-TRC-1/2026, తేదీ 05.11.2026) జారీ చేసింది.
-2. ఆన్‌లైన్ దరఖాస్తు, ఫీజు చెల్లింపునకు చివరి తేదీ 30.11.2026. దరఖాస్తు అధికారిక పోర్టల్ tet2dsc.apcfss.in ద్వారా మాత్రమే.
-3. ప్రతి పోస్టుకు దరఖాస్తు రుసుము ₹1,000. ఒకటి కంటే ఎక్కువ పోస్టులకు ఒకే దరఖాస్తు సమర్పించి, ప్రతి అదనపు పోస్టుకు వేరుగా రుసుము చెల్లించాలి.
-4. తాత్కాలిక షెడ్యూల్ ప్రకారం కంప్యూటర్ ఆధారిత పరీక్షలు (సీబీటీ) 20.12.2026 నుంచి 13.01.2027 మధ్య జరుగుతాయి. వివరమైన పరీక్ష షెడ్యూల్‌ను అధికారిక వెబ్‌సైట్‌లో ప్రకటిస్తారు.
-5. ప్రత్యేక విద్య (స్పెషల్ ఎడ్యుకేషన్), సొసైటీల పోస్టులకు వేర్వేరు నోటిఫికేషన్లు, అర్హతలు ఉన్నాయి. వాటికి సంబంధిత అధికారిక సమాచార బులెటిన్‌నే చూడాలి.
-6. జిల్లా, సబ్జెక్టు వారీ ఖాళీల వివరాలు అధికారిక నోటిఫికేషన్ పీడీఎఫ్‌లో ఉన్నాయి.
+1. ఆంధ్రప్రదేశ్ పాఠశాల విద్యాశాఖ ప్రభుత్వ, జిల్లా పరిషత్, మండల పరిషత్, మున్సిపల్ మరియు మున్సిపల్ కార్పొరేషన్ పాఠశాలల్లో స్కూల్ అసిస్టెంట్ (ఎస్‌ఏ), సెకండరీ గ్రేడ్ టీచర్ (ఎస్‌జీటీ) పోస్టుల భర్తీ కోసం డీఎస్సీ–2026 నోటిఫికేషన్‌ను (నం.01/DSC-TRC-1/2026, తేదీ 05.11.2026) విడుదల చేసింది.
+2. ఆన్‌లైన్ దరఖాస్తుల సమర్పణకు, ఫీజు చెల్లింపుకు చివరి తేదీ 30.11.2026. దరఖాస్తులను అధికారిక పోర్టల్ tet2dsc.apcfss.in ద్వారా మాత్రమే సమర్పించాలి.
+3. ప్రతి పోస్టుకు దరఖాస్తు ఫీజు ₹1,000. ఒకటి కంటే ఎక్కువ పోస్టులకు ఒకే దరఖాస్తులో ఎంపిక చేసి, ప్రతి పోస్టుకు వేర్వేరుగా ఫీజు చెల్లించాలి.
+4. తాత్కాలిక షెడ్యూల్ ప్రకారం కంప్యూటర్ ఆధారిత పరీక్షలు (సీబీటీ) 20.12.2026 నుంచి 13.01.2027 వరకు నిర్వహించనున్నారు. పూర్తి పరీక్ష షెడ్యూల్‌ను అధికారిక వెబ్‌సైట్‌లో ప్రకటిస్తారు.
+5. స్పెషల్ ఎడ్యుకేషన్ పోస్టులు, సొసైటీ పాఠశాలల పోస్టులకు వేర్వేరు నోటిఫికేషన్లు, అర్హత నిబంధనలు ఉన్నాయి. అభ్యర్థులు తమకు సంబంధించిన అధికారిక సమాచార బులెటిన్‌ను తప్పనిసరిగా చూడాలి.
+6. జిల్లా, సబ్జెక్టు, మేనేజ్‌మెంట్, కేటగిరీ వారీ ఖాళీల వివరాలు అధికారిక నోటిఫికేషన్ పీడీఎఫ్‌లో ఉన్నాయి.
 
 ### englishAbstract
 
@@ -151,8 +151,7 @@ Related Orders for this regular-posts notification.
 
 ## Remaining steps before publication
 
-1. Fluent human review of `titleTe` and `summaryTe` (mandatory).
-2. Repeat the same-day official portal check immediately before CMS entry; if the window has
+1. Repeat the same-day official portal check immediately before CMS entry; if the window has
    closed without a verified extension, convert this to a clearly labelled reference post
    instead (see "Expiry and update rule").
 
@@ -201,10 +200,10 @@ notification number, and the deadline is treated as an inclusive IST date.
 1. **Source verification: pass.** `goReference` holds the notification's own number;
    `sourceUrl` and `pdfUrl` are exact official links, checked on 25 November 2026.
    `verifiedAgainstGoir` is `false` because this is a portal notification, not a GOIR order.
-2. **Telugu accuracy: needs fluent human review (mandatory).** The Telugu is written as formal
-   administrative Telugu, but a fluent reviewer must confirm `titleTe` and `summaryTe`. Terms to
-   check: "ఏపీటీఆర్‌టీ", "సీబీటీ", "సొసైటీల పోస్టులు", and keeping "స్కూల్ అసిస్టెంట్" rather than
-   a translated cadre name.
+2. **Telugu accuracy: pass.** `titleTe` and `summaryTe` were approved exactly as written by
+   fluent human review on 25 November 2026. Terminology decisions: "ఏపీ టీఆర్‌టీ" with a space;
+   "స్కూల్ అసిస్టెంట్" kept as the familiar official cadre wording; "సీబీటీ" accepted;
+   "సొసైటీ పాఠశాలల పోస్టులు" instead of "సొసైటీల పోస్టులు".
 3. **No transcribed tables: pass.** The summary, abstract and body describe vacancies and
    eligibility in prose and link the official PDFs. No numeric table is reproduced.
 4. **Related Orders: intentionally pending, not blocking.** GO 52 is the implemented order; no
@@ -214,5 +213,5 @@ notification number, and the deadline is treated as an inclusive IST date.
    the whole IST day and closes it from 00:00 IST on 1 December; switch `statusBadge` to
    `expired` and remove the apply link then, unless an extension is verified.
 
-**Recommendation:** ready for CMS entry as a draft (`isDraft: true`) after the fluent Telugu
-review and a final same-day official portal check. Publish manually only once both pass.
+**Recommendation:** ready for CMS entry as a draft (`isDraft: true`) after a final same-day
+official portal check. Publish manually only after that check passes.
