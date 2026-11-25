@@ -42,14 +42,14 @@ on a later day, repeat this check first.
 | `documentDate` | `2026-11-05` (Notification No.01/DSC-TRC-1/2026, Dated: 05.11.2026) |
 | `statusBadge` | `apply_link` |
 | `tags` | `DSC` |
-| `goReference` | `null`. See editorial blocker B1 |
+| `goReference` | `Notification No.01/DSC-TRC-1/2026` (admin label "Document reference"; accepted since PR #12) |
 | `sourceDept` | School Education Department, Government of Andhra Pradesh (Director of School Education) |
 | `sourceUrl` | `https://tet2dsc.apcfss.in/` |
 | `pdfUrl` | `https://tet2dsc.apcfss.in/DSC2026/notifications/School%20Education%20Notification.pdf` |
 | `actionUrl` | `https://tet2dsc.apcfss.in/` |
-| `actionDeadline` | `2026-11-30`. See editorial blocker B2 |
+| `actionDeadline` | `2026-11-30` (inclusive IST date since PR #12: open through 30 Nov, closed from 00:00 IST on 1 Dec) |
 | `verifiedAgainstGoir` | `false` (source is the official DSC portal, not a GOIR URL) |
-| `relatedOrders` | None linked. See "Related Orders" below |
+| `relatedOrders` | None linked; GO 52 intentionally pending (not a publication blocker). See "Related Orders" below |
 | `isDraft` | `true` |
 
 ### summaryTe lines
@@ -108,6 +108,7 @@ District- and subject-wise vacancies are in the official notification PDF.
   <li>Apply on the official portal, tet2dsc.apcfss.in, before 30 November 2026.</li>
   <li>To apply for more than one post, submit a single application covering all the posts you choose, and pay a separate fee for each additional post.</li>
 </ol>
+<p><strong>Already in service?</strong> If you work in Government service, an autonomous body, a local body or a Government-aided institution, including on a temporary, work-charged, contract or outsourcing basis, the notification requires you to inform your Head of Office or Department in writing that you are applying.</p>
 
 <h2>Vacancies</h2>
 <p>Vacancies vary by district, subject, management and category. The official figures are in the notification PDF and the portal's Vacancy Abstract; refer to them directly rather than to copied lists.</p>
@@ -140,26 +141,23 @@ District- and subject-wise vacancies are in the official notification PDF.
 ## Related Orders
 
 G.O.Ms.No.52, School Education (Ser.I) Department, dated 04.11.2026 is the order this
-notification implements (cited in O2 paragraphs 1 and 11). No portal post for GO 52 is known to
-exist, so nothing is linked. During CMS review: if a GO 52 post exists, link it as background;
-if not, record that the Related Order is pending a GO 52 record. Do not create the relationship
-automatically. GO 50 (Societies) and GO 51 (Special Education) govern other streams and are not
+notification implements (cited in O2 paragraphs 1 and 11). No portal post for GO 52 exists yet,
+so the relationship is **intentionally pending** and, by founder decision (25 Nov 2026), does not
+block publication of this time-sensitive post.
+
+Follow-up: prepare a separate GO 52 reference post from its own research pack, then link it to
+this post as background during CMS review. Do not create the relationship automatically. GO 50 (Societies) and GO 51 (Special Education) govern other streams and are not
 Related Orders for this regular-posts notification.
 
-## Editorial blockers
+## Remaining steps before publication
 
-- **B1. `goReference` cannot hold a notification number.** The CMS validator accepts only GO,
-  Memo, Circular or Proc references (`lib/validation/post.ts`), so
-  "Notification No.01/DSC-TRC-1/2026" would be rejected. Putting "G.O.Ms.No.52" there would
-  misidentify the document. The draft leaves the field `null` and carries the notification number
-  in the title, summary and source note. The founder decides whether that is acceptable or the
-  validator needs a separate change.
-- **B2. Entering 30 November as the deadline marks the post expired on the morning of 30
-  November.** The admin date input saves `new Date("2026-11-30")`, which is 00:00 UTC (05:30 IST).
-  `DocumentTemplate.tsx` then shows "Deadline passed" and `isLifecycleClosed` in
-  `lib/posts/lifecycle.ts` treats the post as closed for most of the official last day. This is an
-  application bug, kept out of this content PR. It only affects 30 November, but it means the
-  post would mislead readers on the last day unless the code is fixed first.
+1. Fluent human review of `titleTe` and `summaryTe` (mandatory).
+2. Repeat the same-day official portal check immediately before CMS entry; if the window has
+   closed without a verified extension, convert this to a clearly labelled reference post
+   instead (see "Expiry and update rule").
+
+The earlier CMS blockers are resolved by PR #12: the document reference field accepts the
+notification number, and the deadline is treated as an inclusive IST date.
 
 ## Source traceability
 
@@ -169,6 +167,7 @@ Related Orders for this regular-posts notification.
 | Application window 11.11.2026–30.11.2026 | O1 (rendered 25 Nov 2026), O2 paragraphs 2 and 7, O3 paragraph 4 |
 | ₹1,000 per post | O2 paragraph 7, O3 paragraph 4 |
 | Single application for several posts, fee per additional post | O3 paragraph 5 |
+| Serving employees must inform their Head of Office/Department in writing | O2 paragraph 5 (pack F8) |
 | Read the bulletin before paying the fee | O2 paragraph 4 |
 | CBT tentatively 20.12.2026–13.01.2027; sessions may change | O2 paragraph 17 and tentative schedule |
 | Detailed schedule to follow on the website | O2 paragraph 17; O1 "Schedule: Coming Soon..." |
@@ -192,9 +191,6 @@ Related Orders for this regular-posts notification.
 - Age limits, qualifications or the tentative mock-test and hall-ticket dates. They are not in the
   research pack's verified fact ledger, and the extracted schedule table did not keep its row
   layout, so those dates could not be safely matched to their events
-- The O2 paragraph 5 requirement that serving employees inform their Head of Office in writing.
-  It is official and relevant to in-service teachers, but it is not in the research pack's fact
-  ledger; add it to the pack first if the founder wants it in the post
 - One combined eligibility claim for regular, Special Education and Societies posts
 - A total-vacancy figure
 - The apply action after 30 November 2026 without a verified extension
@@ -202,20 +198,21 @@ Related Orders for this regular-posts notification.
 
 ## Quality checklist
 
-1. **Source verification: partial.** `sourceUrl` and `pdfUrl` are exact official links, checked
-   on 25 November 2026. `verifiedAgainstGoir` is `false` because this is a portal notification,
-   not a GOIR order. `goReference` is empty (blocker B1).
-2. **Telugu accuracy: needs human review.** The Telugu is written as formal administrative
-   Telugu, but a fluent reviewer should confirm `titleTe` and `summaryTe`. Terms to check:
-   "ఏపీటీఆర్‌టీ", "సీబీటీ", "సొసైటీల పోస్టులు", and keeping "స్కూల్ అసిస్టెంట్" rather than a
-   translated cadre name.
+1. **Source verification: pass.** `goReference` holds the notification's own number;
+   `sourceUrl` and `pdfUrl` are exact official links, checked on 25 November 2026.
+   `verifiedAgainstGoir` is `false` because this is a portal notification, not a GOIR order.
+2. **Telugu accuracy: needs fluent human review (mandatory).** The Telugu is written as formal
+   administrative Telugu, but a fluent reviewer must confirm `titleTe` and `summaryTe`. Terms to
+   check: "ఏపీటీఆర్‌టీ", "సీబీటీ", "సొసైటీల పోస్టులు", and keeping "స్కూల్ అసిస్టెంట్" rather than
+   a translated cadre name.
 3. **No transcribed tables: pass.** The summary, abstract and body describe vacancies and
    eligibility in prose and link the official PDFs. No numeric table is reproduced.
-4. **Related Orders: not linked; explained.** GO 52 is the implemented order, but no portal post
-   is known for it. Resolve this during CMS review.
-5. **Lifecycle stage: pass until 30 November, then fails (blocker B2).** `documentType`
-   `notification` with `statusBadge` `apply_link` matches the open window today. Because of B2,
-   the stored deadline would show the post as closed from 05:30 IST on 30 November.
+4. **Related Orders: intentionally pending, not blocking.** GO 52 is the implemented order; no
+   portal post exists for it yet. A separate GO 52 reference post is the documented follow-up.
+5. **Lifecycle stage: pass.** `documentType` `notification` with `statusBadge` `apply_link`
+   matches the open window. Since PR #12 the 30 November deadline keeps the post open through
+   the whole IST day and closes it from 00:00 IST on 1 December; switch `statusBadge` to
+   `expired` and remove the apply link then, unless an extension is verified.
 
-**Recommendation:** not ready to publish until B1 is decided, the Telugu is reviewed and Related
-Orders are resolved. B2 should be fixed or knowingly accepted before 30 November.
+**Recommendation:** ready for CMS entry as a draft (`isDraft: true`) after the fluent Telugu
+review and a final same-day official portal check. Publish manually only once both pass.
