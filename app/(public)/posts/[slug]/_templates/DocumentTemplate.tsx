@@ -9,7 +9,7 @@ import { MIN_TOC_HEADINGS } from "@/lib/posts/toc";
 import RelatedOrdersTimeline from "@/app/(public)/_components/RelatedOrdersTimeline";
 import ActionSummary from "../_components/ActionSummary";
 import OfficialSourceCard from "../_components/OfficialSourceCard";
-import { formatDate } from "@/lib/dates";
+import { formatDate, isDeadlinePassed } from "@/lib/dates";
 import { stripDecorativeTemplateEmoji } from "@/lib/posts/strip-decorative-template-emoji";
 import { dropCompetitorLink } from "@/lib/posts/competitor-domains";
 
@@ -56,7 +56,7 @@ export default function DocumentTemplate({
     ? formatDate(post.actionDeadline)
     : null;
   const isPastDeadline =
-    Boolean(post.actionDeadline) && new Date(post.actionDeadline) < new Date();
+    Boolean(post.actionDeadline) && isDeadlinePassed(post.actionDeadline);
 
   const headingCount = (renderedContent.match(/<h[23][\s>]/gi) || []).length;
   const showToc = hasArticleContent && headingCount >= MIN_TOC_HEADINGS;

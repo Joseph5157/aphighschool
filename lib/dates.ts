@@ -58,9 +58,34 @@ export function isAfterTodayIST(date: Date): boolean {
 }
 
 /**
+ * An action deadline's calendar date in Asia/Kolkata, as "YYYY-MM-DD".
+ *
+ * actionDeadline is an inclusive calendar date, not an instant. The admin form
+ * and the scraper store a date-only value as 00:00 UTC (05:30 IST that day);
+ * reading the stored instant in IST gives back the intended day for that form
+ * and for one stored as IST midnight alike. Use this for the admin date input
+ * too, so a re-saved post keeps its day.
+ */
+export function deadlineDateIST(deadline: Date | string): string {
+  return ymdInIST(new Date(deadline));
+}
+
+/**
+ * Whether an action deadline has passed: true only once the IST calendar day
+ * AFTER the deadline has begun. A 30 Nov deadline stays open through
+ * 23:59:59 IST on 30 Nov and closes at 00:00 IST on 1 Dec. Never compare the
+ * stored instant with `now` directly — that closed posts at 05:30 IST on their
+ * last day.
+ */
+export function isDeadlinePassed(deadline: Date | string, now: Date = new Date()): boolean {
+  return deadlineDateIST(deadline) < ymdInIST(now);
+}
+
+/**
  * The first instant of today's Asia/Kolkata calendar day. This is suitable
  * for database queries over recorded action dates: a date on the current IST
- * day remains included until that day ends.
+ * day remains included until that day ends. `actionDeadline >= startOfTodayIST()`
+ * is the query form of `!isDeadlinePassed(actionDeadline)`.
  */
 export function startOfTodayIST(): Date {
   return new Date(`${todayInIST()}T00:00:00+05:30`);

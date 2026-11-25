@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { todayInIST } from "@/lib/dates";
+import { deadlineDateIST, todayInIST } from "@/lib/dates";
 import Button from "@/app/(public)/_components/Button";
 import Checkbox from "@/app/(public)/_components/Checkbox";
 import Dialog from "@/app/(public)/_components/Dialog";
@@ -113,7 +113,7 @@ export default function PostFormClient({
   const [goReference, setGoReference] = useState(initial?.goReference || "");
   const [actionDeadline, setActionDeadline] = useState(
     initial?.actionDeadline
-      ? new Date(initial.actionDeadline).toISOString().slice(0, 10)
+      ? deadlineDateIST(initial.actionDeadline)
       : ""
   );
   const [documentDate, setDocumentDate] = useState(
@@ -480,7 +480,7 @@ export default function PostFormClient({
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block text-xs font-mono uppercase text-inkSoft mb-1">
-              GO / Memo Reference
+              Document reference
             </label>
             <input
               name="goReference"
