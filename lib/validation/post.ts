@@ -44,11 +44,15 @@ const ORDER_STATES: string[] = Object.values(OrderState);
 // Telugu block: U+0C00–U+0C7F.
 const TELUGU = /[ఀ-౿]/;
 
-// G.O.Ms.No.129 / G.O.Rt.No.55 / Memo.No.1234 / Circular.No.7 — with or without spaces.
-// Anchored at both ends (trailing whitespace only) so a valid prefix cannot be used to
-// smuggle arbitrary trailing text — including markup — past the check.
+// The official reference of the document a post is about: G.O.Ms.No.129 / G.O.Rt.No.55 /
+// Memo.No.1234 / Circular.No.7 / Proc.No.25 / Notification No.01/DSC-TRC-1/2026 — with or
+// without spaces. Stored in the `goReference` column (the name predates notifications; a
+// schema rename is a separate decision) and labelled "Document reference" in the admin
+// form. A recruitment notification is identified by its own number, never by the GO it
+// implements. Anchored at both ends (trailing whitespace only) so a valid prefix cannot be
+// used to smuggle arbitrary trailing text — including markup — past the check.
 const GO_REFERENCE =
-  /^(G\.?O\.?\s?(Ms|Rt|P)\.?\s?No\.?\s?\d+|Memo\.?\s?No\.?\s?[\w/-]+|Circular\.?\s?No\.?\s?[\w/-]+|Proc\.?\s?No\.?\s?[\w/-]+)\s*$/i;
+  /^(G\.?O\.?\s?(Ms|Rt|P)\.?\s?No\.?\s?\d+|Memo\.?\s?No\.?\s?[\w/-]+|Circular\.?\s?No\.?\s?[\w/-]+|Proc\.?\s?No\.?\s?[\w/-]+|Notification\.?\s?No\.?\s?[\w/-]+)\s*$/i;
 
 function isHttpsUrl(value: string): boolean {
   try {
@@ -115,7 +119,7 @@ export function validatePost(input: PostInput): string[] {
 
   if (input.goReference && !GO_REFERENCE.test(input.goReference.trim())) {
     errors.push(
-      "GO reference must look like G.O.Ms.No.55, G.O.Rt.No.55, Memo.No.55, or Circular.No.55, or Proc.No.55."
+      "Document reference must look like G.O.Ms.No.55, G.O.Rt.No.55, Memo.No.55, Circular.No.55, Proc.No.55, or Notification No.01/DSC-TRC-1/2026."
     );
   }
 

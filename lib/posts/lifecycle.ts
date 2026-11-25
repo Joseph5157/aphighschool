@@ -1,4 +1,5 @@
 import type { DocType, OrderState } from "@prisma/client";
+import { isDeadlinePassed } from "@/lib/dates";
 
 export const RECRUITMENT_STAGES = ["Notified", "Apply open", "Hall ticket", "Results"];
 
@@ -84,10 +85,11 @@ export function resolveLifecycle(post: LifecycleInput): LifecycleView {
  * by the "Open" filter (prisma/seed.ts's GO 21 did exactly that).
  *
  * `actionDeadline` is orthogonal and applies to both kinds: a document whose
- * deadline has passed is finished whatever its kind says.
+ * deadline has passed is finished whatever its kind says. The deadline is an
+ * inclusive IST calendar date (see isDeadlinePassed in lib/dates.ts).
  */
 export function isLifecycleClosed(post: LifecycleFilterInput, now: Date = new Date()): boolean {
-  if (post.actionDeadline && new Date(post.actionDeadline) < now) return true;
+  if (post.actionDeadline && isDeadlinePassed(post.actionDeadline, now)) return true;
 
   const view = resolveLifecycle(post);
 

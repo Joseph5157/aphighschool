@@ -3,6 +3,11 @@ import { describe, it, expect } from "vitest";
 import { DocType, OrderState, PostStatus } from "@prisma/client";
 import { parsePostForm, validatePost, type PostInput } from "@/lib/validation/post";
 
+// Pinned as a literal: the admin label and this message both say "Document
+// reference" (the column is still goReference until a schema rename is decided).
+const DOCUMENT_REFERENCE_ERROR =
+  "Document reference must look like G.O.Ms.No.55, G.O.Rt.No.55, Memo.No.55, Circular.No.55, Proc.No.55, or Notification No.01/DSC-TRC-1/2026.";
+
 const base: PostInput = {
   titleEn: "Transfer Guidelines 2026",
   titleTe: "బదిలీ మార్గదర్శకాలు 2026",
@@ -82,7 +87,7 @@ describe("validatePost", () => {
 
   it("rejects a GO reference that is not in G.O./Memo/Circular form", () => {
     expect(validatePost({ ...base, goReference: "55" })).toContain(
-      "GO reference must look like G.O.Ms.No.55, G.O.Rt.No.55, Memo.No.55, or Circular.No.55, or Proc.No.55."
+      DOCUMENT_REFERENCE_ERROR
     );
   });
 
@@ -95,7 +100,40 @@ describe("validatePost", () => {
       goReference: "G.O.Ms.No.55 this is not actually valid nonsense !!! @@@",
     });
     expect(errors).toContain(
-      "GO reference must look like G.O.Ms.No.55, G.O.Rt.No.55, Memo.No.55, or Circular.No.55, or Proc.No.55."
+      DOCUMENT_REFERENCE_ERROR
+    );
+  });
+
+  it("accepts a recruitment notification number as the document reference", () => {
+    expect(
+      validatePost({ ...base, goReference: "Notification No.01/DSC-TRC-1/2026" })
+    ).toEqual([]);
+  });
+
+  it("still accepts every existing reference form", () => {
+    for (const goReference of [
+      "G.O.Ms.No.55",
+      "G.O.Rt.No.55",
+      "Memo.No.1351/2008-2",
+      "Circular.No.12",
+      "Proc.No.ESE02-20021/83/2026",
+    ]) {
+      expect(validatePost({ ...base, goReference }), goReference).toEqual([]);
+    }
+  });
+
+  it("rejects a notification reference with trailing garbage", () => {
+    expect(
+      validatePost({
+        ...base,
+        goReference: "Notification No.01/DSC-TRC-1/2026 <script>",
+      })
+    ).toContain(DOCUMENT_REFERENCE_ERROR);
+  });
+
+  it("rejects the word Notification without a number", () => {
+    expect(validatePost({ ...base, goReference: "Notification" })).toContain(
+      DOCUMENT_REFERENCE_ERROR
     );
   });
 
