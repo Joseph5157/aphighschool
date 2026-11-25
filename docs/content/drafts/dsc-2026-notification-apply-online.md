@@ -6,7 +6,7 @@
 | Template | `docs/content/POST_TEMPLATE.md` (merged in PR #10, `fc29e57`) |
 | Post model | Action post: application window open on drafting day |
 | Drafted on | 25 November 2026 |
-| Same-day official check | 25 November 2026 (see below) |
+| Same-day official check | 25 November 2026; pre-entry recheck 25 November 2026, 20:51 IST (see below) |
 | CMS state | Not entered. Repository draft only; `isDraft: true` when entered |
 
 This file is not production content. Entering it in the CMS, and publishing it, are separate
@@ -26,6 +26,12 @@ human steps after the quality review.
 
 Result: applications are open, so this is drafted as an action post. If the post is entered
 on a later day, repeat this check first.
+
+**Pre-entry recheck, 25 November 2026, 20:51 IST:** portal still shows "DSC Application",
+Start Date 11.11.2026, End Date 30.11.2026, and "AP-DSC-2026 Registrations Are Opened!". The
+Notification, Information Bulletin and Press Note menus list the same documents as earlier, with
+no extension or corrigendum. The O2, O3 and O4 PDFs return HTTP 200 with unchanged file sizes.
+Status unchanged: action post confirmed.
 
 ## CMS fields
 
