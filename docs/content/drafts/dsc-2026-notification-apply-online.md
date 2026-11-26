@@ -7,7 +7,7 @@
 | Post model | Action post: application window open on drafting day |
 | Drafted on | 25 November 2026 |
 | Same-day official check | 25 November 2026 (see below) |
-| CMS state | Not entered. Repository draft only; `isDraft: true` when entered |
+| CMS state | Entered in the production CMS as a draft (`isDraft: true`), 26 November 2026; admin id `219cfd43-cd4d-4ddc-923f-733ed19adcb4`. Not published. The CMS assigned its own slug, so the `slug` below is not the live slug |
 
 This file is not production content. Entering it in the CMS, and publishing it, are separate
 human steps after the quality review.

@@ -6,7 +6,7 @@
 | Batch | LAUNCH-CONTENT-BATCH-1 |
 | Classification | READY (document guide; prose only, no vacancy figures) |
 | Drafted on | 26 November 2026 |
-| CMS state | Not entered. `isDraft: true` when entered |
+| CMS state | Entered in the production CMS as a draft (`isDraft: true`), 26 November 2026; admin id `d2591307-992d-40f6-a4fa-bf81e03acb18`. Not published. The CMS assigned its own slug, so the `slug` below is not the live slug |
 
 ## CMS fields
 

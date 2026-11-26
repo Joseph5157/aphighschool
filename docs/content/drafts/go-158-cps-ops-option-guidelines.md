@@ -6,7 +6,7 @@
 | Batch | LAUNCH-CONTENT-BATCH-1 |
 | Classification | TIME_SENSITIVE (option closes 31.12.2026) |
 | Drafted on | 26 November 2026 |
-| CMS state | Not entered. `isDraft: true` when entered |
+| CMS state | Entered in the production CMS as a draft (`isDraft: true`), 26 November 2026; admin id `39eae6c4-d5a7-4a26-a860-63494a9752a1`. Not published. The CMS assigned its own slug, so the `slug` below is not the live slug |
 
 ## Same-day official status check (26 November 2026)
 

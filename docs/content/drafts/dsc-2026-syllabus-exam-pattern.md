@@ -6,7 +6,7 @@
 | Batch | LAUNCH-CONTENT-BATCH-1 |
 | Classification | READY (document guide). The CBT window is time-sensitive and must be rechecked |
 | Drafted on | 26 November 2026 |
-| CMS state | Not entered. `isDraft: true` when entered |
+| CMS state | Entered in the production CMS as a draft (`isDraft: true`), 26 November 2026; admin id `59bd2ba6-6e23-41f5-b71e-7c9c4f712b02`. Not published. The CMS assigned its own slug, so the `slug` below is not the live slug |
 
 ## CMS fields
 
