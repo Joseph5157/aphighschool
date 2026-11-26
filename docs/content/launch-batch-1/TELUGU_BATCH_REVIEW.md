@@ -4,9 +4,13 @@ All Telugu titles and summaries in this batch, collected for one fluent review p
 Extracted mechanically from the draft files on 26 November 2026; the drafts remain the
 source of truth. Edit the draft file when a change is approved, not this file.
 
-Review state values: `pending batch review` (all items, 1–14, until a fluent human reviews them), `approved` (only after that review), `changes requested`.
+Review state values: `pending batch review`, `approved` (only after the human review), `changes requested`. All items, 1–14, were approved by the founder on 26 November 2026 (see "Founder decision" at the end).
+
+The item sections below keep the text as extracted before the corrections. Items marked `approved with corrections` must not be copied from this file: the corrected wording is in the draft files, which remain the source of truth.
 
 ## Points for the reviewer
+
+Settled by the founder decision at the end of this file, except the department name in item 5, which is still unverified.
 
 - Cadre names use the familiar official wording (స్కూల్ అసిస్టెంట్, సెకండరీ గ్రేడ్ టీచర్) throughout; confirm once for all items.
 - DA is written as "కరువు భత్యం (డీఏ)"; DR (not used in these posts) would be "కరువు ఉపశమనం (డీఆర్)".
@@ -17,7 +21,7 @@ Review state values: `pending batch review` (all items, 1–14, until a fluent h
 
 ## 1. `dsc-2026-notification-apply-online`
 
-Review state: `pending batch review`
+Review state: `approved with corrections` (founder, 26 November 2026). The text below is the pre-correction extract; use the draft file.
 
 **titleTe:** ఏపీ డీఎస్సీ 2026 (ఏపీ టీఆర్‌టీ–2026): ఎస్‌ఏ, ఎస్‌జీటీ పోస్టుల నోటిఫికేషన్ – ఆన్‌లైన్ దరఖాస్తు వివరాలు
 
@@ -32,7 +36,7 @@ Review state: `pending batch review`
 
 ## 2. `dsc-2026-syllabus-exam-pattern`
 
-Review state: `pending batch review`
+Review state: `approved with corrections` (founder, 26 November 2026). The text below is the pre-correction extract; use the draft file.
 
 **titleTe:** ఏపీ డీఎస్సీ 2026 సిలబస్, పరీక్ష విధానం: అధికారిక సిలబస్ పీడీఎఫ్‌లు, పరీక్ష నిర్మాణం
 
@@ -46,7 +50,7 @@ Review state: `pending batch review`
 
 ## 3. `dsc-2026-vacancies-official-guide`
 
-Review state: `pending batch review`
+Review state: `approved with corrections` (founder, 26 November 2026). The text below is the pre-correction extract; use the draft file.
 
 **titleTe:** ఏపీ డీఎస్సీ 2026 ఖాళీలు: జిల్లా, సబ్జెక్టు, మేనేజ్‌మెంట్ వారీ అధికారిక వివరాలు ఎక్కడ చూడాలి
 
@@ -59,7 +63,7 @@ Review state: `pending batch review`
 
 ## 4. `dsc-2026-special-education-notification`
 
-Review state: `pending batch review`
+Review state: `approved with corrections` (founder, 26 November 2026). The text below is the pre-correction extract; use the draft file.
 
 **titleTe:** ఏపీ డీఎస్సీ 2026 స్పెషల్ ఎడ్యుకేషన్ నోటిఫికేషన్: ఎస్‌ఏ, ఎస్‌జీటీ (స్పెషల్ ఎడ్యుకేషన్) పోస్టులు
 
@@ -74,7 +78,7 @@ Review state: `pending batch review`
 
 ## 5. `dsc-2026-societies-notification`
 
-Review state: `pending batch review`
+Review state: `approved with corrections` (founder, 26 November 2026). The text below is the pre-correction extract; use the draft file.
 
 **titleTe:** ఏపీ డీఎస్సీ 2026 సొసైటీల నోటిఫికేషన్: గురుకుల, మోడల్ స్కూళ్లలో ప్రిన్సిపాల్, పీజీటీ, టీజీటీ, పీడీ, పీఈటీ పోస్టులు
 
@@ -89,7 +93,7 @@ Review state: `pending batch review`
 
 ## 6. `go-52-aptrt-2026-selection-rules`
 
-Review state: `pending batch review`
+Review state: `approved with corrections` (founder, 26 November 2026). The text below is the pre-correction extract; use the draft file.
 
 **titleTe:** జీవో ఎంఎస్ నం.52 (2026): ఎస్‌ఏ, ఎస్‌జీటీ పోస్టుల ఏపీ టీఆర్‌టీ/డీఎస్సీ–2026 ఎంపిక విధాన నిబంధనలు
 
@@ -102,7 +106,7 @@ Review state: `pending batch review`
 
 ## 7. `go-22-teacher-transfer-rules-2025`
 
-Review state: `pending batch review`
+Review state: `approved with corrections` (founder, 26 November 2026). The text below is the pre-correction extract; use the draft file.
 
 **titleTe:** జీవో ఎంఎస్ నం.22 (2025): ఆంధ్రప్రదేశ్ రాష్ట్ర ఉపాధ్యాయుల బదిలీల నియంత్రణ నిబంధనలు, 2025 – వివరణ
 
@@ -117,7 +121,7 @@ Review state: `pending batch review`
 
 ## 8. `ap-special-tet-august-2026-results`
 
-Review state: `pending batch review`
+Review state: `approved with corrections` (founder, 26 November 2026). The text below is the pre-correction extract; use the draft file.
 
 **titleTe:** ఇన్-సర్వీస్ ఉపాధ్యాయుల కోసం ఏపీ స్పెషల్ టెట్ (ఆగస్టు 2026): ఫలితాలు విడుదల
 
@@ -131,7 +135,7 @@ Review state: `pending batch review`
 
 ## 9. `go-120-da-41-86-percent`
 
-Review state: `pending batch review`
+Review state: `approved with corrections` (founder, 26 November 2026). The text below is the pre-correction extract; use the draft file.
 
 **titleTe:** జీవో ఎంఎస్ నం.120 (2026): ఉద్యోగుల కరువు భత్యం (డీఏ) 01.01.2025 నుంచి 41.86 శాతానికి పెంపు
 
@@ -145,7 +149,7 @@ Review state: `pending batch review`
 
 ## 10. `go-119-da-40-04-percent`
 
-Review state: `pending batch review`
+Review state: `approved with corrections` (founder, 26 November 2026). The text below is the pre-correction extract; use the draft file.
 
 **titleTe:** జీవో ఎంఎస్ నం.119 (2026): ఉద్యోగుల కరువు భత్యం (డీఏ) 01.07.2024 నుంచి 40.04 శాతానికి పెంపు
 
@@ -158,7 +162,7 @@ Review state: `pending batch review`
 
 ## 11. `go-158-cps-ops-option-guidelines`
 
-Review state: `pending batch review`
+Review state: `approved with corrections` (founder, 26 November 2026). The text below is the pre-correction extract; use the draft file.
 
 **titleTe:** జీవో ఎంఎస్ నం.158 (2026): సీపీఎస్ నుంచి పాత పెన్షన్ పథకానికి (ఓపీఎస్) వన్‌టైమ్ ఆప్షన్ – 31.12.2026 లోపు దరఖాస్తు విధానం
 
@@ -173,7 +177,7 @@ Review state: `pending batch review`
 
 ## 12. `go-53-cps-ops-one-time-option`
 
-Review state: `pending batch review`
+Review state: `approved with corrections` (founder, 26 November 2026). The text below is the pre-correction extract; use the draft file.
 
 **titleTe:** జీవో ఎంఎస్ నం.53 (2026): 2004 ముందు నోటిఫికేషన్ ద్వారా ఎంపికైన సీపీఎస్ ఉద్యోగులకు పాత పెన్షన్ పథకానికి మారే వన్‌టైమ్ ఆప్షన్
 
@@ -186,7 +190,7 @@ Review state: `pending batch review`
 
 ## 13. `go-35-government-schools-adhoc-rules-2026`
 
-Review state: `pending batch review`
+Review state: `approved as written` (founder, 26 November 2026).
 
 **titleTe:** జీవో ఎంఎస్ నం.35 (2026): ప్రభుత్వ పాఠశాలల ఉపాధ్యాయులకు ఏపీ పాఠశాల విద్యా సబార్డినేట్ సర్వీస్ అడ్‌హాక్ నిబంధనలు
 
@@ -200,7 +204,7 @@ Review state: `pending batch review`
 
 ## 14. `go-36-mpp-zpp-teachers-adhoc-rules-2026`
 
-Review state: `pending batch review`
+Review state: `approved as written` (founder, 26 November 2026).
 
 **titleTe:** జీవో ఎంఎస్ నం.36 (2026): మండల, జిల్లా ప్రజా పరిషత్ పాఠశాలల ఉపాధ్యాయులకు సర్వీస్ అడ్‌హాక్ నిబంధనలు
 
@@ -214,7 +218,7 @@ Review state: `pending batch review`
 ## Model pre-review (26 November 2026): proposed corrections
 
 Claude checked every item line by line against each draft's English abstract and body.
-**This is not the fluent human review**: every item stays `pending batch review`. A fluent
+**This was not the fluent human review**: every item stayed `pending batch review` until the founder's decision below. A fluent
 reviewer approves, edits or rejects each row below, and only approved rows are applied to the
 individual draft files.
 
@@ -251,8 +255,21 @@ individual draft files.
 
 Item 13 and item 14 have no proposed changes. Also unchanged: the titles of items 1–11, item 1 lines 2 and 4–6, items 2–3 (other lines), items 9–10 figures and arrears schedules (checked against the English bodies), and item 8 lines 1–3 and 5.
 
-### Points the human reviewer must still decide
+### Points the human reviewer must still decide (settled below, except the department name)
 
 - Whether "అడ్‌హాక్ నిబంధనలు" (items 13, 14) and "ఇన్-సర్వీస్", "క్యాండిడేట్ లాగిన్" (item 8) read naturally.
 - The official Telugu name of the Differently Abled welfare department (row 5.1).
 - Lines that go stale after 30.11.2026 (items 1.2, 4.2, 5.3) are handled by the import-day recheck, not by this review.
+
+## Founder decision (26 November 2026)
+
+The founder approved this review. Every row in tables A and B was accepted and applied to the draft files; items 13 and 14 are approved as written; every item, 1–14, is approved. The points above are settled by the same approval: "అడ్‌హాక్ నిబంధనలు", "ఇన్-సర్వీస్" and "క్యాండిడేట్ లాగిన్" stay as written.
+
+### Revisions after the PR #16 review (approved by the founder, 26 November 2026)
+
+| Ref | Applied in PR #16 | Revised to | Why |
+| --- | --- | --- | --- |
+| 7.5 | …అధికారికంగా ప్రకటించలేదు. | 26.11.2026 నాటికి 2026 బదిలీల షెడ్యూల్ లేదా వెబ్ కౌన్సెలింగ్‌ను అధికారికంగా ధ్రువీకరించలేదు. | "Not announced" claimed more than the English, which says only that no schedule "has been verified". The as-of date stays |
+| 5.1 | గురుకుల సొసైటీలు (MJPAPBCWREIS, APREIS, APSWREIS, APTWREIS), | MJPAPBCWREIS, APREIS, APSWREIS, APTWREIS (గురుకులం) సొసైటీలు, | The English labels only APTWREIS as Gurukulam. Acronyms stay in English letters |
+
+**Still unverified:** the Telugu department name in row 5.1 ("విభిన్న ప్రతిభావంతుల సంక్షేమ శాఖ"). The official English name is "Welfare of Differently Abled, Transgender and Senior Citizens" (AP district portals). No official Telugu name has been found; confirm it from an official source before import.

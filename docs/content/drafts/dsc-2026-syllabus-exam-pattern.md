@@ -36,7 +36,7 @@
 ### summaryTe lines
 
 1. డీఎస్సీ–2026 (ఏపీ టీఆర్‌టీ–2026) కోసం పాఠశాల విద్యాశాఖ సవరించిన సూచనాత్మక సిలబస్‌ను అధికారిక పోర్టల్‌లో అందుబాటులో ఉంచింది.
-2. ఎస్‌జీటీ, స్కూల్ అసిస్టెంట్ సబ్జెక్టులు, టీజీటీ, పీజీటీ తదితర పోస్టుల సిలబస్ ఒకే పీడీఎఫ్‌లో పోస్టుల వారీగా ఉంది. స్పెషల్ ఎడ్యుకేషన్ పోస్టులకు వేర్వేరుగా సవరించిన సిలబస్ ఉంది.
+2. ఎస్‌జీటీ, స్కూల్ అసిస్టెంట్ సబ్జెక్టులు, టీజీటీ, పీజీటీ తదితర పోస్టుల సిలబస్ ఒకే పీడీఎఫ్‌లో పోస్టుల వారీగా ఉంది. స్పెషల్ ఎడ్యుకేషన్ పోస్టుల సవరించిన సిలబస్ వేరే పీడీఎఫ్‌లో ఉంది.
 3. ఎస్‌ఏ, ఎస్‌జీటీ పోస్టులకు మొత్తం 100 మార్కుల్లో 80 మార్కులు కంప్యూటర్ ఆధారిత పరీక్ష (సీబీటీ)కు, 20 మార్కులు టెట్ వెయిటేజీకి ఉంటాయి. ఎస్‌ఏ (ఫిజికల్ ఎడ్యుకేషన్)కు టెట్ వెయిటేజీ లేదు.
 4. ఎస్‌ఏ, ఎస్‌జీటీ పరీక్షల వ్యవధి 2 గంటల 30 నిమిషాలు; ఎస్‌ఏ (ఫిజికల్ ఎడ్యుకేషన్) పరీక్ష వ్యవధి 3 గంటలు. విభాగాల వారీ మార్కులు అధికారిక సమాచార బులెటిన్‌లో ఉన్నాయి.
 5. తాత్కాలిక షెడ్యూల్ ప్రకారం సీబీటీ 20.12.2026 నుంచి 13.01.2027 మధ్య జరుగుతుంది. వివరణాత్మక షెడ్యూల్‌ను అధికారిక వెబ్‌సైట్‌లో ప్రకటిస్తారు.
@@ -124,7 +124,8 @@ replace the tentative window with the official one.
 
 1. **Source verification: pass.** Official portal URLs. No single document reference, because
    this is a multi-document guide (`documentType: other`, category `notifications`).
-2. **Telugu accuracy: pending fluent review** (TELUGU_BATCH_REVIEW.md, item 2).
+2. **Telugu accuracy: approved by the founder, 26 November 2026** (TELUGU_BATCH_REVIEW.md, item 2).
+   The founder approved the batch review with every proposed correction accepted; approved rows are applied here.
 3. **No transcribed tables: pass.** Only totals and durations in prose; part-wise tables stay in the PDF.
 4. **Related Orders: pending.** Link to the regular notification and GO 52 posts once they are in the CMS.
 5. **Lifecycle: pass.** Not a notification record; no action button.

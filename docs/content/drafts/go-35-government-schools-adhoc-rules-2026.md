@@ -115,7 +115,8 @@ Review on any amendment to GO 35 (watch the GOIR Services-II section).
 ## Quality checklist
 
 1. **Source verification: pass.**
-2. **Telugu accuracy: pending fluent review** (item 13). "అడ్‌హాక్" kept as the official term.
+2. **Telugu accuracy: approved by the founder, 26 November 2026** (TELUGU_BATCH_REVIEW.md, item 13).
+   The founder approved the batch review with every proposed correction accepted; approved rows are applied here.
 3. **No transcribed tables: pass.** Class/category list stays in the PDF.
 4. **Related Orders: pass with note.** GO 11 (2009) superseded but not in the CMS; stated explicitly.
 5. **Lifecycle: pass.**

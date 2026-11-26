@@ -61,9 +61,9 @@ proposed in PR #13. Details: `docs/content/launch-batch-1/BATCH_MANIFEST.md`.
 
 ### summaryTe lines
 
-1. ఆంధ్రప్రదేశ్ పాఠశాల విద్యాశాఖ ప్రభుత్వ, జిల్లా పరిషత్, మండల పరిషత్, మున్సిపల్ మరియు మున్సిపల్ కార్పొరేషన్ పాఠశాలల్లో స్కూల్ అసిస్టెంట్ (ఎస్‌ఏ), సెకండరీ గ్రేడ్ టీచర్ (ఎస్‌జీటీ) పోస్టుల భర్తీ కోసం డీఎస్సీ–2026 నోటిఫికేషన్‌ను (నం.01/DSC-TRC-1/2026, తేదీ 05.11.2026) విడుదల చేసింది.
+1. ఆంధ్రప్రదేశ్ పాఠశాల విద్యాశాఖ ప్రభుత్వ, జిల్లా పరిషత్, మండల పరిషత్, మున్సిపల్, మున్సిపల్ కార్పొరేషన్ పాఠశాలల్లో స్కూల్ అసిస్టెంట్ (ఎస్‌ఏ), సెకండరీ గ్రేడ్ టీచర్ (ఎస్‌జీటీ) పోస్టుల భర్తీ కోసం డీఎస్సీ–2026 నోటిఫికేషన్‌ను (నం.01/DSC-TRC-1/2026, తేదీ 05.11.2026) విడుదల చేసింది.
 2. ఆన్‌లైన్ దరఖాస్తుల సమర్పణకు, ఫీజు చెల్లింపుకు చివరి తేదీ 30.11.2026. దరఖాస్తులను అధికారిక పోర్టల్ tet2dsc.apcfss.in ద్వారా మాత్రమే సమర్పించాలి.
-3. ప్రతి పోస్టుకు దరఖాస్తు ఫీజు ₹1,000. ఒకటి కంటే ఎక్కువ పోస్టులకు ఒకే దరఖాస్తులో ఎంపిక చేసి, ప్రతి పోస్టుకు వేర్వేరుగా ఫీజు చెల్లించాలి.
+3. ప్రతి పోస్టుకు దరఖాస్తు ఫీజు ₹1,000. ఒకటి కంటే ఎక్కువ పోస్టులకు దరఖాస్తు చేసేవారు ఒకే దరఖాస్తులో ఆ పోస్టులన్నింటినీ ఎంచుకుని, ప్రతి పోస్టుకు వేర్వేరుగా ఫీజు చెల్లించాలి.
 4. తాత్కాలిక షెడ్యూల్ ప్రకారం కంప్యూటర్ ఆధారిత పరీక్షలు (సీబీటీ) 20.12.2026 నుంచి 13.01.2027 వరకు నిర్వహించనున్నారు. పూర్తి పరీక్ష షెడ్యూల్‌ను అధికారిక వెబ్‌సైట్‌లో ప్రకటిస్తారు.
 5. స్పెషల్ ఎడ్యుకేషన్ పోస్టులు, సొసైటీ పాఠశాలల పోస్టులకు వేర్వేరు నోటిఫికేషన్లు, అర్హత నిబంధనలు ఉన్నాయి. అభ్యర్థులు తమకు సంబంధించిన అధికారిక సమాచార బులెటిన్‌ను తప్పనిసరిగా చూడాలి.
 6. జిల్లా, సబ్జెక్టు, మేనేజ్‌మెంట్, కేటగిరీ వారీ ఖాళీల వివరాలు అధికారిక నోటిఫికేషన్ పీడీఎఫ్‌లో ఉన్నాయి.
@@ -207,10 +207,8 @@ notification number, and the deadline is treated as an inclusive IST date.
 1. **Source verification: pass.** `goReference` holds the notification's own number;
    `sourceUrl` and `pdfUrl` are exact official links, checked on 25 November 2026.
    `verifiedAgainstGoir` is `false` because this is a portal notification, not a GOIR order.
-2. **Telugu accuracy: pending batch review** (TELUGU_BATCH_REVIEW.md, item 1). No fluent human
-   review is recorded. Terminology choices to check: "ఏపీ టీఆర్‌టీ" with a space;
-   "స్కూల్ అసిస్టెంట్" as the familiar official cadre wording; "సీబీటీ";
-   "సొసైటీ పాఠశాలల పోస్టులు" rather than "సొసైటీల పోస్టులు".
+2. **Telugu accuracy: approved by the founder, 26 November 2026** (TELUGU_BATCH_REVIEW.md, item 1).
+   The founder approved the batch review with every proposed correction accepted; approved rows are applied here.
 3. **No transcribed tables: pass.** The summary, abstract and body describe vacancies and
    eligibility in prose and link the official PDFs. No numeric table is reproduced.
 4. **Related Orders: intentionally pending, not blocking.** GO 52 is the implemented order; no

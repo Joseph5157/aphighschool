@@ -46,7 +46,7 @@
 1. సర్వీసులో ఉన్న ఉపాధ్యాయుల కోసం పాఠశాల విద్యాశాఖ నిర్వహించిన ఏపీ స్పెషల్ టెట్–2026 (ఆగస్టు 2026 నోటిఫికేషన్) ఫలితాలు విడుదలయ్యాయి.
 2. అభ్యర్థులు అధికారిక వెబ్‌సైట్ tet2dsc.apcfss.in లో తమ క్యాండిడేట్ లాగిన్ ద్వారా ఫలితాలను చూసుకోవచ్చు.
 3. కంప్యూటర్ ఆధారిత పరీక్షలు అక్టోబర్ 11 నుంచి 15 వరకు జరిగాయి. తుది కీ ఆధారంగా ఫలితాలు ప్రకటించారు.
-4. స్పెషల్ టెట్‌లో ఉత్తీర్ణత ప్రస్తుత పోస్టులో కొనసాగడానికి లేదా తదుపరి పై పోస్టుకు పదోన్నతికి అవసరమైన టెట్ అర్హత కోసం మాత్రమే చెల్లుతుంది.
+4. స్పెషల్ టెట్‌లో ఉత్తీర్ణత ప్రస్తుత పోస్టులో కొనసాగడానికి లేదా తదుపరి ఉన్నత పోస్టుకు పదోన్నతికి అవసరమైన టెట్ అర్హత కోసం మాత్రమే చెల్లుతుంది.
 5. భవిష్యత్తులో ఏ ప్రత్యక్ష నియామకానికైనా స్పెషల్ టెట్ ఉత్తీర్ణత చెల్లదు; అందుకు సాధారణ ఏపీ టెట్ లేదా సీటెట్ అవసరం.
 
 ### englishAbstract
@@ -137,7 +137,8 @@ notified.
 ## Quality checklist
 
 1. **Source verification: pass.** Official PDFs; `goReference` left `null` by founder decision, with the exact number in the body.
-2. **Telugu accuracy: pending fluent review** (item 8).
+2. **Telugu accuracy: approved by the founder, 26 November 2026** (TELUGU_BATCH_REVIEW.md, item 8).
+   The founder approved the batch review with every proposed correction accepted; approved rows are applied here.
 3. **No transcribed tables: pass.** No result statistics are reproduced.
 4. **Related Orders: pending.** GO 36 (2025) background; confirm the CMS post first.
 5. **Lifecycle: pass.** `notification` + `results` matches the released results.

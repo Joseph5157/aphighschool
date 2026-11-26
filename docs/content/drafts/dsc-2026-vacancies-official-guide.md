@@ -38,7 +38,7 @@
 1. డీఎస్సీ–2026 ఖాళీల అధికారిక వివరాలు మూడు వేర్వేరు నోటిఫికేషన్లలో ఉన్నాయి: సాధారణ ఎస్‌ఏ/ఎస్‌జీటీ, స్పెషల్ ఎడ్యుకేషన్, సొసైటీ పాఠశాలల పోస్టులు.
 2. సాధారణ, స్పెషల్ ఎడ్యుకేషన్ పోస్టుల ఖాళీలు జిల్లా, మేనేజ్‌మెంట్ వారీగా; సొసైటీ పోస్టుల ఖాళీలు సొసైటీ/మేనేజ్‌మెంట్ వారీగా నోటిఫికేషన్ పీడీఎఫ్‌లలో ఉన్నాయి.
 3. అక్టోబర్ 13న విడుదలైన సంక్షిప్త నోటిఫికేషన్లలోని ఖాళీలు తాత్కాలికమైనవి. నవంబర్ 5 నాటి వివరణాత్మక నోటిఫికేషన్లలోని వివరాలనే చూడాలి.
-4. ఖాళీల సంఖ్యలో మార్పులు ఉంటే అధికారిక కొరిజెండం ద్వారా ప్రకటిస్తారు.
+4. ఖాళీల సంఖ్యలో మార్పులు ఉంటే అధికారిక సవరణ ప్రకటన (కొరిజెండం) ద్వారా ప్రకటిస్తారు.
 
 ### englishAbstract
 
@@ -110,7 +110,8 @@ selection lists are published.
 ## Quality checklist
 
 1. **Source verification: pass.** Official PDFs. No single document reference (multi-document guide, category `notifications`).
-2. **Telugu accuracy: pending fluent review** (item 3).
+2. **Telugu accuracy: approved by the founder, 26 November 2026** (TELUGU_BATCH_REVIEW.md, item 3).
+   The founder approved the batch review with every proposed correction accepted; approved rows are applied here.
 3. **No transcribed tables: pass.** No figures at all.
 4. **Related Orders: pending** until the three notification posts exist in the CMS.
 5. **Lifecycle: pass.** No action button.

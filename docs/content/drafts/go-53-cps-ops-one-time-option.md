@@ -14,7 +14,7 @@
 | --- | --- |
 | `slug` | `go-53-2026-cps-to-ops-one-time-option` |
 | `titleEn` | G.O.Ms.No.53 (2026): one-time option for pre-2004-notification CPS employees to move to the Old Pension Scheme |
-| `titleTe` | జీవో ఎంఎస్ నం.53 (2026): 2004 ముందు నోటిఫికేషన్ ద్వారా ఎంపికైన సీపీఎస్ ఉద్యోగులకు పాత పెన్షన్ పథకానికి మారే వన్‌టైమ్ ఆప్షన్ |
+| `titleTe` | జీవో ఎంఎస్ నం.53 (2026): 01.09.2004కి ముందు నోటిఫికేషన్ ద్వారా ఎంపికైన సీపీఎస్ ఉద్యోగులకు పాత పెన్షన్ పథకానికి మారే వన్‌టైమ్ ఆప్షన్ |
 | `summaryTe` | See "summaryTe lines" (4 lines) |
 | `englishAbstract` | See below |
 | `documentType` | `go` |
@@ -40,8 +40,8 @@ are never confused.
 ### summaryTe lines
 
 1. 01.09.2004 కంటే ముందు నియామక నోటిఫికేషన్/ప్రకటన జారీ అయి, 01.09.2004 లేదా ఆ తర్వాత ఉద్యోగంలో చేరి సీపీఎస్‌లో ఉన్న ఉద్యోగులకు పాత పెన్షన్ పథకానికి (ఓపీఎస్) మారేందుకు ఒకసారి అవకాశం ఇస్తూ ఆర్థిక శాఖ జీవో ఎంఎస్ నం.53ని 13.07.2026న జారీ చేసింది.
-2. కేంద్ర ప్రభుత్వం తన ఉద్యోగులకు ఇచ్చిన ఇదే విధమైన అవకాశాన్ని రాష్ట్రం ఈ జీవో ద్వారా అమలు చేసింది.
-3. ఒకసారి ఇచ్చిన ఆప్షన్ తుది నిర్ణయం; ఆప్షన్ ఇవ్వనివారు సీపీఎస్‌లోనే కొనసాగుతారు.
+2. కేంద్ర ప్రభుత్వం తన ఉద్యోగులకు అమలు చేసిన విధానాన్ని అనుసరించి రాష్ట్రం ఈ అవకాశం కల్పించింది.
+3. ఒకసారి ఇచ్చిన ఆప్షన్ తుది నిర్ణయం, దానిని ఉపసంహరించుకోలేరు; ఆప్షన్ ఇవ్వనివారు సీపీఎస్‌లోనే కొనసాగుతారు.
 4. దరఖాస్తు విధానం, చివరి తేదీ (31.12.2026) జీవో ఎంఎస్ నం.158లో ఉన్నాయి.
 
 ### englishAbstract
@@ -116,7 +116,8 @@ options received.
 ## Quality checklist
 
 1. **Source verification: pass.**
-2. **Telugu accuracy: pending fluent review** (item 12).
+2. **Telugu accuracy: approved by the founder, 26 November 2026** (TELUGU_BATCH_REVIEW.md, item 12).
+   The founder approved the batch review with every proposed correction accepted; approved rows are applied here.
 3. **No transcribed tables: pass.**
 4. **Related Orders: pass.** GO 158 links to this order; GO 653 is not in the CMS (stated).
 5. **Lifecycle: pass.**
