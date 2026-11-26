@@ -210,3 +210,49 @@ Review state: `pending batch review`
 2. 2009 నాటి జీవో ఎంఎస్ నం.12 అడ్‌హాక్ నిబంధనలను (తదుపరి సవరణలతో సహా) ఇవి భర్తీ చేశాయి. ఇవి 02.10.2026 నుంచి అమల్లోకి వచ్చినట్లుగా పరిగణిస్తారు.
 3. రాష్ట్రపతి ఉత్తర్వు–2025 ప్రకారం కొత్త స్థానిక కేడర్ల వ్యవస్థకు అనుగుణంగా ఈ నిబంధనలను జారీ చేశారు.
 4. ప్రభుత్వ పాఠశాలల ఉపాధ్యాయులకు వేరుగా జీవో ఎంఎస్ నం.35 వర్తిస్తుంది. పూర్తి నిబంధనలు జీవో పీడీఎఫ్‌లో ఉన్నాయి.
+
+## Model pre-review (26 November 2026): proposed corrections
+
+Claude checked every item line by line against each draft's English abstract and body.
+**This is not the fluent human review**: every item stays `pending batch review`. A fluent
+reviewer approves, edits or rejects each row below, and only approved rows are applied to the
+individual draft files.
+
+### A. Meaning or accuracy (recommended)
+
+| Ref | Current | Proposed | Why |
+| --- | --- | --- | --- |
+| 11.6 | ఆప్షన్ ఆమోదం పొందినవారిని జీపీఎఫ్/జడ్పీపీఎఫ్‌లో చేర్చి, సర్వీస్ రిజిస్టర్‌లో నమోదు చేస్తారు. | ఆప్షన్ ఆమోదం పొందినవారిని వర్తించే భవిష్య నిధి ఖాతాలో (జీపీఎఫ్ లేదా జడ్పీపీఎఫ్ వంటివి) చేర్చి, వారు రివైజ్డ్ పెన్షన్ రూల్స్, 1980 పరిధిలోకి వస్తారని సర్వీస్ రిజిస్టర్‌లో నమోదు చేస్తారు. | Matches the PR #14 English correction ("applicable provident-fund account, such as GPF or ZPPF"). Also says what the Service Register records (O2 Annexure-I paras 6–7) |
+| 12 title | 2004 ముందు నోటిఫికేషన్ ద్వారా ఎంపికైన | 01.09.2004కి ముందు నోటిఫికేషన్ ద్వారా ఎంపికైన | "Before 2004" is wrong: the cut-off is 01.09.2004 |
+| 11.3 | దరఖాస్తు నిధి (NIDHI) పోర్టల్‌లోని … సర్వీసులో ఉన్నవారు ప్రస్తుత నిధి లాగిన్‌నే ఉపయోగించాలి. | దరఖాస్తును NIDHI పోర్టల్‌లోని "CPS-OPS Conversion" టైల్ ద్వారా మాత్రమే చేయాలి. సర్వీసులో ఉన్నవారు ప్రస్తుత NIDHI లాగిన్‌నే ఉపయోగించాలి. | నిధి means "fund", so "దరఖాస్తు నిధి" can read as "application fund". Writing the portal name in English letters removes the ambiguity |
+| 7.5 | 2026 బదిలీల షెడ్యూల్ లేదా వెబ్ కౌన్సెలింగ్‌ను అధికారికంగా ఇంకా ధ్రువీకరించలేదు. | 26.11.2026 నాటికి 2026 బదిలీల షెడ్యూల్ లేదా వెబ్ కౌన్సెలింగ్‌ను అధికారికంగా ప్రకటించలేదు. | Adds an as-of date so the line cannot go stale silently |
+| 5.1 | ఏపీ మోడల్ స్కూల్స్, ఎంజేపీఏపీబీసీడబ్ల్యూఆర్ఈఐఎస్, ఏపీఆర్ఈఐఎస్, ఏపీఎస్‌డబ్ల్యూఆర్ఈఐఎస్, ఏపీటీడబ్ల్యూఆర్ఈఐఎస్ (గురుకులం) సొసైటీలు, దివ్యాంగుల సంక్షేమ శాఖ పాఠశాలల్లో | ఏపీ మోడల్ స్కూల్స్, గురుకుల సొసైటీలు (MJPAPBCWREIS, APREIS, APSWREIS, APTWREIS), విభిన్న ప్రతిభావంతుల సంక్షేమ శాఖ పాఠశాలల్లో | The Telugu-script acronyms are unreadable. "(గురుకులం)" after APTWREIS alone suggests only that society is a Gurukulam, which the English does not say. The department name follows the official English "Differently Abled"; **the reviewer should confirm the official Telugu department name** |
+
+### B. Grammar and clarity (recommended)
+
+| Ref | Current | Proposed | Why |
+| --- | --- | --- | --- |
+| 1.1 | మున్సిపల్ మరియు మున్సిపల్ కార్పొరేషన్ | మున్సిపల్, మున్సిపల్ కార్పొరేషన్ | Bookish "మరియు"; matches items 4, 6, 7 |
+| 1.3 | ఒకటి కంటే ఎక్కువ పోస్టులకు ఒకే దరఖాస్తులో ఎంపిక చేసి, ప్రతి పోస్టుకు వేర్వేరుగా ఫీజు చెల్లించాలి. | ఒకటి కంటే ఎక్కువ పోస్టులకు దరఖాస్తు చేసేవారు ఒకే దరఖాస్తులో ఆ పోస్టులన్నింటినీ ఎంచుకుని, ప్రతి పోస్టుకు వేర్వేరుగా ఫీజు చెల్లించాలి. | The sentence has no subject |
+| 2.2 | స్పెషల్ ఎడ్యుకేషన్ పోస్టులకు వేర్వేరుగా సవరించిన సిలబస్ ఉంది. | స్పెషల్ ఎడ్యుకేషన్ పోస్టుల సవరించిన సిలబస్ వేరే పీడీఎఫ్‌లో ఉంది. | Says plainly that it is a separate PDF |
+| 3.4 | అధికారిక కొరిజెండం ద్వారా | అధికారిక సవరణ ప్రకటన (కొరిజెండం) ద్వారా | A Telugu gloss for an English legal term |
+| 4.3 | కంప్యూటర్ ఆధారిత పరీక్షలు (సీబీటీ) 20.12.2026 నుంచి ప్రారంభమవుతాయి. ఈ పరీక్ష ఇంగ్లీష్, తెలుగు మాధ్యమాల్లో మాత్రమే ఉంటుంది. | కంప్యూటర్ ఆధారిత పరీక్షలు (సీబీటీ) 20.12.2026 నుంచి ప్రారంభమవుతాయి. ఈ పరీక్షలు ఇంగ్లీష్, తెలుగు మాధ్యమాల్లో మాత్రమే ఉంటాయి. | Singular/plural mismatch |
+| 4.4 (2nd sentence) | మెరిట్ జాబితా ప్రకటించిన తర్వాత ఏడు రోజుల పాటు ఆ క్రమాన్ని మాత్రమే ఒకసారి మార్చుకునే అవకాశం ఉంటుంది. | మెరిట్ జాబితా ప్రకటించిన ఏడు రోజుల్లోగా ఆ ప్రాధాన్య క్రమాన్ని ఒక్కసారి మార్చుకోవచ్చు; ఇతర వివరాలేవీ మార్చలేరు. | The English says only the order can be changed, once, within seven days, and nothing else is editable; the current word order is ambiguous |
+| 5.6 | ఎస్ఎంఎస్ | ఎస్‌ఎంఎస్ | Missing ZWNJ; every other acronym uses one |
+| 6.2 (2nd sentence) | సంబంధిత జిల్లా విద్యాశాఖాధికారి (డీఈవో) నియామక అధికారి. | నియామక అధికారిగా సంబంధిత జిల్లా విద్యాశాఖాధికారి (డీఈవో) వ్యవహరిస్తారు. | A verbless sentence reads like a fragment |
+| 7.1 | సమాన కేడర్ల | సమాన స్థాయి కేడర్ల | "Equivalent cadres" reads more clearly |
+| 8.4 | తదుపరి పై పోస్టుకు | తదుపరి ఉన్నత పోస్టుకు | Standard term for "next higher post" |
+| 9.3, 10.2 | (అక్టోబర్ 2026లో చెల్లింపు) నగదుగా చెల్లిస్తారు | (అక్టోబర్ 2026లో అందే జీతం) నగదుగా చెల్లిస్తారు | Removes the repeated చెల్లింపు/చెల్లిస్తారు |
+| 11.4 | విధుల్లో చేరిన ఉత్తర్వుల | విధుల్లో చేర్చుకున్న ఉత్తర్వుల | The English is "order admitting you to duty" |
+| 12.2 | కేంద్ర ప్రభుత్వం తన ఉద్యోగులకు ఇచ్చిన ఇదే విధమైన అవకాశాన్ని రాష్ట్రం ఈ జీవో ద్వారా అమలు చేసింది. | కేంద్ర ప్రభుత్వం తన ఉద్యోగులకు అమలు చేసిన విధానాన్ని అనుసరించి రాష్ట్రం ఈ అవకాశం కల్పించింది. | The English is "adopts the Government of India policy"; the current wording reads as if the State carries out a central scheme |
+| 12.3 | ఒకసారి ఇచ్చిన ఆప్షన్ తుది నిర్ణయం; | ఒకసారి ఇచ్చిన ఆప్షన్ తుది నిర్ణయం, దానిని ఉపసంహరించుకోలేరు; | The English says "final and irrevocable"; matches item 11.5 |
+
+### C. Reviewed with no change proposed
+
+Item 13 and item 14 have no proposed changes. Also unchanged: the titles of items 1–11, item 1 lines 2 and 4–6, items 2–3 (other lines), items 9–10 figures and arrears schedules (checked against the English bodies), and item 8 lines 1–3 and 5.
+
+### Points the human reviewer must still decide
+
+- Whether "అడ్‌హాక్ నిబంధనలు" (items 13, 14) and "ఇన్-సర్వీస్", "క్యాండిడేట్ లాగిన్" (item 8) read naturally.
+- The official Telugu name of the Differently Abled welfare department (row 5.1).
+- Lines that go stale after 30.11.2026 (items 1.2, 4.2, 5.3) are handled by the import-day recheck, not by this review.
