@@ -39,7 +39,7 @@
 2. ఈ నిబంధనలు వెంటనే అమల్లోకి వచ్చాయి. ఉపాధ్యాయుల బదిలీలపై ఇంతకు ముందు ఉన్న నోటిఫికేషన్లు, నిబంధనలు, మార్గదర్శకాలన్నింటినీ ఇవి భర్తీ చేశాయి.
 3. ఒకే పాఠశాలలో మే 31 నాటికి ఐదు విద్యా సంవత్సరాలు పూర్తి చేసిన హెడ్‌మాస్టర్ గ్రేడ్–II, ఎనిమిది విద్యా సంవత్సరాలు పూర్తి చేసిన ఇతర ఉపాధ్యాయులకు తప్పనిసరి బదిలీ ఉంటుంది.
 4. కనీసం రెండు విద్యా సంవత్సరాలు పూర్తి చేసినవారు అభ్యర్థన బదిలీకి అర్హులు. రెండేళ్లలోపు పదవీ విరమణ చేసేవారిని వారి అభ్యర్థన మేరకు తప్ప బదిలీ చేయరు.
-5. 26.11.2026 నాటికి 2026 బదిలీల షెడ్యూల్ లేదా వెబ్ కౌన్సెలింగ్‌ను అధికారికంగా ప్రకటించలేదు.
+5. 26.11.2026 నాటికి 2026 బదిలీల షెడ్యూల్ లేదా వెబ్ కౌన్సెలింగ్‌ను అధికారికంగా ధ్రువీకరించలేదు.
 6. ఎంటైటిల్‌మెంట్ పాయింట్లు, ప్రాధాన్య కేటగిరీలు వంటి వివరాలు జీవో పీడీఎఫ్‌లో ఉన్నాయి.
 
 ### englishAbstract
@@ -138,6 +138,7 @@ separate post that links back to this GO.
 1. **Source verification: pass.** Exact GOIR URL.
 2. **Telugu accuracy: approved by the founder, 26 November 2026** (TELUGU_BATCH_REVIEW.md, item 7).
    The founder approved the batch review with every proposed correction accepted; approved rows are applied here.
+   Line 5 was revised after the PR #16 review to keep "ధ్రువీకరించలేదు" (not verified), matching the English; approved by the founder, 26 November 2026.
 3. **No transcribed tables: pass.** Tenure conditions are rule text stated in prose; point tables stay in the PDF.
 4. **Related Orders: action required.** GO 21 is background; confirm the existing CMS post ID.
 5. **Lifecycle: pass.** GO, `orderState: current`.

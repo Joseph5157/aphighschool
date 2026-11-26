@@ -43,7 +43,7 @@
 
 ### summaryTe lines
 
-1. ఏపీ మోడల్ స్కూల్స్, గురుకుల సొసైటీలు (MJPAPBCWREIS, APREIS, APSWREIS, APTWREIS), విభిన్న ప్రతిభావంతుల సంక్షేమ శాఖ పాఠశాలల్లో పోస్టుల భర్తీకి డీఎస్సీ–2026 సొసైటీల నోటిఫికేషన్ (నం.03/DSC-TRC-1/2026, తేదీ 05.11.2026) విడుదలైంది.
+1. ఏపీ మోడల్ స్కూల్స్, MJPAPBCWREIS, APREIS, APSWREIS, APTWREIS (గురుకులం) సొసైటీలు, విభిన్న ప్రతిభావంతుల సంక్షేమ శాఖ పాఠశాలల్లో పోస్టుల భర్తీకి డీఎస్సీ–2026 సొసైటీల నోటిఫికేషన్ (నం.03/DSC-TRC-1/2026, తేదీ 05.11.2026) విడుదలైంది.
 2. ప్రిన్సిపాల్, పోస్ట్ గ్రాడ్యుయేట్ టీచర్ (పీజీటీ), ట్రైన్డ్ గ్రాడ్యుయేట్ టీచర్ (టీజీటీ), ఫిజికల్ డైరెక్టర్ (పీడీ), ఫిజికల్ ఎడ్యుకేషన్ టీచర్ (పీఈటీ) పోస్టులు ఇందులో ఉన్నాయి. ఏ సొసైటీలో ఏ పోస్టులు ఉన్నాయో నోటిఫికేషన్‌లో చూడాలి.
 3. ఆన్‌లైన్ దరఖాస్తు, ఫీజు చెల్లింపుకు చివరి తేదీ 30.11.2026. ప్రతి పోస్టుకు ఫీజు ₹1,000. సీబీటీ 20.12.2026 నుంచి ప్రారంభమవుతుంది.
 4. సీబీటీ ఇంగ్లీష్‌లో మాత్రమే ఉంటుంది. పీడీ, పీఈటీ, టీజీటీ (స్పెషల్ ఎడ్యుకేషన్–ప్రత్యేక పాఠశాలలు) పోస్టులకు మాత్రం ఇంగ్లీష్, తెలుగు మాధ్యమాల్లో ఉంటుంది.
@@ -142,6 +142,8 @@ switch to `expired`, remove the apply action and record the post as REFERENCE_ON
 1. **Source verification: pass.**
 2. **Telugu accuracy: approved by the founder, 26 November 2026** (TELUGU_BATCH_REVIEW.md, item 5).
    The founder approved the batch review with every proposed correction accepted; approved rows are applied here.
+   Line 1 was revised after the PR #16 review: "(గురుకులం)" now follows APTWREIS only, as in the English.
+   **Unverified term:** "విభిన్న ప్రతిభావంతుల సంక్షేమ శాఖ". The department's official English name is "Welfare of Differently Abled, Transgender and Senior Citizens" (AP district portals); no official Telugu name has been found. Confirm it from an official source before import.
 3. **No transcribed tables: pass.**
 4. **Related Orders: pending, not blocking** (GO 50).
 5. **Lifecycle: pass on 26 Nov 2026.**

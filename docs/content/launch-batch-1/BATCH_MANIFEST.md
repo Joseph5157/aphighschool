@@ -30,7 +30,7 @@ application/result/deadline content needing the final pre-import status check.
 
 | # | Draft file | Topic | Post type | Class | Official sources | Category (slug) | Document reference | Deadline / freshness | Related Orders | Telugu | CMS readiness |
 | ---: | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | `dsc-2026-notification-apply-online.md` (PR #11, unchanged) | DSC regular SA/SGT | Action post | TIME_SENSITIVE | Portal; Notification No.01 PDF (unchanged file) | `notifications` | Notification No.01/DSC-TRC-1/2026 | Apply closes 30 Nov 2026; still open on 26 Nov | GO 52: **now drafted (#6)**; link at entry | approved 26 Nov | Ready; status check passed 26 Nov |
+| 1 | `dsc-2026-notification-apply-online.md` (PR #11; Telugu corrected 26 Nov, PR #16) | DSC regular SA/SGT | Action post | TIME_SENSITIVE | Portal; Notification No.01 PDF (unchanged file) | `notifications` | Notification No.01/DSC-TRC-1/2026 | Apply closes 30 Nov 2026; still open on 26 Nov | GO 52: **now drafted (#6)**; link at entry | approved 26 Nov | Ready; status check passed 26 Nov |
 | 2 | `dsc-2026-syllabus-exam-pattern.md` | DSC syllabus/pattern | Document guide | READY | Revised syllabus; Spl Edn revised syllabus; General Posts IB | `notifications` (`documentType: other`) | none (multi-document) | Recheck on new syllabus/CBT schedule | Pending (#1, #6) | approved 26 Nov | Ready |
 | 3 | `dsc-2026-vacancies-official-guide.md` | DSC vacancies | Document guide (no figures) | READY | Notifications No.01/02/03; brief notifications | `notifications` (`documentType: other`) | none (multi-document) | Recheck on corrigendum | Pending (#1, #4, #5) | approved 26 Nov | Ready |
 | 4 | `dsc-2026-special-education-notification.md` | DSC Special Education | Action post | TIME_SENSITIVE | Notification No.02 PDF; Spl Edn IB; portal | `notifications` | Notification No.02/DSC-TRC-1/2026 | Apply closes 30 Nov 2026 | GO 51: pending, not blocking | approved 26 Nov | Ready; status check passed 26 Nov |
@@ -79,7 +79,7 @@ each official action is live.
 1. **Multi-document guides (#2, #3):** category `notifications`, `documentType` stays `other`. Applied.
 2. **Special TET reference (#8):** `goReference` stays `null`; the exact number appears in the article body. Applied. No validator change.
 3. **CPS→OPS `actionDeadline` (#11):** `2026-12-31`. Applied.
-4. **Telugu:** approved by the founder on 26 November 2026 for all items, 1–14, with every proposed correction in TELUGU_BATCH_REVIEW.md accepted and applied to the drafts.
+4. **Telugu:** approved by the founder on 26 November 2026 for all items, 1–14, with every proposed correction in TELUGU_BATCH_REVIEW.md accepted and applied to the drafts. Rows 7.5 and 5.1 were revised after the PR #16 review. The Telugu department name in item 5 is still unverified and must be confirmed before import.
 5. **Superseded PR:** #13 (25 Nov DSC pre-entry recheck) was closed as superseded by the consolidated check below.
 
 **Still open:** one founder approval for the CMS draft import of all 14 posts. Nothing has been written to the CMS.
