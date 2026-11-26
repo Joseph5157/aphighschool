@@ -79,7 +79,7 @@ each official action is live.
 1. **Multi-document guides (#2, #3):** category `notifications`, `documentType` stays `other`. Applied.
 2. **Special TET reference (#8):** `goReference` stays `null`; the exact number appears in the article body. Applied. No validator change.
 3. **CPS→OPS `actionDeadline` (#11):** `2026-12-31`. Applied.
-4. **Telugu:** approved by the founder on 26 November 2026 for all items, 1–14, with every proposed correction in TELUGU_BATCH_REVIEW.md accepted and applied to the drafts. Rows 7.5 and 5.1 were revised after the PR #16 review. The Telugu department name in item 5 is still unverified and must be confirmed before import.
+4. **Telugu:** approved by the founder on 26 November 2026 for all items, 1–14, with every proposed correction in TELUGU_BATCH_REVIEW.md accepted and applied to the drafts. Rows 7.5 and 5.1 were revised after the PR #16 review. The item 5 department name was settled by the founder on 26 November 2026 (see TELUGU_BATCH_REVIEW.md).
 5. **Superseded PR:** #13 (25 Nov DSC pre-entry recheck) was closed as superseded by the consolidated check below.
 
 **Still open:** one founder approval for the CMS draft import of all 14 posts. Nothing has been written to the CMS.

@@ -10,7 +10,7 @@ The item sections below keep the text as extracted before the corrections. Items
 
 ## Points for the reviewer
 
-Settled by the founder decision at the end of this file, except the department name in item 5, which is still unverified.
+Settled by the founder decision at the end of this file.
 
 - Cadre names use the familiar official wording (స్కూల్ అసిస్టెంట్, సెకండరీ గ్రేడ్ టీచర్) throughout; confirm once for all items.
 - DA is written as "కరువు భత్యం (డీఏ)"; DR (not used in these posts) would be "కరువు ఉపశమనం (డీఆర్)".
@@ -255,7 +255,7 @@ individual draft files.
 
 Item 13 and item 14 have no proposed changes. Also unchanged: the titles of items 1–11, item 1 lines 2 and 4–6, items 2–3 (other lines), items 9–10 figures and arrears schedules (checked against the English bodies), and item 8 lines 1–3 and 5.
 
-### Points the human reviewer must still decide (settled below, except the department name)
+### Points the human reviewer must still decide (all settled below)
 
 - Whether "అడ్‌హాక్ నిబంధనలు" (items 13, 14) and "ఇన్-సర్వీస్", "క్యాండిడేట్ లాగిన్" (item 8) read naturally.
 - The official Telugu name of the Differently Abled welfare department (row 5.1).
@@ -272,4 +272,4 @@ The founder approved this review. Every row in tables A and B was accepted and a
 | 7.5 | …అధికారికంగా ప్రకటించలేదు. | 26.11.2026 నాటికి 2026 బదిలీల షెడ్యూల్ లేదా వెబ్ కౌన్సెలింగ్‌ను అధికారికంగా ధ్రువీకరించలేదు. | "Not announced" claimed more than the English, which says only that no schedule "has been verified". The as-of date stays |
 | 5.1 | గురుకుల సొసైటీలు (MJPAPBCWREIS, APREIS, APSWREIS, APTWREIS), | MJPAPBCWREIS, APREIS, APSWREIS, APTWREIS (గురుకులం) సొసైటీలు, | The English labels only APTWREIS as Gurukulam. Acronyms stay in English letters |
 
-**Still unverified:** the Telugu department name in row 5.1 ("విభిన్న ప్రతిభావంతుల సంక్షేమ శాఖ"). The official English name is "Welfare of Differently Abled, Transgender and Senior Citizens" (AP district portals). No official Telugu name has been found; confirm it from an official source before import.
+**Department name (row 5.1), founder decision 26 November 2026:** "విభిన్న ప్రతిభావంతుల సంక్షేమ శాఖ (Department for the Welfare of Differently Abled)". The Telugu follows the form used in Telugu news coverage of the department (Eenadu, HMTV); the bracketed English is the notification's own wording. No official Telugu name was found outside GOIR, and GOIR was not used, at the founder's direction. The department's current official English name is "Welfare of Differently Abled, Transgender and Senior Citizens" (AP district portals).
