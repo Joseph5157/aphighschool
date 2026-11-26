@@ -36,7 +36,7 @@
 ### summaryTe lines
 
 1. రాష్ట్ర ప్రభుత్వ ఉద్యోగుల కరువు భత్యాన్ని (డీఏ) మూల వేతనంలో 37.31 శాతం నుంచి 40.04 శాతానికి (2.73 శాతం పెంపు) 01.07.2024 నుంచి పెంచుతూ ఆర్థిక శాఖ జీవో ఎంఎస్ నం.119ని 11.09.2026న జారీ చేసింది.
-2. పెరిగిన డీఏను సెప్టెంబర్ 2026 జీతంతో (అక్టోబర్ 2026లో చెల్లింపు) నగదుగా చెల్లిస్తారు. స్థానిక సంస్థల పాఠశాలల ఉపాధ్యాయులు, ఎయిడెడ్ సిబ్బందికీ (ఆర్‌పీఎస్–2022 రెగ్యులర్ స్కేల్) ఇది వర్తిస్తుంది.
+2. పెరిగిన డీఏను సెప్టెంబర్ 2026 జీతంతో (అక్టోబర్ 2026లో అందే జీతం) నగదుగా చెల్లిస్తారు. స్థానిక సంస్థల పాఠశాలల ఉపాధ్యాయులు, ఎయిడెడ్ సిబ్బందికీ (ఆర్‌పీఎస్–2022 రెగ్యులర్ స్కేల్) ఇది వర్తిస్తుంది.
 3. 01.07.2024 నుంచి 31.08.2026 వరకు (26 నెలలు) బకాయిల్లో 10 శాతం ఏప్రిల్ 2027లో, మిగిలిన 90 శాతం జూన్, ఆగస్టు, అక్టోబర్ 2027లలో మూడు సమాన వాయిదాల్లో చెల్లిస్తారు.
 4. 01.01.2025 నుంచి అమల్లోకి వచ్చే తదుపరి పెంపు (41.86 శాతం) జీవో ఎంఎస్ నం.120 ద్వారా వేరుగా జారీ అయింది.
 
@@ -114,7 +114,8 @@ Review after each arrears instalment month and on any amendment.
 ## Quality checklist
 
 1. **Source verification: pass.**
-2. **Telugu accuracy: pending fluent review** (item 10).
+2. **Telugu accuracy: approved by the founder, 26 November 2026** (TELUGU_BATCH_REVIEW.md, item 10).
+   The founder approved the batch review with every proposed correction accepted; approved rows are applied here.
 3. **No transcribed tables: pass.**
 4. **Related Orders: pass.** GO 120 links to this post; earlier DA orders are not in the CMS (stated).
 5. **Lifecycle: pass.**

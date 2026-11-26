@@ -35,11 +35,11 @@
 
 ### summaryTe lines
 
-1. ప్రభుత్వ, జిల్లా పరిషత్, మండల పరిషత్, మున్సిపల్, మున్సిపల్ కార్పొరేషన్ పాఠశాలల్లో పనిచేసే హెడ్‌మాస్టర్ గ్రేడ్–II, స్కూల్ అసిస్టెంట్, సెకండరీ గ్రేడ్ టీచర్, సమాన కేడర్ల బదిలీలకు ఈ నిబంధనలు వర్తిస్తాయి.
+1. ప్రభుత్వ, జిల్లా పరిషత్, మండల పరిషత్, మున్సిపల్, మున్సిపల్ కార్పొరేషన్ పాఠశాలల్లో పనిచేసే హెడ్‌మాస్టర్ గ్రేడ్–II, స్కూల్ అసిస్టెంట్, సెకండరీ గ్రేడ్ టీచర్, సమాన స్థాయి కేడర్ల బదిలీలకు ఈ నిబంధనలు వర్తిస్తాయి.
 2. ఈ నిబంధనలు వెంటనే అమల్లోకి వచ్చాయి. ఉపాధ్యాయుల బదిలీలపై ఇంతకు ముందు ఉన్న నోటిఫికేషన్లు, నిబంధనలు, మార్గదర్శకాలన్నింటినీ ఇవి భర్తీ చేశాయి.
 3. ఒకే పాఠశాలలో మే 31 నాటికి ఐదు విద్యా సంవత్సరాలు పూర్తి చేసిన హెడ్‌మాస్టర్ గ్రేడ్–II, ఎనిమిది విద్యా సంవత్సరాలు పూర్తి చేసిన ఇతర ఉపాధ్యాయులకు తప్పనిసరి బదిలీ ఉంటుంది.
 4. కనీసం రెండు విద్యా సంవత్సరాలు పూర్తి చేసినవారు అభ్యర్థన బదిలీకి అర్హులు. రెండేళ్లలోపు పదవీ విరమణ చేసేవారిని వారి అభ్యర్థన మేరకు తప్ప బదిలీ చేయరు.
-5. 2026 బదిలీల షెడ్యూల్ లేదా వెబ్ కౌన్సెలింగ్‌ను అధికారికంగా ఇంకా ధ్రువీకరించలేదు.
+5. 26.11.2026 నాటికి 2026 బదిలీల షెడ్యూల్ లేదా వెబ్ కౌన్సెలింగ్‌ను అధికారికంగా ప్రకటించలేదు.
 6. ఎంటైటిల్‌మెంట్ పాయింట్లు, ప్రాధాన్య కేటగిరీలు వంటి వివరాలు జీవో పీడీఎఫ్‌లో ఉన్నాయి.
 
 ### englishAbstract
@@ -136,7 +136,8 @@ separate post that links back to this GO.
 ## Quality checklist
 
 1. **Source verification: pass.** Exact GOIR URL.
-2. **Telugu accuracy: pending fluent review** (item 7).
+2. **Telugu accuracy: approved by the founder, 26 November 2026** (TELUGU_BATCH_REVIEW.md, item 7).
+   The founder approved the batch review with every proposed correction accepted; approved rows are applied here.
 3. **No transcribed tables: pass.** Tenure conditions are rule text stated in prose; point tables stay in the PDF.
 4. **Related Orders: action required.** GO 21 is background; confirm the existing CMS post ID.
 5. **Lifecycle: pass.** GO, `orderState: current`.

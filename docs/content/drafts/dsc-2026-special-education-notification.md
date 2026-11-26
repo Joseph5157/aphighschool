@@ -48,8 +48,8 @@ REFERENCE_ONLY conversion in "Expiry and update rule" before entry.
 
 1. ప్రభుత్వ, జిల్లా పరిషత్, మండల పరిషత్, మున్సిపల్, మున్సిపల్ కార్పొరేషన్ పాఠశాలల్లో స్కూల్ అసిస్టెంట్ (స్పెషల్ ఎడ్యుకేషన్), సెకండరీ గ్రేడ్ టీచర్ (స్పెషల్ ఎడ్యుకేషన్) పోస్టుల భర్తీకి డీఎస్సీ–2026 స్పెషల్ ఎడ్యుకేషన్ నోటిఫికేషన్ (నం.02/DSC-TRC-1/2026, తేదీ 05.11.2026) విడుదలైంది.
 2. ఆన్‌లైన్ దరఖాస్తు, ఫీజు చెల్లింపుకు చివరి తేదీ 30.11.2026. ప్రతి పోస్టుకు దరఖాస్తు ఫీజు ₹1,000.
-3. కంప్యూటర్ ఆధారిత పరీక్షలు (సీబీటీ) 20.12.2026 నుంచి ప్రారంభమవుతాయి. ఈ పరీక్ష ఇంగ్లీష్, తెలుగు మాధ్యమాల్లో మాత్రమే ఉంటుంది.
-4. ఒకటి కంటే ఎక్కువ పోస్టులకు దరఖాస్తు చేసేవారు దరఖాస్తు సమయంలోనే మేనేజ్‌మెంట్, పోస్టుల ప్రాధాన్య క్రమాన్ని తప్పనిసరిగా తెలపాలి. మెరిట్ జాబితా ప్రకటించిన తర్వాత ఏడు రోజుల పాటు ఆ క్రమాన్ని మాత్రమే ఒకసారి మార్చుకునే అవకాశం ఉంటుంది.
+3. కంప్యూటర్ ఆధారిత పరీక్షలు (సీబీటీ) 20.12.2026 నుంచి ప్రారంభమవుతాయి. ఈ పరీక్షలు ఇంగ్లీష్, తెలుగు మాధ్యమాల్లో మాత్రమే ఉంటాయి.
+4. ఒకటి కంటే ఎక్కువ పోస్టులకు దరఖాస్తు చేసేవారు దరఖాస్తు సమయంలోనే మేనేజ్‌మెంట్, పోస్టుల ప్రాధాన్య క్రమాన్ని తప్పనిసరిగా తెలపాలి. మెరిట్ జాబితా ప్రకటించిన ఏడు రోజుల్లోగా ఆ ప్రాధాన్య క్రమాన్ని ఒక్కసారి మార్చుకోవచ్చు; ఇతర వివరాలేవీ మార్చలేరు.
 5. మెరిట్ జాబితా ప్రకటించిన ఏడు రోజుల్లో అర్హత ధ్రువపత్రాలను అభ్యర్థి లాగిన్‌లో అప్‌లోడ్ చేయాలి.
 6. అర్హతలు, రిజర్వేషన్, పరీక్ష విధానం వివరాలు స్పెషల్ ఎడ్యుకేషన్ సమాచార బులెటిన్‌లో ఉన్నాయి; జిల్లా వారీ ఖాళీలు నోటిఫికేషన్ పీడీఎఫ్‌లో ఉన్నాయి.
 
@@ -150,7 +150,8 @@ closed on 30 November 2026", and record the post as REFERENCE_ONLY in the manife
 ## Quality checklist
 
 1. **Source verification: pass.** Notification number and official PDF; `verifiedAgainstGoir` is `false` (portal source).
-2. **Telugu accuracy: pending fluent review** (item 4).
+2. **Telugu accuracy: approved by the founder, 26 November 2026** (TELUGU_BATCH_REVIEW.md, item 4).
+   The founder approved the batch review with every proposed correction accepted; approved rows are applied here.
 3. **No transcribed tables: pass.** Vacancy and qualifying-marks tables stay in the PDF.
 4. **Related Orders: pending, not blocking.** GO 51 has no portal post yet.
 5. **Lifecycle: pass on 26 Nov 2026.** `apply_link` with deadline 30 Nov; convert on expiry.

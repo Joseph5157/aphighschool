@@ -36,7 +36,7 @@
 ### summaryTe lines
 
 1. ప్రభుత్వ, జిల్లా పరిషత్, మండల పరిషత్, మున్సిపల్, మున్సిపల్ కార్పొరేషన్ పాఠశాలల్లో స్కూల్ అసిస్టెంట్, సెకండరీ గ్రేడ్ టీచర్ పోస్టుల నియామకానికి ఏపీ టీఆర్‌టీ/డీఎస్సీ–2026 ఎంపిక విధాన నిబంధనలను ప్రభుత్వం జీవో ఎంఎస్ నం.52 (తేదీ 04.11.2026) ద్వారా జారీ చేసింది.
-2. ఈ నిబంధనలు ఉత్తర్వులు జారీ అయిన తేదీ నుంచే అమల్లోకి వచ్చాయి. సంబంధిత జిల్లా విద్యాశాఖాధికారి (డీఈవో) నియామక అధికారి.
+2. ఈ నిబంధనలు ఉత్తర్వులు జారీ అయిన తేదీ నుంచే అమల్లోకి వచ్చాయి. నియామక అధికారిగా సంబంధిత జిల్లా విద్యాశాఖాధికారి (డీఈవో) వ్యవహరిస్తారు.
 3. డీఎస్సీ–2026 సాధారణ ఎస్‌ఏ, ఎస్‌జీటీ నోటిఫికేషన్ (నం.01/DSC-TRC-1/2026) ఈ జీవో ఆధారంగానే విడుదలైంది.
 4. అర్హతలు, రిజర్వేషన్, ఎంపిక విధానం వంటి పూర్తి నిబంధనలు జీవో పీడీఎఫ్‌లో ఉన్నాయి.
 
@@ -119,7 +119,8 @@ the governing rules for this recruitment; do not archive without a founder decis
 ## Quality checklist
 
 1. **Source verification: pass.** Exact GOIR URL; `verifiedAgainstGoir: true`.
-2. **Telugu accuracy: pending fluent review** (item 6).
+2. **Telugu accuracy: approved by the founder, 26 November 2026** (TELUGU_BATCH_REVIEW.md, item 6).
+   The founder approved the batch review with every proposed correction accepted; approved rows are applied here.
 3. **No transcribed tables: pass.**
 4. **Related Orders: action required at CMS entry.** Link the regular notification post to this GO (background/implements), with a founder-approved note.
 5. **Lifecycle: pass.** GO with `orderState: current`.

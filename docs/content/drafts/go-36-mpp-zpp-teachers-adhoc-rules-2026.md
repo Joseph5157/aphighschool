@@ -112,7 +112,8 @@ Review on any amendment.
 ## Quality checklist
 
 1. **Source verification: pass.**
-2. **Telugu accuracy: pending fluent review** (item 14).
+2. **Telugu accuracy: approved by the founder, 26 November 2026** (TELUGU_BATCH_REVIEW.md, item 14).
+   The founder approved the batch review with every proposed correction accepted; approved rows are applied here.
 3. **No transcribed tables: pass.**
 4. **Related Orders: pass with note** (GO 12 of 2009 not in the CMS).
 5. **Lifecycle: pass.**
