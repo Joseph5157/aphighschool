@@ -7,7 +7,7 @@
 | Topic | AP Teacher Transfers |
 | Canonical tag | `Transfers` |
 | Priority | P1 |
-| Evidence status | `verified` for the 2025 standing rules; `blocked` for a claimed 2026 cycle |
+| Evidence status | `verified` for the 2025 standing rules (GOIR amendment check done 26 Nov 2026); `blocked` for a claimed 2026 cycle |
 | Researched on | 25 November 2026 |
 | Review by | Before drafting; search for later amendments and current-cycle orders |
 | Intended post model | Standing GO reference plus separately verified current updates |
@@ -94,3 +94,39 @@ Do not copy tenure, entitlement-point, preferred-category or vacancy tables from
 
 Claude Code may draft a standing GO 22 reference only after the amendment check is recorded.
 It must not generate a current 2026 schedule or action page from this pack.
+
+## LAUNCH-CONTENT-BATCH-1 update (26 November 2026)
+
+The amendment check required before drafting a GO 22 standing reference has been done on GOIR.
+
+| ID | Issuer | Document or page | Reference and date | URL | Checked on | Evidence state | Supports |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| O3 | GOIR | G.O.Ms.No.22, School Education (Services.II) | 20.05.2025 | https://goir.ap.gov.in/dgo.ashx?gid=551319&fileType=E | 26 Nov 2026 | verified (GOIR) | Same rules as O1; usable as an exact GOIR `sourceUrl` |
+| O4 | GOIR | G.O.Ms.No.21, School Education (Prog.I), re-apportionment norms | 13.05.2025 | https://goir.ap.gov.in/dgo.ashx?gid=550786&fileType=E | 26 Nov 2026 | verified (GOIR) | Background order cited by GO 22 (reference 7) |
+| O5 | GOIR | G.O.Ms.No.33, School Education (Prog.I), amendment to the re-apportionment norms | 31.07.2025 | https://goir.ap.gov.in/dgo.ashx?gid=556761&fileType=E | 26 Nov 2026 | verified (GOIR) | Amends the GO 21 norms; a Rationalisation topic, not a transfer-rule amendment |
+
+### Amendment check method and result
+
+- GOIR, School Education department, all G.O.Ms orders from 01.05.2025 to 26.11.2026: the only
+  transfer-category order for teachers is G.O.Ms.No.22. The other transfer orders in the period
+  are G.O.Ms.No.23 (Intermediate Education employees) and RT orders for DEOs, Samagra Shiksha
+  officers and AP Model Schools staff, none of which amend GO 22.
+- GOIR keyword search "Transfers", School Education, MS and RT, 21.05.2025–26.11.2026: no order
+  amending the AP State Teachers (Regulation of Transfers) Rules, 2025.
+- Limitation: GOIR registers Government Orders only. Department proceedings or memos on a
+  transfer schedule are not indexed there. That does not affect a standing-rules reference, but
+  it does mean no 2026 schedule can be inferred either way.
+
+### Additional verified facts (GO 22 rule 2, read on GOIR copy O3)
+
+| Fact ID | Supported fact | Source ID | Scope/condition | Time-sensitive | Safe for post |
+| --- | --- | --- | --- | --- | --- |
+| F6 | HM Gr.II who complete five academic years in a school as on 31 May of that year are transferred compulsorily; other teachers after eight academic years | O3 rule 2(i)(a)–(b) | Counted as on 31 May of the transfer year | no | yes |
+| F7 | A minimum of two academic years in a school as on 31 May makes an HM Gr.II/teacher eligible to request a transfer | O3 rule 2(i)(c) | — | no | yes |
+| F8 | Nine months of service in an academic year counts as a complete academic year for these rules | O3 rule 2, note to (a)–(c) | — | no | yes |
+| F9 | Those retiring within two years (on or before 31 May of the respective year) are not transferred except on their own request | O3 rule 2(i)(d) | — | no | yes |
+| F10 | A male HM Gr.II/teacher below 50 years as on 31 May working in a girls' high school is transferred mandatorily | O3 rule 2(i)(e) | Rule 2(i)(f) covers the case where no woman teacher is available | no | yes |
+| F11 | No amendment to GO 22 was found in the GOIR School Education register through 26.11.2026 | GOIR search above | GOIR covers GOs only | yes | yes, as the verification note |
+
+Pack state for the **standing GO 22 reference**: `verified`. A 2026 schedule or counselling post
+stays `blocked`.

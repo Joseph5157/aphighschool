@@ -7,7 +7,7 @@
 | Topic | AP TET 2026 |
 | Canonical tag | `TET` |
 | Priority | P1 |
-| Evidence status | `partial` — June cycle verified as historical; later current cycle not yet identified |
+| Evidence status | `verified` for Special APTET – August 2026 (results released); June cycle historical; next regular cycle not announced (26 Nov 2026) |
 | Researched on | 25 November 2026 |
 | Review by | Before any TET post is drafted |
 | Intended post model | Current-cycle hub and event-driven actions |
@@ -89,3 +89,33 @@ The June notification cannot support a page described as the current November 20
 
 This pack is not ready for a current-cycle article. Return the missing active-cycle evidence and
 stop unless the requested output is explicitly a historical June 2026 reference.
+
+## LAUNCH-CONTENT-BATCH-1 update (26 November 2026)
+
+The portal's own document index (read from the published app bundle) resolves the earlier
+"TET-August-2026" question: that section is the **Special APTET – August 2026 for in-service
+teachers**, not a regular cycle.
+
+| ID | Issuer | Document or page | Reference and date | URL | Checked on | Evidence state | Supports |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| O4 | School Education Department | Special APTET – August 2026 Notification | Notification No.01–AP SPL-TET-August-2026, 24.08.2026 | https://tet2dsc.apcfss.in/SplTetAug2026/Spl%20TET%20Notification%20final.pdf | 26 Nov 2026 | verified | Purpose, eligible teachers, papers, validity of the pass, fee, exam window |
+| O5 | AP Special TET-2026 Convener | Results press note (Telugu) | Portal label "Special TET Press Note (16.11.2026)" | https://tet2dsc.apcfss.in/SplTetAug2026/AP%20Special%20TET-2026%20Results%20Press%20Note%2016.11.2026.pdf | 26 Nov 2026 | verified (read from the rendered page; text layer is not extractable) | Results released, how to check, exam dates as held, participation figures |
+| O6 | GOIR | G.O.Ms.No.36, School Education (Services-I), APTET guidelines | 23.10.2025 | https://goir.ap.gov.in/dgo.ashx?gid=561982&fileType=E | 26 Nov 2026 | verified (GOIR) | Standing APTET guidelines cited by O1 and O4 |
+
+| Fact ID | Supported fact | Source ID | Scope/condition | Time-sensitive | Safe for post |
+| --- | --- | --- | --- | --- | --- |
+| F5 | The Special APTET is for in-service teachers (regular and Minimum Time Scale) in Government, local body, APREIS, Government welfare residential societies, AP Model Schools, private aided schools and other Government department schools | O4 paras 3, 5(i) | — | no | yes |
+| F6 | A Special APTET pass counts only for the mandatory TET condition for continuing in the present post or promotion to the next higher post; it cannot be used for any future direct recruitment, which needs the regular APTET or CTET | O4 para 5(ii)–(iii) | — | no | yes |
+| F7 | The notification records that the Supreme Court extended the time for in-service teachers to acquire TET to 31.08.2028 and asked for TET to be held periodically, preferably twice a year | O4 para 1 | Paraphrase of the notification's own summary; do not present it as legal advice | no | yes, attributed |
+| F8 | Paper-I covers teachers of classes I–V and Paper-II classes VI–VIII; the fee was ₹1,000 per paper | O4 paras 4, 7 | Historical for this cycle | no | historical |
+| F9 | The results press note says the CBT was held for five days, 11 to 15 October 2026, and that results were released after the final key | O5 | The notification gave 11.10.2026 onwards; the press note records the dates actually held | no | yes |
+| F10 | Results are available in the candidate login on https://tet2dsc.apcfss.in. The press note also names a WhatsApp results channel | O5 | Only the candidate login may be published | yes | candidate login only; WhatsApp channel excluded (founder, PR #14 review) |
+| F11 | The press note gives paper-level participation and qualification figures | O5 | Figures stay in the press note | no | no (founder, PR #14 review) |
+| F12 | No regular APTET cycle after June 2026 is announced in the portal's TET menus as of 26 Nov 2026 | Portal index | Absence is not proof that none is planned | yes | editorial note only |
+
+Wording that needs care: O4 para 2 describes the Government permission as being for "In-service
+Teachers appointed prior to 2011", while paras 3 and 5 define eligibility without that date. A
+post must not state a 2011 appointment cut-off as an eligibility rule.
+
+Pack state: `verified` for a Special APTET – August 2026 results/reference post; a regular
+current-cycle hub remains `verify_first` until the next regular notification is issued.

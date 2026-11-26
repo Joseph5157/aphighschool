@@ -1,6 +1,6 @@
 # AP Teacher Desk launch content queue
 
-Point-in-time review: 25 November 2026
+Point-in-time review: 26 November 2026 (LAUNCH-CONTENT-BATCH-1; see `launch-batch-1/BATCH_MANIFEST.md`)
 Application-code changes: none
 Production-content changes: none
 
@@ -12,10 +12,12 @@ topic does not move to drafting until its exact official evidence is available.
 | Order | Topic | Canonical tag | Evidence status | Recommended content | Next action |
 | ---: | --- | --- | --- | --- | --- |
 | 1 | DSC / APTRT | DSC | verified, active deadline | Notification hub, apply guide, syllabus guide; vacancy document guide | Recheck application state daily through 30 Nov 2026; keep vacancy grids in official PDFs |
-| 2 | AP TET | TET | partial; confirmed June cycle is historical | Current-cycle hub only after exact active notification is identified | Verify whether TET-August-2026 or Special TET-2026 is the intended current cycle |
-| 3 | Teacher Transfers | Transfers | standing GO verified; 2026 cycle not verified | GO 22 standing reference | Search for later amendments and a current schedule before any 2026 update |
-| 4 | Promotions and Seniority | Promotions | blocked | TIS/seniority proceeding, objections and official lists | Obtain exact current proceeding and official district/management sources |
-| 5 | DA and Arrears | DA | blocked | Latest DA order and payment instructions | Obtain the exact AP Finance/GOIR order before recording any rate or instalment |
+| 2 | AP TET | TET | verified for Special APTET – August 2026 (results released); no regular cycle after June 2026 listed | Special TET results post drafted; regular current-cycle hub on hold | Watch the portal for the next regular APTET notification |
+| 3 | Teacher Transfers | Transfers | GO 22 verified on GOIR, no amendment found (26 Nov 2026); 2026 cycle not verified | GO 22 standing reference drafted | Verify any 2026 schedule and the inter-district/mutual/spouse orders separately |
+| 4 | Promotions and Seniority | Promotions | blocked | TIS/seniority proceeding, objections and official lists | Obtain the exact CSE proceeding; GOIR does not index CSE proceedings |
+| 5 | DA and Arrears | DA | verified: G.O.Ms.No.119–122 (11-09-2026) on GOIR | GO 119 and GO 120 drafted; DR GOs 121/122 next | Review on any new DA order or arrears instalment |
+| 6 | CPS to OPS option | Pension | verified: G.O.Ms.No.53 and 158 on GOIR | GO 53 and GO 158 drafted | Recheck for an extension before 31 Dec 2026 |
+| 7 | Service Rules 2026 | Service Rules | verified register; GO 35/36 read | GO 35 and GO 36 drafted | Read GO 37–48 next |
 
 The three researched DSC draft examples created during template development are not production
 content and are not committed here. Claude Code should generate new CMS-ready drafts from the
@@ -31,7 +33,7 @@ approved repository pack when implementation begins.
 | PRC and Pay Fixation | PRC | Standing RPS/PRC reference and verified tools | partial | Confirm which scales and orders remain applicable |
 | GPF, ZPPF and APGLI | GPF/APGLI | Separate authority and service guides | partial | Verify the responsible authority and official link for each scheme |
 | CFMS and Bills | CFMS | Task pages for payslip, employee ID and bill status | partial | Confirm each live task link before drafting |
-| Rationalisation and Re-apportionment | Rationalisation | Current order plus standing reference | blocked | Locate GO 21 and later amendments; keep staffing tables in the PDF |
+| Rationalisation and Re-apportionment | Rationalisation | Current order plus standing reference | partial: GO 21 (13.05.2025) and amendment GO 33 (31.07.2025) located on GOIR | Draft a prose-only reference; keep staffing norms in the PDF |
 
 ## P3 and seasonal topics
 

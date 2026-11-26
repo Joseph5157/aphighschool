@@ -19,6 +19,8 @@ traceable to an official source.
 - `RESEARCH_PACK_TEMPLATE.md` — the structure for collecting evidence before drafting.
 - `CONTENT_QUEUE.md` — the launch topic queue and current evidence status.
 - `research/` — one source pack per topic.
+- `drafts/` — CMS-ready draft posts generated from approved packs.
+- `launch-batch-1/` — LAUNCH-CONTENT-BATCH-1 manifest and the consolidated Telugu review file.
 
 ## Workflow
 
