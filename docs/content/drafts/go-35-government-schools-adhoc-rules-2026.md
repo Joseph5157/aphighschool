@@ -2,7 +2,7 @@
 
 | Draft metadata | Value |
 | --- | --- |
-| Research pack | `docs/content/research/service-rules-2026.md` (O1, O2–O9; F1, F3–F6) |
+| Research pack | `docs/content/research/service-rules-2026.md` (O1, O2; F1, F3–F5) |
 | Batch | LAUNCH-CONTENT-BATCH-1 |
 | Classification | READY (standing document guide; rule contents stay in the PDF) |
 | Drafted on | 26 November 2026 |
@@ -55,7 +55,7 @@ G.O.Ms.No.36.
 
 - SEO title: GO 35 2026: service Adhoc Rules for Government school teachers in AP
 - Meta description: What G.O.Ms.No.35 (03.11.2026) covers, what it replaces, its commencement date,
-  and which other 2026 GOs apply to MPP/ZPP, municipal and Model School teachers.
+  and the separate order for MPP/ZPP school teachers.
 - Search aliases: GO 35 service rules 2026, AP government teachers service rules, జీవో 35 సర్వీస్ రూల్స్.
 
 ## Article body (`content` HTML)
@@ -79,14 +79,8 @@ G.O.Ms.No.36.
 <h2>What is in the GO</h2>
 <p>The GO lists the classes and categories of posts and sets out the rules on appointment, qualifications, promotion and related service matters. Read those rules in the GO itself; they are not reproduced here.</p>
 
-<h2>Other 2026 service-rules GOs</h2>
-<ul>
-  <li>Mandal and Zilla Parishad school teachers: G.O.Ms.No.36.</li>
-  <li>Municipal school teachers: G.O.Ms.No.37 (Municipalities), 38 (Municipal Corporations), 39 (Vijayawada) and 40 (Greater Visakhapatnam).</li>
-  <li>Headmasters Grade-II: G.O.Ms.No.41 to 46.</li>
-  <li>AP Model Schools: G.O.Ms.No.47 (Principals) and 48 (PGTs and TGTs).</li>
-</ul>
-<p>All of these are dated 03.11.2026 on GOIR.</p>
+<h2>Related service-rule orders</h2>
+<p>Teachers in Mandal and Zilla Parishad schools are covered by a separate order, G.O.Ms.No.36, dated 03.11.2026. Separate related service-rule orders for other school managements and posts also exist; AP Teacher Desk will describe them only after each order has been individually read and verified.</p>
 
 <h2>Official documents</h2>
 <ul>
@@ -94,7 +88,7 @@ G.O.Ms.No.36.
 </ul>
 
 <h2>Official-source note</h2>
-<p>Verified on 26 November 2026 against G.O.Ms.No.35, School Education (Services.II) Department, dated 03.11.2026, and the GOIR register of the related orders. A later amendment prevails over this summary.</p>
+<p>Verified on 26 November 2026 against G.O.Ms.No.35, School Education (Services.II) Department, dated 03.11.2026, on GOIR. A later amendment prevails over this summary.</p>
 <p>AP Teacher Desk is an independent information site and is not affiliated with the Government of Andhra Pradesh.</p>
 ```
 
@@ -106,7 +100,7 @@ G.O.Ms.No.36.
 | Supersedes GO 11 (2009) | O1 notification preamble |
 | Deemed from 02.10.2026 | O1 order para 6 |
 | Local-cadre background, separate units, 95% | O1 order paras 2–3 |
-| Other GOs and dates | GOIR School Education register (O2–O9) |
+| GO 36 covers MPP/ZPP school teachers | O2 rules 1–2(i) |
 | No amendment | GOIR register to 26.11.2026 |
 
 ## Expiry and update rule
@@ -116,7 +110,7 @@ Review on any amendment to GO 35 (watch the GOIR Services-II section).
 ## Do not publish
 
 - Post classification lists, qualification or promotion tables from the GO
-- Any statement on GO 37–48 contents
+- Any mapping of other service-rule orders (GO 37–48 on GOIR) to managements or posts until each order is individually read and verified
 
 ## Quality checklist
 

@@ -207,10 +207,10 @@ notification number, and the deadline is treated as an inclusive IST date.
 1. **Source verification: pass.** `goReference` holds the notification's own number;
    `sourceUrl` and `pdfUrl` are exact official links, checked on 25 November 2026.
    `verifiedAgainstGoir` is `false` because this is a portal notification, not a GOIR order.
-2. **Telugu accuracy: pass.** `titleTe` and `summaryTe` were approved exactly as written by
-   fluent human review on 25 November 2026. Terminology decisions: "ఏపీ టీఆర్‌టీ" with a space;
-   "స్కూల్ అసిస్టెంట్" kept as the familiar official cadre wording; "సీబీటీ" accepted;
-   "సొసైటీ పాఠశాలల పోస్టులు" instead of "సొసైటీల పోస్టులు".
+2. **Telugu accuracy: pending batch review** (TELUGU_BATCH_REVIEW.md, item 1). No fluent human
+   review is recorded. Terminology choices to check: "ఏపీ టీఆర్‌టీ" with a space;
+   "స్కూల్ అసిస్టెంట్" as the familiar official cadre wording; "సీబీటీ";
+   "సొసైటీ పాఠశాలల పోస్టులు" rather than "సొసైటీల పోస్టులు".
 3. **No transcribed tables: pass.** The summary, abstract and body describe vacancies and
    eligibility in prose and link the official PDFs. No numeric table is reproduced.
 4. **Related Orders: intentionally pending, not blocking.** GO 52 is the implemented order; no

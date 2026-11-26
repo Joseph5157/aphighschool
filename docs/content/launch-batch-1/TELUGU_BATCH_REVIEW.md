@@ -4,11 +4,11 @@ All Telugu titles and summaries in this batch, collected for one fluent review p
 Extracted mechanically from the draft files on 26 November 2026; the drafts remain the
 source of truth. Edit the draft file when a change is approved, not this file.
 
-Review state values: `approved` (only with a recorded human approval), `pending batch review`, `changes requested`.
+Review state values: `pending batch review` (all items, 1–14, until a fluent human reviews them), `approved` (only after that review), `changes requested`.
 
 ## Points for the reviewer
 
-- Cadre names are kept as the familiar official wording (స్కూల్ అసిస్టెంట్, సెకండరీ గ్రేడ్ టీచర్), as approved for item 1.
+- Cadre names use the familiar official wording (స్కూల్ అసిస్టెంట్, సెకండరీ గ్రేడ్ టీచర్) throughout; confirm once for all items.
 - DA is written as "కరువు భత్యం (డీఏ)"; DR (not used in these posts) would be "కరువు ఉపశమనం (డీఆర్)".
 - "అడ్‌హాక్ నిబంధనలు" keeps the official "Adhoc Rules" title; confirm it reads naturally.
 - Item 5 transliterates society acronyms (ఎంజేపీఏపీబీసీడబ్ల్యూఆర్ఈఐఎస్ etc.). Decide whether to keep them in English letters instead.
@@ -17,7 +17,7 @@ Review state values: `approved` (only with a recorded human approval), `pending 
 
 ## 1. `dsc-2026-notification-apply-online`
 
-Review state: `approved` — founder approved this exact text on 25 Nov 2026 (commit 16ec973, PR #11); unchanged since
+Review state: `pending batch review`
 
 **titleTe:** ఏపీ డీఎస్సీ 2026 (ఏపీ టీఆర్‌టీ–2026): ఎస్‌ఏ, ఎస్‌జీటీ పోస్టుల నోటిఫికేషన్ – ఆన్‌లైన్ దరఖాస్తు వివరాలు
 
@@ -124,7 +124,7 @@ Review state: `pending batch review`
 **summaryTe:**
 
 1. సర్వీసులో ఉన్న ఉపాధ్యాయుల కోసం పాఠశాల విద్యాశాఖ నిర్వహించిన ఏపీ స్పెషల్ టెట్–2026 (ఆగస్టు 2026 నోటిఫికేషన్) ఫలితాలు విడుదలయ్యాయి.
-2. అభ్యర్థులు అధికారిక వెబ్‌సైట్ tet2dsc.apcfss.in లో తమ క్యాండిడేట్ లాగిన్ ద్వారా ఫలితాలను చూసుకోవచ్చు. 9552300009 వాట్సాప్ నంబర్ ద్వారా కూడా ఫలితాలు తెలుసుకోవచ్చని కన్వీనర్ ప్రకటించారు.
+2. అభ్యర్థులు అధికారిక వెబ్‌సైట్ tet2dsc.apcfss.in లో తమ క్యాండిడేట్ లాగిన్ ద్వారా ఫలితాలను చూసుకోవచ్చు.
 3. కంప్యూటర్ ఆధారిత పరీక్షలు అక్టోబర్ 11 నుంచి 15 వరకు జరిగాయి. తుది కీ ఆధారంగా ఫలితాలు ప్రకటించారు.
 4. స్పెషల్ టెట్‌లో ఉత్తీర్ణత ప్రస్తుత పోస్టులో కొనసాగడానికి లేదా తదుపరి పై పోస్టుకు పదోన్నతికి అవసరమైన టెట్ అర్హత కోసం మాత్రమే చెల్లుతుంది.
 5. భవిష్యత్తులో ఏ ప్రత్యక్ష నియామకానికైనా స్పెషల్ టెట్ ఉత్తీర్ణత చెల్లదు; అందుకు సాధారణ ఏపీ టెట్ లేదా సీటెట్ అవసరం.

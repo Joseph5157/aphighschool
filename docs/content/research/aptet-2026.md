@@ -109,8 +109,8 @@ teachers**, not a regular cycle.
 | F7 | The notification records that the Supreme Court extended the time for in-service teachers to acquire TET to 31.08.2028 and asked for TET to be held periodically, preferably twice a year | O4 para 1 | Paraphrase of the notification's own summary; do not present it as legal advice | no | yes, attributed |
 | F8 | Paper-I covers teachers of classes I–V and Paper-II classes VI–VIII; the fee was ₹1,000 per paper | O4 paras 4, 7 | Historical for this cycle | no | historical |
 | F9 | The results press note says the CBT was held for five days, 11 to 15 October 2026, and that results were released after the final key | O5 | The notification gave 11.10.2026 onwards; the press note records the dates actually held | no | yes |
-| F10 | Results are available in the candidate login on https://tet2dsc.apcfss.in; the press note also gives WhatsApp number 9552300009 for results | O5 | — | yes | yes |
-| F11 | Per the press note, 68,420 in-service teachers applied for 83,015 papers, and 79,743 papers were qualified (96.06 per cent) | O5 | Paper-level figures, not teacher-level | no | yes, as quoted figures |
+| F10 | Results are available in the candidate login on https://tet2dsc.apcfss.in. The press note also names a WhatsApp results channel | O5 | Only the candidate login may be published | yes | candidate login only; WhatsApp channel excluded (founder, PR #14 review) |
+| F11 | The press note gives paper-level participation and qualification figures | O5 | Figures stay in the press note | no | no (founder, PR #14 review) |
 | F12 | No regular APTET cycle after June 2026 is announced in the portal's TET menus as of 26 Nov 2026 | Portal index | Absence is not proof that none is planned | yes | editorial note only |
 
 Wording that needs care: O4 para 2 describes the Government permission as being for "In-service

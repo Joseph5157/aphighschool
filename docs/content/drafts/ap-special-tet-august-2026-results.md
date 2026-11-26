@@ -44,7 +44,7 @@
 ### summaryTe lines
 
 1. సర్వీసులో ఉన్న ఉపాధ్యాయుల కోసం పాఠశాల విద్యాశాఖ నిర్వహించిన ఏపీ స్పెషల్ టెట్–2026 (ఆగస్టు 2026 నోటిఫికేషన్) ఫలితాలు విడుదలయ్యాయి.
-2. అభ్యర్థులు అధికారిక వెబ్‌సైట్ tet2dsc.apcfss.in లో తమ క్యాండిడేట్ లాగిన్ ద్వారా ఫలితాలను చూసుకోవచ్చు. 9552300009 వాట్సాప్ నంబర్ ద్వారా కూడా ఫలితాలు తెలుసుకోవచ్చని కన్వీనర్ ప్రకటించారు.
+2. అభ్యర్థులు అధికారిక వెబ్‌సైట్ tet2dsc.apcfss.in లో తమ క్యాండిడేట్ లాగిన్ ద్వారా ఫలితాలను చూసుకోవచ్చు.
 3. కంప్యూటర్ ఆధారిత పరీక్షలు అక్టోబర్ 11 నుంచి 15 వరకు జరిగాయి. తుది కీ ఆధారంగా ఫలితాలు ప్రకటించారు.
 4. స్పెషల్ టెట్‌లో ఉత్తీర్ణత ప్రస్తుత పోస్టులో కొనసాగడానికి లేదా తదుపరి పై పోస్టుకు పదోన్నతికి అవసరమైన టెట్ అర్హత కోసం మాత్రమే చెల్లుతుంది.
 5. భవిష్యత్తులో ఏ ప్రత్యక్ష నియామకానికైనా స్పెషల్ టెట్ ఉత్తీర్ణత చెల్లదు; అందుకు సాధారణ ఏపీ టెట్ లేదా సీటెట్ అవసరం.
@@ -77,7 +77,6 @@ only; it cannot be used for any future direct recruitment.
   <li>Notification: No.01–AP SPL-TET-August-2026, dated 24.08.2026, School Education Department.</li>
   <li>Computer Based Test held: 11 to 15 October 2026.</li>
   <li>Results: declared on the basis of the final key; available in the candidate login on tet2dsc.apcfss.in.</li>
-  <li>Participation (as stated in the official press note): 68,420 teachers applied for 83,015 papers; 79,743 papers were qualified, or 96.06 per cent.</li>
 </ul>
 
 <h2>Who the Special TET was for</h2>
@@ -114,9 +113,8 @@ only; it cannot be used for any future direct recruitment.
 
 | Claim | Source |
 | --- | --- |
-| Results released; login access; WhatsApp number | O5 |
+| Results released; candidate-login access | O5 |
 | Exam held 11–15 Oct 2026; results on final key | O5 |
-| Participation figures | O5 |
 | Number, date | O4 header |
 | Eligible teachers | O4 paras 3, 5(i) |
 | Validity limits | O4 para 5(ii)–(iii) |
@@ -132,14 +130,15 @@ notified.
 ## Do not publish
 
 - A 2011 appointment cut-off as an eligibility rule (para 2 wording only; see pack)
-- Any paper-wise or district-wise result statistics beyond the press-note totals
+- Any result statistics, including the press-note participation and qualification figures (founder decision, PR #14 review)
+- Any results channel other than the official candidate login (the press-note WhatsApp number is excluded by founder decision)
 - Legal interpretation of the Supreme Court orders
 
 ## Quality checklist
 
 1. **Source verification: pass.** Official PDFs; `goReference` left `null` by founder decision, with the exact number in the body.
 2. **Telugu accuracy: pending fluent review** (item 8).
-3. **No transcribed tables: pass.** Three headline figures quoted in prose from the press note.
+3. **No transcribed tables: pass.** No result statistics are reproduced.
 4. **Related Orders: pending.** GO 36 (2025) background; confirm the CMS post first.
 5. **Lifecycle: pass.** `notification` + `results` matches the released results.
 

@@ -45,7 +45,7 @@
 | F3 | Both notifications were to be published in the Gazette on 03.11.2026 and are deemed to have come into force from 02.10.2026 | O1, O2 para 6 | Retrospective commencement date is official | no | yes |
 | F4 | Both GOs record that the new local-cadre organisation (Presidential Order 2025, in force from 15.12.2025) required the service rules to be aligned. GO 35 cites G.O.Ms.No.201 and GO 36 cites G.O.Ms.No.202, both GA (SPF&MC), 02.10.2026 | O1 paras 2–3; O2 paras 2–3 | Background only; the two GA orders are different documents | no | yes, in prose |
 | F5 | GO 35 para 3 records that, under the local-cadre orders, District and Zone are separate units for appointment, direct recruitment, seniority, promotion and transfer, with 95% local reservation in direct recruitment | O1 para 3 | Paraphrase of the order's recital | no | yes, attributed |
-| F6 | The municipal, corporation, HM Gr.II and Model Schools orders exist with the titles in the register above | GOIR register | Contents not read in this batch | no | as an index only |
+| F6 | The municipal, corporation, HM Gr.II and Model Schools orders exist with the titles in the register above | GOIR register | Contents not read in this batch | no | no; a post may say only that separate related orders exist pending individual verification (PR #14 review) |
 
 Qualification, promotion, probation and age rules inside GO 35/36 are long rule text and
 eligibility matrices; they stay in the PDF.

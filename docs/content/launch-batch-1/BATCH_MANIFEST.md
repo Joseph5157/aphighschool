@@ -30,7 +30,7 @@ application/result/deadline content needing the final pre-import status check.
 
 | # | Draft file | Topic | Post type | Class | Official sources | Category (slug) | Document reference | Deadline / freshness | Related Orders | Telugu | CMS readiness |
 | ---: | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | `dsc-2026-notification-apply-online.md` (PR #11, unchanged) | DSC regular SA/SGT | Action post | TIME_SENSITIVE | Portal; Notification No.01 PDF (unchanged file) | `notifications` | Notification No.01/DSC-TRC-1/2026 | Apply closes 30 Nov 2026; still open on 26 Nov | GO 52: **now drafted (#6)**; link at entry | approved (founder, 25 Nov 2026, commit 16ec973) | Ready; status check passed 26 Nov |
+| 1 | `dsc-2026-notification-apply-online.md` (PR #11, unchanged) | DSC regular SA/SGT | Action post | TIME_SENSITIVE | Portal; Notification No.01 PDF (unchanged file) | `notifications` | Notification No.01/DSC-TRC-1/2026 | Apply closes 30 Nov 2026; still open on 26 Nov | GO 52: **now drafted (#6)**; link at entry | pending batch review | Ready; status check passed 26 Nov |
 | 2 | `dsc-2026-syllabus-exam-pattern.md` | DSC syllabus/pattern | Document guide | READY | Revised syllabus; Spl Edn revised syllabus; General Posts IB | `notifications` (`documentType: other`) | none (multi-document) | Recheck on new syllabus/CBT schedule | Pending (#1, #6) | pending batch review | Ready |
 | 3 | `dsc-2026-vacancies-official-guide.md` | DSC vacancies | Document guide (no figures) | READY | Notifications No.01/02/03; brief notifications | `notifications` (`documentType: other`) | none (multi-document) | Recheck on corrigendum | Pending (#1, #4, #5) | pending batch review | Ready |
 | 4 | `dsc-2026-special-education-notification.md` | DSC Special Education | Action post | TIME_SENSITIVE | Notification No.02 PDF; Spl Edn IB; portal | `notifications` | Notification No.02/DSC-TRC-1/2026 | Apply closes 30 Nov 2026 | GO 51: pending, not blocking | pending batch review | Ready; status check passed 26 Nov |
@@ -42,7 +42,7 @@ application/result/deadline content needing the final pre-import status check.
 | 10 | `go-119-da-40-04-percent.md` | DA | GO reference | READY | GOIR G.O.Ms.No.119 | `govt-orders` | G.O.Ms.No.119 | Arrears due 2027 | Linked from #9 | pending batch review | Ready |
 | 11 | `go-158-cps-ops-option-guidelines.md` | Pension (CPS→OPS) | GO explainer | TIME_SENSITIVE | GOIR G.O.Ms.No.158 and 53 | `govt-orders` | G.O.Ms.No.158 | Option closes 31 Dec 2026; `actionDeadline` 2026-12-31 | Implements GO 53 (#12) | pending batch review | Ready; status check passed 26 Nov |
 | 12 | `go-53-cps-ops-one-time-option.md` | Pension (CPS→OPS) | GO reference | READY | GOIR G.O.Ms.No.53 (Finance) | `govt-orders` | G.O.Ms.No.53 | Standing | Linked from #11 | pending batch review | Ready |
-| 13 | `go-35-government-schools-adhoc-rules-2026.md` | Service Rules | GO document guide | READY | GOIR G.O.Ms.No.35; GOIR register | `govt-orders` | G.O.Ms.No.35 | Standing | GO 11 (2009) superseded, not in CMS | pending batch review | Ready |
+| 13 | `go-35-government-schools-adhoc-rules-2026.md` | Service Rules | GO document guide | READY | GOIR G.O.Ms.No.35 and 36 | `govt-orders` | G.O.Ms.No.35 | Standing | GO 11 (2009) superseded, not in CMS | pending batch review | Ready |
 | 14 | `go-36-mpp-zpp-teachers-adhoc-rules-2026.md` | Service Rules | GO document guide | READY | GOIR G.O.Ms.No.36 (2026) | `govt-orders` | G.O.Ms.No.36 | Standing | GO 12 (2009) superseded, not in CMS | pending batch review | Ready |
 
 Recommended CMS entry order (so Related Orders can be linked as each post is entered):
@@ -79,10 +79,17 @@ each official action is live.
 1. **Multi-document guides (#2, #3):** category `notifications`, `documentType` stays `other`. Applied.
 2. **Special TET reference (#8):** `goReference` stays `null`; the exact number appears in the article body. Applied. No validator change.
 3. **CPS→OPS `actionDeadline` (#11):** `2026-12-31`. Applied.
-4. **Telugu:** item 1 is approved on the strength of the founder's recorded approval (commit 16ec973, PR #11). Items 2–14 are `pending batch review`. No Telugu has been marked approved without a recorded human approval.
+4. **Telugu:** all items, 1–14, are `pending batch review` until a fluent human reviews them. No Telugu in this batch is recorded as approved.
 5. **Superseded PR:** #13 (25 Nov DSC pre-entry recheck) was closed as superseded by the consolidated check below.
 
 **Still open:** one founder approval for the CMS draft import of all 14 posts. Nothing has been written to the CMS.
+
+## PR #14 final-review corrections (applied 26 November 2026)
+
+1. Telugu item 1 is changed to `pending batch review` in the DSC draft, the Telugu review file and this manifest. All claims of founder or fluent Telugu approval are removed.
+2. The Special TET results draft (#8) no longer carries the press-note WhatsApp number or the participation/qualification statistics in its summary, body or traceability notes. The official candidate login is kept. Pack facts F10/F11 are marked not for publication.
+3. The GO 158 English abstract (#11) now says accepted employees are admitted to the applicable provident-fund account, such as GPF or ZPPF, as applicable.
+4. The GO 35 draft (#13) no longer maps GO 37–48 to managements or posts, because those orders were not individually read. It names only GO 36 (read and verified) and says that separate related service-rule orders exist, pending individual verification.
 
 ## Disputed or unclear official wording (kept out of posts)
 

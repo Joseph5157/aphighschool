@@ -57,7 +57,8 @@ operational guidelines for the one-time option under G.O.Ms.No.53 (13-07-2026), 
 employees recruited against a notification issued before 01.09.2004 but appointed on or after
 that date, and now under CPS, move to the Old Pension Scheme. Serving and retired employees and
 family pension beneficiaries must opt by 31.12.2026, only through the NIDHI portal. The option
-is final, and accepted employees are admitted to GPF.
+is final, and accepted employees are admitted to the applicable provident-fund account, such as
+GPF or ZPPF, as applicable.
 
 ## SEO fields
 
