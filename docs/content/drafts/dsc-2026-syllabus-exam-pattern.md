@@ -17,9 +17,9 @@
 | `titleTe` | ఏపీ డీఎస్సీ 2026 సిలబస్, పరీక్ష విధానం: అధికారిక సిలబస్ పీడీఎఫ్‌లు, పరీక్ష నిర్మాణం |
 | `summaryTe` | See "summaryTe lines" (5 lines) |
 | `englishAbstract` | See below |
-| `documentType` | `other` (a guide to several official documents, not one document). Flag for founder: alternatively `notification`, tied to No.01/DSC-TRC-1/2026 |
+| `documentType` | `other` (a guide to several official documents, not one document; founder decision 26 Nov 2026) |
 | `orderState` | `current` |
-| `categoryId` | `null` and flagged: no category fits `other`. If the founder chooses `notification`, use the `notifications` slug |
+| `categoryId` | Existing category with slug `notifications` (founder decision 26 Nov 2026; resolve the `id` at entry, do not create) |
 | `documentDate` | `null` (multi-document guide) |
 | `statusBadge` | Not applicable (not a recruitment-notification record); leave the default |
 | `tags` | `DSC` |
@@ -122,11 +122,11 @@ replace the tentative window with the official one.
 
 ## Quality checklist
 
-1. **Source verification: pass, with a field decision.** Official portal URLs. No single
-   document reference, because this is a multi-document guide (see the `documentType` flag).
+1. **Source verification: pass.** Official portal URLs. No single document reference, because
+   this is a multi-document guide (`documentType: other`, category `notifications`).
 2. **Telugu accuracy: pending fluent review** (TELUGU_BATCH_REVIEW.md, item 2).
 3. **No transcribed tables: pass.** Only totals and durations in prose; part-wise tables stay in the PDF.
 4. **Related Orders: pending.** Link to the regular notification and GO 52 posts once they are in the CMS.
 5. **Lifecycle: pass.** Not a notification record; no action button.
 
-**Recommendation:** ready for CMS entry as a draft once the founder decides the `documentType`/category question.
+**Recommendation:** ready for CMS entry as a draft.

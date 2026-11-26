@@ -17,9 +17,9 @@
 | `titleTe` | ఏపీ డీఎస్సీ 2026 ఖాళీలు: జిల్లా, సబ్జెక్టు, మేనేజ్‌మెంట్ వారీ అధికారిక వివరాలు ఎక్కడ చూడాలి |
 | `summaryTe` | See "summaryTe lines" (4 lines) |
 | `englishAbstract` | See below |
-| `documentType` | `other` (guide across three notifications). Founder flag as in the syllabus draft |
+| `documentType` | `other` (guide across three notifications; founder decision 26 Nov 2026) |
 | `orderState` | `current` |
-| `categoryId` | `null` and flagged (no category for `other`) |
+| `categoryId` | Existing category with slug `notifications` (founder decision 26 Nov 2026) |
 | `documentDate` | `null` |
 | `statusBadge` | Not applicable; leave the default |
 | `tags` | `DSC` |
@@ -109,10 +109,10 @@ selection lists are published.
 
 ## Quality checklist
 
-1. **Source verification: pass, with a field decision.** Official PDFs. No single document reference (multi-document guide).
+1. **Source verification: pass.** Official PDFs. No single document reference (multi-document guide, category `notifications`).
 2. **Telugu accuracy: pending fluent review** (item 3).
 3. **No transcribed tables: pass.** No figures at all.
 4. **Related Orders: pending** until the three notification posts exist in the CMS.
 5. **Lifecycle: pass.** No action button.
 
-**Recommendation:** ready for CMS entry as a draft after the `documentType`/category decision.
+**Recommendation:** ready for CMS entry as a draft.

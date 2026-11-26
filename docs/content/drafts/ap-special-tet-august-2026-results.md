@@ -31,7 +31,7 @@
 | `documentDate` | `2026-08-24` (notification date) |
 | `statusBadge` | `results` |
 | `tags` | `TET` |
-| `goReference` | **CMS decision needed.** The official reference is "Notification No.01–AP SPL-TET-August-2026". It contains a space and an en dash, so the CMS validator rejects it. Options: (a) leave `null` and state the number in the body (recommended; no altered reference), or (b) a founder-approved normalised form such as `Notification No.01-APSPL-TET-August-2026` |
+| `goReference` | `null` (founder decision 26 Nov 2026). The official reference, "Notification No.01–AP SPL-TET-August-2026", contains a space and an en dash that the validator rejects, so it is stated in the article body instead and never normalised |
 | `sourceDept` | School Education Department, Government of Andhra Pradesh (Director of School Education / AP Special TET-2026 Convener) |
 | `sourceUrl` | `https://tet2dsc.apcfss.in/` |
 | `pdfUrl` | `https://tet2dsc.apcfss.in/SplTetAug2026/Spl%20TET%20Notification%20final.pdf` |
@@ -137,10 +137,10 @@ notified.
 
 ## Quality checklist
 
-1. **Source verification: pass with a CMS decision.** Official PDFs; the document reference fails the validator (see `goReference`).
+1. **Source verification: pass.** Official PDFs; `goReference` left `null` by founder decision, with the exact number in the body.
 2. **Telugu accuracy: pending fluent review** (item 8).
 3. **No transcribed tables: pass.** Three headline figures quoted in prose from the press note.
 4. **Related Orders: pending.** GO 36 (2025) background; confirm the CMS post first.
 5. **Lifecycle: pass.** `notification` + `results` matches the released results.
 
-**Recommendation:** ready for draft CMS entry after the `goReference` decision.
+**Recommendation:** ready for draft CMS entry after the pre-import status check.

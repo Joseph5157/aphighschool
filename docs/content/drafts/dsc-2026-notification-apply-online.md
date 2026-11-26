@@ -27,6 +27,13 @@ human steps after the quality review.
 Result: applications are open, so this is drafted as an action post. If the post is entered
 on a later day, repeat this check first.
 
+### Recheck: 26 November 2026 (LAUNCH-CONTENT-BATCH-1 consolidated check)
+
+Rendered portal still shows "DSC Application" 11.11.2026–30.11.2026 and "AP-DSC-2026
+Registrations Are Opened!"; no extension or corrigendum; the O2, O3 and O4 PDFs are
+byte-identical to the drafting copies. This supersedes the 25 November pre-entry recheck
+proposed in PR #13. Details: `docs/content/launch-batch-1/BATCH_MANIFEST.md`.
+
 ## CMS fields
 
 | CMS field | Value |

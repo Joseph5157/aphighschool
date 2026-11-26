@@ -4,7 +4,7 @@ All Telugu titles and summaries in this batch, collected for one fluent review p
 Extracted mechanically from the draft files on 26 November 2026; the drafts remain the
 source of truth. Edit the draft file when a change is approved, not this file.
 
-Review state values: `approved` (founder/fluent reviewer), `pending`, `changes requested`.
+Review state values: `approved` (only with a recorded human approval), `pending batch review`, `changes requested`.
 
 ## Points for the reviewer
 
@@ -17,7 +17,7 @@ Review state values: `approved` (founder/fluent reviewer), `pending`, `changes r
 
 ## 1. `dsc-2026-notification-apply-online`
 
-Review state: `approved 25 Nov 2026 (PR #11); no change`
+Review state: `approved` — founder approved this exact text on 25 Nov 2026 (commit 16ec973, PR #11); unchanged since
 
 **titleTe:** ఏపీ డీఎస్సీ 2026 (ఏపీ టీఆర్‌టీ–2026): ఎస్‌ఏ, ఎస్‌జీటీ పోస్టుల నోటిఫికేషన్ – ఆన్‌లైన్ దరఖాస్తు వివరాలు
 
@@ -32,7 +32,7 @@ Review state: `approved 25 Nov 2026 (PR #11); no change`
 
 ## 2. `dsc-2026-syllabus-exam-pattern`
 
-Review state: `pending`
+Review state: `pending batch review`
 
 **titleTe:** ఏపీ డీఎస్సీ 2026 సిలబస్, పరీక్ష విధానం: అధికారిక సిలబస్ పీడీఎఫ్‌లు, పరీక్ష నిర్మాణం
 
@@ -46,7 +46,7 @@ Review state: `pending`
 
 ## 3. `dsc-2026-vacancies-official-guide`
 
-Review state: `pending`
+Review state: `pending batch review`
 
 **titleTe:** ఏపీ డీఎస్సీ 2026 ఖాళీలు: జిల్లా, సబ్జెక్టు, మేనేజ్‌మెంట్ వారీ అధికారిక వివరాలు ఎక్కడ చూడాలి
 
@@ -59,7 +59,7 @@ Review state: `pending`
 
 ## 4. `dsc-2026-special-education-notification`
 
-Review state: `pending`
+Review state: `pending batch review`
 
 **titleTe:** ఏపీ డీఎస్సీ 2026 స్పెషల్ ఎడ్యుకేషన్ నోటిఫికేషన్: ఎస్‌ఏ, ఎస్‌జీటీ (స్పెషల్ ఎడ్యుకేషన్) పోస్టులు
 
@@ -74,7 +74,7 @@ Review state: `pending`
 
 ## 5. `dsc-2026-societies-notification`
 
-Review state: `pending`
+Review state: `pending batch review`
 
 **titleTe:** ఏపీ డీఎస్సీ 2026 సొసైటీల నోటిఫికేషన్: గురుకుల, మోడల్ స్కూళ్లలో ప్రిన్సిపాల్, పీజీటీ, టీజీటీ, పీడీ, పీఈటీ పోస్టులు
 
@@ -89,7 +89,7 @@ Review state: `pending`
 
 ## 6. `go-52-aptrt-2026-selection-rules`
 
-Review state: `pending`
+Review state: `pending batch review`
 
 **titleTe:** జీవో ఎంఎస్ నం.52 (2026): ఎస్‌ఏ, ఎస్‌జీటీ పోస్టుల ఏపీ టీఆర్‌టీ/డీఎస్సీ–2026 ఎంపిక విధాన నిబంధనలు
 
@@ -102,7 +102,7 @@ Review state: `pending`
 
 ## 7. `go-22-teacher-transfer-rules-2025`
 
-Review state: `pending`
+Review state: `pending batch review`
 
 **titleTe:** జీవో ఎంఎస్ నం.22 (2025): ఆంధ్రప్రదేశ్ రాష్ట్ర ఉపాధ్యాయుల బదిలీల నియంత్రణ నిబంధనలు, 2025 – వివరణ
 
@@ -117,7 +117,7 @@ Review state: `pending`
 
 ## 8. `ap-special-tet-august-2026-results`
 
-Review state: `pending`
+Review state: `pending batch review`
 
 **titleTe:** ఇన్-సర్వీస్ ఉపాధ్యాయుల కోసం ఏపీ స్పెషల్ టెట్ (ఆగస్టు 2026): ఫలితాలు విడుదల
 
@@ -131,7 +131,7 @@ Review state: `pending`
 
 ## 9. `go-120-da-41-86-percent`
 
-Review state: `pending`
+Review state: `pending batch review`
 
 **titleTe:** జీవో ఎంఎస్ నం.120 (2026): ఉద్యోగుల కరువు భత్యం (డీఏ) 01.01.2025 నుంచి 41.86 శాతానికి పెంపు
 
@@ -145,7 +145,7 @@ Review state: `pending`
 
 ## 10. `go-119-da-40-04-percent`
 
-Review state: `pending`
+Review state: `pending batch review`
 
 **titleTe:** జీవో ఎంఎస్ నం.119 (2026): ఉద్యోగుల కరువు భత్యం (డీఏ) 01.07.2024 నుంచి 40.04 శాతానికి పెంపు
 
@@ -158,7 +158,7 @@ Review state: `pending`
 
 ## 11. `go-158-cps-ops-option-guidelines`
 
-Review state: `pending`
+Review state: `pending batch review`
 
 **titleTe:** జీవో ఎంఎస్ నం.158 (2026): సీపీఎస్ నుంచి పాత పెన్షన్ పథకానికి (ఓపీఎస్) వన్‌టైమ్ ఆప్షన్ – 31.12.2026 లోపు దరఖాస్తు విధానం
 
@@ -173,7 +173,7 @@ Review state: `pending`
 
 ## 12. `go-53-cps-ops-one-time-option`
 
-Review state: `pending`
+Review state: `pending batch review`
 
 **titleTe:** జీవో ఎంఎస్ నం.53 (2026): 2004 ముందు నోటిఫికేషన్ ద్వారా ఎంపికైన సీపీఎస్ ఉద్యోగులకు పాత పెన్షన్ పథకానికి మారే వన్‌టైమ్ ఆప్షన్
 
@@ -186,7 +186,7 @@ Review state: `pending`
 
 ## 13. `go-35-government-schools-adhoc-rules-2026`
 
-Review state: `pending`
+Review state: `pending batch review`
 
 **titleTe:** జీవో ఎంఎస్ నం.35 (2026): ప్రభుత్వ పాఠశాలల ఉపాధ్యాయులకు ఏపీ పాఠశాల విద్యా సబార్డినేట్ సర్వీస్ అడ్‌హాక్ నిబంధనలు
 
@@ -200,7 +200,7 @@ Review state: `pending`
 
 ## 14. `go-36-mpp-zpp-teachers-adhoc-rules-2026`
 
-Review state: `pending`
+Review state: `pending batch review`
 
 **titleTe:** జీవో ఎంఎస్ నం.36 (2026): మండల, జిల్లా ప్రజా పరిషత్ పాఠశాలల ఉపాధ్యాయులకు సర్వీస్ అడ్‌హాక్ నిబంధనలు
 

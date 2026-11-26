@@ -36,7 +36,7 @@
 | `sourceUrl` | `https://goir.ap.gov.in/dgo.ashx?gid=589379&fileType=E` |
 | `pdfUrl` | `https://goir.ap.gov.in/dgo.ashx?gid=589379&fileType=E` |
 | `actionUrl` | `null` (NIDHI tile not verified) |
-| `actionDeadline` | `2026-12-31`. **Founder decision:** the field is labelled for an action; a GO with no action URL may not need it. Recommended: set it, so the freshness logic flags the post after the deadline |
+| `actionDeadline` | `2026-12-31` (founder decision 26 Nov 2026: set even without an action URL, so freshness logic flags the post after the option window) |
 | `verifiedAgainstGoir` | `true` |
 | `relatedOrders` | GO 158 **implements** G.O.Ms.No.53 (13-07-2026). Link to the GO 53 post drafted in this batch |
 | `isDraft` | `true` |
@@ -159,6 +159,6 @@ is final, and accepted employees are admitted to GPF.
 2. **Telugu accuracy: pending fluent review** (item 11). "నిధి (NIDHI)" kept with the English name for recognisability.
 3. **No transcribed tables: pass.**
 4. **Related Orders: action required.** Link to GO 53 (implements).
-5. **Lifecycle: pass, with an `actionDeadline` decision.**
+5. **Lifecycle: pass.** `actionDeadline` 2026-12-31 matches GO 158 para 3.
 
 **Recommendation:** ready for draft CMS entry after the pre-import recheck.
