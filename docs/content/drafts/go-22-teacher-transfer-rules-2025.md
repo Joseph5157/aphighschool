@@ -6,7 +6,7 @@
 | Batch | LAUNCH-CONTENT-BATCH-1 |
 | Classification | READY (standing reference; amendment check done on GOIR 26 Nov 2026) |
 | Drafted on | 26 November 2026 |
-| CMS state | Not entered. `isDraft: true` when entered |
+| CMS state | Entered in the production CMS as a draft (`isDraft: true`), 26 November 2026; admin id `feb89ae2-1ab8-479b-889e-10efc160b56e`. Not published. The CMS assigned its own slug, so the `slug` below is not the live slug |
 
 ## CMS fields
 

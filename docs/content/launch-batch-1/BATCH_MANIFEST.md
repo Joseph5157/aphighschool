@@ -3,7 +3,7 @@
 Prepared: 26 November 2026; review corrections and consolidated status check applied 26 November 2026 (03:11–03:20 UTC)
 Branch: `content/launch-batch-1`
 Application-code changes: none
-Production-content changes: none. Nothing has been entered in or published to the CMS
+Production-content changes: all 14 posts entered in the production CMS as drafts on 26 November 2026 (see "CMS draft import"). Nothing is published
 
 ## Inputs and method
 
@@ -82,7 +82,7 @@ each official action is live.
 4. **Telugu:** approved by the founder on 26 November 2026 for all items, 1–14, with every proposed correction in TELUGU_BATCH_REVIEW.md accepted and applied to the drafts. Rows 7.5 and 5.1 were revised after the PR #16 review. The item 5 department name was settled by the founder on 26 November 2026 (see TELUGU_BATCH_REVIEW.md).
 5. **Superseded PR:** #13 (25 Nov DSC pre-entry recheck) was closed as superseded by the consolidated check below.
 
-**Still open:** one founder approval for the CMS draft import of all 14 posts. Nothing has been written to the CMS.
+**Resolved:** the founder approved the CMS draft import of all 14 posts on 26 November 2026; see "CMS draft import" below.
 
 ## PR #14 final-review corrections (applied 26 November 2026)
 
@@ -116,3 +116,41 @@ each official action is live.
 **Repeat this check on import day** if import happens on a later date. In particular, if import
 happens on or after 1 December 2026 and no extension is verified, convert #1, #4 and #5 to
 REFERENCE_ONLY using each draft's expiry rule, and never show the apply link.
+
+## CMS draft import (26 November 2026, about 14:30–14:45 UTC)
+
+Founder approval: 26 November 2026. Target: the production CMS (aphighschool-production.up.railway.app).
+
+**Pre-import recheck (same day):**
+- DSC portal: same app bundle as the morning check (`main.9d9ef1e6.js`); DSC application end date still 30.11.2026; no corrigendum or extension; the "Registrations Are Opened!" and Special TET "Results Are Now Released!" notices are unchanged.
+- GOIR School Education, 25–26.11.2026: RT-197 to RT-200 only (budget releases, junior-college permissions). Nothing affects GO 22, 35, 36 or 52 or DSC.
+- GOIR Finance, 25–26.11.2026: budget releases and one house-building advance (MS-169). No DA, pension or CPS→OPS order.
+
+**Method:** each draft was parsed and checked with the CMS's own `validatePost` (all 14 passed), then entered through the admin New Post form, which calls the normal `createPost` action. Every form field was read back and compared with the draft before submission. Posts are created with `isDraft: true` by default; none was published. Public pages (home, both category pages, search) were checked afterwards and show none of these posts.
+
+**Slugs:** the admin form generates the slug from the English title plus a timestamp, so the planned `slug` values in the drafts are not the live slugs (founder decision: accept the generated slugs).
+
+| Entry order | Draft # | Draft file | Admin id |
+| ---: | ---: | --- | --- |
+| 1 | 6 | `go-52-aptrt-2026-selection-rules.md` | `bdc86ab2-fc0f-47fa-b8a8-c508fc924b70` |
+| 2 | 1 | `dsc-2026-notification-apply-online.md` | `219cfd43-cd4d-4ddc-923f-733ed19adcb4` |
+| 3 | 4 | `dsc-2026-special-education-notification.md` | `e4990b36-101c-49bf-b466-7c5115d2697f` |
+| 4 | 5 | `dsc-2026-societies-notification.md` | `72e28ea1-519e-4a7b-a9b0-b90d617d67b2` |
+| 5 | 2 | `dsc-2026-syllabus-exam-pattern.md` | `59bd2ba6-6e23-41f5-b71e-7c9c4f712b02` |
+| 6 | 3 | `dsc-2026-vacancies-official-guide.md` | `d2591307-992d-40f6-a4fa-bf81e03acb18` |
+| 7 | 7 | `go-22-teacher-transfer-rules-2025.md` | `feb89ae2-1ab8-479b-889e-10efc160b56e` |
+| 8 | 8 | `ap-special-tet-august-2026-results.md` | `3296a494-9f29-4e64-a8b7-b16b6eedfb5d` |
+| 9 | 10 | `go-119-da-40-04-percent.md` | `38ac4ea3-d451-4d9d-abc9-51c04433c577` |
+| 10 | 9 | `go-120-da-41-86-percent.md` | `d034502e-23a9-498f-bc80-1796633f8697` |
+| 11 | 12 | `go-53-cps-ops-one-time-option.md` | `778782f2-ff8e-4568-bf9d-6c4a7280a5b5` |
+| 12 | 11 | `go-158-cps-ops-option-guidelines.md` | `39eae6c4-d5a7-4a26-a860-63494a9752a1` |
+| 13 | 13 | `go-35-government-schools-adhoc-rules-2026.md` | `96629fbc-5131-4678-9d6c-35a0126c8beb` |
+| 14 | 14 | `go-36-mpp-zpp-teachers-adhoc-rules-2026.md` | `36b41ccb-e09f-4618-ba4d-a28fe710819f` |
+
+**Related Orders linked (8, manual, approved):** #1 → #6 (GO 52); #2 → #1, #6; #3 → #1, #4, #5; #9 → #10 (GO 119); #11 → #12 (GO 53). The admin form does not set a relationship note.
+
+**Not linked:** #7 → GO 21 and #8 → GO 36 (2025). Production has no post for either order (the five existing posts were checked), so there was nothing to link. GO 50, 51 and 653 have no posts either, as recorded in the drafts.
+
+**Still to do:**
+1. Publishing is a separate founder decision, post by post.
+2. If publishing happens on or after 1 December 2026 with no verified extension, first convert #1, #4 and #5 to REFERENCE_ONLY (status `expired`, apply link removed) using each draft's expiry rule.
